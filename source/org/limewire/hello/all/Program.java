@@ -7,7 +7,6 @@ import org.limewire.hello.base.state.old.OldPulse;
 import org.limewire.hello.base.web.Web;
 import org.limewire.hello.bittorrent.BitTorrent;
 import org.limewire.hello.download.DownloadList;
-import org.limewire.hello.feed.FeedList;
 
 
 // this is the program object
@@ -36,7 +35,6 @@ public class Program {
 		
 		bitTorrent = new BitTorrent(internet, web, store);
 		
-		feed = new FeedList(); // The list of RSS feeds we're subscribed to
 		download = new DownloadList();
 		
 		window = new Window(this); // Making the Window object puts the program's window on the screen
@@ -53,7 +51,6 @@ public class Program {
 	/** The program's Window object, which is the window on the screen. */
 	public Window window;
 	
-	public final FeedList feed;
 	public final DownloadList download;
 	
 	

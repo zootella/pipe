@@ -13,7 +13,6 @@ import org.limewire.hello.all.Program;
 import org.limewire.hello.base.user.Dialog;
 import org.limewire.hello.bittorrent.user.BitTorrentTab;
 import org.limewire.hello.download.user.DownloadTab;
-import org.limewire.hello.feed.user.FeedTab;
 
 public class Window {
 
@@ -31,14 +30,12 @@ public class Window {
 		this.program = program;
 
 		// Make the objects that represent the tabs in the window
-    	feed = new FeedTab(this, program.feed);
 		status = new StatusTab();
 		download = new DownloadTab(program.download, this, program.web);
 		bittorrent = new BitTorrentTab(this, program.bitTorrent);
 
 		// Make a row of tabs, and add the tabs to it
 		JTabbedPane tabs = new JTabbedPane();
-		tabs.addTab("Feed", feed.component());
 		tabs.addTab("Status", status.component());
 		tabs.addTab("Download", download.component());
 		tabs.addTab("BitTorrent", bittorrent.component());
@@ -70,7 +67,6 @@ public class Window {
 	public DownloadTab download;
 	
 	public BitTorrentTab bittorrent;
-	public FeedTab feed;
 
 	// -------- Close --------
 
