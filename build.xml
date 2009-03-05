@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Build Pipe -->
+<project default="build">
+	<target name="build" description="Compile and package the source code into a jar">
+
+		<!-- Delete temporary folders to make everything again from scratch -->
+		<delete dir="ant"/>
+		<delete file="work/pipe.jar"/>
+
+		<!-- Copy the tree of resource files so they'll also get bundled into the jar -->
+		<copy todir="ant">
+			<fileset dir="resource"/>
+		</copy>
+
+		<!--
+		Compile all the .java files into .class files
+
+		debug = yes        Include debug information in the .class files
+		destdir            Where to put the .class files
+		source and target  Use Java version 1.6
+		-->
+		<javac
+			debug="yes"
+			destdir="ant"
+			source="1.6"
+			target="1.6">
+
+			<!-- Compile the code in these folders, each has a tree of .java files in it -->
+			<src path="source"/>
+
+			<!-- Tell the Java compiler where .jar files are that the code above uses -->
+			<classpath>
+
+				<pathelement location="work/rome-1.0RC1.jar"/>       <!-- Rome 1.0 RC1, https://rome.dev.java.net/ -->
+				<pathelement location="work/jdom.jar"/>              <!-- JDOM 1.1, http://www.jdom.org/ -->
+				<pathelement location="work/itunes-0.4.jar"/>        <!-- Apple iTunes Plug In, 2006 August 20, http://wiki.java.net/bin/view/Javawsxml/ITunes -->
+
+				<pathelement location="work/apache-mime4j-0.4.jar"/> <!-- Apache HttpClient 4.0 Beta 1, http://hc.apache.org/httpcomponents-client/ -->
+				<pathelement location="work/commons-codec-1.3.jar"/>
+				<pathelement location="work/commons-logging-1.1.1.jar"/>
+				<pathelement location="work/httpclient-4.0-beta1.jar"/>
+				<pathelement location="work/httpcore-4.0-beta2.jar"/>
+				<pathelement location="work/httpmime-4.0-beta1.jar"/>
+
+			</classpath>
+		</javac>
+
+		<!--
+		Bundle files together to make the jar
+
+		jarfile          Where to make the .jar file, this will overwrite a file already there
+		basedir          Find the files to put in the jar here
+		filesonly = yes  Store only file entries
+		-->
+		<jar
+			jarfile="work/pipe.jar"
+			basedir="ant"
+			filesonly="yes">
+
+			<!-- Write a manifest inside the jar -->
+			<manifest>
+
+				<!-- The class Java will run when the user double-clicks hello.jar -->
+				<attribute name="Main-Class" value="org.limewire.hello.all.Main"/>
+
+				<!-- The names of the .jar files hello will use when it runs, separated by spaces -->
+				<attribute name="Class-Path" value="apache-mime4j-0.4.jar commons-codec-1.3.jar commons-logging-1.1.1.jar httpclient-4.0-beta1.jar httpcore-4.0-beta2.jar httpmime-4.0-beta1.jar itunes-0.4.jar jdom.jar rome-1.0RC1.jar"/>
+			</manifest>
+		</jar>
+
+	</target>
+</project>
