@@ -1,0 +1,69 @@
+package org.base.time;
+
+import javax.swing.JDialog;
+
+import org.base.state.Receive;
+import org.base.state.Update;
+import org.base.user.Dialog;
+import org.junit.Test;
+
+public class UpdateTest {
+	
+	@Test
+	public void spinTest() {
+		
+		// this will produce a SpinException right away
+		// then, when you close the box, the test will succeed
+		new TestBox();
+	}
+
+	private class TestBox {
+		
+		public TestBox() {
+			
+			spin();
+			
+			JDialog dialog = Dialog.modal("Test Box");
+			dialog.setVisible(true); // control sticks here while the dialog is open
+		}
+	}
+	
+	private void spin() {
+
+		Parent parent = new Parent();
+		parent.child.finished();
+	}
+
+	private class Parent {
+		
+		public Parent() {
+			
+			update = new Update(new MyReceive());
+			child = new Child(update);
+		}
+		
+		public Update update;
+		public Child child;
+		
+		private class MyReceive implements Receive {
+			public void receive() {
+				
+				child.finished();
+			}
+		}
+	}
+	
+	private class Child {
+		
+		public Child(Update update) {
+			this.update = update;
+		}
+		
+		private Update update;
+		
+		public void finished() {
+			
+			update.send();
+		}
+	}
+}
