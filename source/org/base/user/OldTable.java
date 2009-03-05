@@ -17,7 +17,6 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.base.state.Model;
-import org.base.state.Receive;
 
 public class OldTable {
 

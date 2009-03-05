@@ -1,11 +1,5 @@
 package org.base.user;
 
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JToggleButton;
-import javax.swing.text.JTextComponent;
-
 import org.base.data.Number;
 import org.base.data.Text;
 
