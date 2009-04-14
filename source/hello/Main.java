@@ -15,12 +15,19 @@ public class Main {
 
             	// Make the Program object which represents the whole program, and save it
             	program = new Program();
+            	
+            	core = new Core();
+            	window = new Window(core);
             }
         });
     }
 
     /** The Program object that represents the whole program. */
     public static Program program;
+    
+    
+    private static Core core;
+    private static Window window;
 
 	// -------- Methods --------
 

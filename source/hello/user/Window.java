@@ -1,5 +1,6 @@
 package hello.user;
 
+import hello.Core;
 import hello.Program;
 
 import java.awt.Dimension;
@@ -13,6 +14,7 @@ import javax.swing.JTabbedPane;
 
 
 import base.user.Dialog;
+import bridge.user.BridgeTab;
 
 public class Window {
 
@@ -24,17 +26,19 @@ public class Window {
 	 * 
 	 * @param program A link up to the Program object this new Window object is a part of
 	 */
-	public Window(Program program) {
+	public Window(Core core) {
 		
 		// Save the link back up to the Program object
-		this.program = program;
+		this.core = core;
 
 		// Make the objects that represent the tabs in the window
 		status = new StatusTab();
+		bridge = new BridgeTab(core.bridge);
 
 		// Make a row of tabs, and add the tabs to it
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.addTab("Status", status.component());
+		tabs.addTab("Bridge", bridge.component());
 
 		// Choose how big the window will be, and where it will appear on the screen
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();          // Screen resolution in pixels
@@ -59,6 +63,7 @@ public class Window {
 	public JFrame frame;
 	/** The Status tab in the window. */
 	public StatusTab status;
+	public BridgeTab bridge;
 
 	// -------- Close --------
 
