@@ -1,4 +1,4 @@
-package org.base.state;
+package base.state;
 
 import javax.swing.JDialog;
 

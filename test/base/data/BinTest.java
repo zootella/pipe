@@ -1,4 +1,4 @@
-package org.base.data;
+package base.data;
 
 import java.nio.ByteBuffer;
 

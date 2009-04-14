@@ -1,4 +1,4 @@
-package org.base.time;
+package base.time;
 
 import org.junit.Test;
 import org.junit.Assert;

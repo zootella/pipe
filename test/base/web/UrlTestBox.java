@@ -1,4 +1,4 @@
-package org.base.web;
+package base.web;
 
 import java.net.URI;
 import java.net.URISyntaxException;

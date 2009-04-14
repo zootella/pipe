@@ -1,4 +1,4 @@
-package org.base.encode;
+package base.encode;
 
 import static org.junit.Assert.*;
 

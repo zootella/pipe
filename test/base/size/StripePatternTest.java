@@ -1,4 +1,4 @@
-package org.base.size;
+package base.size;
 
 import static org.junit.Assert.*;
 

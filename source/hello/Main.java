@@ -29,10 +29,4 @@ public class Main {
     	System.out.println(s); // Display it in Eclipse
 		if (program != null) program.window.status.report(s); // Also put it on the Status tab
     }
-
-    //TODO this will go away when you kill pulse in place of update
-    /** Make the next pulse happen soon, instead of after the normal delay. */
-    public static void soon() {
-    	if (program != null) program.pulse.soon(); // Make sure we have the Program object first
-    }
 }

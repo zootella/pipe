@@ -1,4 +1,4 @@
-package org.base.data;
+package base.data;
 
 import org.junit.Test;
 import org.junit.Assert;

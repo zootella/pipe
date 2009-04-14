@@ -1,4 +1,4 @@
-package org.base.web;
+package base.web;
 
 import org.junit.Assert;
 import org.junit.Test;
