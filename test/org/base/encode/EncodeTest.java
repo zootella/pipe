@@ -2,9 +2,10 @@ package org.base.encode;
 
 import static org.junit.Assert.*;
 
-import org.base.data.Data;
-import org.base.encode.Encode;
 import org.junit.Test;
+
+import base.data.Data;
+import base.encode.Encode;
 
 public class EncodeTest {
 	

@@ -2,8 +2,9 @@ package org.base.size;
 
 import static org.junit.Assert.*;
 
-import org.base.size.Stripe;
 import org.junit.Test;
+
+import base.size.Stripe;
 
 public class StripeTest {
 	

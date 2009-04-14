@@ -1,8 +1,9 @@
 package org.base.data;
 
-import org.base.data.Text;
 import org.junit.Test;
 import org.junit.Assert;
+
+import base.data.Text;
 
 public class TextTest {
 	

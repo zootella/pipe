@@ -5,8 +5,9 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.base.valve.Pair;
 import org.junit.Test;
+
+import base.valve.Pair;
 
 public class PairTest {
 

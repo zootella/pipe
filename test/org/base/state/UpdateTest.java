@@ -2,10 +2,11 @@ package org.base.state;
 
 import javax.swing.JDialog;
 
-import org.base.state.Receive;
-import org.base.state.Update;
-import org.base.user.Dialog;
 import org.junit.Test;
+
+import base.state.Receive;
+import base.state.Update;
+import base.user.Dialog;
 
 public class UpdateTest {
 	

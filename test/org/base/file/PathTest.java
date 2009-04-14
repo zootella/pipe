@@ -1,9 +1,10 @@
 package org.base.file;
 
-import org.base.exception.MessageException;
-import org.base.file.Path;
 import org.junit.Test;
 import org.junit.Assert;
+
+import base.exception.MessageException;
+import base.file.Path;
 
 public class PathTest {
 

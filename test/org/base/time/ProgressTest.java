@@ -1,9 +1,10 @@
 package org.base.time;
 
-import org.base.size.Size;
-import org.base.time.Progress;
 import org.junit.Test;
 import org.junit.Assert;
+
+import base.size.Size;
+import base.time.Progress;
 
 public class ProgressTest {
 	

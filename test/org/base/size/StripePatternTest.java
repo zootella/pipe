@@ -2,13 +2,16 @@ package org.base.size;
 
 import static org.junit.Assert.*;
 
+import hello.Main;
+
 import java.util.List;
 
-import org.base.exception.MessageException;
-import org.base.size.Stripe;
-import org.base.size.StripePattern;
 import org.junit.Test;
-import org.pipe.all.Main;
+
+
+import base.exception.MessageException;
+import base.size.Stripe;
+import base.size.StripePattern;
 
 public class StripePatternTest {
 	

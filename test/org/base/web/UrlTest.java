@@ -1,9 +1,10 @@
 package org.base.web;
 
-import org.base.exception.MessageException;
-import org.base.web.Url;
 import org.junit.Assert;
 import org.junit.Test;
+
+import base.exception.MessageException;
+import base.web.Url;
 
 public class UrlTest {
 
