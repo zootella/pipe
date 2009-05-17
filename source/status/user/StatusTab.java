@@ -1,6 +1,5 @@
-package hello.user;
+package status.user;
 
-import hello.Snippet;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +9,8 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import main.Snippet;
 
 
 import base.user.Cell;
@@ -55,17 +56,12 @@ public class StatusTab {
 		panel.place(1, 2, 1, 1, 0, 1, 0, 0, Cell.wrap(enter));
 	}
 	
-	/** Get the Swing JComponent that is the user interface of this tab. */
-	public JComponent component() {
-		return panel.jpanel; // It's the JPanel in our Panel object, which is a JComponent
-	}
-	
 	/** The Swing JTextArea object which is the large text box in the center that prints the program's output. */
 	private JTextArea output;
 	/** The Swing JTextField object which is the single-line text box at the bottom where the user can type a command. */
 	private JTextField command;
 	/** A Panel object which contains the Swing JPanel that holds all the user interface components. */
-	private Panel panel;
+	public final Panel panel;
 
 	// -------- Methods Java calls when the user clicks --------
 

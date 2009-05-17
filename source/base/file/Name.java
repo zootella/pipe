@@ -1,6 +1,6 @@
 package base.file;
 
-import hello.Program;
+import main.Program;
 
 import base.data.Data;
 import base.data.Text;

@@ -1,13 +1,14 @@
 package base.user;
 
 
-import hello.user.Window;
 
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+
+import main.Window;
 
 
 public class Panel {
@@ -38,7 +39,7 @@ public class Panel {
 
 	/** Add a border around the inside edge of this Panel. */
 	public Panel border() {
-		jpanel.setBorder(BorderFactory.createEmptyBorder(Window.space, Window.space, Window.space, Window.space));
+		jpanel.setBorder(BorderFactory.createEmptyBorder(Dialog.space, Dialog.space, Dialog.space, Dialog.space));
 		return this; // Return a reference to this same Panel object so you can use border() in a chain
 	}
 
@@ -61,8 +62,8 @@ public class Panel {
 			else            cell.constraints.gridy = n; // This Panel is a column, keep gridx 0 and count up gridy instead
 
 			// Use an Inset to keep this new component from touching the last one we added
-			if (n > 0 && horizontal)  cell.constraints.insets = new Insets(0, Window.space, 0, 0); // To the left
-			if (n > 0 && !horizontal) cell.constraints.insets = new Insets(Window.space, 0, 0, 0); // Above
+			if (n > 0 && horizontal)  cell.constraints.insets = new Insets(0, Dialog.space, 0, 0); // To the left
+			if (n > 0 && !horizontal) cell.constraints.insets = new Insets(Dialog.space, 0, 0, 0); // Above
 
 			// Add the given JComponent to our JPanel, positioning it with the GridBagConstraints it came with and that we adjusted
 			jpanel.add(cell.component, cell.constraints);
@@ -83,7 +84,7 @@ public class Panel {
 		cell.constraints.gridy = y;
 		cell.constraints.gridwidth = w;
 		cell.constraints.gridheight = h;
-		cell.constraints.insets = new Insets(t * Window.space, l * Window.space, b * Window.space, r * Window.space);
+		cell.constraints.insets = new Insets(t * Dialog.space, l * Dialog.space, b * Dialog.space, r * Dialog.space);
 		
 		// Add the given JComponent to our JPanel, positioning it with the GridBagConstraints it came with and that we adjusted
 		jpanel.add(cell.component, cell.constraints);

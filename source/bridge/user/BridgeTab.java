@@ -9,14 +9,27 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import base.exception.CodeException;
+import base.exception.MessageException;
+import base.internet.name.IpPort;
+import base.internet.name.Port;
+import base.state.View;
 import base.user.Cell;
 import base.user.Panel;
+import base.user.Refresh;
 import base.user.TextMenu;
 import bridge.Bridge;
 
 public class BridgeTab {
 	
-	private static Bridge bridge;
+	// Define
+	
+	private final Port port;
+	private final IpPort ipPort;
+	
+	// Links
+	
+	private Bridge bridge;
 
 	// Tab
 
@@ -25,7 +38,10 @@ public class BridgeTab {
 		
 		this.bridge = bridge;
 		
-
+		try {
+			port = new Port(1234);
+			ipPort = new IpPort("127.0.0.1:1234");
+		} catch (MessageException e) { throw new CodeException(); }
 
 		// Make the output text area
 		output = new JTextArea();
@@ -51,10 +67,8 @@ public class BridgeTab {
 		panel.place(1, 2, 1, 1, 0, 1, 0, 0, Cell.wrap(new JButton(new SendAction())));
 	}
 	
-	/** Get the Swing JComponent that is the user interface of this tab. */
-	public JComponent component() { return panel.jpanel; } // It's the JPanel in our Panel object, which is a JComponent
 	/** A Panel object which contains the Swing JPanel that holds all the user interface components. */
-	private Panel panel;
+	public final Panel panel;
 	
 	/** The large text box in the center that prints the program's output. */
 	private JTextArea output;
@@ -65,12 +79,13 @@ public class BridgeTab {
 	
 	// Actions
 
-	// The user clicked the Server button
+	// The user clicked the Listen button
 	private class ServerAction extends AbstractAction {
-		public ServerAction() { super("Server"); } // Specify the button text
+		public ServerAction() { super("Listen"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
-			
-			report("server");
+
+			bridge.server(port);
+			report("listening...");
 		}
 	}
 	
@@ -79,7 +94,8 @@ public class BridgeTab {
 		public ConnectAction() { super("Connect"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
 			
-			report("connect");
+			bridge.client(ipPort);
+			report("connecting...");
 		}
 	}
 
@@ -88,7 +104,9 @@ public class BridgeTab {
 		public SendAction() { super("Send"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
 			
-			report("send");
+			String s = command.getText();
+			bridge.send(s);
+			report("sending: " + s);
 		}
 	}
 
@@ -99,4 +117,17 @@ public class BridgeTab {
         output.append(s + "\n"); // Add the given text and a newline to the end of what's already in the output box
         output.setCaretPosition(output.getDocument().getLength()); // Scroll to the bottom
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

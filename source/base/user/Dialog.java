@@ -11,6 +11,13 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 public class Dialog {
+	
+	// Define
+
+	/** 8 pixels, the space between buttons and the width of the margin at the edge. */
+	public static final int space = 8;
+	/** 80 pixels, the width and height of a big button. */
+	public static final int button = 80;
 
 	// -------- Make --------
 

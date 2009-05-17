@@ -1,7 +1,8 @@
 package base.size;
 
 import static org.junit.Assert.*;
-import hello.Main;
+
+import main.Main;
 
 import org.junit.Test;
 
@@ -42,7 +43,7 @@ public class SprayPatternTest {
 		SprayPattern p = new SprayPattern(s);
 		Data d = p.data();
 		SprayPattern p2 = new SprayPattern(d, p.size());
-		if (!p.equals(p2)) Main.report("mismatch on " + s);
+		if (!p.equals(p2)) System.out.println("mismatch on " + s);
 	}
 	
 	@Test
@@ -154,19 +155,19 @@ public class SprayPatternTest {
 	
 	public void testLoopRun(String s) {
 			
-		Main.report("");
-		Main.report(s);
+		System.out.println("");
+		System.out.println(s);
 		
 		SprayPattern p = new SprayPattern(s);
 		
 		SprayPattern.Step step = p.step(false);
 		while (step.next()) {
-			Main.report("false " + step.i());
+			System.out.println("false " + step.i());
 		}
 		
 		step = p.step(true);
 		while (step.next()) {
-			Main.report("true " + step.i());
+			System.out.println("true " + step.i());
 		}
 	}
 	

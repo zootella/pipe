@@ -1,6 +1,7 @@
 package base.data;
 
-import hello.Main;
+
+import main.Main;
 
 import org.junit.Test;
 
@@ -159,14 +160,14 @@ public class OutlineTest {
 		int sizeAsText = asText.size();
 		Outline o = Outline.fromText(asText);
 		int sizeAsData = o.data().size();
-		Main.report(sizeAsText + " " + sizeAsData); // 165 to 104
+		System.out.println(sizeAsText + " " + sizeAsData); // 165 to 104
 	}
 
 	public void test(String s) throws Exception {
 			
 		// text > outline > data > outline > text
 		Outline o = Outline.fromText(new Data(s)); // text to outline
-		Main.report(o.toString());
+		System.out.println(o.toString());
 		Data d = o.data(); // outline to data
 		Data d1 = d.copy();
 		Outline o2 = new Outline(d); // data to outline

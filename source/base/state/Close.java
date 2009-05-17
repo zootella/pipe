@@ -46,9 +46,16 @@ public abstract class Close {
 
 	// Help
 
-	/** Close the given object that extends Close, takes null and ignores exception. */
+	/** Close c ignoring null and exceptions */
 	public static void close(Close c) {
 		if (c == null) return;
 		try { c.close(); } catch (Exception e) {}
 	}
+
+	/** true if c is null */
+	public static boolean no(Close c) { return c == null; }
+	/** true if c exists */
+	public static boolean is(Close c) { return c != null; }
+	/** true if c exists and is closed */
+	public static boolean done(Close c) { return c != null && c.closed(); }
 }
