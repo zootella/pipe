@@ -1,24 +1,19 @@
 package base.data;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SocketChannel;
-
 
 import base.file.File;
-import base.internet.name.IpPort;
 import base.size.Stripe;
 
 // A Bay object holds data, growing to hold more you add to it.
 // say one place in the program, probably in the javadoc or wiki page for bay
-// this program holds teh following conventiosn when using ByteBuffers
+// this program holds the following conventions when using ByteBuffers
 // position and limit clip around the data, not the space afterwards
 // nothing ever moves them, if a java method is going to move them, our code copies the ByteBuffer and gives the java a copy
 public class Bay {
 
-	// -------- Make a Bay --------
+	// Make
 	
 	/** Make a new empty Bay object that can hold data. */
 	public Bay() {}
@@ -33,8 +28,8 @@ public class Bay {
 	public Bay(ByteBuffer b) { add(b); }
 	/** Make a new Bay object with a copy of d in it. */
 	public Bay(Data d) { add(d); }
-	
-	// -------- Add data to the end --------
+
+	// Add
 	
 	/** Add a single byte to end of the data this Bay object holds. */
 	public void add(byte y) { add(new Data(y)); }
@@ -51,11 +46,21 @@ public class Bay {
 		buffer.put(d.toByteBuffer()); // Copy d in, moves buffer's position forward to still clip out the empty space at the end
 	}
 
-	// -------- Look at the data this Bay is holding --------
+	/** Move all the data from the given Bin to the end of this Bay. */
+	public void add(Bin b) {
+		add(b.data());
+		b.clear();
+	}
 
-	/** How much data this Bay object is holding, in bytes. */
-	public int size() { return data().size(); }
-	//TODO this would be faster if it just did the math
+	// Look
+
+	/** true if this Bay is holding some data. */
+	public boolean hasData() { return size() > 0; }
+	/** How many bytes of data this Bay contains. */
+	public int size() {
+		if (buffer == null) return 0;
+		return buffer.position() - offset;
+	}
 	
 	/** Look at the data this Bay object holds. */
 	public Data data() { return new Data(buffer()); }
@@ -65,19 +70,16 @@ public class Bay {
 	 * You can move the position without changing this Bay object.
 	 */
 	private ByteBuffer buffer() {
-		
-		// If we don't have a ByteBuffer, return a new empty one
-		if (buffer == null) return ByteBuffer.allocate(0);
+		if (buffer == null) return ByteBuffer.allocate(0); // If we don't have a ByteBuffer, return a new empty one
 		
 		// Make a new ByteBuffer clipped around our data, and return it
 		ByteBuffer b = buffer.asReadOnlyBuffer(); // This doesn't copy the data
 		b.position(offset); // Clip b's position and limit around our data
 		b.limit(buffer.position());
-		return b.slice(); // Return a ByteBuffer sized around the data
-		//TODO the slice is unnecessary
+		return b;
 	}
 	
-	// -------- Remove some data from the start --------
+	// Remove
 
 	/** Remove size bytes from the start of the data this Bay object holds. */
 	public void remove(int size) {
@@ -99,16 +101,14 @@ public class Bay {
 
 	/** Clear all the data this Bay object is holding. */
 	public void clear() {
-
-		// We don't have any data to clear
-		if (buffer == null) return;
+		if (buffer == null) return; // We don't have any data to clear
 
 		// Mark our buffer as empty
 		buffer.clear(); // Moves position to the start and limit to the end
 		offset = 0;     // No data to skip over at the start
 	}
 
-	// -------- How it works inside --------
+	// Inside
 
 	/**
 	 * The ByteBuffer object that holds the data.
@@ -160,8 +160,8 @@ public class Bay {
 	private static ByteBuffer allocate(int size) {
 
 		// If the size is 8 KB or bigger, allocate the memory outside of Java in the native process space 
-		if (size < big) return ByteBuffer.allocate(size);       // Back it with a Java byte array
-		else            return ByteBuffer.allocateDirect(size); // Get memory outside of Java
+		if (size < Bin.medium) return ByteBuffer.allocate(size);       // Back it with a Java byte array
+		else                   return ByteBuffer.allocateDirect(size); // Get memory outside of Java
 	}
 
 	/** Shift the data this Bay object holds to the start of our ByteBuffer. */
@@ -180,24 +180,8 @@ public class Bay {
 		// There's no data at the start to skip over any more
 		offset = 0;
 	}
-
-	/**
-	 * 8192 bytes, 8 KB, the program considers this size to be big.
-	 * 
-	 * The program uses this size in several ways.
-	 * Given a size 8 KB or larger, allocate() will get memory from the native process space instead of using a Java byte array.
-	 * TubeUpload and TubeDownload use this size as a boundary.
-	 * 
-	 * This size is based on information from the platform.
-	 * By default, SocketChannel and DatagramChannel objects have 8 KB underlying send and receive buffers.
-	 * To see this, call channel.socket().getSendBufferSize() and channel.socket().getReceiveBufferSize().
-	 */
-	public static final int big = 8 * 1024;
-	//TODO replace with Bin.size
-	//TODO stop using all below
-	// note Bin.medium 8K is our TCP buffer size, and Bin.big 64K is our UDP buffer size
 	
-	// In
+	// File
 
 	/** Add the given stripe of data from file to this Bay, or throw an IOException. */
 	public void read(File file, Stripe stripe) throws IOException {
@@ -216,97 +200,5 @@ public class Bay {
 
 		// Move buffer's position past the new data we wrote
 		buffer.position(fill.position());
-	}
-
-	// -------- Internet transfer --------
-
-	/**
-	 * Upload the data this Bay object holds into a given SocketChannel.
-	 * Uploads the amount of data the channel can take right now.
-	 * Removes the data it uploads from this Bay object.
-	 * 
-	 * @param c The SocketChannel this method will upload data into
-	 * @return  The number of bytes we uploaded
-	 */
-	public int oldUpload(SocketChannel c) throws IOException {
-		
-		// Make sure we have data to upload
-		if (size() == 0) return 0;
-		//TODO throw IOException on nothing to upload
-		
-		// Clip our buffer's position and limit around our data
-		buffer.limit(buffer.position()); // Normally, they clip the free space at the end
-		buffer.position(offset);
-
-		// Upload our data into the given channel
-		int uploaded = c.write(buffer); // Moves position forward past the data it uploads
-		if (uploaded == -1) throw new IOException(); // Make sure write() didn't report end of stream
-
-		// The channel took all our data
-		if (buffer.remaining() == 0) {
-
-			// Mark us as empty
-			clear();
-
-		// We still have some data left to try uploading next time
-		} else {
-
-			// Clip offset and position around our data, and position and limit around the space beyond
-			offset = buffer.position();
-			buffer.position(buffer.limit());
-			buffer.limit(buffer.capacity());
-		}
-
-		// Return the number of bytes the channel took from us
-		return uploaded;
-		//TODO throw IOException on nothing uploaded
-		//TODO no counting, have the caller measure the size
-	}
-
-	/**
-	 * Download data from a given SocketChannel, adding it to the data this Bay object holds.
-	 * Shifts our data to the start, and fills the space at the end with data from the channel.
-	 * Doesn't prepare more space in this Bay object.
-	 * 
-	 * @param c The SocketChannel this method will download data from
-	 * @return  The number of bytes we downloaded
-	 */
-	public int oldDownload(SocketChannel c) throws IOException {
-
-		// Make sure we're not already full
-		if (buffer == null || size() == buffer.capacity()) return 0;
-
-		// Shift any data in our ByteBuffer to the start
-		compact();
-
-		// Download data from the channel, adding it to our ByteBuffer
-		int downloaded = c.read(buffer);               // Moves position forward so it still clips out the empty space at the end
-		if (downloaded == -1) throw new IOException(); // Make sure read() didn't report end of stream
-		return downloaded;                             // Return the number of bytes the channel gave us
-		
-		//TODO throw IOException on downloaded nothing
-		//TODO no counting, have the caller measure the size
-	}
-
-	/**
-	 * Download the data of a single UDP packet from a given DatagramChannel, putting it in this Bay object.
-	 * Clears this Bay before downloading the new data.
-	 * If the UDP packet is bigger than this Bay can hold, Java chops the end off without telling us.
-	 * 
-	 * @param c The DatagramChannel this method will download data from.
-	 * @return  The IP address and port number of the computer that sent us the UDP packet, in an IpPort object.
-	 *          null if there is no packet has arrived for us to download right now.
-	 */
-	public IpPort oldReceive(DatagramChannel c) throws IOException {
-
-		// Clear this Bay so it can hold as much as possible
-		clear();
-		
-		// Download data from the channel, putting it at the start of our ByteBuffer
-		InetSocketAddress a = (InetSocketAddress)c.receive(buffer); // Moves position forward
-		if (a == null) return null; // There is no packet for us right now
-		
-		// Return the IP address and port number in an IpPort object
-		return new IpPort(a);
 	}
 }

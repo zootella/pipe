@@ -1,9 +1,7 @@
 package base.data;
 
-
 import java.nio.ByteBuffer;
 import java.util.Random;
-
 
 import base.encode.Encode;
 import base.encode.Hash;
@@ -11,10 +9,8 @@ import base.exception.ChopException;
 import base.exception.CodeException;
 
 public class Data implements Comparable<Data> {
-	
-	//TODO fix the 3 todos below to improve performance and stop copying the ByteBuffer a million times
-	
-	// -------- Make a new Data object to view some data --------
+
+	// Make
 
 	/** Make a new Data object that views the single byte y. */
 	public Data(byte y) { this(Convert.toByteBuffer(y)); }
@@ -24,8 +20,7 @@ public class Data implements Comparable<Data> {
 	public Data(String s) { this(Convert.toByteBuffer(s)); }
 	/** Make a new Data object that views the data between b's position and limit, doesn't change b. */
 	public Data(ByteBuffer b) {
-		buffer = b.asReadOnlyBuffer().slice(); // Save a copy of b so if b's position moves, buffer's position won't
-		//TODO is it necessary to read only and slice, here, this copies it twice more, that may be slow
+		buffer = b.asReadOnlyBuffer(); // Save a copy of b so if b's position moves, buffer's position won't
 	}
 
 	/**
@@ -44,7 +39,7 @@ public class Data implements Comparable<Data> {
 		return (new Bay(this)).data(); // Make a new Bay that will copy the data we view into it
 	}
 	
-	// -------- Convert this Data into a byte array, String, or ByteBuffer --------
+	// Convert
 
 	/** Copy the data this Data object views into a new byte array, and return it. */
 	public byte[] toByteArray() { return Convert.toByteArray(toByteBuffer()); }
@@ -59,7 +54,7 @@ public class Data implements Comparable<Data> {
 		return buffer.duplicate(); // Return a copy so if toByteBuffer()'s position changes, buffer's position won't
 	}
 
-	// -------- Size --------
+	// Size
 	
 	/** The number of bytes of data this Data object views. */
 	public int size() {
@@ -73,15 +68,13 @@ public class Data implements Comparable<Data> {
 		return buffer.hasRemaining(); // True if our ByteBuffer's position and limit aren't closed together
 	}
 
-	// -------- Change this Data object --------
+	// Change
 
 	/** Remove size bytes from the start of the data this Data object views. */
 	public void remove(int size) throws ChopException {
 		if (size == 0) return; // Nothing to remove
 		if (size > size()) throw new ChopException(); // Asked to remove more than we have
 		buffer.position(buffer.position() + size); // Move our ByteBuffer's position forward size bytes
-		buffer = buffer.slice(); // Make a new ByteBuffer clipped around just that part
-		//TODO stop using slice entirely
 	}
 
 	/** Remove data from the start of this Data object, keeping only the last size bytes. */
@@ -96,16 +89,15 @@ public class Data implements Comparable<Data> {
 		return d;
 	}
 
-	// -------- Inside parts --------
+	// Inside
 
 	/**
 	 * A Data object has a ByteBuffer buffer that clips out the data it views.
 	 * The data is between buffer's position and limit.
 	 */
-	private ByteBuffer buffer;
-	//TODO can you make this final?
+	private final ByteBuffer buffer;
 
-	// -------- Return new Data objects that clip out parts of this Data --------
+	// Clip
 
 	/** Clip out up to size bytes from the start of this Data. */
 	public Data begin(int size) {
@@ -143,7 +135,7 @@ public class Data implements Comparable<Data> {
 		return buffer.get(buffer.position() + i); // ByteBuffer.get() takes an index from the start of the ByteBuffer
 	}
 
-	// -------- Determine if this Data views the same data as a given object --------
+	// Same
 
 	/** true if this Data object views a single byte, y. */
 	public boolean same(byte y) { return same(new Data(y)); }
@@ -160,7 +152,7 @@ public class Data implements Comparable<Data> {
 		return search(d, true, false) != -1;  // Search at the start only
 	}
 
-	// -------- Determine if this Data starts, ends, or has the data of a given object --------
+	// Has
 
 	/** true if this Data starts with the byte y. */
 	public boolean starts(byte y) { return starts(new Data(y)); }
@@ -195,7 +187,7 @@ public class Data implements Comparable<Data> {
 	/** true if this Data contains d. */
 	public boolean has(Data d) { return search(d, true, true) != -1; }
 
-	// -------- Find where in this Data a tag appears --------
+	// Find
 
 	/** Find the distance in bytes from the start of this Data to where the byte y first appears, -1 if not found. */
 	public int find(byte y) { return find(new Data(y)); }
@@ -265,7 +257,7 @@ public class Data implements Comparable<Data> {
 		} catch (ChopException e) { throw new CodeException(); } // There is a mistake in the code in this try block
 	}
 
-	// -------- Split this Data around a tag, clipping out what is before and after it --------
+	// Split
 
 	/** Split this Data around the given byte y, clipping out the parts before and after it. */
 	public Split split(byte y) { return split(new Data(y)); }
@@ -322,7 +314,7 @@ public class Data implements Comparable<Data> {
 		} catch (ChopException e) { throw new CodeException(); } // There is a mistake in the code in this try block
 	}
 	
-	// -------- Compare --------
+	// Compare
 
 	/** Compare this Data object to another one to determine which should appear first in ascending sorted order. */
 	public int compareTo(Data d) {
@@ -335,7 +327,7 @@ public class Data implements Comparable<Data> {
 		return buffer.equals(((Data)o).buffer); // Use Java's ByteBuffer.equals() method
 	}
 
-	// -------- Use features other classes offer --------
+	// Shortcut
 	
 	/** Encode this Data into text using base 16, each byte will become 2 characters, "00" through "ff". */
 	public String base16() { return Encode.toBase16(this); }
@@ -351,7 +343,7 @@ public class Data implements Comparable<Data> {
 	/** Compute the SHA1 hash of this Data, return the 20-byte, 160-bit hash value. */
 	public Data hash() { return Hash.hash(this); }
 	
-	// -------- Empty and random --------
+	// Supply
 	
 	/** Make a new empty Data object that doesn't view any data, and has a size() of 0 bytes. */
 	public static Data empty() {

@@ -53,7 +53,6 @@ public class Bin {
 	public Data data() {
 		ByteBuffer b = buffer.asReadOnlyBuffer(); // This doesn't copy the data
 		b.flip(); // Clip b's position and limit around our data
-		b = b.slice(); // Size b around the data
 		return new Data(b); // Make it into a new Data object
 	}
 

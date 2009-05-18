@@ -7,6 +7,7 @@ import java.util.zip.Inflater;
 
 
 import base.data.Bay;
+import base.data.Bin;
 import base.data.Data;
 import base.exception.ChopException;
 import base.exception.MessageException;
@@ -79,7 +80,7 @@ public class Compress {
 	/** Make an empty temporary byte array size bytes big, keeping it between 64 bytes and 8 KB. */
 	private static byte[] temporary(int size) {
 		if (size < 64) size = 64;
-		if (size > Bay.big) size = Bay.big;
+		if (size > Bin.medium) size = Bin.medium;
 		return new byte[size];
 	}
 	

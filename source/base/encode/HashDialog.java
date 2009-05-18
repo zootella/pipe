@@ -81,7 +81,7 @@ public class HashDialog extends Close {
 
 		// Make our inner View object and connect the Model below to it
 		view = new MyView();
-		hash.model.add(view); // When the Feed Model changes, it will call our view.refresh() method
+		hash.model.add(view); // When the Model below changes, it will call our view.refresh() method
 		view.refresh();
 
 		// Make the dialog box and show it on the screen

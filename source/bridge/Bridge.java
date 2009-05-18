@@ -1,10 +1,7 @@
 package bridge;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
+import base.data.Bay;
 import base.data.Bin;
-import base.data.Data;
 import base.data.Split;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
@@ -23,12 +20,13 @@ public class Bridge extends Close {
 	
 	// Parts
 	
-	public Bridge() {
+	public Bridge(Update up) {
+		this.up = up;
 		
 		uploadBin = Bin.medium();
 		downloadBin = Bin.medium();
-		uploadMessages = new ArrayDeque<String>();
-		downloadMessages = new ArrayDeque<String>();
+		uploadBay = new Bay();
+		downloadBay = new Bay();
 		
 		update = new Update(new MyReceive());
 		update.send();
@@ -46,9 +44,10 @@ public class Bridge extends Close {
 	private DownloadTask downloadTask;
 	private Bin uploadBin;
 	private Bin downloadBin;
-	private final Deque<String> uploadMessages;
-	private final Deque<String> downloadMessages;
+	private final Bay uploadBay;
+	private final Bay downloadBay;
 	
+	private final Update up;
 	private final Update update;
 	private Exception exception;
 	
@@ -78,12 +77,16 @@ public class Bridge extends Close {
 	}
 
 	public void send(String s) {
-		if ((new Data(s)).size() + 1 > Bin.medium) throw new IndexOutOfBoundsException();
-		uploadMessages.add(s);
+		uploadBay.add(s);
+		uploadBay.add((byte)0);
 		update.send();
 	}
 	public String receive() {
-		return downloadMessages.poll();
+		Split split = downloadBay.data().split((byte)0);
+		if (!split.found) return null;
+		String s = split.before.toString();
+		downloadBay.remove(split.before.size() + 1);
+		return s;
 	}
 	
 	// Run
@@ -99,9 +102,9 @@ public class Bridge extends Close {
 						listen = new ListenSocket(port); // Make once the first time
 					if (no(accept))
 						accept = new AcceptTask(update, listen); // Listen for the incoming connection
-					if (no(socket) && done(accept)) {// The client connected to us
+					if (no(socket) && done(accept)) { // The client connected to us
 						socket = accept.result(); // Get the connection socket
-						System.out.println("server connected");
+						up.send();
 					}
 				}
 
@@ -111,7 +114,7 @@ public class Bridge extends Close {
 						connect = new ConnectTask(update, ipPort);
 					if (no(socket) && done(connect)) {
 						socket = connect.result();
-						System.out.println("client connected");
+						up.send();
 					}
 				}
 
@@ -125,45 +128,24 @@ public class Bridge extends Close {
 					downloadTask = null;
 				}
 				
-				// Move text data between list and bins
-				if (no(uploadTask)) { // No task is using the upload bin right now
-					while (
-						uploadMessages.peek() != null && // We have text to upload, and
-						(new Data(uploadMessages.peek())).size() + 1 <= uploadBin.space()) { // 
-						
-						uploadBin.add(new Data(uploadMessages.poll()));
-						uploadBin.add(new Data((byte)0));
-					}
+				// Move data between bays and bins
+				if (uploadBay.hasData() && no(uploadTask) && uploadBin.hasSpace())
+					uploadBin.add(uploadBay);
+				if (no(downloadTask) && downloadBin.hasData()) {
+					downloadBay.add(downloadBin);
+					up.send();
 				}
-				if (no(downloadTask)) { // No task is using the download bin right now
-					while (true) {
-						Split s = downloadBin.data().split((byte)0); // Look for a 0 byte that separates messages
-						if (!s.found && downloadBin.isFull()) throw new IndexOutOfBoundsException(); // Message too big
-						if (!s.found) break;
-						
-						String message = s.before.toString();
-						
-						downloadMessages.add(s.before.toString());
-						downloadBin.remove(s.before.size() + 1);
-						
-						System.out.println("received: " + message);
-						//TODO send notification we've changed
-					}
-				}
-
-				// Upload or download more data
+				
+				// Upload and download more data
 				if (is(socket) && no(uploadTask) && uploadBin.hasData())
 					uploadTask = new UploadTask(update, socket, new Range(), uploadBin);
 				if (is(socket) && no(downloadTask) && downloadBin.hasSpace())
 					downloadTask = new DownloadTask(update, socket, new Range(), downloadBin);
 
 			} catch (Exception e) {
-				
-				System.out.println("exception:");
-				e.printStackTrace();
-				
 				exception = e;
 				close();
+				up.send();
 			}
 		}
 	}

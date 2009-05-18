@@ -32,7 +32,7 @@ public class Window {
 		this.core = core;
 
 		// Make the objects that represent the tabs in the window
-		bridge = new BridgeTab(core.bridge);
+		bridge = new BridgeTab();
 		status = new StatusTab();
 
 		// Make a row of tabs, and add the tabs to it
@@ -70,8 +70,8 @@ public class Window {
 	private class MyWindowListener extends WindowAdapter {
 		public void windowClosing(WindowEvent e) {
 
-			// Close the whole program
-//			core.program.close();
+			// Close the core
+			core.close();
 		}
 	}
 
