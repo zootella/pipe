@@ -9,6 +9,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import base.exception.CodeException;
+import base.exception.Error;
 import base.exception.MessageException;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
@@ -95,11 +96,14 @@ public class BridgeTab extends Close {
 	private class ServerAction extends AbstractAction {
 		public ServerAction() { super("Listen"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
-			
-			report("Listening...");
-			serverAction.setEnabled(false);
-			connectAction.setEnabled(false);
-			bridge.server(port);
+			try {
+				
+				report("Listening...");
+				serverAction.setEnabled(false);
+				connectAction.setEnabled(false);
+				bridge.server(port);
+				
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 	
@@ -108,11 +112,14 @@ public class BridgeTab extends Close {
 	private class ConnectAction extends AbstractAction {
 		public ConnectAction() { super("Connect"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				report("Connecting...");
+				serverAction.setEnabled(false);
+				connectAction.setEnabled(false);
+				bridge.client(ipPort);
 
-			report("Connecting...");
-			serverAction.setEnabled(false);
-			connectAction.setEnabled(false);
-			bridge.client(ipPort);
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 
@@ -120,8 +127,11 @@ public class BridgeTab extends Close {
 	private class SendAction extends AbstractAction {
 		public SendAction() { super("Send"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
-			
-			bridge.send(command.getText());
+			try {
+				
+				bridge.send(command.getText());
+
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 	

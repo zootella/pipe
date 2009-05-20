@@ -2,6 +2,8 @@ package base.state;
 
 import javax.swing.SwingUtilities;
 
+import base.exception.Error;
+
 public class Update {
 	
 	// Make
@@ -35,9 +37,11 @@ public class Update {
 	// Soon after send() above calls SwingUtilities.invokeLater(), Java calls this run() method
 	private class MyRunnable implements Runnable {
 		public void run() {
-			set = false;       // Let the next call to send() go through
-			spin.count();      // Make sure we haven't been doing this too frequently
-			receive.receive(); // Call our given receive() method
+			try {
+				set = false;       // Let the next call to send() go through
+				spin.count();      // Make sure we haven't been doing this too frequently
+				receive.receive(); // Call our given receive() method
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 }

@@ -1,15 +1,10 @@
 package base.user;
 
-
-
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-
-import main.Window;
-
 
 public class Panel {
 

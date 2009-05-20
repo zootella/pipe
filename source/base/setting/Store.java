@@ -10,10 +10,11 @@ import base.exception.MessageException;
 import base.file.File;
 import base.file.Here;
 import base.file.Path;
+import base.state.Close;
 
-public class Store {
+public class Store extends Close {
 
-	// -------- Open and save Store.txt --------
+	// Open
 
 	/** Open Store.txt next to where this program is running. */
 	public Store() {
@@ -51,7 +52,8 @@ public class Store {
 	public Outline outline;
 	
 	/** Save the program's store file for the next time we run. */
-	public void close() {
+	@Override public void close() {
+		if (already()) return;
 		try {
 			
 			// Turn outline into text, and save it to path

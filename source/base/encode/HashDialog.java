@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-
+import base.exception.Error;
 import base.state.Close;
 import base.state.View;
 import base.user.Cell;
@@ -32,8 +32,10 @@ public class HashDialog extends Close {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-            	HashDialog dialog = new HashDialog();
-        		dialog.dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Make closing the window close the program
+    			try {
+    				HashDialog dialog = new HashDialog();
+    				dialog.dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Make closing the window close the program
+    			} catch (Exception e) { Error.error(e); }
             }
         });
     }
@@ -108,8 +110,10 @@ public class HashDialog extends Close {
 	
 	// When the user clicks the dialog's corner X, Java calls this windowClosing() method and then takes the dialog off the screen
 	private class MyWindowListener extends WindowAdapter {
-		public void windowClosing(WindowEvent e) {
-			close();
+		public void windowClosing(WindowEvent w) {
+			try {
+				close();
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 	
@@ -117,7 +121,9 @@ public class HashDialog extends Close {
 	private class CloseAction extends AbstractAction {
 		public CloseAction() { super("Close"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
-			close();
+			try {
+				close();
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 	
@@ -125,22 +131,36 @@ public class HashDialog extends Close {
 	private class BrowseAction extends AbstractAction {
 		public BrowseAction() { super("Browse..."); }
 		public void actionPerformed(ActionEvent a) {
-			Dialog.chooseFile(dialog, path); // Show the choice box to the user, and set the path text
+			try {
+				Dialog.chooseFile(dialog, path); // Show the choice box to the user, and set the path text
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 	
 	// The user clicked a button
 	private class StartAction extends AbstractAction {
 		public StartAction() { super("Start"); }
-		public void actionPerformed(ActionEvent a) { hash.start(path.getText()); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+				hash.start(path.getText());
+			} catch (Exception e) { Error.error(e); }
+		}
 	}
 	private class StopAction extends AbstractAction {
 		public StopAction() { super("Stop"); }
-		public void actionPerformed(ActionEvent a) { hash.stop(); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+				hash.stop();
+			} catch (Exception e) { Error.error(e); }
+		}
 	}
 	private class ResetAction extends AbstractAction {
 		public ResetAction() { super("Reset"); }
-		public void actionPerformed(ActionEvent a) { hash.reset(); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+				hash.reset();
+			} catch (Exception e) { Error.error(e); }
+		}
 	}
 
 	// View

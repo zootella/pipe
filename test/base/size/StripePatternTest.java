@@ -5,9 +5,10 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import main.Main;
 
 import org.junit.Test;
+
+import pipe.main.Main;
 
 
 import base.exception.MessageException;

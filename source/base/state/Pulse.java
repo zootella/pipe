@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Timer;
 
+import base.exception.Error;
+
 public class Pulse extends Close {
 	
 	// Make
@@ -32,11 +34,13 @@ public class Pulse extends Close {
 	
 	// Receive
 
-	// When timer goes off, Java calls this actionPerformed() method
+	// When timer goes off, Java calls this method
 	private class MyActionListener extends AbstractAction {
-		public void actionPerformed(ActionEvent e) {
-			if (closed()) return; // Don't let a closed Pulse call receive()
-			receive.receive();    // Call our given receive() method
+		public void actionPerformed(ActionEvent a) {
+			try {
+				if (closed()) return; // Don't let a closed Pulse call receive()
+				receive.receive();    // Call our given receive() method
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 }

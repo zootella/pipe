@@ -1,6 +1,7 @@
 package base.file;
 
-import main.Program;
+import pipe.main.Main;
+import pipe.main.Program;
 
 import base.data.Data;
 import base.data.Text;
@@ -105,6 +106,6 @@ public class Name {
 
 	/** Make a new Name like "Hello ryio3tz5.db" that won't conflict with files already in a folder. */
 	public static Name temporary() {
-		return new Name(Program.name + " " + Text.start(Data.random(8).base32(), 8), "db");
+		return new Name(Main.name + " " + Text.start(Data.random(8).base32(), 8), "db");
 	}
 }

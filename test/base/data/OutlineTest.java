@@ -1,9 +1,10 @@
 package base.data;
 
 
-import main.Main;
 
 import org.junit.Test;
+
+import pipe.main.Main;
 
 
 import base.data.Data;

@@ -10,9 +10,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.text.JTextComponent;
 
-
 import base.data.Text;
 import base.desktop.Clipboard;
+import base.exception.Error;
 
 public class TextMenu {
 
@@ -97,43 +97,46 @@ public class TextMenu {
 		}
 	}
 
-	// When the user clicks an item in the menu, Java calls this actionPerformed() method
+	// When the user clicks an item in the menu, Java calls this method
 	private class MyActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-
-			// Get the selected text, and the text before and after it
-			String s = component.getText();
-			int i = component.getSelectionStart(); // The index where the selection starts
-			int size = component.getSelectionEnd() - i; // The number of selected characters
-			String before = Text.start(s, i);
-			String selected = Text.clip(s, i, size);
-			String after = Text.after(s, i + size);
-
-			// The user clicked "Cut" on the menu
-			if (e.getActionCommand().equals("Cut")) {
-				Clipboard.copy(selected);
-				component.setText(before + after); // Remove the selected text
-				component.setCaretPosition(i);
-
-			// The user clicked "Copy" on the menu
-			} else if (e.getActionCommand().equals("Copy")) {
-				Clipboard.copy(selected);
-
-			// The user clicked "Paste" on the menu
-			} else if (e.getActionCommand().equals("Paste")) {
-				String clipboard = Clipboard.paste(); // Insert text from the clipboard
-				component.setText(before + clipboard + after);
-				component.setCaretPosition(i + clipboard.length());
-
-			// The user clicked "Delete" on the menu
-			} else if (e.getActionCommand().equals("Delete")) {
-				component.setText(before + after); // Remove the selected text
-				component.setCaretPosition(i);
-
-			// The user clicked "Select All" on the menu
-			} else if (e.getActionCommand().equals("Select All")) {
-				component.selectAll();
-			}
+		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				// Get the selected text, and the text before and after it
+				String s = component.getText();
+				int i = component.getSelectionStart(); // The index where the selection starts
+				int size = component.getSelectionEnd() - i; // The number of selected characters
+				String before = Text.start(s, i);
+				String selected = Text.clip(s, i, size);
+				String after = Text.after(s, i + size);
+				
+				// The user clicked "Cut" on the menu
+				if (a.getActionCommand().equals("Cut")) {
+					Clipboard.copy(selected);
+					component.setText(before + after); // Remove the selected text
+					component.setCaretPosition(i);
+					
+					// The user clicked "Copy" on the menu
+				} else if (a.getActionCommand().equals("Copy")) {
+					Clipboard.copy(selected);
+					
+					// The user clicked "Paste" on the menu
+				} else if (a.getActionCommand().equals("Paste")) {
+					String clipboard = Clipboard.paste(); // Insert text from the clipboard
+					component.setText(before + clipboard + after);
+					component.setCaretPosition(i + clipboard.length());
+					
+					// The user clicked "Delete" on the menu
+				} else if (a.getActionCommand().equals("Delete")) {
+					component.setText(before + after); // Remove the selected text
+					component.setCaretPosition(i);
+					
+					// The user clicked "Select All" on the menu
+				} else if (a.getActionCommand().equals("Select All")) {
+					component.selectAll();
+				}
+				
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 }

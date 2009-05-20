@@ -10,9 +10,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import main.Snippet;
+import pipe.main.Snippet;
 
 
+
+import base.exception.Error;
 import base.user.Cell;
 import base.user.Panel;
 import base.user.TextMenu;
@@ -65,22 +67,25 @@ public class StatusTab {
 
 	// -------- Methods Java calls when the user clicks --------
 
-	// When the user clicks something in the Status tab, Java calls this actionPerformed() method
+	// When the user clicks something in the Status tab, Java calls this method
 	private class MyActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-
-			// The user clicked the Snippet button
-			if (e.getActionCommand().equals("Snippet")) {
-				Snippet.snippet(); // Call the program's snippet method to run the snippet of code there
+		public void actionPerformed(ActionEvent a) {
+			try {
 				
-			// The user hit the Enter key in the text box at the bottom, which we named "Command"
-			} else if (e.getActionCommand().equals("Command")) {
-				enter(); // Get and process the command the user typed
+				// The user clicked the Snippet button
+				if (a.getActionCommand().equals("Snippet")) {
+					Snippet.snippet(); // Call the program's snippet method to run the snippet of code there
+					
+					// The user hit the Enter key in the text box at the bottom, which we named "Command"
+				} else if (a.getActionCommand().equals("Command")) {
+					enter(); // Get and process the command the user typed
+					
+					// The user clicked the Enter button
+				} else if (a.getActionCommand().equals("Enter")) {
+					enter(); // Get and process the command the user typed
+				}
 
-			// The user clicked the Enter button
-			} else if (e.getActionCommand().equals("Enter")) {
-				enter(); // Get and process the command the user typed
-			}
+			} catch (Exception e) { Error.error(e); }
 		}
 	}
 	
