@@ -25,10 +25,12 @@ public class Toolbar {
 		this.program = program;
 
 		newAction = new NewAction();
+		infoAction = new InfoAction();
 		snippetAction = new SnippetAction();
 		
 		panel = Panel.row();
 		panel.add(Cell.wrap(new JButton(newAction)));
+		panel.add(Cell.wrap(new JButton(infoAction)));
 		panel.add(Cell.wrap(new JButton(snippetAction)));
 		
 		
@@ -44,7 +46,18 @@ public class Toolbar {
 
 	private final NewAction newAction;
 	private class NewAction extends AbstractAction {
-		public NewAction() { super("New..."); } // Text for the button
+		public NewAction() { super("New"); } // Text for the button
+		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				
+			} catch (Exception e) { Error.error(e); }
+		}
+	}
+
+	private final InfoAction infoAction;
+	private class InfoAction extends AbstractAction {
+		public InfoAction() { super("Info"); } // Text for the button
 		public void actionPerformed(ActionEvent a) {
 			try {
 				

@@ -1,8 +1,6 @@
 package base.file;
 
 import pipe.main.Main;
-import pipe.main.Program;
-
 import base.data.Data;
 import base.data.Text;
 import base.data.TextSplit;

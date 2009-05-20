@@ -1,7 +1,7 @@
 package base.exception;
 
 /**
- * Throw a PeerException when a remote peer you're communicating with says something impossible, a mistake.
+ * Throw a PeerException when a remote peer you're communicating with says something not allowed.
  * When you catch a PeerException, disconnect from the remote peer.
  */
-public class PeerException extends Exception {} // Methods that throw PeerException have to declare it
+public class PeerException extends RuntimeException {}
