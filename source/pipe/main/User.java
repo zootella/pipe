@@ -1,10 +1,11 @@
 package pipe.main;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import pipe.user.window.InfoWindow;
-import pipe.user.window.MainIcon;
-import pipe.user.window.MainWindow;
+import pipe.user.InfoFrame;
+import pipe.user.MainIcon;
+import pipe.user.MainFrame;
 import base.state.Close;
 
 public class User extends Close {
@@ -17,12 +18,13 @@ public class User extends Close {
 		
 		// Java settings
 		JFrame.setDefaultLookAndFeelDecorated(true);	
+		JDialog.setDefaultLookAndFeelDecorated(true);
 		
 		
 		
 		
-		window = new MainWindow(program);
-		info = new InfoWindow(program);
+		window = new MainFrame(program);
+		info = new InfoFrame(program);
 		icon = new MainIcon(program);
 		
 		show(true);
@@ -32,8 +34,8 @@ public class User extends Close {
 		
 	}
 	
-	public final MainWindow window;
-	public final InfoWindow info;
+	public final MainFrame window;
+	public final InfoFrame info;
 	public final MainIcon icon;
 	
 	

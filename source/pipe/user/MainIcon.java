@@ -1,4 +1,4 @@
-package pipe.user.window;
+package pipe.user;
 
 import java.awt.AWTException;
 import java.awt.Image;

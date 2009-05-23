@@ -88,7 +88,7 @@ public class Panel {
 	// -------- Inside parts --------
 	
 	/** The Swing JPanel object that shows this Panel on the screen. */
-	public JPanel jpanel;
+	public final JPanel jpanel;
 	
 	/** true if the components are in a horizontal row, false if they're in a vertical column. */
 	private boolean horizontal;

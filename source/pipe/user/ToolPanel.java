@@ -1,4 +1,4 @@
-package pipe.user.panel;
+package pipe.user;
 
 import java.awt.event.ActionEvent;
 
@@ -6,7 +6,6 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import pipe.main.Core;
 import pipe.main.Program;
 import pipe.main.Snippet;
 import base.exception.Mistake;
@@ -53,6 +52,7 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
+				new MuseumDialog(program);
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}

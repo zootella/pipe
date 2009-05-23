@@ -1,6 +1,6 @@
 package pipe.main;
 
-import pipe.user.window.MainIcon;
+import pipe.user.MainIcon;
 
 public class Snippet {
 

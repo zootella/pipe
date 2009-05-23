@@ -36,4 +36,14 @@ public class Core extends Close {
 		// Make sure every object with a close() method ran
 		Close.checkAll();
 	}
+	
+	
+	
+	
+	// call after you add or remove a pipe or one changes
+	public void changed() {
+		
+		
+		
+	}
 }

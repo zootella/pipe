@@ -1,4 +1,4 @@
-package pipe.user.window;
+package pipe.user;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -10,8 +10,6 @@ import javax.swing.JFrame;
 import pipe.core.Pipe;
 import pipe.main.Main;
 import pipe.main.Program;
-import pipe.user.panel.PipePanel;
-import pipe.user.panel.ToolPanel;
 import base.exception.Mistake;
 import base.state.Close;
 import base.user.Cell;
@@ -19,7 +17,7 @@ import base.user.Dialog;
 import base.user.Panel;
 
 /** The main window on the screen that lists the running pipes. */
-public class MainWindow extends Close {
+public class MainFrame extends Close {
 	
 	// Links
 
@@ -28,7 +26,7 @@ public class MainWindow extends Close {
 	// Object
 
 	/** Make the program's main window on the screen. */
-	public MainWindow(Program program) {
+	public MainFrame(Program program) {
 		
 		// Save the given link
 		this.program = program;

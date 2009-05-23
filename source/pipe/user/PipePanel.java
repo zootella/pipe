@@ -1,4 +1,4 @@
-package pipe.user.panel;
+package pipe.user;
 
 /** A Status panel shows a pipe to the user. */
 public class PipePanel {

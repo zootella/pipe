@@ -1,17 +1,16 @@
-package pipe.user.window;
+package pipe.user;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import pipe.main.Core;
 import pipe.main.Program;
 import base.exception.Mistake;
 import base.state.Close;
 
 /** The Info window that shows advanced statistics and diagnostic information. */
-public class InfoWindow extends Close {
+public class InfoFrame extends Close {
 	
 	// Links
 	
@@ -19,7 +18,7 @@ public class InfoWindow extends Close {
 	
 	// Object
 
-	public InfoWindow(Program program) {
+	public InfoFrame(Program program) {
 		
 		// Save the given link
 		this.program = program;
