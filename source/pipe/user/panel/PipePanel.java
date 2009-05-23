@@ -1,7 +1,7 @@
-package pipe.user;
+package pipe.user.panel;
 
 /** A Status panel shows a pipe to the user. */
-public class Status {
+public class PipePanel {
 	
 	// Define
 	

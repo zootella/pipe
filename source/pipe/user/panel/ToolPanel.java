@@ -1,4 +1,4 @@
-package pipe.user;
+package pipe.user.panel;
 
 import java.awt.event.ActionEvent;
 
@@ -6,6 +6,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import pipe.main.Core;
 import pipe.main.Program;
 import pipe.main.Snippet;
 import base.exception.Error;
@@ -13,7 +14,7 @@ import base.user.Cell;
 import base.user.Panel;
 
 /** The toolbar at the top of the main window. */
-public class Toolbar {
+public class ToolPanel {
 	
 	// Define
 	
@@ -21,17 +22,19 @@ public class Toolbar {
 	
 	// Object
 	
-	public Toolbar(Program program) {
+	public ToolPanel(Program program) {
 		this.program = program;
 
 		newAction = new NewAction();
 		infoAction = new InfoAction();
 		snippetAction = new SnippetAction();
+		exitAction = new ExitAction();
 		
 		panel = Panel.row();
 		panel.add(Cell.wrap(new JButton(newAction)));
 		panel.add(Cell.wrap(new JButton(infoAction)));
 		panel.add(Cell.wrap(new JButton(snippetAction)));
+		panel.add(Cell.wrap(new JButton(exitAction)));
 		
 		
 		
@@ -73,6 +76,18 @@ public class Toolbar {
 			try {
 				
 				Snippet.snippet();
+
+			} catch (Exception e) { Error.error(e); }
+		}
+	}
+
+	private final ExitAction exitAction;
+	private class ExitAction extends AbstractAction {
+		public ExitAction() { super("Exit"); } // Text for the button
+		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				program.close();
 
 			} catch (Exception e) { Error.error(e); }
 		}

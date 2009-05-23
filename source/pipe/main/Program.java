@@ -1,37 +1,23 @@
 package pipe.main;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import pipe.core.Pipe;
-
-import base.setting.Store;
 import base.state.Close;
 
-/** The core program beneath the window that does everything. */
 public class Program extends Close {
 	
-	// Links
-	
-	private final Store store;
-
-	// Object
-	
-	public Program(Store store) {
-		this.store = store;
-		pipes = new ArrayList<Pipe>();
-
+	public Program() {
+		
+		core = new Core(); // Make the core that does everything
+		user = new User(this); // Put the window on the screen to let the user interact with it
+		
 	}
 	
-	/** The list of pipes the program is using to transfer files with other computers. */
-	public final List<Pipe> pipes;
+	public final Core core;
+	public final User user;
 
 	@Override public void close() {
 		if (already()) return;
 		
-		close(store);
-		
-		// Make sure every object with a close() method ran
-		Close.checkAll();
+		close(user);
+		close(core);
 	}
 }
