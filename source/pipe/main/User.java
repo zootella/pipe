@@ -21,9 +21,9 @@ public class User extends Close {
 		
 		
 		
-		mainWindow = new MainWindow(program);
-		infoWindow = new InfoWindow(program);
-		mainIcon = new MainIcon(program);
+		window = new MainWindow(program);
+		info = new InfoWindow(program);
+		icon = new MainIcon(program);
 		
 		show(true);
 		
@@ -32,9 +32,9 @@ public class User extends Close {
 		
 	}
 	
-	public final MainWindow mainWindow;
-	public final InfoWindow infoWindow;
-	public final MainIcon mainIcon;
+	public final MainWindow window;
+	public final InfoWindow info;
+	public final MainIcon icon;
 	
 	
 	
@@ -44,12 +44,12 @@ public class User extends Close {
 		if (show == b) return;
 		
 		if (b) {
-			mainWindow.frame.setVisible(true);
-			mainIcon.show(false);
+			window.frame.setVisible(true);
+			icon.show(false);
 		} else {
-			mainWindow.frame.setVisible(false);
-			infoWindow.frame.setVisible(false);
-			mainIcon.show(true);
+			window.frame.setVisible(false);
+			info.frame.setVisible(false);
+			icon.show(true);
 		}
 		
 		show = b;
@@ -60,9 +60,9 @@ public class User extends Close {
 	@Override public void close() {
 		if (already()) return;
 		
-		close(mainWindow);
-		close(infoWindow);
-		close(mainIcon);
+		close(window);
+		close(info);
+		close(icon);
 	}
 	
 	

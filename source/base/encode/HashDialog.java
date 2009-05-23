@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import base.exception.Error;
+import base.exception.Mistake;
 import base.state.Close;
 import base.state.View;
 import base.user.Cell;
@@ -35,7 +35,7 @@ public class HashDialog extends Close {
     			try {
     				HashDialog dialog = new HashDialog();
     				dialog.dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Make closing the window close the program
-    			} catch (Exception e) { Error.error(e); }
+    			} catch (Exception e) { Mistake.grab(e); }
             }
         });
     }
@@ -113,7 +113,7 @@ public class HashDialog extends Close {
 		public void windowClosing(WindowEvent w) {
 			try {
 				close();
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	
@@ -123,7 +123,7 @@ public class HashDialog extends Close {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				close();
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	
@@ -133,7 +133,7 @@ public class HashDialog extends Close {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				Dialog.chooseFile(dialog, path); // Show the choice box to the user, and set the path text
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	
@@ -143,7 +143,7 @@ public class HashDialog extends Close {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				hash.start(path.getText());
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	private class StopAction extends AbstractAction {
@@ -151,7 +151,7 @@ public class HashDialog extends Close {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				hash.stop();
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	private class ResetAction extends AbstractAction {
@@ -159,7 +159,7 @@ public class HashDialog extends Close {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				hash.reset();
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 

@@ -14,7 +14,7 @@ import pipe.main.Snippet;
 
 
 
-import base.exception.Error;
+import base.exception.Mistake;
 import base.user.Cell;
 import base.user.Panel;
 import base.user.TextMenu;
@@ -85,7 +85,7 @@ public class StatusTab {
 					enter(); // Get and process the command the user typed
 				}
 
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	

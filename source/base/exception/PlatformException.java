@@ -25,6 +25,11 @@ public class PlatformException extends RuntimeException {
 		message = m;
 	}
 	
+	public PlatformException(String m) {
+		exception = null;
+		message = m;
+	}
+	
 	
 	
 }

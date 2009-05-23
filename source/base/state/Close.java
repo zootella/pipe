@@ -1,6 +1,6 @@
 package base.state;
 
-import base.exception.Error;
+import base.exception.Mistake;
 
 /** Have your object extend Close so the program will notice if you forget to later call its close() method. */
 public abstract class Close {
@@ -51,13 +51,7 @@ public abstract class Close {
 	/** Close c ignoring null and exceptions */
 	public static void close(Close c) {
 		if (c == null) return;
-		try {
-			c.close();
-		} catch (Exception e) {
-			System.out.println("Close.close() caught an exception --v--"); // Log exception and keep going
-			System.out.print(Error.describe(e));
-			System.out.println("Close.close() caught an exception --^--");
-		}
+		try { c.close(); } catch (Exception e) { Mistake.ignore(e); }
 	}
 
 	/** true if c is null */

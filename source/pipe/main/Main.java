@@ -2,7 +2,7 @@ package pipe.main;
 
 import javax.swing.SwingUtilities;
 
-import base.exception.Error;
+import base.exception.Mistake;
 
 public class Main {
 	
@@ -24,7 +24,7 @@ public class Main {
         			// Start the program
         			new Program();
 
-        		} catch (Exception e) { Error.error(e); } // Exception starting up
+        		} catch (Exception e) { Mistake.grab(e); } // Exception starting up
         	}
     	});
 	}

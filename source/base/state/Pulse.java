@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Timer;
 
-import base.exception.Error;
+import base.exception.Mistake;
 
 public class Pulse extends Close {
 	
@@ -40,7 +40,7 @@ public class Pulse extends Close {
 			try {
 				if (closed()) return; // Don't let a closed Pulse call receive()
 				receive.receive();    // Call our given receive() method
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 }

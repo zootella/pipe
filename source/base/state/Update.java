@@ -2,7 +2,7 @@ package base.state;
 
 import javax.swing.SwingUtilities;
 
-import base.exception.Error;
+import base.exception.Mistake;
 
 public class Update {
 	
@@ -41,7 +41,7 @@ public class Update {
 				set = false;       // Let the next call to send() go through
 				spin.count();      // Make sure we haven't been doing this too frequently
 				receive.receive(); // Call our given receive() method
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 }

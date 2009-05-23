@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Timer;
 
-import base.exception.Error;
+import base.exception.Mistake;
 
 public class Delay extends Close {
 	
@@ -56,7 +56,7 @@ public class Delay extends Close {
 				if (closed()) return; // Don't let a closed Delay call receive()
 				set = false;          // Let the next call to send() go through
 				receive.receive();    // Call our given receive() method
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 

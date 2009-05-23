@@ -9,7 +9,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import base.exception.CodeException;
-import base.exception.Error;
+import base.exception.Mistake;
 import base.exception.MessageException;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
@@ -103,7 +103,7 @@ public class BridgeTab extends Close {
 				connectAction.setEnabled(false);
 				bridge.server(port);
 				
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	
@@ -119,7 +119,7 @@ public class BridgeTab extends Close {
 				connectAction.setEnabled(false);
 				bridge.client(ipPort);
 
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 
@@ -131,7 +131,7 @@ public class BridgeTab extends Close {
 				
 				bridge.send(command.getText());
 
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	

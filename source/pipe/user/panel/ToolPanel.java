@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import pipe.main.Core;
 import pipe.main.Program;
 import pipe.main.Snippet;
-import base.exception.Error;
+import base.exception.Mistake;
 import base.user.Cell;
 import base.user.Panel;
 
@@ -54,7 +54,7 @@ public class ToolPanel {
 			try {
 				
 				
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 
@@ -65,7 +65,7 @@ public class ToolPanel {
 			try {
 				
 				
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 
@@ -77,7 +77,7 @@ public class ToolPanel {
 				
 				Snippet.snippet();
 
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 
@@ -89,7 +89,7 @@ public class ToolPanel {
 				
 				program.close();
 
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	

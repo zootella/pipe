@@ -12,7 +12,7 @@ import javax.swing.text.JTextComponent;
 
 import base.data.Text;
 import base.desktop.Clipboard;
-import base.exception.Error;
+import base.exception.Mistake;
 
 public class TextMenu {
 
@@ -136,7 +136,7 @@ public class TextMenu {
 					component.selectAll();
 				}
 				
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 }

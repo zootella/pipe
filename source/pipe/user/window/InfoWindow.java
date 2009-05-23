@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 import pipe.main.Core;
 import pipe.main.Program;
-import base.exception.Error;
+import base.exception.Mistake;
 import base.state.Close;
 
 /** The Info window that shows advanced statistics and diagnostic information. */
@@ -56,7 +56,7 @@ public class InfoWindow extends Close {
 				// Close the program
 				program.close();
 				
-			} catch (Exception e) { Error.error(e); }
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 
