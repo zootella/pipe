@@ -29,8 +29,10 @@ public class ExchangeDialog {
 		new TextMenu(home);
 		new TextMenu(away);
 		home.setEditable(false);
-		JScrollPane homeScroll = new JScrollPane(home, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		JScrollPane awayScroll = new JScrollPane(away, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		home.setLineWrap(true);
+		away.setLineWrap(true);
+		JScrollPane homeScroll = new JScrollPane(home, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane awayScroll = new JScrollPane(away, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		Panel row = Panel.row();
 		row.add(Cell.wrap(new JButton(new OkAction())));
