@@ -1,6 +1,7 @@
 package pipe.user;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -9,6 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import pipe.main.Main;
+import pipe.main.Program;
 import base.exception.MessageException;
 import base.exception.Mistake;
 import base.file.Path;
@@ -16,16 +19,16 @@ import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
 import base.user.TextMenu;
-import pipe.core.Pipe;
-import pipe.core.SendPipe;
-import pipe.main.Main;
-import pipe.main.Program;
 
-public class ConfigureSendDialog {
+public class FolderDialog {
+
+	// Link
 	
 	private final Program program;
 	
-	public ConfigureSendDialog(Program program) {
+	// Object
+	
+	public FolderDialog(Program program, String title, String instruction) {
 		this.program = program;
 		
 		browseAction = new BrowseAction();
@@ -34,38 +37,35 @@ public class ConfigureSendDialog {
 		
 		folder = new JTextField();
 		new TextMenu(folder);
-		
-		
-		dialog = new JDialog(program.user.window.frame, "Send Pipe", true); // true to make a modal dialog
+
+		dialog = new JDialog(program.user.window.frame, title, true); // true to make a modal dialog
 		
 		Panel input = Panel.row();
 		input.add(Cell.wrap(folder).fillWide());
 		input.add(Cell.wrap(new JButton(browseAction)).upperRight());
-		
-		
-		
+
 		Panel buttons = Panel.row();
 		buttons.add(Cell.wrap(new JButton(okAction)));
 		buttons.add(Cell.wrap(new JButton(cancelAction)));
-		
-		
-		
+
 		Panel panel = Panel.column().border();
-		panel.add(Cell.wrap(new JLabel("Choose the folder to send:")));
+		panel.add(Cell.wrap(new JLabel(instruction)));
 		panel.add(Cell.wrap(input.jpanel).fillWide().growTall());
 		panel.add(Cell.wrap(buttons.jpanel).lowerRight());
 		
 		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
 
 		Dialog.show(dialog, 600, 180);
-		
 	}
 
-	public final JDialog dialog;
+	private final JDialog dialog;
 	private final JTextField folder;
+
+	public Path result() { return result; }
+	private Path result;
 	
-	
-	
+	// Action
+
 	private final BrowseAction browseAction;
 	private class BrowseAction extends AbstractAction {
 		public BrowseAction() { super("Browse..."); }
@@ -84,34 +84,11 @@ public class ConfigureSendDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				Path path = null;
-				try {
-					path = new Path(folder.getText());
-				} catch (MessageException e) { path = null; }
-				if (path != null && !path.existsFolder())
-					path = null;
-				
-				if (path == null) {
-					
+				result = check(folder.getText());
+				if (result == null)
 					JOptionPane.showMessageDialog(program.user.window.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
-					
-				} else {
-					
+				else
 					dialog.dispose();
-					Pipe pipe = new SendPipe(path);
-					
-					new ExchangeDialog(program, pipe);
-					
-					if (pipe.readyToStart()) {
-						
-						program.core.pipes.add(pipe);
-						program.core.changed();
-						
-					} else {
-						
-						pipe.close();
-					}
-				}
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -129,7 +106,30 @@ public class ConfigureSendDialog {
 		}
 	}
 	
-	
-	
-	
+	// Help
+
+	/** Make sure s is a Path to a folder on the disk, or return null. */
+	private static Path check(String s) {
+		try {
+			
+			// Parse s into a Path
+			Path path = new Path(s);
+			if (path == null)
+				return null; // Given text is not a valid Path
+			
+			// See if a folder is there
+			if (path.existsFolder())
+				return path;
+			
+			// Try to make the folder
+			path.folder();
+			
+			// See if the folder is there now
+			if (path.existsFolder())
+				return path;
+			return null;
+		}
+		catch (MessageException e) { return null; }
+		catch (IOException e) { return null; }
+	}
 }

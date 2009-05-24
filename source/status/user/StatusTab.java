@@ -74,7 +74,7 @@ public class StatusTab {
 				
 				// The user clicked the Snippet button
 				if (a.getActionCommand().equals("Snippet")) {
-					Snippet.snippet(); // Call the program's snippet method to run the snippet of code there
+//					Snippet.snippet(); // Call the program's snippet method to run the snippet of code there
 					
 					// The user hit the Enter key in the text box at the bottom, which we named "Command"
 				} else if (a.getActionCommand().equals("Command")) {
@@ -103,7 +103,7 @@ public class StatusTab {
     	if (s.equals("snippet")) {
 
     		// Run the snippet method, and set the response text
-    		Snippet.snippet();
+//    		Snippet.snippet();
     		response = "ran snippet";
     	}
 

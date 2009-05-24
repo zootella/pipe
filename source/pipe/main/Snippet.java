@@ -1,16 +1,13 @@
 package pipe.main;
 
-import pipe.user.MainIcon;
+import javax.swing.JOptionPane;
+
+import pipe.user.FolderDialog;
+import base.file.Path;
 
 public class Snippet {
 
-	public static void snippet() {
-		
-		
-		
+	public static void snippet(Program program) {
 
-		
-		
-		
 	}
 }

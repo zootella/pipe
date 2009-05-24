@@ -44,15 +44,20 @@ public class ToolPanel {
 
 	private final Program program;
 	
-	// Actions
+	public JPanel panel() {
+		return panel.jpanel;
+	}
+	
+	
+	// Action
 
 	private final NewAction newAction;
 	private class NewAction extends AbstractAction {
 		public NewAction() { super("New"); } // Text for the button
 		public void actionPerformed(ActionEvent a) {
 			try {
-				
-				new MuseumDialog(program);
+
+				program.user.newPipe();
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -64,6 +69,7 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
+				program.user.info.frame.setVisible(true);
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -75,7 +81,7 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				Snippet.snippet();
+				Snippet.snippet(program);
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -94,10 +100,6 @@ public class ToolPanel {
 	}
 	
 	
-	// Panel
 	
-	public JPanel panel() {
-		return panel.jpanel;
-	}
 
 }
