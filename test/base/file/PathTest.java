@@ -7,11 +7,11 @@ import base.exception.MessageException;
 import base.file.Path;
 
 public class PathTest {
+	
+	// Test
 
-	@Test
-	public void test() throws Exception {
-
-		// good absolute paths, windows-style
+	// good absolute paths, windows style
+	@Test public void testParseWindows() throws Exception {
 		
 		new Path("C:\\folder\\subfolder"); // escaped backslashes
 		new Path("C:/folder/subfolder");   // forward slashes
@@ -28,8 +28,29 @@ public class PathTest {
 		new Path("C:"); // it took extra code to make these work
 		new Path("C:");
 		new Path("/C:");
+	}
+	
+	// good absolute paths, windows lan style
+	@Test public void testParseWindowsLan() throws Exception {
+
+		new Path("\\\\computer\\share");
+		new Path("\\\\computer\\share\\file.ext");
+		new Path("\\\\computer\\share\\folder\\file.ext");
+		new Path("\\\\computer\\share\\folder\\folder\\file.ext");
+	}
+
+	// good absolute paths, mac and linux style
+	// TODO this test fails on windows, maybe it only works on mac
+	@Test public void testParseUnix() throws Exception {
 		
-		// bad because they are relative
+		new Path("/");
+		new Path("/file.ext");
+		new Path("/folder/file.ext");
+		new Path("/folder/folder/file.ext");
+	}
+	
+	// bad because they are relative
+	@Test public void testRelative() throws Exception {
 		
 		confirmBad("");
 		confirmBad("hello");
@@ -46,13 +67,17 @@ public class PathTest {
 		confirmBad("./hello/you");
 		confirmBad("../hello/you");
 		confirmBad("../../hello/you");
-		
-		// nonsense
-		
+	}
+	
+	// nonsense
+	@Test public void testNonsense() throws Exception {
+
 		confirmBad(" ");
 		confirmBad("*");
 		confirmBad(":");
 	}
+	
+	// Help
 
 	private void confirmBad(String s) {
 		try {

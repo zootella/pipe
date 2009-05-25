@@ -1,10 +1,11 @@
 package base.file;
 
 import java.io.File;
-import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import base.data.Text;
+import base.exception.DiskException;
 import base.exception.MessageException;
 
 /** A Path is a parsed and valid looking absolute disk path, like "C:\folder\folder\file.ext". */
@@ -13,7 +14,7 @@ public class Path {
 	// Make
 
 	/** Parse the given String into a new absolute Path, or throw a MessageException. */
-	public Path(String s) throws MessageException {
+	public Path(String s) {
 
 		// Turn "C:" into "C:/", "/C:" into "/C:/", otherwise the Java File constructor will make a relative File
 		if ((s.length() == 2 &&                       Text.isLetter(s.charAt(0)) && s.charAt(1) == ':') ||
@@ -27,7 +28,7 @@ public class Path {
 	}
 
 	/** Confirm File is absolute and make it into a new Path, or throw a MessageException. */
-	public Path(File file) throws MessageException {
+	public Path(File file) {
 		if (!file.isAbsolute()) throw new MessageException(); // Make sure it's absolute
 		this.file = file; // Save it
 	}
@@ -79,19 +80,51 @@ public class Path {
 		} catch (MessageException e) { throw new IndexOutOfBoundsException(); } // New Path not absolute
 	}
 	
-	// Disk
+	// Look
 	
-	/** True if there is a file or folder on the disk at this Path, false if it is unoccupied. */
+	/** true if there is a file or folder on the disk at this Path, false if it is unoccupied. */
 	public boolean exists() { return file.exists(); }
-	/** True if there is a file on the disk at this Path. */
+	/** true if there is a file on the disk at this Path. */
 	public boolean existsFile() { return exists() && !existsFolder(); }
-	/** True if there is a folder on this disk at this Path. */
+	/** true if there is a folder on the disk at this Path. */
 	public boolean existsFolder() { return file.isDirectory(); }
+
+	/** true if there is an empty folder on the disk at this Path. */
+	public boolean existsFolderEmpty() {
+		if (!existsFolder()) return false;
+		return list().size() == 0;
+	}
+
+	/** Get a list of the contents of this folder, throws DiskException if this Path isn't to a folder on the disk. */
+	public List<Name> list() {
+
+		// Get a list of the folders and files inside
+		String[] a = file.list();
+		if (a == null) throw new DiskException();
+
+		// Make and return a List of Name objects
+		List<Name> list = new ArrayList<Name>();
+		for (String s : a)
+			list.add(new Name(s));
+		return list;
+	}
 	
-	/** Confirm this Path is to a folder on the disk, making folders as needed, throw an IOException if it's not. */
-	public void folder() throws IOException {
+	// Change
+	
+	/** Confirm this Path is to a folder on the disk, making folders as needed, throw a DiskException if it's not. */
+	public void folder() {
 		if (existsFolder()) return; // It's already a folder
-		if (!file.mkdirs()) throw new IOException(); // Turn returning false into an exception
+		if (!file.mkdirs()) throw new DiskException(); // Turn returning false into an exception
+	}
+
+	/** Confirm this Path is to a folder on the disk we can write to, throw a DiskException if it's not. */
+	public void folderWrite() {
+		if (!existsFolder()) throw new DiskException();
+		
+		// Try to make and delete a subfolder with a unique name
+		Path temporary = add(Name.unique());
+		temporary.folder();
+		temporary.delete();
 	}
 	
 	/**
@@ -99,16 +132,16 @@ public class Path {
 	 * move() can rename a file or a folder, even if the folder has contents.
 	 * move() can move a file into an existing folder, but can't make a folder to move the file into.
 	 */
-	public void move(Path destination) throws IOException {
-		if (!file.renameTo(destination.file)) throw new IOException(); // Move it by renaming it
+	public void move(Path destination) {
+		if (!file.renameTo(destination.file)) throw new DiskException(); // Move it by renaming it
 	}
 	
 	/**
-	 * Delete the file at the given path, or throw an IOException.
+	 * Delete the file at the given path, or throw a DiskException.
 	 * delete() can delete a file or an empty folder, but not a folder with contents.
 	 */
-	public void delete() throws IOException {
+	public void delete() {
 		if (!exists()) return; // Nothing to delete, delete() below would return false
-		if (!file.delete()) throw new IOException(); // Turn returning false into an exception
+		if (!file.delete()) throw new DiskException(); // Turn returning false into an exception
 	}
 }

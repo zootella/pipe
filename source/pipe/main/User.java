@@ -81,6 +81,7 @@ public class User extends Close {
 	
 	public Pipe newPipe() {
 
+		/*
 		Pipe pipe = (new MuseumDialog(program)).result();
 		if (pipe == null) return null;
 		
@@ -100,6 +101,7 @@ public class User extends Close {
 
 		Outline away = (new ExchangeDialog(program)).result();
 		if (away == null) return null;
+		*/
 		
 		
 		

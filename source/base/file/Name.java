@@ -103,7 +103,7 @@ public class Name {
 	// -------- Make a new Name for a temporary file --------
 
 	/** Make a new Name like "Hello ryio3tz5.db" that won't conflict with files already in a folder. */
-	public static Name temporary() {
+	public static Name unique() {
 		return new Name(Main.name + " " + Text.start(Data.random(8).base32(), 8), "db");
 	}
 }

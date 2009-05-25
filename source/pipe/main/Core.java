@@ -30,8 +30,8 @@ public class Core extends Close {
 		if (already()) return;
 		
 		close(store);
-		for (Pipe pipe : pipes)
-			close(pipe);
+//		for (Pipe pipe : pipes)
+//			close(pipe);
 		
 		// Make sure every object with a close() method ran
 		Close.checkAll();

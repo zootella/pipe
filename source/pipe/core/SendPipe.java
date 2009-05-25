@@ -34,7 +34,7 @@ public class SendPipe extends Close implements Pipe {
 		
 	}
 	
-	public final Path folder;
+	private Path folder;
 
 	@Override public void close() {
 		if (already()) return;
@@ -51,5 +51,11 @@ public class SendPipe extends Close implements Pipe {
 	public boolean readyToStart() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Path folder(String s) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
