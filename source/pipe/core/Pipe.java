@@ -2,32 +2,22 @@ package pipe.core;
 
 import javax.swing.JPanel;
 
+import base.file.Path;
 import base.state.Close;
 
 import pipe.user.PipePanel;
 
-/** Our end of a pipe that transfers files with another computer. */
-public class Pipe extends Close {
+/** An object that extends Pipe represents our end of a pipe that transfers files with another computer. */
+public interface Pipe {
 	
-	public Pipe() {
-		
-	}
+	public Path folder(String s);
+	
 
-	private PipePanel status;
-	
-	public JPanel panel() {
-		return new JPanel();
-	}
+	public JPanel panel();
 
-	@Override public void close() {
-		if (already()) return;
-		
-	}
 	
 	
 	
-	public boolean readyToStart() {
-		return false;
-	}
+	public boolean readyToStart();
 
 }

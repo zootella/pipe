@@ -81,8 +81,8 @@ public class User extends Close {
 	
 	public Pipe newPipe() {
 
-		String type = (new MuseumDialog(program)).result();
-		if (type == null) return null;
+		Pipe pipe = (new MuseumDialog(program)).result();
+		if (pipe == null) return null;
 		
 		String title, instruction;
 		if (type.equals("send")) {

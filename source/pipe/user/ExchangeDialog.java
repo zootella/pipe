@@ -6,11 +6,17 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import pipe.main.Main;
 import pipe.main.Program;
+import base.data.Data;
 import base.data.Outline;
+import base.desktop.Clipboard;
+import base.exception.ChopException;
+import base.exception.MessageException;
 import base.exception.Mistake;
 import base.user.Cell;
 import base.user.Dialog;
@@ -21,7 +27,7 @@ public class ExchangeDialog {
 	
 	private final Program program;
 	
-	public ExchangeDialog(Program program) {
+	public ExchangeDialog(Program program, Outline homeOutline) {
 		this.program = program;
 
 		home = new JTextArea();
@@ -46,9 +52,11 @@ public class ExchangeDialog {
 		panel.place(0, 2, 1, 1, 1, 0, 0, 1, Cell.wrap(new JButton(new CopyAction())));
 		panel.place(1, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JButton(new PasteAction())));
 		panel.place(0, 3, 2, 1, 1, 0, 0, 0, Cell.wrap(row.jpanel).lowerRight());
+		
+		home.setText(homeOutline.toString());
 
 		dialog = new JDialog(program.user.window.frame, "Code Exchange", true); // true to make a modal dialog
-		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
+		dialog.setContentPane(panel.jpanel);
 		Dialog.show(dialog, 800, 400);
 	}
 	
@@ -68,6 +76,7 @@ public class ExchangeDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
+				Clipboard.copy(home.getText());
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -78,6 +87,7 @@ public class ExchangeDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
+				away.setText(Clipboard.paste());
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -88,7 +98,12 @@ public class ExchangeDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				dialog.dispose();
+				result = check(away.getText() + "\n");
+				if (result == null)
+					JOptionPane.showMessageDialog(program.user.window.frame, "Unable to parse code. Make sure you pasted it correctly, and try again.", Main.name, JOptionPane.PLAIN_MESSAGE);
+				else
+					dialog.dispose();
+
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -103,6 +118,16 @@ public class ExchangeDialog {
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}
+	}
+	
+	// Help
+	
+	private Outline check(String s) {
+		try {
+			return Outline.fromText(new Data(s));
+		}
+		catch (MessageException e) { return null; }
+		catch (ChopException e) { return null; }
 	}
 	
 	

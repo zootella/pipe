@@ -6,6 +6,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
+import pipe.core.Pipe;
+import pipe.core.ReceivePipe;
+import pipe.core.SendPipe;
 import pipe.main.Program;
 import base.exception.Mistake;
 import base.user.Cell;
@@ -30,8 +33,8 @@ public class MuseumDialog {
 	
 	private final JDialog dialog;
 	
-	public String result() { return result; }
-	private String result;
+	public Pipe pipe() { return pipe; }
+	private Pipe pipe;
 	
 	// Action
 	
@@ -41,7 +44,7 @@ public class MuseumDialog {
 			try {
 				
 				dialog.dispose();
-				result = "send";
+				pipe = new SendPipe();
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}
@@ -53,7 +56,7 @@ public class MuseumDialog {
 			try {
 				
 				dialog.dispose();
-				result = "receive";
+				pipe = new ReceivePipe();
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}

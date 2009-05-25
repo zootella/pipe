@@ -1,13 +1,14 @@
 package pipe.core;
 
+import javax.swing.JPanel;
+
 import pipe.user.ExchangeDialog;
 import base.file.Path;
 import base.state.Close;
 
-public class SendPipe extends Pipe {
+public class SendPipe extends Close implements Pipe {
 	
-	public SendPipe(Path folder) {
-		this.folder = folder;
+	public SendPipe() {
 		
 		
 		/*
@@ -38,5 +39,17 @@ public class SendPipe extends Pipe {
 	@Override public void close() {
 		if (already()) return;
 		
+	}
+
+	@Override
+	public JPanel panel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean readyToStart() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
