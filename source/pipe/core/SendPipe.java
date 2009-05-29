@@ -48,13 +48,19 @@ public class SendPipe extends Close implements Pipe {
 	}
 
 	@Override
-	public boolean readyToStart() {
+	public boolean ready() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Path folder(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Path folder() {
 		// TODO Auto-generated method stub
 		return null;
 	}

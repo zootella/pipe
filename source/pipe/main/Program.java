@@ -1,5 +1,6 @@
 package pipe.main;
 
+import base.exception.Mistake;
 import base.state.Close;
 
 public class Program extends Close {
@@ -19,5 +20,8 @@ public class Program extends Close {
 		
 		close(user);
 		close(core);
+
+		// Make sure every object with a close() method ran
+		try { Close.checkAll(); } catch (Exception e) { Mistake.grab(e); }
 	}
 }
