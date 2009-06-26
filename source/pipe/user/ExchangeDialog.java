@@ -25,9 +25,15 @@ import base.user.TextMenu;
 
 public class ExchangeDialog {
 	
-	private final Program program;
+	// Library
+
+	public static Outline show(Program program, Outline home) {
+		return (new ExchangeDialog(program, home)).result;
+	}
 	
-	public ExchangeDialog(Program program, Outline homeOutline) {
+	// Object
+
+	private ExchangeDialog(Program program, Outline homeOutline) {
 		this.program = program;
 
 		home = new JTextArea();
@@ -60,14 +66,11 @@ public class ExchangeDialog {
 		Dialog.show(dialog, 800, 400);
 	}
 	
+	private final Program program;
 	private final JDialog dialog;
 	private final JTextArea home;
 	private final JTextArea away;
-
 	private Outline result;
-	public Outline result() {
-		return result;
-	}
 	
 	// Action
 
@@ -129,11 +132,4 @@ public class ExchangeDialog {
 		catch (MessageException e) { return null; }
 		catch (ChopException e) { return null; }
 	}
-	
-	
-	
-	
-	
-	
-
 }

@@ -1,7 +1,6 @@
 package pipe.user;
 
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -22,14 +21,16 @@ import base.user.Panel;
 import base.user.TextMenu;
 
 public class FolderDialog {
+	
+	// Library
 
-	// Link
-	
-	private final Program program;
-	
+	public static Path show(Program program, String title, String instruction) {
+		return (new FolderDialog(program, title, instruction)).path;
+	}
+
 	// Object
 	
-	public FolderDialog(Program program, String title, String instruction) {
+	private FolderDialog(Program program, String title, String instruction) {
 		this.program = program;
 		
 		browseAction = new BrowseAction();
@@ -59,11 +60,10 @@ public class FolderDialog {
 		Dialog.show(dialog, 600, 180);
 	}
 
+	private final Program program;
 	private final JDialog dialog;
 	private final JTextField folder;
-
-	public Path result() { return result; }
-	private Path result;
+	private Path path;
 	
 	// Action
 
@@ -85,8 +85,8 @@ public class FolderDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				result = check(folder.getText());
-				if (result == null)
+				path = check(folder.getText());
+				if (path == null)
 					JOptionPane.showMessageDialog(program.user.window.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
 				else
 					dialog.dispose();

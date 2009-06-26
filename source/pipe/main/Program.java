@@ -7,9 +7,8 @@ public class Program extends Close {
 	
 	public Program() {
 		
-		core = new Core(); // Make the core that does everything
+		core = new Core(this); // Make the core that does everything
 		user = new User(this); // Put the window on the screen to let the user interact with it
-		
 	}
 	
 	public final Core core;

@@ -17,9 +17,15 @@ import base.user.Panel;
 
 public class MuseumDialog {
 	
+	// Library
+	
+	public static Pipe show(Program program) {
+		return (new MuseumDialog(program)).pipe;
+	}
+	
 	// Object
 	
-	public MuseumDialog(Program program) {
+	private MuseumDialog(Program program) {
 		
 		Panel panel = Panel.row();
 		panel.add(Cell.wrap(new JButton(new SendAction())));
@@ -32,8 +38,6 @@ public class MuseumDialog {
 	}
 	
 	private final JDialog dialog;
-	
-	public Pipe pipe() { return pipe; }
 	private Pipe pipe;
 	
 	// Action

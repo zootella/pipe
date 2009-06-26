@@ -57,7 +57,7 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 
-				program.user.newPipe();
+				program.core.newPipe();
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}

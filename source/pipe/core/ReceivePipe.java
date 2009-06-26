@@ -26,34 +26,33 @@ public class ReceivePipe extends Close implements Pipe {
 		return false;
 	}
 
-	@Override
-	public Path folder(String s) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override public Path folder(Path p) {
+		this.folder = p;
+		return folder;
+	}
+	private Path folder;
+	@Override public Path folder() {
+		return folder;
 	}
 
-	@Override
-	public Path folder() {
-		// TODO Auto-generated method stub
-		return null;
+	@Override public Outline away(Outline away) {
+		this.away = away;
+		return away;
+	}
+	private Outline away;
+	@Override public Outline away() {
+		return away;
 	}
 
-	@Override
-	public Outline away(String s) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override public Outline home() {
+		return new Outline();
+	}
+	
+	@Override public String title() { return "Receive Pipe"; }
+	@Override public String instruction() { return "Choose an empty folder to receive the incoming:"; }
+
+	@Override public void go() {
 	}
 
-	@Override
-	public Outline away() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Outline home() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

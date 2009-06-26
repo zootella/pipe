@@ -15,15 +15,12 @@ public interface Pipe {
 	
 	// Configure
 
-	/** Tell this Pipe what folder to use, returns Path if good or null not good. */
-	public Path folder(String s);
-	/** The folder this Pipe will use. */
+	public Path folder(Path p);
 	public Path folder();
 	
-	
 	public Outline home();
-	
-	public Outline away(String s);
+
+	public Outline away(Outline o);
 	public Outline away();
 
 	/** true when this Pipe is configured and ready to start. */
@@ -33,4 +30,11 @@ public interface Pipe {
 
 	/** Make a panel to show this pipe to the user. */
 	public JPanel panel();
+	
+	
+	
+	public String title();
+	public String instruction();
+	
+	public void go();
 }
