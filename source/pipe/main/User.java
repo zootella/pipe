@@ -4,17 +4,9 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import pipe.core.Pipe;
-import pipe.core.ReceivePipe;
-import pipe.core.SendPipe;
-import pipe.user.ExchangeDialog;
-import pipe.user.FolderDialog;
 import pipe.user.InfoFrame;
-import pipe.user.MainIcon;
 import pipe.user.MainFrame;
-import pipe.user.MuseumDialog;
-import base.data.Outline;
-import base.exception.CancelException;
-import base.file.Path;
+import pipe.user.MainIcon;
 import base.state.Close;
 
 public class User extends Close {
@@ -53,7 +45,10 @@ public class User extends Close {
 	
 	public void add(Pipe pipe) {
 		
+		
+		
 	}
+	
 	
 
 	private boolean show;
