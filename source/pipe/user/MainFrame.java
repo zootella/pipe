@@ -21,6 +21,9 @@ import base.user.Panel;
 public class MainFrame extends Close {
 
 	// Object
+	
+	public static final int outsideBorder = 5;
+	public static final int outsideTitle = 23;
 
 	/** Make the program's main window on the screen. */
 	public MainFrame(Program program) {
@@ -29,13 +32,14 @@ public class MainFrame extends Close {
 		this.program = program;
 		
 		// Make panels to show in the window
-		toolbar = new ToolPanel(program);
+		tool = new ToolPanel(program);
 		
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setSize(PipePanel.width, 600);
 		
-		panel.add(toolbar.panel);
+		tool.panel.setLocation(0, 0);
+		panel.add(tool.panel);
 		
 		
 		/*
@@ -45,18 +49,18 @@ public class MainFrame extends Close {
 
 		
 		// Calculate how big the window should be
-		Dimension size = new Dimension(PipePanel.width, 600);
+		Dimension size = new Dimension(PipePanel.width + (2 * outsideBorder), ToolPanel.height + (2 * outsideBorder) + outsideTitle);
 
 		// Make the program's window, configure it, and show it
 		frame = new JFrame();                            // Make the Swing JFrame object which is the program's main window on the screen
 		frame.setResizable(false);                       // User can't drag borders to resize
 		frame.setLayout(null);
+		frame.setSize(size);
 		
 		
 		frame.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
 		frame.setTitle(Main.name);                       // Set the text in the window's title bar
-		frame.setSize(size);                             // Set the window's size and location from what we calculated above
 		frame.setLocation(Dialog.position(size));        // Pick a random location on the screen
 		
 		
@@ -66,7 +70,7 @@ public class MainFrame extends Close {
 
 	private final Program program;
 	public final JFrame frame;
-	public final ToolPanel toolbar;
+	public final ToolPanel tool;
 	public final JPanel panel;
 
 	// When the user clicks the main window's corner X, Java calls this windowClosing() method

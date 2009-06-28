@@ -28,8 +28,9 @@ public class PipePanel {
 		
 		
 		panel = new JPanel();
-		panel.setBackground(new Color(0, 0, 0));
-		panel.setPreferredSize(new Dimension(width, height));
+		panel.setLayout(null);
+		panel.setSize(width, height);
+		panel.setBackground(new Color(150, 150, 150));
 
 		
 		
@@ -39,7 +40,6 @@ public class PipePanel {
 	
 	private final Program program;
 	private final Pipe pipe;
-
 	public final JPanel panel;
 
 }
