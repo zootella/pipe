@@ -1,5 +1,8 @@
 package pipe.user;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -9,15 +12,13 @@ import javax.swing.JPanel;
 import pipe.main.Program;
 import pipe.main.Snippet;
 import base.exception.Mistake;
-import base.user.Cell;
-import base.user.Panel;
 
 /** The toolbar at the top of the main window. */
 public class ToolPanel {
 	
 	// Define
 	
-	public static final int height = 80;
+	public static final int height = 45;
 	
 	// Object
 	
@@ -29,26 +30,41 @@ public class ToolPanel {
 		snippetAction = new SnippetAction();
 		exitAction = new ExitAction();
 		
-		panel = Panel.row();
-		panel.add(Cell.wrap(new JButton(newAction)));
-		panel.add(Cell.wrap(new JButton(infoAction)));
-		panel.add(Cell.wrap(new JButton(snippetAction)));
-		panel.add(Cell.wrap(new JButton(exitAction)));
+		panel = new JPanel();
+		panel.setLayout(null);
+		panel.setSize(new Dimension(PipePanel.width, height));
 		
+		panel.setBackground(new Color(200, 200, 200));
 		
+		JButton newButton = new JButton(new NewAction());
+		JButton infoButton = new JButton(new InfoAction());
+		JButton snippetButton = new JButton(new SnippetAction());
+		JButton exitButton = new JButton(new ExitAction());
 		
-	}
-	
-	
-	private final Panel panel;
+		newButton.setLayout(null);
+		infoButton.setLayout(null);
+		snippetButton.setLayout(null);
+		exitButton.setLayout(null);
+		
+		newButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		infoButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		snippetButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		exitButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
 
-	private final Program program;
-	
-	public JPanel panel() {
-		return panel.jpanel;
+		newButton.setBounds(10, 10, 80, 25);
+		infoButton.setBounds(100, 10, 80, 25);
+		snippetButton.setBounds(190, 10, 80, 25);
+		exitButton.setBounds(280, 10, 80, 25);
+
+		panel.add(newButton);
+		panel.add(infoButton);
+		panel.add(snippetButton);
+		panel.add(exitButton);
 	}
-	
-	
+
+	public final JPanel panel;
+	private final Program program;
+
 	// Action
 
 	private final NewAction newAction;
@@ -98,8 +114,4 @@ public class ToolPanel {
 			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
-	
-	
-	
-
 }

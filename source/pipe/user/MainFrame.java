@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import pipe.core.Pipe;
 import pipe.main.Main;
@@ -29,31 +30,44 @@ public class MainFrame extends Close {
 		
 		// Make panels to show in the window
 		toolbar = new ToolPanel(program);
-		column = Panel.column();
-		column.add(Cell.wrap(toolbar.panel()));
 		
+		panel = new JPanel();
+		panel.setLayout(null);
+		panel.setSize(PipePanel.width, 600);
+		
+		panel.add(toolbar.panel);
+		
+		
+		/*
 		for (Pipe pipe : program.core.pipes)
 			column.add(Cell.wrap(pipe.panel().panel.jpanel));
+			*/
 
 		
 		// Calculate how big the window should be
-		Dimension size = new Dimension(PipePanel.width, ToolPanel.height + (program.core.pipes.size() * PipePanel.height));
+		Dimension size = new Dimension(PipePanel.width, 600);
 
 		// Make the program's window, configure it, and show it
 		frame = new JFrame();                            // Make the Swing JFrame object which is the program's main window on the screen
 		frame.setResizable(false);                       // User can't drag borders to resize
+		frame.setLayout(null);
+		
+		
 		frame.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
 		frame.setTitle(Main.name);                       // Set the text in the window's title bar
 		frame.setSize(size);                             // Set the window's size and location from what we calculated above
 		frame.setLocation(Dialog.position(size));        // Pick a random location on the screen
-		frame.setContentPane(column.jpanel);             // Put the tabs in the window
+		
+		
+		
+		frame.setContentPane(panel);             // Put the tabs in the window
 	}
 
 	private final Program program;
 	public final JFrame frame;
 	public final ToolPanel toolbar;
-	private final Panel column;
+	public final JPanel panel;
 
 	// When the user clicks the main window's corner X, Java calls this windowClosing() method
 	private class MyWindowListener extends WindowAdapter {
@@ -77,20 +91,8 @@ public class MainFrame extends Close {
 		
 	}
 	
-	public void add(PipePanel p) {
-		column.add(Cell.wrap(p.panel.jpanel));
-		
-		// Calculate how big the window should be
-		Dimension size = new Dimension(PipePanel.width, ToolPanel.height + (program.core.pipes.size() * PipePanel.height));
-		frame.setSize(size);                             // Set the window's size and location from what we calculated above
-		
-		
-		
-		
-		
-	}
 	
-	public void remove(PipePanel p) {
+	public void remove(JPanel pipe) {
 		
 	}
 	

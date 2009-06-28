@@ -1,5 +1,6 @@
 package pipe.user;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
@@ -26,10 +27,12 @@ public class PipePanel {
 		
 		
 		
-		panel = new Panel();
-		panel.add(Cell.wrap(new JLabel("Hello Pipe")));
+		panel = new JPanel();
+		panel.setBackground(new Color(0, 0, 0));
+		panel.setPreferredSize(new Dimension(width, height));
+
 		
-		panel.jpanel.setPreferredSize(new Dimension(width, height));
+		
 		
 		
 	}
@@ -37,6 +40,6 @@ public class PipePanel {
 	private final Program program;
 	private final Pipe pipe;
 
-	public final Panel panel;
+	public final JPanel panel;
 
 }
