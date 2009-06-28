@@ -2,14 +2,18 @@ package pipe.core;
 
 import javax.swing.JPanel;
 
+import pipe.main.Program;
 import pipe.user.ExchangeDialog;
+import pipe.user.PipePanel;
 import base.data.Outline;
 import base.file.Path;
 import base.state.Close;
 
 public class SendPipe extends Close implements Pipe {
 	
-	public SendPipe() {
+	public SendPipe(Program program) {
+		this.program = program;
+		panel = new PipePanel(program, this);
 		
 		
 		/*
@@ -35,17 +39,16 @@ public class SendPipe extends Close implements Pipe {
 		
 	}
 	
+	private final Program program;
+	
 
 	@Override public void close() {
 		if (already()) return;
 		
 	}
-
-	@Override
-	public JPanel panel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	private final PipePanel panel;
+	@Override public PipePanel panel() { return panel; }
 
 	@Override
 	public boolean ready() {

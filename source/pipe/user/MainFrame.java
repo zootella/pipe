@@ -18,11 +18,7 @@ import base.user.Panel;
 
 /** The main window on the screen that lists the running pipes. */
 public class MainFrame extends Close {
-	
-	// Links
 
-	private final Program program;
-	
 	// Object
 
 	/** Make the program's main window on the screen. */
@@ -33,11 +29,13 @@ public class MainFrame extends Close {
 		
 		// Make panels to show in the window
 		toolbar = new ToolPanel(program);
-		Panel panel = Panel.column();
-		panel.add(Cell.wrap(toolbar.panel()));
+		column = Panel.column();
+		column.add(Cell.wrap(toolbar.panel()));
+		
 		for (Pipe pipe : program.core.pipes)
-			panel.add(Cell.wrap(pipe.panel()));
+			column.add(Cell.wrap(pipe.panel().panel.jpanel));
 
+		
 		// Calculate how big the window should be
 		Dimension size = new Dimension(PipePanel.width, ToolPanel.height + (program.core.pipes.size() * PipePanel.height));
 
@@ -49,13 +47,13 @@ public class MainFrame extends Close {
 		frame.setTitle(Main.name);                       // Set the text in the window's title bar
 		frame.setSize(size);                             // Set the window's size and location from what we calculated above
 		frame.setLocation(Dialog.position(size));        // Pick a random location on the screen
-		frame.setContentPane(panel.jpanel);              // Put the tabs in the window
+		frame.setContentPane(column.jpanel);             // Put the tabs in the window
 	}
-	
+
+	private final Program program;
 	public final JFrame frame;
-	
-	
 	public final ToolPanel toolbar;
+	private final Panel column;
 
 	// When the user clicks the main window's corner X, Java calls this windowClosing() method
 	private class MyWindowListener extends WindowAdapter {
@@ -78,4 +76,33 @@ public class MainFrame extends Close {
 		frame.dispose(); // Dispose the frame so the process can close
 		
 	}
+	
+	public void add(PipePanel p) {
+		column.add(Cell.wrap(p.panel.jpanel));
+		
+		// Calculate how big the window should be
+		Dimension size = new Dimension(PipePanel.width, ToolPanel.height + (program.core.pipes.size() * PipePanel.height));
+		frame.setSize(size);                             // Set the window's size and location from what we calculated above
+		
+		
+		
+		
+		
+	}
+	
+	public void remove(PipePanel p) {
+		
+	}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

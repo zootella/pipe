@@ -26,17 +26,19 @@ public class MuseumDialog {
 	// Object
 	
 	private MuseumDialog(Program program) {
+		this.program = program;
 		
 		Panel panel = Panel.row();
 		panel.add(Cell.wrap(new JButton(new SendAction())));
 		panel.add(Cell.wrap(new JButton(new ReceiveAction())));
 
-		dialog = new JDialog(program.user.window.frame, "What kind of pipe do you want? (Science Museum Music)", true); // true to make a modal dialog
+		dialog = new JDialog(program.user.frame.frame, "What kind of pipe do you want? (Science Museum Music)", true); // true to make a modal dialog
 		dialog.setResizable(false);
 		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
 		Dialog.show(dialog, 600, 300);
 	}
 	
+	private final Program program;
 	private final JDialog dialog;
 	private Pipe pipe;
 	
@@ -48,7 +50,7 @@ public class MuseumDialog {
 			try {
 				
 				dialog.dispose();
-				pipe = new SendPipe();
+				pipe = new SendPipe(program);
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}

@@ -1,7 +1,6 @@
 package pipe.core;
 
-import javax.swing.JPanel;
-
+import pipe.user.PipePanel;
 import base.data.Outline;
 import base.file.Path;
 import base.state.Close;
@@ -15,7 +14,7 @@ public class ReceivePipe extends Close implements Pipe {
 	}
 
 	@Override
-	public JPanel panel() {
+	public PipePanel panel() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,7 +1,6 @@
 package pipe.core;
 
-import javax.swing.JPanel;
-
+import pipe.user.PipePanel;
 import base.data.Outline;
 import base.file.Path;
 
@@ -28,8 +27,8 @@ public interface Pipe {
 
 	// User
 
-	/** Make a panel to show this pipe to the user. */
-	public JPanel panel();
+	/** The panel that shows this Pipe to the user. */
+	public PipePanel panel();
 	
 	
 	

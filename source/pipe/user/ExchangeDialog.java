@@ -61,7 +61,7 @@ public class ExchangeDialog {
 		
 		home.setText(homeOutline.toString());
 
-		dialog = new JDialog(program.user.window.frame, "Code Exchange", true); // true to make a modal dialog
+		dialog = new JDialog(program.user.frame.frame, "Code Exchange", true); // true to make a modal dialog
 		dialog.setContentPane(panel.jpanel);
 		Dialog.show(dialog, 800, 400);
 	}
@@ -103,7 +103,7 @@ public class ExchangeDialog {
 				
 				result = check(away.getText() + "\n");
 				if (result == null)
-					JOptionPane.showMessageDialog(program.user.window.frame, "Unable to parse code. Make sure you pasted it correctly, and try again.", Main.name, JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(program.user.frame.frame, "Unable to parse code. Make sure you pasted it correctly, and try again.", Main.name, JOptionPane.PLAIN_MESSAGE);
 				else
 					dialog.dispose();
 

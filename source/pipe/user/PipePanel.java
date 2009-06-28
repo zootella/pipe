@@ -1,5 +1,7 @@
 package pipe.user;
 
+import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -26,6 +28,8 @@ public class PipePanel {
 		
 		panel = new Panel();
 		panel.add(Cell.wrap(new JLabel("Hello Pipe")));
+		
+		panel.jpanel.setPreferredSize(new Dimension(width, height));
 		
 		
 	}

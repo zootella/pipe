@@ -26,7 +26,7 @@ public class User extends Close {
 		
 		
 		
-		window = new MainFrame(program);
+		frame = new MainFrame(program);
 		info = new InfoFrame(program);
 		icon = new MainIcon(program);
 		
@@ -37,13 +37,14 @@ public class User extends Close {
 		
 	}
 	
-	public final MainFrame window;
+	public final MainFrame frame;
 	public final InfoFrame info;
 	public final MainIcon icon;
 	
 	
 	
 	public void add(Pipe pipe) {
+		frame.add(pipe.panel());
 		
 		
 		
@@ -56,10 +57,10 @@ public class User extends Close {
 		if (show == b) return;
 		
 		if (b) {
-			window.frame.setVisible(true);
+			frame.frame.setVisible(true);
 			icon.show(false);
 		} else {
-			window.frame.setVisible(false);
+			frame.frame.setVisible(false);
 			info.frame.setVisible(false);
 			icon.show(true);
 		}
@@ -72,7 +73,7 @@ public class User extends Close {
 	@Override public void close() {
 		if (already()) return;
 		
-		close(window);
+		close(frame);
 		close(info);
 		close(icon);
 	}

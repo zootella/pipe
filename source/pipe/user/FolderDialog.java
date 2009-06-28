@@ -40,7 +40,7 @@ public class FolderDialog {
 		folder = new JTextField();
 		new TextMenu(folder);
 
-		dialog = new JDialog(program.user.window.frame, title, true); // true to make a modal dialog
+		dialog = new JDialog(program.user.frame.frame, title, true); // true to make a modal dialog
 		
 		Panel input = Panel.row();
 		input.add(Cell.wrap(folder).fillWide());
@@ -87,7 +87,7 @@ public class FolderDialog {
 				
 				path = check(folder.getText());
 				if (path == null)
-					JOptionPane.showMessageDialog(program.user.window.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(program.user.frame.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
 				else
 					dialog.dispose();
 
