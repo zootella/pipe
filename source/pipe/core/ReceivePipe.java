@@ -1,5 +1,6 @@
 package pipe.core;
 
+import pipe.user.PipeInfoFrame;
 import pipe.user.PipePanel;
 import base.data.Outline;
 import base.file.Path;
@@ -51,6 +52,12 @@ public class ReceivePipe extends Close implements Pipe {
 	@Override public String instruction() { return "Choose an empty folder to receive the incoming:"; }
 
 	@Override public void go() {
+	}
+
+	@Override
+	public PipeInfoFrame info() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

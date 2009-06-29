@@ -63,7 +63,7 @@ public class Core extends Close {
 					
 					// List, show, and start the new pipe
 					pipes.add(pipe);
-					program.user.add(pipe);
+					program.user.frame.fill();
 					pipe.go();
 				}
 			}
@@ -73,5 +73,4 @@ public class Core extends Close {
 		if (pipe != null && !pipes.contains(pipe))
 			pipe.close();
 	}
-	
 }

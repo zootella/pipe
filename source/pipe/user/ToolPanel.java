@@ -3,6 +3,7 @@ package pipe.user;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -25,10 +26,6 @@ public class ToolPanel {
 	public ToolPanel(Program program) {
 		this.program = program;
 
-		newAction = new NewAction();
-		infoAction = new InfoAction();
-		snippetAction = new SnippetAction();
-		exitAction = new ExitAction();
 		
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -36,30 +33,20 @@ public class ToolPanel {
 		
 		panel.setBackground(new Color(200, 200, 200));
 		
-		JButton newButton = new JButton(new NewAction());
-		JButton infoButton = new JButton(new InfoAction());
-		JButton snippetButton = new JButton(new SnippetAction());
-		JButton exitButton = new JButton(new ExitAction());
+		newAction = new NewAction();
+		infoAction = new InfoAction();
+		snippetAction = new SnippetAction();
+		exitAction = new ExitAction();
 		
-		newButton.setLayout(null);
-		infoButton.setLayout(null);
-		snippetButton.setLayout(null);
-		exitButton.setLayout(null);
+		Button make = new Button(newAction, new Rectangle(10, 10, 80, 25));
+		Button info = new Button(infoAction, new Rectangle(100, 10, 80, 25));
+		Button snip = new Button(snippetAction, new Rectangle(190, 10, 80, 25));
+		Button exit = new Button(exitAction, new Rectangle(280, 10, 80, 25));
 		
-		newButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		infoButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		snippetButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		exitButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
-
-		newButton.setBounds(10, 10, 80, 25);
-		infoButton.setBounds(100, 10, 80, 25);
-		snippetButton.setBounds(190, 10, 80, 25);
-		exitButton.setBounds(280, 10, 80, 25);
-
-		panel.add(newButton);
-		panel.add(infoButton);
-		panel.add(snippetButton);
-		panel.add(exitButton);
+		panel.add(make.button);
+		panel.add(info.button);
+		panel.add(snip.button);
+		panel.add(exit.button);
 	}
 
 	public final JPanel panel;

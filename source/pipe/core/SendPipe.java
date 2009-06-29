@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import pipe.main.Program;
 import pipe.user.ExchangeDialog;
+import pipe.user.PipeInfoFrame;
 import pipe.user.PipePanel;
 import base.data.Outline;
 import base.file.Path;
@@ -14,6 +15,7 @@ public class SendPipe extends Close implements Pipe {
 	public SendPipe(Program program) {
 		this.program = program;
 		panel = new PipePanel(program, this);
+		info = new PipeInfoFrame(program, this);
 		
 		
 		/*
@@ -49,6 +51,9 @@ public class SendPipe extends Close implements Pipe {
 	
 	private final PipePanel panel;
 	@Override public PipePanel panel() { return panel; }
+	
+	private final PipeInfoFrame info;
+	@Override public PipeInfoFrame info() { return info; }
 
 	@Override
 	public boolean ready() {

@@ -1,5 +1,6 @@
 package pipe.core;
 
+import pipe.user.PipeInfoFrame;
 import pipe.user.PipePanel;
 import base.data.Outline;
 import base.file.Path;
@@ -36,4 +37,6 @@ public interface Pipe {
 	public String instruction();
 	
 	public void go();
+
+	public PipeInfoFrame info();
 }

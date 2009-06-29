@@ -1,16 +1,15 @@
 package pipe.user;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 
-import javax.swing.JLabel;
+import javax.swing.AbstractAction;
 import javax.swing.JPanel;
-
-import base.user.Cell;
-import base.user.Panel;
 
 import pipe.core.Pipe;
 import pipe.main.Program;
+import base.exception.Mistake;
 
 /** A Status panel shows a pipe to the user. */
 public class PipePanel {
@@ -30,10 +29,19 @@ public class PipePanel {
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setSize(width, height);
-		panel.setBackground(new Color(150, 150, 150));
+		panel.setBackground(new Color(250, 250, 250));
 
 		
+		// buttons, info and terminate
 		
+		infoAction = new InfoAction();
+		killAction = new KillAction();
+		
+		Button info = new Button(new InfoAction(), new Rectangle(320, 165, 80, 25));
+		Button kill = new Button(new KillAction(), new Rectangle(410, 165, 80, 25));
+		
+		panel.add(info.button);
+		panel.add(kill.button);
 		
 		
 	}
@@ -42,4 +50,32 @@ public class PipePanel {
 	private final Pipe pipe;
 	public final JPanel panel;
 
+	// Action
+
+	private final InfoAction infoAction;
+	private class InfoAction extends AbstractAction {
+		public InfoAction() { super("Info"); } // Text for the button
+		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				System.out.println("info");
+
+			} catch (Exception e) { Mistake.grab(e); }
+		}
+	}
+
+	private final KillAction killAction;
+	private class KillAction extends AbstractAction {
+		public KillAction() { super("Kill"); } // Text for the button
+		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				System.out.println("kill");
+
+			} catch (Exception e) { Mistake.grab(e); }
+		}
+	}
+	
+	
+	
 }

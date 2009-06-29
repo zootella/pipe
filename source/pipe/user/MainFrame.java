@@ -1,5 +1,7 @@
 package pipe.user;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -13,65 +15,74 @@ import pipe.main.Main;
 import pipe.main.Program;
 import base.exception.Mistake;
 import base.state.Close;
-import base.user.Cell;
 import base.user.Dialog;
-import base.user.Panel;
 
 /** The main window on the screen that lists the running pipes. */
 public class MainFrame extends Close {
 
 	// Object
-	
-	public static final int outsideBorder = 5;
-	public static final int outsideTitle = 23;
 
 	/** Make the program's main window on the screen. */
 	public MainFrame(Program program) {
-		
-		// Save the given link
 		this.program = program;
 		
-		// Make panels to show in the window
-		tool = new ToolPanel(program);
-		
+		frame = new JFrame();
 		panel = new JPanel();
-		panel.setLayout(null);
-		panel.setSize(PipePanel.width, 600);
+		pipes = new JPanel();
 		
+		frame.setResizable(false);
+		frame.setLayout(null);
+		panel.setLayout(null);
+		pipes.setLayout(null);
+
+		tool = new ToolPanel(program);
 		tool.panel.setLocation(0, 0);
 		panel.add(tool.panel);
-		
-		
-		/*
-		for (Pipe pipe : program.core.pipes)
-			column.add(Cell.wrap(pipe.panel().panel.jpanel));
-			*/
 
-		
-		// Calculate how big the window should be
-		Dimension size = new Dimension(PipePanel.width + (2 * outsideBorder), ToolPanel.height + (2 * outsideBorder) + outsideTitle);
+		pipes.setLocation(0, ToolPanel.height);
+		fill();
+		panel.add(pipes);
 
-		// Make the program's window, configure it, and show it
-		frame = new JFrame();                            // Make the Swing JFrame object which is the program's main window on the screen
-		frame.setResizable(false);                       // User can't drag borders to resize
-		frame.setLayout(null);
-		frame.setSize(size);
-		
-		
 		frame.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
-		frame.setTitle(Main.name);                       // Set the text in the window's title bar
-		frame.setLocation(Dialog.position(size));        // Pick a random location on the screen
+		frame.setTitle(Main.name);
+		frame.setLocation(Dialog.position(frame.getSize())); // Pick a random location on the screen
+		frame.setContentPane(panel);
+	}
+
+	public void fill() {
 		
+		final int border = 5;
+		final int title = 23;
 		
+		int x = PipePanel.width;
+		int y = program.core.pipes.size() * PipePanel.height;
+		pipes.setSize(x, y);
 		
-		frame.setContentPane(panel);             // Put the tabs in the window
+		y += ToolPanel.height;
+		panel.setSize(x, y);
+		
+		x += border + border;
+		y += border + title + border;
+		frame.setSize(x, y);
+		
+		pipes.removeAll();
+		int i = 0;
+		for (Pipe pipe : program.core.pipes) {
+			JPanel panel = pipe.panel().panel;
+			panel.setLocation(0, i);
+			pipes.add(panel);
+			i += PipePanel.height;
+		}
 	}
 
 	private final Program program;
+
 	public final JFrame frame;
-	public final ToolPanel tool;
 	public final JPanel panel;
+	private final JPanel pipes;
+	
+	public final ToolPanel tool;
 
 	// When the user clicks the main window's corner X, Java calls this windowClosing() method
 	private class MyWindowListener extends WindowAdapter {
@@ -92,23 +103,5 @@ public class MainFrame extends Close {
 		
 		frame.setVisible(false);
 		frame.dispose(); // Dispose the frame so the process can close
-		
 	}
-	
-	
-	public void remove(JPanel pipe) {
-		
-	}
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
