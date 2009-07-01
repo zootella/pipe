@@ -43,7 +43,7 @@ public class Core extends Close {
 			pipe.close();
 	}
 	
-	// New
+	// Make
 
 	public void makePipe() {
 		
