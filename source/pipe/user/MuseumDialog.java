@@ -33,9 +33,9 @@ public class MuseumDialog {
 		panel.add(Cell.wrap(new JButton(new SendAction())));
 		panel.add(Cell.wrap(new JButton(new ReceiveAction())));
 
-		dialog = new JDialog(program.user.frame.frame, "What kind of pipe do you want? (Science Museum Music)", true); // true to make a modal dialog
+		dialog = new JDialog(program.user.main.frame, "What kind of pipe do you want? (Science Museum Music)", true); // true to make a modal dialog
 		dialog.setResizable(false);
-		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
+		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
 		dialog.setBounds(Screen.positionPixel(600, 300)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}

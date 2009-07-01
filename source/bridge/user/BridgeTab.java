@@ -65,7 +65,7 @@ public class BridgeTab extends Close {
 		// Lay out the text boxes and button on a Panel, which will appear in the tab
 		panel = new Panel();
 		panel.border();
-		panel.place(0, 0, 2, 1, 0, 0, 0, 0, Cell.wrap(bar.jpanel));
+		panel.place(0, 0, 2, 1, 0, 0, 0, 0, Cell.wrap(bar.panel));
 		panel.place(0, 1, 2, 1, 1, 0, 1, 0, Cell.wrap(scroll).fill());
 		panel.place(0, 2, 1, 1, 0, 0, 0, 0, Cell.wrap(command).fillWide());
 		panel.place(1, 2, 1, 1, 0, 1, 0, 0, Cell.wrap(new JButton(new SendAction())));

@@ -45,7 +45,7 @@ public class Core extends Close {
 	
 	// New
 
-	public void newPipe() {
+	public void makePipe() {
 		
 		// Museum dialog
 		Pipe pipe = MuseumDialog.show(program);
@@ -63,7 +63,7 @@ public class Core extends Close {
 					
 					// List, show, and start the new pipe
 					pipes.add(pipe);
-					program.user.frame.fill();
+					program.user.main.fill();
 					pipe.go();
 				}
 			}
@@ -81,6 +81,6 @@ public class Core extends Close {
 		pipes.remove(pipe);
 		pipe.close();
 		
-		program.user.frame.fill();
+		program.user.main.fill();
 	}
 }

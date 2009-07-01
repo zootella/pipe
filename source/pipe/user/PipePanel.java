@@ -17,7 +17,6 @@ public class PipePanel {
 	// Define
 	
 	public static final int width = 500;
-	
 	public static final int height = 200;
 	
 	public PipePanel(Program program, Pipe pipe) {
@@ -58,7 +57,7 @@ public class PipePanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				System.out.println("info");
+				pipe.info().frame.setVisible(true);
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

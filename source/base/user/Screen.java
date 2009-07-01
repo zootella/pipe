@@ -9,10 +9,10 @@ public class Screen {
 	
 	// Library
 
-	/** Given a width and height like 3/4 and 1/2 of the screen size, choose a random position on the screen. */
-	public static Rectangle positionPortion(float w, float h) {
+	/** Given a width and height like 75 and 50 percent of the screen size, choose a random position on the screen. */
+	public static Rectangle positionPercent(int w, int h) {
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		return positionPixel((int)(w * screen.width), (int)(h * screen.height));
+		return positionPixel(w * screen.width / 100, h * screen.height / 100);
 	}
 	
 	/** Given a width and height like 500 and 300 pixels, choose a random position on the screen. */

@@ -58,12 +58,12 @@ public class ExchangeDialog {
 		panel.place(1, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(awayScroll).fill());
 		panel.place(0, 2, 1, 1, 1, 0, 0, 1, Cell.wrap(new JButton(new CopyAction())));
 		panel.place(1, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JButton(new PasteAction())));
-		panel.place(0, 3, 2, 1, 1, 0, 0, 0, Cell.wrap(row.jpanel).lowerRight());
+		panel.place(0, 3, 2, 1, 1, 0, 0, 0, Cell.wrap(row.panel).lowerRight());
 		
 		home.setText(homeOutline.toString());
 
-		dialog = new JDialog(program.user.frame.frame, "Code Exchange", true); // true to make a modal dialog
-		dialog.setContentPane(panel.jpanel);
+		dialog = new JDialog(program.user.main.frame, "Code Exchange", true); // true to make a modal dialog
+		dialog.setContentPane(panel.panel);
 		dialog.setBounds(Screen.positionPixel(800, 400)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}
@@ -105,7 +105,7 @@ public class ExchangeDialog {
 				
 				result = check(away.getText() + "\n");
 				if (result == null)
-					JOptionPane.showMessageDialog(program.user.frame.frame, "Unable to parse code. Make sure you pasted it correctly, and try again.", Main.name, JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(program.user.main.frame, "Unable to parse code. Make sure you pasted it correctly, and try again.", Main.name, JOptionPane.PLAIN_MESSAGE);
 				else
 					dialog.dispose();
 

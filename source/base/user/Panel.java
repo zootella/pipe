@@ -7,13 +7,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class Panel {
-
-	// -------- Make a Panel to arrage buttons in a grid, row, or column --------
+	
+	// Make
 	
 	/** Make a new Panel to arrange user interface components like buttons in a window. */
 	public Panel() {
-		jpanel = new JPanel(); // Make our JPanel object, and configure it for grid bag layout
-		jpanel.setLayout(new GridBagLayout());
+		panel = new JPanel(); // Make our JPanel object, and configure it for grid bag layout
+		panel.setLayout(new GridBagLayout());
 	}
 
 	/** Make a new Panel to arrange user inteface components like buttons in a single horizontal row. */
@@ -34,11 +34,11 @@ public class Panel {
 
 	/** Add a border around the inside edge of this Panel. */
 	public Panel border() {
-		jpanel.setBorder(BorderFactory.createEmptyBorder(Dialog.space, Dialog.space, Dialog.space, Dialog.space));
+		panel.setBorder(BorderFactory.createEmptyBorder(Dialog.space, Dialog.space, Dialog.space, Dialog.space));
 		return this; // Return a reference to this same Panel object so you can use border() in a chain
 	}
 
-	// -------- Add buttons and labels to this Panel --------
+	// Add
 
 	/**
 	 * Add another component, like a button, to this Panel.
@@ -61,7 +61,7 @@ public class Panel {
 			if (n > 0 && !horizontal) cell.constraints.insets = new Insets(Dialog.space, 0, 0, 0); // Above
 
 			// Add the given JComponent to our JPanel, positioning it with the GridBagConstraints it came with and that we adjusted
-			jpanel.add(cell.component, cell.constraints);
+			panel.add(cell.component, cell.constraints);
 			n++; // Count one more component to set gridx or gridy farther next time
 		}
 	}
@@ -82,13 +82,13 @@ public class Panel {
 		cell.constraints.insets = new Insets(t * Dialog.space, l * Dialog.space, b * Dialog.space, r * Dialog.space);
 		
 		// Add the given JComponent to our JPanel, positioning it with the GridBagConstraints it came with and that we adjusted
-		jpanel.add(cell.component, cell.constraints);
+		panel.add(cell.component, cell.constraints);
 	}
 	
-	// -------- Inside parts --------
+	// Inside
 	
 	/** The Swing JPanel object that shows this Panel on the screen. */
-	public final JPanel jpanel;
+	public final JPanel panel;
 	
 	/** true if the components are in a horizontal row, false if they're in a vertical column. */
 	private boolean horizontal;

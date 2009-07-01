@@ -73,11 +73,11 @@ public class HashDialog extends Close {
 		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Status")));
 		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Size")));
 		panel.place(0, 3, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Value")));
-		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(bar1.jpanel).fillWide());
+		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(bar1.panel).fillWide());
 		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(status).fillWide());
 		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(size).fillWide());
 		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(value).fillWide());
-		panel.place(1, 4, 1, 1, 1, 1, 0, 0, Cell.wrap(bar2.jpanel).lowerLeft().grow());
+		panel.place(1, 4, 1, 1, 1, 1, 0, 0, Cell.wrap(bar2.panel).lowerLeft().grow());
 
 		// Make our Hash object that will do what this dialog shows
 		hash = new HashMachine();
@@ -89,7 +89,7 @@ public class HashDialog extends Close {
 
 		// Make the dialog box and show it on the screen
 		dialog = Dialog.make("Hash");
-		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
+		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
 		dialog.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
 		dialog.setBounds(Screen.positionPixel(600, 180)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen

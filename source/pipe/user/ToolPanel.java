@@ -60,7 +60,7 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 
-				program.core.newPipe();
+				program.core.makePipe();
 				
 			} catch (Exception e) { Mistake.grab(e); }
 		}

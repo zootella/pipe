@@ -1,9 +1,6 @@
 package pipe.core;
 
-import javax.swing.JPanel;
-
 import pipe.main.Program;
-import pipe.user.ExchangeDialog;
 import pipe.user.PipeInfoFrame;
 import pipe.user.PipePanel;
 import base.data.Outline;
@@ -47,6 +44,7 @@ public class SendPipe extends Close implements Pipe {
 	@Override public void close() {
 		if (already()) return;
 		
+		close(info);
 	}
 	
 	private final PipePanel panel;

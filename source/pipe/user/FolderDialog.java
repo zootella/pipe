@@ -41,7 +41,7 @@ public class FolderDialog {
 		folder = new JTextField();
 		new TextMenu(folder);
 
-		dialog = new JDialog(program.user.frame.frame, title, true); // true to make a modal dialog
+		dialog = new JDialog(program.user.main.frame, title, true); // true to make a modal dialog
 		
 		Panel input = Panel.row();
 		input.add(Cell.wrap(folder).fillWide());
@@ -53,10 +53,10 @@ public class FolderDialog {
 
 		Panel panel = Panel.column().border();
 		panel.add(Cell.wrap(new JLabel(instruction)));
-		panel.add(Cell.wrap(input.jpanel).fillWide().growTall());
-		panel.add(Cell.wrap(buttons.jpanel).lowerRight());
+		panel.add(Cell.wrap(input.panel).fillWide().growTall());
+		panel.add(Cell.wrap(buttons.panel).lowerRight());
 		
-		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
+		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
 
 		dialog.setBounds(Screen.positionPixel(600, 180)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
@@ -89,7 +89,7 @@ public class FolderDialog {
 				
 				path = check(folder.getText());
 				if (path == null)
-					JOptionPane.showMessageDialog(program.user.frame.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(program.user.main.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
 				else
 					dialog.dispose();
 
