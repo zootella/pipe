@@ -14,6 +14,7 @@ import base.exception.Mistake;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
+import base.user.Screen;
 
 public class MuseumDialog {
 	
@@ -35,7 +36,8 @@ public class MuseumDialog {
 		dialog = new JDialog(program.user.frame.frame, "What kind of pipe do you want? (Science Museum Music)", true); // true to make a modal dialog
 		dialog.setResizable(false);
 		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
-		Dialog.show(dialog, 600, 300);
+		dialog.setBounds(Screen.positionPixel(600, 300)); // Set the dialog size and pick a random location
+		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 	
 	private final Program program;

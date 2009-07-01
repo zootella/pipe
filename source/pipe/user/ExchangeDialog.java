@@ -21,6 +21,7 @@ import base.exception.Mistake;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
+import base.user.Screen;
 import base.user.TextMenu;
 
 public class ExchangeDialog {
@@ -63,7 +64,8 @@ public class ExchangeDialog {
 
 		dialog = new JDialog(program.user.frame.frame, "Code Exchange", true); // true to make a modal dialog
 		dialog.setContentPane(panel.jpanel);
-		Dialog.show(dialog, 800, 400);
+		dialog.setBounds(Screen.positionPixel(800, 400)); // Set the dialog size and pick a random location
+		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 	
 	private final Program program;

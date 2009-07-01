@@ -1,8 +1,5 @@
 package pipe.user;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -16,6 +13,7 @@ import pipe.main.Program;
 import base.exception.Mistake;
 import base.state.Close;
 import base.user.Dialog;
+import base.user.Screen;
 
 /** The main window on the screen that lists the running pipes. */
 public class MainFrame extends Close {
@@ -42,11 +40,11 @@ public class MainFrame extends Close {
 		pipes.setLocation(0, ToolPanel.height);
 		fill();
 		panel.add(pipes);
-
+		
 		frame.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
 		frame.setTitle(Main.name);
-		frame.setLocation(Dialog.position(frame.getSize())); // Pick a random location on the screen
+		frame.setBounds(Screen.positionPixel(frame.getSize().width, frame.getSize().height));
 		frame.setContentPane(panel);
 	}
 

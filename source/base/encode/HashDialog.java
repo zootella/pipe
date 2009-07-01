@@ -20,6 +20,7 @@ import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
 import base.user.Refresh;
+import base.user.Screen;
 import base.user.SelectTextArea;
 import base.user.TextMenu;
 
@@ -90,7 +91,8 @@ public class HashDialog extends Close {
 		dialog = Dialog.make("Hash");
 		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
 		dialog.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
-		Dialog.show(dialog, 600, 180);
+		dialog.setBounds(Screen.positionPixel(600, 180)); // Set the dialog size and pick a random location
+		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 	
 	/** The object below with a Model this dialog is a View of. */

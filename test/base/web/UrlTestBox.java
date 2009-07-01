@@ -16,6 +16,7 @@ import base.exception.MessageException;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
+import base.user.Screen;
 import base.user.SelectTextArea;
 import base.user.TextMenu;
 import base.web.Url;
@@ -141,7 +142,8 @@ public class UrlTestBox {
 		dialog = Dialog.make("Url Test");
 		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Make closing the dialog close the program
-		Dialog.show(dialog, 800, 600); // Control sticks here while the dialog is open
+		dialog.setBounds(Screen.positionPixel(800, 600)); // Set the dialog size and pick a random location
+		dialog.setVisible(true); // Show the dialog box on the screen
 		update(); // Parse and show output for the default starting text
 	}
 

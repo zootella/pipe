@@ -18,6 +18,7 @@ import base.file.Path;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
+import base.user.Screen;
 import base.user.TextMenu;
 
 public class FolderDialog {
@@ -57,7 +58,8 @@ public class FolderDialog {
 		
 		dialog.setContentPane(panel.jpanel); // Put everything we layed out in the dialog box
 
-		Dialog.show(dialog, 600, 180);
+		dialog.setBounds(Screen.positionPixel(600, 180)); // Set the dialog size and pick a random location
+		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 
 	private final Program program;
