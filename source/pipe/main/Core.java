@@ -73,4 +73,14 @@ public class Core extends Close {
 		if (pipe != null && !pipes.contains(pipe))
 			pipe.close();
 	}
+	
+	public void killPipe(Pipe pipe) {
+		if (pipe == null || !pipes.contains(pipe))
+			throw new IllegalArgumentException();
+		
+		pipes.remove(pipe);
+		pipe.close();
+		
+		program.user.frame.fill();
+	}
 }

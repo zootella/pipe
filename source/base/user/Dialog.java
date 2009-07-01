@@ -2,6 +2,7 @@ package base.user;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.util.Random;
 
@@ -41,6 +42,25 @@ public class Dialog {
 		dialog.setLocation(position(new Dimension(width, height))); // Choose random location
 		dialog.setVisible(true);                                    // Show the dialog box on the screen
 	}
+	
+	// Moar Random Help
+	
+	/*
+	public Rectangle positionSize(int w, int h) {
+		
+	}
+	
+	public Rectangle positionScreen(long w, long h) {
+
+		
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();          // Screen resolution in pixels
+		Dimension size = new Dimension(screen.width * w, screen.height * h); // Window size
+		Point location = Dialog.position(size);                                  // Random location
+	}
+	*/
+	
+	
+	
 
 	// -------- Choose a random location on the screen --------
 	

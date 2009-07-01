@@ -70,7 +70,7 @@ public class PipePanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				System.out.println("kill");
+				program.core.killPipe(pipe);
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}
