@@ -1,5 +1,7 @@
 package pipe.main;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import pipe.user.MuseumDialog;
 
 import base.data.Outline;
 import base.file.Path;
+import base.internet.name.Ip;
 import base.setting.Store;
 import base.state.Close;
 
@@ -26,6 +29,23 @@ public class Core extends Close {
 		this.program = program;
 		store = new Store();
 		pipes = new ArrayList<Pipe>();
+		
+		
+		// what's my ip address, lan first
+		try {
+			InetAddress me = InetAddress.getLocalHost();
+			Ip ip = new Ip(me);
+			System.out.println(ip.toString());
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+
+		// ok, now for the internet
+		// well, first let's try the time server thing
+		
+		
 
 	}
 	
