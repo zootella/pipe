@@ -14,7 +14,7 @@ public class ListenPacket extends Close {
 
 	// Open
 
-	/** Bind a new TCP server socket to port. */
+	/** Bind a new UDP socket to port. */
 	public ListenPacket(Port port) throws IOException {
 		this.port = port;
 		channel = DatagramChannel.open();
