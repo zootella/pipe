@@ -6,6 +6,7 @@ import java.nio.channels.DatagramChannel;
 
 
 import base.data.Bin;
+import base.exception.NetException;
 import base.internet.name.Port;
 import base.state.Close;
 
@@ -15,14 +16,16 @@ public class ListenPacket extends Close {
 	// Open
 
 	/** Bind a new UDP socket to port. */
-	public ListenPacket(Port port) throws IOException {
-		this.port = port;
-		channel = DatagramChannel.open();
-		if (channel.socket().getSendBufferSize() < Bin.big) // Handle 64 KB UDP packets, the default is just 8 KB
-			channel.socket().setSendBufferSize(Bin.big);
-		if (channel.socket().getReceiveBufferSize() < Bin.big)
-			channel.socket().setReceiveBufferSize(Bin.big);
-		channel.socket().bind(new InetSocketAddress(port.port));
+	public ListenPacket(Port port) {
+		try {
+			this.port = port;
+			channel = DatagramChannel.open();
+			if (channel.socket().getSendBufferSize() < Bin.big) // Handle 64 KB UDP packets, the default is just 8 KB
+				channel.socket().setSendBufferSize(Bin.big);
+			if (channel.socket().getReceiveBufferSize() < Bin.big)
+				channel.socket().setReceiveBufferSize(Bin.big);
+			channel.socket().bind(new InetSocketAddress(port.port));
+		} catch (IOException e) { throw new NetException(e); }
 	}
 
 	// Look

@@ -99,6 +99,8 @@ public class Time extends Close {
 	
 	// in addition to doing it that way, do it as a single Task
 	// between these two, you can be flexible for everything
+	// later, split this into two objects, one that just talks on udp,
+	// the other that uses that one to contact the time server
 	
 	
 	

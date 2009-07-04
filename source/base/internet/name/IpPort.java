@@ -15,26 +15,25 @@ import base.exception.MessageException;
 
 public class IpPort implements Comparable<IpPort> {
 	
-	// -------- Parts --------
+	// Parts
 
 	/** The Ip address, like 1.2.3.4. */
 	public final Ip ip;
 	/** The port number, like 80. */
-	public final int port;
-	//TODO use the separate Port class
+	public final Port port;
 	
 	/** Make a new IpPort object with the given Ip address and port number. */
-	public IpPort(Ip ip, int port) { this.ip = ip; this.port = port; }
+	public IpPort(Ip ip, Port port) { this.ip = ip; this.port = port; }
 
-	// -------- Convert to and from a Java InetSocketAddress object, which contains an IP address and port number --------
+	// Convert
 	
 	/** Convert this IpPort into a Java InetSocketAddress object. */
-	public InetSocketAddress toInetSocketAddress() { return new InetSocketAddress(ip.toInetAddress(), port); }
+	public InetSocketAddress toInetSocketAddress() { return new InetSocketAddress(ip.toInetAddress(), port.port); }
 	
 	/** Make a new IpPort with the IP address and port number of the given Java InetSocketAddress object. */
-	public IpPort(InetSocketAddress a) { ip = new Ip(a.getAddress()); port = a.getPort(); }
+	public IpPort(InetSocketAddress a) { ip = new Ip(a.getAddress()); port = new Port(a.getPort()); }
 
-	// -------- Convert to and from a String like "1.2.3.4:5" --------
+	// Text
 	
 	/** Convert this IpPort into text like "1.2.3.4:5". */
 	public String toString() { return ip.toString() + ":" + port; }
@@ -44,10 +43,10 @@ public class IpPort implements Comparable<IpPort> {
 		TextSplit split = Text.split(s, ":");
 		if (!split.found) throw new MessageException();
 		ip = new Ip(split.before);
-		port = Number.toInt(split.after, 0, 65535); // Make sure the port number is 0 through 65535
+		port = new Port(Number.toInt(split.after, 0, 65535)); // Make sure the port number is 0 through 65535
 	}
 
-	// -------- Convert to and from 6 bytes of data --------
+	// Data
 
 	/**
 	 * "123405", the default pattern that describes how the IP and port 1.2.3.4:5 are arranged in 6 bytes of data.
@@ -75,11 +74,11 @@ public class IpPort implements Comparable<IpPort> {
 	public void toBay(Bay bay, String pattern) {
 		if (pattern.charAt(0) == '1' || pattern.charAt(0) == '4') {         // IP first
 			ip.toBay(bay, Text.start(pattern, 4));
-			if (pattern.charAt(4) == '0') Number.toBay(bay, 2, port);
-			else                          Number.toBayLittle(bay, 2, port);
+			if (pattern.charAt(4) == '0') Number.toBay(bay, 2, port.port);
+			else                          Number.toBayLittle(bay, 2, port.port);
 		} else {                                                            // Port first
-			if (pattern.charAt(0) == '0') Number.toBay(bay, 2, port);
-			else                          Number.toBayLittle(bay, 2, port);
+			if (pattern.charAt(0) == '0') Number.toBay(bay, 2, port.port);
+			else                          Number.toBayLittle(bay, 2, port.port);
 			ip.toBay(bay, Text.after(pattern, 2));
 		}
 	}
@@ -89,28 +88,28 @@ public class IpPort implements Comparable<IpPort> {
 	/** Make a new IpPort from 6 bytes at the start of d using a pattern like "123405". */
 	public IpPort(Data d, String pattern) throws MessageException {
 		try {
-			if (pattern.charAt(0) == '1' || pattern.charAt(0) == '4') {                          // IP first
+			if (pattern.charAt(0) == '1' || pattern.charAt(0) == '4') { // IP first
 				ip = new Ip(d, Text.start(pattern, 4));
-				if (pattern.charAt(4) == '0') port = Number.toInt(d.clip(4, 2), 0, 65535);
-				else                          port = Number.toIntLittle(d.clip(4, 2), 0, 65535);
-			} else {                                                                             // Port first
-				if (pattern.charAt(0) == '0') port = Number.toInt(d.clip(0, 2), 0, 65535);
-				else                          port = Number.toIntLittle(d.clip(0, 2), 0, 65535);
+				if (pattern.charAt(4) == '0') port = new Port(Number.toInt(d.clip(4, 2), 0, 65535));
+				else                          port = new Port(Number.toIntLittle(d.clip(4, 2), 0, 65535));
+			} else {                                                    // Port first
+				if (pattern.charAt(0) == '0') port = new Port(Number.toInt(d.clip(0, 2), 0, 65535));
+				else                          port = new Port(Number.toIntLittle(d.clip(0, 2), 0, 65535));
 				ip = new Ip(d.after(2), Text.after(pattern, 2));
 			}
 		} catch (ChopException e) { throw new MessageException(); } // d isn't big enough
 	}
 
-	// -------- Compare --------
+	// Compare
 
 	/**
 	 * Compare this IpPort to a given one to determine which should come first in sorted order.
 	 * @return Negative to sort this first, positive if o is first, 0 if they're the same
 	 */
 	public int compareTo(IpPort o) {
-		int sort = ip.compareTo(o.ip); // Compare the IP addresses
-		if (sort != 0) return sort;    // They're different, sort based on that
-		return port - o.port;          // The IP addresses are the same, sort based on the port numbers
+		int sort = ip.compareTo(o.ip);  // Compare the IP addresses
+		if (sort != 0) return sort;     // They're different, sort based on that
+		return port.port - o.port.port; // The IP addresses are the same, sort based on the port numbers
 	}
 
 	/** true if the given IpPort has the same IP address and port number as this one. */
@@ -119,7 +118,7 @@ public class IpPort implements Comparable<IpPort> {
 		return ip.equals(((IpPort)o).ip) && port == ((IpPort)o).port;
 	}
 	
-	// -------- Convert a List of IpPort objects to and from data and text --------
+	// List
 
 	/** Turn a List of IpPort objects into Data with each in 6 bytes, like "123405123405123405". */
 	public static Data data(List<IpPort> list) { Bay bay = new Bay(); toBay(bay, list); return bay.data(); }
