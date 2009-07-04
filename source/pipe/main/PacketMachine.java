@@ -3,37 +3,33 @@ package pipe.main;
 import java.util.ArrayList;
 import java.util.List;
 
-import base.data.Bin;
 import base.data.Data;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.packet.ListenPacket;
+import base.internet.packet.Packet;
 import base.internet.packet.ReceiveTask;
 import base.internet.packet.SendTask;
-import base.internet.packet.Packet;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
 
-// the program makes one of these to send and receive udp packets
 public class PacketMachine extends Close {
 	
 	// Object
 	
-	public PacketMachine(Program program, Update up, Port port) {
-		this.program = program;
+	public PacketMachine(Update up, Port port) {
 		this.up = up;
 		this.port = port;
 		
-		sendList = new ArrayList<Packet>();
-		receiveList = new ArrayList<Packet>();
-		bins = new ArrayList<Bin>();
+		send = new ArrayList<Packet>();
+		receive = new ArrayList<Packet>();
+		recycle = new ArrayList<Packet>();
 		
 		update = new Update(new MyReceive());
 		update.send();
 	}
 	
-	private final Program program;
 	private final Update up;
 	private final Update update;
 	private final Port port;
@@ -43,11 +39,9 @@ public class PacketMachine extends Close {
 	private SendTask sendTask;
 	private ReceiveTask receiveTask;
 	
-	private List<Packet> sendList;
-	private Packet sendPacket;
-	private Packet receivePacket;
-	private List<Packet> receiveList;
-	private List<Packet> recycleList;
+	private final List<Packet> send;
+	private final List<Packet> receive;
+	private final List<Packet> recycle;
 
 	@Override public void close() {
 		if (already()) return;
@@ -68,20 +62,20 @@ public class PacketMachine extends Close {
 
 				// Done
 				if (done(sendTask)) {
-					sendTask.result();
+					recycle.add(sendTask.result());
 					sendTask = null;
 				}
 				if (done(receiveTask)) {
-					receiveList.add(receiveTask.result());
+					receive.add(receiveTask.result());
 					receiveTask = null;
+					up.send();
 				}
 				
 				// Start
-				if (!sendList.isEmpty() && no(sendTask)) {
-					sendTask = new SendTask(update, listen, sendBin, p.ipPort);
-				}
+				if (!send.isEmpty() && no(sendTask))
+					sendTask = new SendTask(update, listen, send.remove(0));
 				if (no(receiveTask))
-					receiveTask = new ReceiveTask(update, listen, receiveBin);
+					receiveTask = new ReceiveTask(update, listen, reuse());
 
 			} catch (Exception e) { exception = e; close(); }
 		}
@@ -93,18 +87,38 @@ public class PacketMachine extends Close {
 	// Use
 	
 	public void send(Data data, IpPort ipPort) {
-		sendList.add(packet);
+		
+		Packet packet = reuse();
+		packet.bin.add(data);
+		packet.ipPort = ipPort;
+		
+		send.add(packet);
 		update.send();
 	}
 	
-	/** The next packet we've received, or null no more right now. */
+	public boolean receiveHas() {
+		return !receive.isEmpty();
+	}
+	
 	public Packet receiveLook() {
-		if (receiveList.isEmpty()) return null;
-		
-		return receiveList.get(0);
+		if (receive.isEmpty())
+			return null;
+		return receive.get(0);
 	}
 	
 	public void receiveDone() {
-		bins.add(receiveList.remove(0).bin);
+		recycle.add(receive.get(0));
+	}
+	
+	// Inside
+	
+	private Packet reuse() {
+		
+		if (recycle.isEmpty())
+			return new Packet();
+		
+		Packet packet = recycle.remove(0);
+		packet.clear();
+		return packet;
 	}
 }

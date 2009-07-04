@@ -280,13 +280,15 @@ public class Bin {
 	// Packet
 	
 	/** Receive the data of a single UDP packet from listen, 0 or more bytes, putting it in this empty Bin. */
-	public PacketMove receive(ListenPacket listen) throws IOException {
-		ByteBuffer space = in(capacity()); // Make sure we start out empty
-		Now start = new Now();
-		InetSocketAddress a = (InetSocketAddress)listen.channel.receive(space); // Receive a packet and move position forward
-		if (a == null) throw new IOException("null");
-		inDone(space);
-		return new PacketMove(start, size(), new IpPort(a));
+	public PacketMove receive(ListenPacket listen) {
+		try {
+			ByteBuffer space = in(capacity()); // Make sure we start out empty
+			Now start = new Now();
+			InetSocketAddress a = (InetSocketAddress)listen.channel.receive(space); // Receive a packet and move position forward
+			if (a == null) throw new NetException("null");
+			inDone(space);
+			return new PacketMove(start, size(), new IpPort(a));
+		} catch (IOException e) { throw new NetException(e); }
 	}
 	
 	//TODO change IOException to NetException everywhere else

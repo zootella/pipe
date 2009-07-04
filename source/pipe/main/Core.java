@@ -11,10 +11,18 @@ import pipe.user.FolderDialog;
 import pipe.user.MuseumDialog;
 
 import base.data.Outline;
+import base.encode.Encode;
+import base.exception.Mistake;
 import base.file.Path;
 import base.internet.name.Ip;
+import base.internet.name.Port;
+import base.internet.packet.ListenPacket;
+import base.internet.packet.ReceiveTask;
+import base.internet.packet.SendTask;
 import base.setting.Store;
 import base.state.Close;
+import base.state.Receive;
+import base.state.Update;
 
 /** The core program beneath the window that does everything. */
 public class Core extends Close {
@@ -44,10 +52,29 @@ public class Core extends Close {
 
 		// ok, now for the internet
 		// well, first let's try the time server thing
+		update = new Update(new MyReceive());
+		time = new Time(program, update, "time-c.timefreq.bldrdoc.gov", new Port(37), Encode.fromBase16("00"));
+		
 		
 		
 
 	}
+	
+	private class MyReceive implements Receive {
+		public void receive() {
+			if (closed()) return;
+			try {
+				
+				if (time.answer != null)
+					System.out.println("Answer: " + Encode.toBase16(time.answer));
+
+			} catch (Exception e) { Mistake.grab(e); }
+		}
+	}
+	
+	
+	private final Update update;
+	private final Time time;
 	
 	private final Store store;
 	

@@ -4,52 +4,25 @@ import base.data.Bin;
 import base.internet.name.IpPort;
 import base.size.PacketMove;
 
+/** A Packet object holds information about a UDP packet we send or receive, and can be cleared and used again. */
 public class Packet {
-	
-	// Group
 
-	/** true if we sent this Packet, false if we received it. */
-	public boolean outgoing;
-	/** How big this Packet is and how long it took to send, or how long we waited for it. */
+	/** Make a new Packet to keep, send, or receive a UDP packet. */
+	public Packet() {
+		bin = Bin.big();
+	}
+
+	/** Clear this Packet to use it again. */
+	public void clear() {
+		bin.clear();
+		move = null;
+		ipPort = null;
+	}
+	
+	/** Data to send, empty afterwards, or empty to wait, then data received. */
+	public final Bin bin;
+	/** How big the data is and how long it took to send, or how long we waited for it. */
 	public PacketMove move;
 	/** The IP address and port number we sent this Packet to or received it from. */
 	public IpPort ipPort;
-	/** An empty bin after sending this packet, or the data of the packet we received. */
-	public Bin bin;
-	
-	public void clear(boolean outgoing) {
-		this.outgoing = outgoing;
-		move = null;
-		ipPort = null;
-		bin.clear();
-	}
-	
-	/*
-	// Send
-	
-	/**
-	 * Use listen to send bin's data to ipPort in a UDP packet.
-	 * @return A Packet that tells when it was sent, and has an empty bin you can reuse
-	 *
-	public Packet(ListenPacket listen, Bin bin, IpPort ipPort) throws IOException {
-		if (listen.closed()) throw new IOException("listen closed");
-		this.outgoing = true; // Send
-		this.move = bin.send(listen, ipPort);
-		this.ipPort = ipPort;
-		this.bin = bin;
-	}
-	
-	// Receive
-	
-	/** Given the empty bin, wait on listen until a new Packet arrives. *
-	public Packet(ListenPacket listen, Bin bin) throws IOException {
-		if (listen.closed()) throw new IOException("listen closed");
-		this.outgoing = false; // Receive
-		this.move = bin.receive(listen);
-		this.ipPort = move.ipPort;
-		this.bin = bin;
-	}
-	*/
-	
-	// Look
 }

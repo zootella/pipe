@@ -1,7 +1,5 @@
 package base.internet.packet;
 
-
-import base.data.Bin;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.TaskClose;
@@ -12,20 +10,18 @@ public class ReceiveTask extends TaskClose {
 	// Make
 
 	/** Given the empty bin, wait on listen until a new Packet arrives. */
-	public ReceiveTask(Update update, ListenPacket listen, Bin bin) {
+	public ReceiveTask(Update update, ListenPacket listen, Packet packet) {
 		this.update = update; // We'll tell above when we're done
 		
 		// Save the input
 		this.listen = listen;
-		this.bin = bin;
+		this.packet = packet;
 		
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	/** Our bound UDP socket that receives the packet. */
 	private final ListenPacket listen;
-	/** The empty Bin we put the data in, and then put inside the result Packet. */
-	private final Bin bin;
 	
 	// Result
 	
@@ -37,25 +33,21 @@ public class ReceiveTask extends TaskClose {
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private Packet taskPacket; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() throws Exception {
-				
-			// Wait on listen until a new Packet arrives
-			taskPacket = new Packet(listen, bin);				
+
+			// Wait on listen until a new UDP packet arrives
+			packet.move = packet.bin.receive(listen);
+			packet.ipPort = packet.move.ipPort;
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
 		public void done(Exception e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			if (e == null) {      // No exception, save what thread() did
-				
-				packet = taskPacket;
-			}
-			close();       // We're done
-			update.send(); // Tell update we've changed
+			close();              // We're done
+			update.send();        // Tell update we've changed
 		}
 	}
 }
