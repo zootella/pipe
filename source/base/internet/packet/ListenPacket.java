@@ -7,6 +7,7 @@ import java.nio.channels.DatagramChannel;
 
 import base.data.Bin;
 import base.exception.NetException;
+import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.state.Close;
 
@@ -27,6 +28,33 @@ public class ListenPacket extends Close {
 			channel.socket().bind(new InetSocketAddress(port.port));
 		} catch (IOException e) { throw new NetException(e); }
 	}
+	
+	// Use
+	
+	
+	
+	public void send(Packet packet) {
+		if (closed()) throw new NetException("closed");
+		
+		
+		
+		this.outgoing = true; // Send
+		this.move = bin.send(this, ipPort);
+		this.ipPort = ipPort;
+		this.bin = bin;
+	}
+	
+	
+	public void receive(Packet packet) {
+		if (closed()) throw new NetException("closed");
+		
+		this.outgoing = false; // Receive
+		this.move = bin.receive(listen);
+		this.ipPort = move.ipPort;
+		this.bin = bin;
+	}
+	
+	
 
 	// Look
 

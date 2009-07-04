@@ -1,20 +1,36 @@
 package base.internet.packet;
 
-import java.io.IOException;
-
-
 import base.data.Bin;
 import base.internet.name.IpPort;
 import base.size.PacketMove;
 
 public class Packet {
 	
+	// Group
+
+	/** true if we sent this Packet, false if we received it. */
+	public boolean outgoing;
+	/** How big this Packet is and how long it took to send, or how long we waited for it. */
+	public PacketMove move;
+	/** The IP address and port number we sent this Packet to or received it from. */
+	public IpPort ipPort;
+	/** An empty bin after sending this packet, or the data of the packet we received. */
+	public Bin bin;
+	
+	public void clear(boolean outgoing) {
+		this.outgoing = outgoing;
+		move = null;
+		ipPort = null;
+		bin.clear();
+	}
+	
+	/*
 	// Send
 	
 	/**
 	 * Use listen to send bin's data to ipPort in a UDP packet.
 	 * @return A Packet that tells when it was sent, and has an empty bin you can reuse
-	 */
+	 *
 	public Packet(ListenPacket listen, Bin bin, IpPort ipPort) throws IOException {
 		if (listen.closed()) throw new IOException("listen closed");
 		this.outgoing = true; // Send
@@ -25,7 +41,7 @@ public class Packet {
 	
 	// Receive
 	
-	/** Given the empty bin, wait on listen until a new Packet arrives. */
+	/** Given the empty bin, wait on listen until a new Packet arrives. *
 	public Packet(ListenPacket listen, Bin bin) throws IOException {
 		if (listen.closed()) throw new IOException("listen closed");
 		this.outgoing = false; // Receive
@@ -33,15 +49,7 @@ public class Packet {
 		this.ipPort = move.ipPort;
 		this.bin = bin;
 	}
+	*/
 	
 	// Look
-
-	/** true if we sent this Packet, false if we received it. */
-	public final boolean outgoing;
-	/** How big this Packet is and how long it took to send, or how long we waited for it. */
-	public final PacketMove move;
-	/** The IP address and port number we sent this Packet to or received it from. */
-	public final IpPort ipPort;
-	/** An empty bin after sending this packet, or the data of the packet we received. */
-	public final Bin bin;
 }

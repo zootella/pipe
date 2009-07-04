@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 
 import base.exception.ChopException;
 import base.exception.CodeException;
+import base.exception.NetException;
 import base.file.File;
 import base.internet.name.IpPort;
 import base.internet.packet.ListenPacket;
@@ -287,16 +288,19 @@ public class Bin {
 		inDone(space);
 		return new PacketMove(start, size(), new IpPort(a));
 	}
-
+	
+	//TODO change IOException to NetException everywhere else
 	/** Use listen to send the data in this Bin, 0 or more bytes, as a UDP packet to p. */
-	public PacketMove send(ListenPacket listen, IpPort p) throws IOException {
-		ByteBuffer data = out(size()); // We might send a UDP packet with no data payload
-		Now start = new Now();
-		int did = listen.channel.send(data, p.toInetSocketAddress()); // Send a packet and move position forward
-		if (did != size())         throw new IOException("behind");
-		if (data.remaining() != 0) throw new IOException("position");
-		outDone(data);
-		return new PacketMove(start, did, p);
+	public PacketMove send(ListenPacket listen, IpPort p) {
+		try {
+			ByteBuffer data = out(size()); // We might send a UDP packet with no data payload
+			Now start = new Now();
+			int did = listen.channel.send(data, p.toInetSocketAddress()); // Send a packet and move position forward
+			if (did != size())         throw new NetException("behind");
+			if (data.remaining() != 0) throw new NetException("position");
+			outDone(data);
+			return new PacketMove(start, did, p);
+		} catch (IOException e) { throw new NetException(e); }
 	}
 
 	// Direct

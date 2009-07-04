@@ -7,13 +7,21 @@ package base.exception;
 public class NetException extends RuntimeException {
 	
 	public NetException() {
+		message = null;
+		exception = null;
+	}
+	
+	public NetException(String s) {
+		message = s;
 		exception = null;
 	}
 
 	public NetException(Exception e) {
+		message = null;
 		exception = e;
 	}
 	
-	/** The Exception from Java that caused us to throw this NetException. */
+	public final String message;
 	public final Exception exception;
+	//TODO cant you make and extend BaseException to put message and exception in there?
 }
