@@ -173,9 +173,9 @@ public class Bin {
 	}
 	
 	/** Make sure we did at least 1 byte and position moved forward correctly. */
-	private void inCheck(int did, ByteBuffer space) {
-		if (did < 1) throw new TransferException("did " + did); // Hit the end got nothing
-		if (buffer.position() + did != space.position()) throw new TransferException("position"); // Moved position forward incorrectly
+	private void inCheck(int did, ByteBuffer space) throws IOException {
+		if (did < 1) throw new IOException("did " + did); // Hit the end got nothing
+		if (buffer.position() + did != space.position()) throw new IOException("position"); // Moved position forward incorrectly
 	}
 	
 	/** Save our buffer after moving data in. */
@@ -194,9 +194,9 @@ public class Bin {
 	}
 	
 	/** Make sure we did at least 1 byte and position moved forward correctly. */
-	private void outCheck(int did, ByteBuffer data) {
-		if (did < 1) throw new TransferException("did " + did); // Error or wrote nothing
-		if (did != data.position()) throw new TransferException("position"); // Moved position forward incorrectly
+	private void outCheck(int did, ByteBuffer data) throws IOException {
+		if (did < 1) throw new IOException("did " + did); // Error or wrote nothing
+		if (did != data.position()) throw new IOException("position"); // Moved position forward incorrectly
 	}
 	
 	/** Save our buffer after moving data out. */
