@@ -69,7 +69,7 @@ public class HeaderGroup {
 	 * Another-Header: another value, with a comma in it\r\n
 	 * \r\n
 	 */
-	public HeaderGroup(Data d) throws ChopException {
+	public HeaderGroup(Data d) {
 		
 		// Call the HeaderGroup() constructor to make headers a new empty ArrayList
 		this();

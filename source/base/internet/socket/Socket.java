@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
-
 import base.data.Bin;
+import base.exception.NetException;
 import base.internet.name.IpPort;
 import base.state.Close;
 import base.time.Duration;
@@ -16,25 +16,29 @@ public class Socket extends Close {
 
 	// Open
 
-	/** Open a new TCP socket connection to the given IP address and port number or throw an IOException. */
-	public Socket(IpPort ipPort) throws IOException {
-		Now start = new Now();
-		outgoing = true;
-		channel = SocketChannel.open();
-		if (!channel.connect(ipPort.toInetSocketAddress())) throw new IOException("connect false");
-		this.ipPort = ipPort;
-		size();
-		connect = new Duration(start);
+	/** Open a new TCP socket connection to the given IP address and port number or throw a NetException. */
+	public Socket(IpPort ipPort) {
+		try {
+			Now start = new Now();
+			outgoing = true;
+			channel = SocketChannel.open();
+			if (!channel.connect(ipPort.toInetSocketAddress())) throw new NetException("connect false");
+			this.ipPort = ipPort;
+			size();
+			connect = new Duration(start);
+		} catch (IOException e) { throw new NetException(e); }
 	}
 	
 	/** Make a new Socket for the given SocketChannel that just connected in to us. */
-	public Socket(SocketChannel channel) throws IOException {
-		if (!channel.isConnected()) throw new IOException("not connected"); // Make sure the given channel is connected
-		outgoing = false;
-		this.channel = channel;
-		ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress());
-		size();
-		connect = null;
+	public Socket(SocketChannel channel) {
+		try {
+			if (!channel.isConnected()) throw new NetException("not connected"); // Make sure the given channel is connected
+			outgoing = false;
+			this.channel = channel;
+			ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress());
+			size();
+			connect = null;
+		} catch (IOException e) { throw new NetException(e); }
 	}
 	
 	/** Increase the socket buffer size if necessary. */

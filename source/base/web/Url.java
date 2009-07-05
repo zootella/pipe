@@ -55,7 +55,7 @@ public class Url {
 	 * Parse text from the user into a new Url object.
 	 * Lets the user omit "http://" at the start, and type something with spaces.
 	 */
-	public Url(String s) throws MessageException {
+	public Url(String s) {
 
 		// Prepare the given text from the user
 		s = s.trim();                             // Remove spaces from the start and end

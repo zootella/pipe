@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 
-
+import base.exception.NetException;
 import base.internet.name.Port;
 import base.state.Close;
 
@@ -14,10 +14,12 @@ public class ListenSocket extends Close {
 	// Open
 
 	/** Bind a new TCP server socket to port. */
-	public ListenSocket(Port port) throws IOException {
-		this.port = port;
-		channel = ServerSocketChannel.open();
-		channel.socket().bind(new InetSocketAddress(port.port));
+	public ListenSocket(Port port) {
+		try {
+			this.port = port;
+			channel = ServerSocketChannel.open();
+			channel.socket().bind(new InetSocketAddress(port.port));
+		} catch (IOException e) { throw new NetException(e); }
 	}
 
 	// Look

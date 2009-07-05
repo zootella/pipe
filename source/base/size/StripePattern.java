@@ -75,7 +75,7 @@ public class StripePattern {
 	 * "2 2" becomes a StripePattern that is true between the distances 2 and 4.
 	 * "0 2 2" becomes a StripePattern that is true from 0 to 2, and from 4 onwards.
 	 */
-	public StripePattern(String widths) throws MessageException {
+	public StripePattern(String widths) {
 
 		// Convert widths like "1 1 1" in the given String into distances like 1, 2, 3 for the list
 		this();           // Make list a new empty ArrayList

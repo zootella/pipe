@@ -103,7 +103,7 @@ public class SprayPattern {
 	// -------- Convert to and from data --------
 
 	/** Parse d into this new SprayPattern object, taking bits number of bits from the start. */
-	public SprayPattern(Data d, int bits) throws ChopException, MessageException {
+	public SprayPattern(Data d, int bits) {
 		
 		// Make sure d isn't empty and bits isn't 0
 		int bytes = d.size();

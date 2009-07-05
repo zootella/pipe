@@ -38,7 +38,7 @@ public class Header {
 	 * 
 	 * Header-Name: header value\r\n
 	 */
-	public Header(Data d) throws ChopException {
+	public Header(Data d) {
 		String line = Text.line(d); // Throws a ChopException if it can't find "\n" to end the line
 		TextSplit split = Text.split(line, ":"); // The header name and its value are separated by a ":"
 		name = split.before.trim();
