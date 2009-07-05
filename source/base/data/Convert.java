@@ -35,7 +35,7 @@ public class Convert {
 	 */
 	public static String toString(byte[] a) {
 		String s = null;
-		try { s = new String(a, encoding); } catch (UnsupportedEncodingException e) { throw new PlatformException(); }
+		try { s = new String(a, encoding); } catch (UnsupportedEncodingException e) { throw new PlatformException(e); }
 		return s;
 	}
 	
@@ -49,7 +49,7 @@ public class Convert {
 	/** Convert a String into a byte array using UTF-8 encoding. */
 	public static byte[] toByteArray(String s) {
 		byte[] a = null;
-		try { a = s.getBytes(encoding); } catch (UnsupportedEncodingException e) { throw new PlatformException(); }
+		try { a = s.getBytes(encoding); } catch (UnsupportedEncodingException e) { throw new PlatformException(e); }
 		return a;
 	}
 	

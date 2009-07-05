@@ -154,7 +154,7 @@ public class Url {
 	public static String encode(String s) {
 		try {
 			return URLEncoder.encode(s, Convert.encoding);
-		} catch (UnsupportedEncodingException e) { throw new PlatformException(); }
+		} catch (UnsupportedEncodingException e) { throw new PlatformException(e); }
 	}
 	
 	/** Encode spaces into "%20", leaving other characters like "/" alone. */
@@ -166,7 +166,7 @@ public class Url {
 	public static String decode(String s) {
 		try {
 			return URLDecoder.decode(s, Convert.encoding);
-		} catch (UnsupportedEncodingException e) { throw new PlatformException(); }
+		} catch (UnsupportedEncodingException e) { throw new PlatformException(e); }
 	}
 
 	// -------- File name for saving the file --------

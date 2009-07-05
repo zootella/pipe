@@ -4,24 +4,34 @@ package base.exception;
  * Throw a NetException when Internet communications are blocked or interrupted.
  * When you catch a NetException, try again with a new connection or message.
  */
-public class NetException extends RuntimeException {
+public class NetException extends MyException {
+	
+	// Make
 	
 	public NetException() {
-		message = null;
-		exception = null;
+		this.message = null;
+		this.exception = null;
 	}
 	
-	public NetException(String s) {
-		message = s;
-		exception = null;
+	public NetException(String message) {
+		this.message = message;
+		this.exception = null;
 	}
+	
+	public NetException(Exception exception) {
+		this.message = null;
+		this.exception = exception;
+	}
+	
+	public NetException(String message, Exception exception) {
+		this.message = message;
+		this.exception = exception;
+	}
+	
+	// Look
 
-	public NetException(Exception e) {
-		message = null;
-		exception = e;
-	}
-	
+	/** A short text message that describes what happened, or null if none. */
 	public final String message;
+	/** The Java exception that happened first and that we wrapped in this one, or null if none. */
 	public final Exception exception;
-	//TODO cant you make and extend BaseException to put message and exception in there?
 }

@@ -16,7 +16,7 @@ public class Hash {
 	public Hash() {
 		try {
 			digest = MessageDigest.getInstance("SHA"); // Ask for the SHA1 algorithm
-		} catch (NoSuchAlgorithmException e) { throw new PlatformException(); }
+		} catch (NoSuchAlgorithmException e) { throw new PlatformException(e); }
 	}
 
 	/** Our MessageDigest object that hashes more data based on what has come before. */

@@ -37,11 +37,11 @@ public class Mistake {
 
 	/** Get the stack trace from an exception. */
 	private static String describe(Exception e) {
-		StringWriter stringWriter = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(stringWriter, true);
-		e.printStackTrace(printWriter);
-		printWriter.flush();
-		stringWriter.flush();
-		return stringWriter.toString();
+		StringWriter s = new StringWriter();
+		PrintWriter p = new PrintWriter(s, true);
+		e.printStackTrace(p);
+		p.flush();
+		s.flush();
+		return s.toString();
 	}
 }
