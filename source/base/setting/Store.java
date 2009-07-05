@@ -36,9 +36,9 @@ public class Store extends Close {
 			outline = Outline.fromText(File.data(path));
 			
 		// That didn't work, outline will be the blank empty Outline
-		} catch (ChopException e) {
-		} catch (MessageException e) {
-		} catch (IOException e) {}
+		}
+		catch (ChopException e) {}
+		catch (MessageException e) {}
 	}
 
 	/** The Path where the store file is on the disk. */
@@ -54,13 +54,9 @@ public class Store extends Close {
 	/** Save the program's store file for the next time we run. */
 	@Override public void close() {
 		if (already()) return;
-		try {
 			
-			// Turn outline into text, and save it to path
-			File.save(path, new Data(outline.toString()));
-			
-		// That didn't work, but we can't do anything about it
-		} catch (IOException e) {}
+		// Turn outline into text, and save it to path
+		File.save(path, new Data(outline.toString()));
 	}
 	
 	// -------- Make different kinds of setting objects that will save themselves in this Store --------

@@ -6,8 +6,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-import base.exception.ChopException;
-import base.exception.CodeException;
 import base.exception.DiskException;
 import base.exception.NetException;
 import base.file.File;

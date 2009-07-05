@@ -8,9 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import base.exception.CodeException;
 import base.exception.Mistake;
-import base.exception.MessageException;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.state.Close;
@@ -37,10 +35,8 @@ public class BridgeTab extends Close {
 	/** Make the Bridge tab in the window. */
 	public BridgeTab() {
 		
-		try {
-			port = new Port(1234);
-			ipPort = new IpPort("127.0.0.1:1234");
-		} catch (MessageException e) { throw new CodeException(); }
+		port = new Port(1234);
+		ipPort = new IpPort("127.0.0.1:1234");
 		
 		update = new Update(new MyReceive());
 		bridge = new Bridge(update);

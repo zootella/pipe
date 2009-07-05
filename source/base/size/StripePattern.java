@@ -4,11 +4,8 @@ package base.size;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import base.data.Number;
 import base.data.Text;
-import base.exception.CodeException;
-import base.exception.MessageException;
 
 public class StripePattern {
 
@@ -200,16 +197,14 @@ public class StripePattern {
 
 	/** Make a new StripePattern which is (!this), true where this one is false, leaving this one unchanged. */
 	public StripePattern not() {
-		try {
-			if (list.isEmpty())                // No numbers, false everywhere
-				return new StripePattern("0"); // Return "0" which is true everywhere
-			StripePattern p = copy();          // Make a copy of this StripePattern to change and return
-			if (p.list.get(0) == 0)            // Flip the presence of "0" at the start of the list, flipping true and false everywhere after
-				p.list.remove(0);              // The list has "0", remove it
-			else
-				p.list.add(0, (long)0);        // The list lacks "0", add it to the start
-			return p;
-		} catch (MessageException e) { throw new CodeException(); }
+		if (list.isEmpty())                // No numbers, false everywhere
+			return new StripePattern("0"); // Return "0" which is true everywhere
+		StripePattern p = copy();          // Make a copy of this StripePattern to change and return
+		if (p.list.get(0) == 0)            // Flip the presence of "0" at the start of the list, flipping true and false everywhere after
+			p.list.remove(0);              // The list has "0", remove it
+		else
+			p.list.add(0, (long)0);        // The list lacks "0", add it to the start
+		return p;
 	}
 
 	/** Return a new StripePattern which is (this | p), true everywhere this one or p are true, leaving this one unchanged. */

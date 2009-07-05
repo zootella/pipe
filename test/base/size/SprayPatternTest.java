@@ -52,19 +52,19 @@ public class SprayPatternTest {
 			
 		SprayPattern p;
 		
-		p = new SprayPattern(Encode.data("00"), 1);
+		p = new SprayPattern(Encode.fromBase16("00"), 1);
 		assertTrue(p.toString().equals("0"));
 		
-		p = new SprayPattern(Encode.data("ff"), 1);
+		p = new SprayPattern(Encode.fromBase16("ff"), 1);
 		assertTrue(p.toString().equals("1"));
 		
-		p = new SprayPattern(Encode.data("80"), 1);
+		p = new SprayPattern(Encode.fromBase16("80"), 1);
 		assertTrue(p.toString().equals("1"));
 		
-		p = new SprayPattern(Encode.data("80"), 2);
+		p = new SprayPattern(Encode.fromBase16("80"), 2);
 		assertTrue(p.toString().equals("10"));
 		
-		p = new SprayPattern(Encode.data("40"), 2);
+		p = new SprayPattern(Encode.fromBase16("40"), 2);
 		assertTrue(p.toString().equals("01"));
 	}
 	
