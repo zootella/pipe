@@ -4,23 +4,23 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import base.data.Bay;
 import base.data.Data;
 import base.data.Number;
 import base.data.Text;
 import base.data.TextSplit;
-import base.exception.ChopException;
 import base.exception.MessageException;
 
 public class IpPort implements Comparable<IpPort> {
 	
-	// Parts
+	// Look
 
 	/** The Ip address, like 1.2.3.4. */
 	public final Ip ip;
 	/** The port number, like 80. */
 	public final Port port;
+	
+	// Make
 	
 	/** Make a new IpPort object with the given Ip address and port number. */
 	public IpPort(Ip ip, Port port) { this.ip = ip; this.port = port; }
@@ -39,7 +39,7 @@ public class IpPort implements Comparable<IpPort> {
 	public String toString() { return ip.toString() + ":" + port; }
 
 	/** Make a new IpPort from a String like "1.2.3.4:5". */
-	public IpPort(String s) throws MessageException {
+	public IpPort(String s) {
 		TextSplit split = Text.split(s, ":");
 		if (!split.found) throw new MessageException();
 		ip = new Ip(split.before);
@@ -83,21 +83,20 @@ public class IpPort implements Comparable<IpPort> {
 		}
 	}
 
-	/** Make a new IpPort from 6 bytes at the start of d, 01020304 0005 becomes 1.2.3.4:5. */
-	public IpPort(Data d) throws MessageException { this(d, pattern); } // Use the default pattern
-	/** Make a new IpPort from 6 bytes at the start of d using a pattern like "123405". */
-	public IpPort(Data d, String pattern) throws MessageException {
-		try {
-			if (pattern.charAt(0) == '1' || pattern.charAt(0) == '4') { // IP first
-				ip = new Ip(d, Text.start(pattern, 4));
-				if (pattern.charAt(4) == '0') port = new Port(Number.toInt(d.clip(4, 2), 0, 65535));
-				else                          port = new Port(Number.toIntLittle(d.clip(4, 2), 0, 65535));
-			} else {                                                    // Port first
-				if (pattern.charAt(0) == '0') port = new Port(Number.toInt(d.clip(0, 2), 0, 65535));
-				else                          port = new Port(Number.toIntLittle(d.clip(0, 2), 0, 65535));
-				ip = new Ip(d.after(2), Text.after(pattern, 2));
-			}
-		} catch (ChopException e) { throw new MessageException(); } // d isn't big enough
+	/** Make a new IpPort from d which must be 6 bytes, 01020304 0005 becomes 1.2.3.4:5. */
+	public IpPort(Data d) { this(d, pattern); } // Use the default pattern
+	/** Make a new IpPort from d which must be 6 bytes, use pattern like "123405". */
+	public IpPort(Data d, String pattern) {
+		if (d.size() != 6) throw new MessageException("size");
+		if (pattern.charAt(0) == '1' || pattern.charAt(0) == '4') { // IP first
+			ip = new Ip(d, Text.start(pattern, 4));
+			if (pattern.charAt(4) == '0') port = new Port(Number.toInt(d.clip(4, 2), 0, 65535));
+			else                          port = new Port(Number.toIntLittle(d.clip(4, 2), 0, 65535));
+		} else {                                                    // Port first
+			if (pattern.charAt(0) == '0') port = new Port(Number.toInt(d.clip(0, 2), 0, 65535));
+			else                          port = new Port(Number.toIntLittle(d.clip(0, 2), 0, 65535));
+			ip = new Ip(d.after(2), Text.after(pattern, 2));
+		}
 	}
 
 	// Compare
@@ -128,13 +127,12 @@ public class IpPort implements Comparable<IpPort> {
 	}
 	
 	/** Parse data like "123405123405123405", with each IP address and port number in 6 bytes, into a List of IpPort objects. */
-	public static List<IpPort> list(Data d) throws MessageException {
-		try {
-			Data data = d.copy(); // Make a copy to not change d
-			List<IpPort> list = new ArrayList<IpPort>();
-			while (data.hasData()) list.add(new IpPort(data.cut(6))); // Cut 6 bytes from the start of data until it runs out
-			return list;
-		} catch (ChopException e) { throw new MessageException(); } // The data didn't split into 6-byte pieces
+	public static List<IpPort> list(Data d) {
+		if (d.size() % 6 != 0) throw new MessageException("size");
+		Data data = d.copy(); // Make a copy to not change d
+		List<IpPort> list = new ArrayList<IpPort>();
+		while (data.hasData()) list.add(new IpPort(data.cut(6))); // Cut 6 bytes from the start of data until it runs out
+		return list;
 	}
 
 	/** Turn a List of IpPort objects into a String like "1.2.3.4:5,1.2.3.4:5,1.2.3.4:5". */
@@ -150,7 +148,7 @@ public class IpPort implements Comparable<IpPort> {
 	}
 
 	/** Parse text like "1.2.3.4:5,1.2.3.4:5,1.2.3.4:5" into a List of IpPort objects. */
-	public static List<IpPort> list(String s) throws MessageException {
+	public static List<IpPort> list(String s) {
 		List<String> words = Text.words(s, ",");
 		List<IpPort> list = new ArrayList<IpPort>();
 		for (String word : words) list.add(new IpPort(word)); // Each word is like "1.2.3.4:5"
@@ -158,12 +156,12 @@ public class IpPort implements Comparable<IpPort> {
 	}
 
 	/** Turn a String like "1.2.3.4:5,1.2.3.4:5,1.2.3.4:5" into Data like "123405123405123405". */
-	public static Data listToData(String s) throws MessageException { Bay bay = new Bay(); listToBay(bay, s); return bay.data(); }
+	public static Data listToData(String s) { Bay bay = new Bay(); listToBay(bay, s); return bay.data(); }
 	/** Turn a String like "1.2.3.4:5,1.2.3.4:5,1.2.3.4:5" into Data like "123405123405123405" added to bay. */
-	public static void listToBay(Bay bay, String s) throws MessageException { toBay(bay, list(s)); } // Go through list(String)
+	public static void listToBay(Bay bay, String s) { toBay(bay, list(s)); } // Go through list(String)
 
 	/** Turn data like "123405123405123405" into a String like "1.2.3.4:5,1.2.3.4:5,1.2.3.4:5". */
-	public static String listToString(Data d) throws MessageException { StringBuffer b = new StringBuffer(); listToString(b, d); return b.toString(); }
+	public static String listToString(Data d) { StringBuffer b = new StringBuffer(); listToString(b, d); return b.toString(); }
 	/** Turn data like "123405123405123405" into a String like "1.2.3.4:5,1.2.3.4:5,1.2.3.4:5", added to the given StringBuffer. */
-	public static void listToString(StringBuffer b, Data d) throws MessageException { toString(b, list(d)); } // Go through list(Data)
+	public static void listToString(StringBuffer b, Data d) { toString(b, list(d)); } // Go through list(Data)
 }

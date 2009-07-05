@@ -4,6 +4,11 @@ import base.exception.MessageException;
 
 public class Port {
 	
+	// Look
+	
+	/** The port number, 0 through 65535. */
+	public final int port;
+	
 	// Make
 
 	/** Make sure port is 0 through 65535 or throw a MessageException. */
@@ -11,11 +16,6 @@ public class Port {
 		if (port < minimum || port > maximum) throw new MessageException();
 		this.port = port;
 	}
-	
-	// Look
-	
-	/** The port number, 0 through 65535. */
-	public final int port;
 
 	// Define
 

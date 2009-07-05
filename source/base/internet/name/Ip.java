@@ -4,17 +4,16 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
-
 import base.data.Bay;
 import base.data.Data;
 import base.data.Number;
 import base.data.Text;
-import base.exception.ChopException;
 import base.exception.MessageException;
+import base.exception.PlatformException;
 
 public class Ip implements Comparable<Ip> {
 	
-	// -------- Parts --------
+	// Look
 	
 	/** The 1st number in the IP address, n1.0.0.0. */
 	public final int n1;
@@ -25,7 +24,7 @@ public class Ip implements Comparable<Ip> {
 	/** The 4th number in the IP address, 0.0.0.n4. */
 	public final int n4;
 	
-	// -------- Convert to and from a Java InetAddress object, which contains just an IP address --------
+	// Convert
 
 	/** Convert this Ip into a Java InetAddress object. */
 	public InetAddress toInetAddress() {
@@ -36,7 +35,7 @@ public class Ip implements Comparable<Ip> {
 			b[2] = (byte)n3;
 			b[3] = (byte)n4;
 			return InetAddress.getByAddress(b); // Java promises to not do any network activity
-		} catch (UnknownHostException e) { return null; } // The array wasn't 4 bytes long
+		} catch (UnknownHostException e) { throw new PlatformException(e); } // The array wasn't 4 bytes long
 	}
 	
 	/** Make a new Ip with the IP address of the given Java InetAddress object. */
@@ -48,13 +47,13 @@ public class Ip implements Comparable<Ip> {
 		n4 = b[3] & 0xff;
 	}
 
-	// -------- Convert to and from a String like "1.2.3.4" --------
+	// Text
 	
 	/** Convert this Ip into text like "1.2.3.4". */
 	public String toString() { return n1 + "." + n2 + "." + n3 + "." + n4; }
 
 	/** Make a new Ip from a String like "1.2.3.4". */
-	public Ip(String s) throws MessageException {
+	public Ip(String s) {
 		List<String> list = Text.words(s, ".");
 		if (list.size() != 4) throw new MessageException(); // Make sure we got 4 parts
 		n1 = Number.toInt(list.get(0), 0, 255); // Throws MessageException if the text isn't numerals, or if a number isn't 0 through 255
@@ -63,7 +62,7 @@ public class Ip implements Comparable<Ip> {
 		n4 = Number.toInt(list.get(3), 0, 255);
 	}
 
-	// -------- Convert to and from 4 bytes of data --------
+	// Data
 
 	/**
 	 * "1234", the default pattern that describes how the IP address 1.2.3.4 is arranged in 4 bytes of data.
@@ -96,26 +95,25 @@ public class Ip implements Comparable<Ip> {
 		}
 	}
 
-	/** Make a new Ip from 4 bytes at the start of d, 01 02 03 04 becomes 1.2.3.4. */
-	public Ip(Data d) throws MessageException { this(d, pattern); } // Use the default pattern
-	/** Make a new Ip from 4 bytes at the start of d using the pattern "1234" or "4321". */
-	public Ip(Data d, String pattern) throws MessageException {
-		try {
-			if (pattern.charAt(0) == '1') {              // pattern is "1234", use big endian network byte order
-				n1 = Number.toInt(d.clip(0, 1), 0, 255); // Turn each byte into a number
-				n2 = Number.toInt(d.clip(1, 1), 0, 255);
-				n3 = Number.toInt(d.clip(2, 1), 0, 255);
-				n4 = Number.toInt(d.clip(3, 1), 0, 255);
-			} else {                                     // pattern is "4321", use little endian order
-				n4 = Number.toInt(d.clip(0, 1), 0, 255);
-				n3 = Number.toInt(d.clip(1, 1), 0, 255);
-				n2 = Number.toInt(d.clip(2, 1), 0, 255);
-				n1 = Number.toInt(d.clip(3, 1), 0, 255);
-			}
-		} catch (ChopException e) { throw new MessageException(); } // d isn't big enough
+	/** Make a new Ip from d which must be 4 bytes, 01 02 03 04 becomes 1.2.3.4. */
+	public Ip(Data d) { this(d, pattern); } // Use the default pattern
+	/** Make a new Ip from d which must be 4 bytes, use the pattern "1234" or "4321". */
+	public Ip(Data d, String pattern) {
+		if (d.size() != 4) throw new MessageException("size");
+		if (pattern.charAt(0) == '1') {              // pattern is "1234", use big endian network byte order
+			n1 = Number.toInt(d.clip(0, 1), 0, 255); // Turn each byte into a number
+			n2 = Number.toInt(d.clip(1, 1), 0, 255);
+			n3 = Number.toInt(d.clip(2, 1), 0, 255);
+			n4 = Number.toInt(d.clip(3, 1), 0, 255);
+		} else {                                     // pattern is "4321", use little endian order
+			n4 = Number.toInt(d.clip(0, 1), 0, 255);
+			n3 = Number.toInt(d.clip(1, 1), 0, 255);
+			n2 = Number.toInt(d.clip(2, 1), 0, 255);
+			n1 = Number.toInt(d.clip(3, 1), 0, 255);
+		}
 	}
 
-	// -------- Compare --------
+	// Compare
 
 	/**
 	 * Compare this Ip to a given one to determine which should come first in sorted order.
