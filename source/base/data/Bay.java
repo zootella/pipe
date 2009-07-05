@@ -3,6 +3,7 @@ package base.data;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import base.exception.DiskException;
 import base.file.File;
 import base.size.Stripe;
 
@@ -184,21 +185,24 @@ public class Bay {
 	// File
 
 	/** Add the given stripe of data from file to this Bay, or throw an IOException. */
-	public void read(File file, Stripe stripe) throws IOException {
-		
-		// Prepare enough room
-		prepare((int)stripe.size);
+	public void read(File file, Stripe stripe) {
+		try {
+			
+			// Prepare enough room
+			prepare((int)stripe.size);
+			
+			// Copy our buffer to read in the stripe
+			ByteBuffer fill = buffer.duplicate(); // Copy buffer to move b's position and limit separately
+			fill.limit(fill.position() + (int)stripe.size); // Clip position and limit around stripe size of space after our data
+			
+			// Copy data from the file to this Bay
+			int did = file.file.getChannel().read(fill, stripe.i); // Read from file at stripe.i to fill between b's position and limit
+			if (did != stripe.size) throw new DiskException("did " + did); // Make sure we got everything
+			if (fill.hasRemaining()) throw new DiskException("remain");
+			
+			// Move buffer's position past the new data we wrote
+			buffer.position(fill.position());
 
-		// Copy our buffer to read in the stripe
-		ByteBuffer fill = buffer.duplicate(); // Copy buffer to move b's position and limit separately
-		fill.limit(fill.position() + (int)stripe.size); // Clip position and limit around stripe size of space after our data
-		
-		// Copy data from the file to this Bay
-		int did = file.file.getChannel().read(fill, stripe.i); // Read from file at stripe.i to fill between b's position and limit
-		if (did != stripe.size) throw new IOException("did " + did); // Make sure we got everything
-		if (fill.hasRemaining()) throw new IOException("remain");
-
-		// Move buffer's position past the new data we wrote
-		buffer.position(fill.position());
+		} catch (IOException e) { throw new DiskException(e); }
 	}
 }

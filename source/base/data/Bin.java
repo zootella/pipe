@@ -9,7 +9,9 @@ import java.nio.ByteBuffer;
 
 import base.exception.ChopException;
 import base.exception.CodeException;
+import base.exception.DiskException;
 import base.exception.NetException;
+import base.exception.TransferException;
 import base.file.File;
 import base.internet.name.IpPort;
 import base.internet.packet.ListenPacket;
@@ -171,9 +173,9 @@ public class Bin {
 	}
 	
 	/** Make sure we did at least 1 byte and position moved forward correctly. */
-	private void inCheck(int did, ByteBuffer space) throws IOException {
-		if (did < 1) throw new IOException("did " + did); // Hit the end got nothing
-		if (buffer.position() + did != space.position()) throw new IOException("position"); // Moved position forward incorrectly
+	private void inCheck(int did, ByteBuffer space) {
+		if (did < 1) throw new TransferException("did " + did); // Hit the end got nothing
+		if (buffer.position() + did != space.position()) throw new TransferException("position"); // Moved position forward incorrectly
 	}
 	
 	/** Save our buffer after moving data in. */
@@ -192,9 +194,9 @@ public class Bin {
 	}
 	
 	/** Make sure we did at least 1 byte and position moved forward correctly. */
-	private void outCheck(int did, ByteBuffer data) throws IOException {
-		if (did < 1) throw new IOException("did " + did); // Error or wrote nothing
-		if (did != data.position()) throw new IOException("position"); // Moved position forward incorrectly
+	private void outCheck(int did, ByteBuffer data) {
+		if (did < 1) throw new TransferException("did " + did); // Error or wrote nothing
+		if (did != data.position()) throw new TransferException("position"); // Moved position forward incorrectly
 	}
 	
 	/** Save our buffer after moving data out. */
@@ -207,46 +209,54 @@ public class Bin {
 	// Stream
 
 	/** Move 1 byte or more from stream in to this Bin. */
-	public Move in(InputStream stream, Range range) throws IOException {
-		int ask = range.ask(space()); // Don't try to bring in more bytes than buffer has space to hold
-		Now start = new Now();
-		int did = stream.read(array(), 0, ask); // Move from stream to array
-		if (did < 1 || did > ask) throw new IOException("did " + did);
-		ByteBuffer space = in(did); // Move from array to buffer
-		space.put(array(), 0, did);
-		inCheck(did, space);
-		inDone(space);
-		return new Move(start, did);
+	public Move in(InputStream stream, Range range) {
+		try {
+			int ask = range.ask(space()); // Don't try to bring in more bytes than buffer has space to hold
+			Now start = new Now();
+			int did = stream.read(array(), 0, ask); // Move from stream to array
+			if (did < 1 || did > ask) throw new TransferException("did " + did);
+			ByteBuffer space = in(did); // Move from array to buffer
+			space.put(array(), 0, did);
+			inCheck(did, space);
+			inDone(space);
+			return new Move(start, did);
+		} catch (IOException e) { throw new TransferException(e); }
 	}
 
 	/** Move 1 byte or more from this Bin out to stream. */
-	public Move out(OutputStream stream, Range range) throws IOException {
-		int ask = range.ask(size()); // Don't try to give out more data than buffer has
-		Now start = new Now();
-		ByteBuffer data = out(ask); // Move from buffer to array
-		data.get(array(), 0, ask);		
-		stream.write(array(), 0, ask); // Move from array to stream
-		outCheck(ask, data);
-		outDone(data);
-		return new Move(start, ask);
+	public Move out(OutputStream stream, Range range) {
+		try {
+			int ask = range.ask(size()); // Don't try to give out more data than buffer has
+			Now start = new Now();
+			ByteBuffer data = out(ask); // Move from buffer to array
+			data.get(array(), 0, ask);		
+			stream.write(array(), 0, ask); // Move from array to stream
+			outCheck(ask, data);
+			outDone(data);
+			return new Move(start, ask);
+		} catch (IOException e) { throw new TransferException(e); }
 	}
 
 	// File
 	
 	/** Read 1 byte or more from file to this Bin. */
-	public Move read(File file, StripePattern pattern, Range range) throws IOException {
-		int ask = range.ask(space()); // Don't try to read more bytes than we have space for
-		ByteBuffer space = in(ask);
-		if (!pattern.is(true, new Stripe(range.i, ask))) throw new IOException("hole"); // Make sure the file has data where we will read it
-		Now start = new Now();
-		int did = file.file.getChannel().read(space, range.i); // Read from the file at i and move space.position forward
-		inCheck(did, space);
-		inDone(space);
-		return new Move(start, range.i, did);
+	public Move read(File file, StripePattern pattern, Range range) {
+		try {
+			int ask = range.ask(space()); // Don't try to read more bytes than we have space for
+			ByteBuffer space = in(ask);
+			if (!pattern.is(true, new Stripe(range.i, ask))) throw new DiskException("hole"); // Make sure the file has data where we will read it
+			Now start = new Now();
+			int did = file.file.getChannel().read(space, range.i); // Read from the file at i and move space.position forward
+			inCheck(did, space);
+			inDone(space);
+			return new Move(start, range.i, did);
+		}
+		catch (IOException e)       { throw new DiskException(e); }
+		catch (TransferException e) { throw new DiskException(e); }
 	}
 	
 	/** Write 1 byte or more from this Bin to file. */
-	public Move write(File file, Range range) throws IOException {
+	public Move write(File file, Range range) {
 		ByteBuffer data = out(range.ask(size())); // Don't try to write more bytes than we have
 		Now start = new Now();
 		int did = file.file.getChannel().write(data, range.i); // Write to the file at trip.at and move data.position forward

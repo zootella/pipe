@@ -1,29 +1,29 @@
 package base.exception;
 
 /**
- * Throw a CodeException when something seemingly impossible has happened because of a mistake in the code.
- * When you catch a CodeException, close the program and try to contact the programmer.
+ * Throw a TransferException when data transfer didn't work and you're not sure if it's the fault of the disk or the network.
+ * When you catch a TransferException, try to figure out which one it was.
  */
-public class CodeException extends MyException {
+public class TransferException extends MyException {
 	
 	// Make
 	
-	public CodeException() {
+	public TransferException() {
 		this.message = null;
 		this.exception = null;
 	}
 	
-	public CodeException(String message) {
+	public TransferException(String message) {
 		this.message = message;
 		this.exception = null;
 	}
 	
-	public CodeException(Exception exception) {
+	public TransferException(Exception exception) {
 		this.message = null;
 		this.exception = exception;
 	}
 	
-	public CodeException(String message, Exception exception) {
+	public TransferException(String message, Exception exception) {
 		this.message = message;
 		this.exception = exception;
 	}
