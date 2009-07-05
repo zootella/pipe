@@ -1,13 +1,9 @@
 package base.encode;
 
-
 import base.data.Bay;
 import base.data.Data;
 import base.data.Text;
-import base.exception.ChopException;
-import base.exception.CodeException;
 import base.exception.MessageException;
-
 
 // document which methods are reversible, and which are one way
 // which are readable by the user, and which are not
@@ -20,7 +16,7 @@ import base.exception.MessageException;
 /** Use TextEncode methods to convert data to and from text letters and numbers using base 16, 32, and 62 encoding. */
 public class Encode {
 	
-	// -------- Shortcut methods --------
+	// Shortcuts
 
 	/** Turn data into text using base 16, each byte will become 2 characters, "00" through "ff". */
 	public static String toBase16(Data d) { StringBuffer b = new StringBuffer(); toBase16(b, d); return b.toString(); }
@@ -30,110 +26,98 @@ public class Encode {
 	public static String toBase62(Data d) { StringBuffer b = new StringBuffer(); toBase62(b, d); return b.toString(); }
 	
 	/** Turn base 16-encoded text back into the data it was made from. */
-	public static Data fromBase16(String s) throws MessageException { Bay bay = new Bay(); fromBase16(bay, s); return bay.data(); }
+	public static Data fromBase16(String s) { Bay bay = new Bay(); fromBase16(bay, s); return bay.data(); }
 	/** Turn base 32-encoded text back into the data it was made from. */
-	public static Data fromBase32(String s) throws MessageException { Bay bay = new Bay(); fromBase32(bay, s); return bay.data(); }
+	public static Data fromBase32(String s) { Bay bay = new Bay(); fromBase32(bay, s); return bay.data(); }
 	/** Turn base 62-encoded text back into the data it was made from. */
-	public static Data fromBase62(String s) throws MessageException { Bay bay = new Bay(); fromBase62(bay, s); return bay.data(); }
+	public static Data fromBase62(String s) { Bay bay = new Bay(); fromBase62(bay, s); return bay.data(); }
 	
 	/** Turn data into text by putting bytes that aren't characters in square braces in base 16, "a[b]c\r\n" becomes "a[[b]]c[0d0a]". */
 	public static String box(Data d) { StringBuffer b = new StringBuffer(); box(b, d); return b.toString(); }
 	/** Turn box-encoded text back into the data it was made from. */
-	public static Data unbox(String s) throws MessageException { Bay bay = new Bay(); unbox(bay, s); return bay.data(); }
+	public static Data unbox(String s) { Bay bay = new Bay(); unbox(bay, s); return bay.data(); }
 	/** Turn data into text like "hello--", striking out non-ASCII bytes with hyphens. */
 	public static String strike(Data d) { StringBuffer b = new StringBuffer(); strike(b, d); return b.toString(); }
 
-	/** Make a Data object with some data from base 16 text quoted in the code, like Encode.data("00ff00ff") to make those 4 bytes. */
-	public static Data data(String s) { try { return fromBase16(s); } catch (MessageException e) { throw new CodeException(); } }
-
-	// -------- Base 16, 32, and 62 encoding --------
+	// Base 16, 32, and 62
 
 	/** Turn data into text using base 16, each byte will become 2 characters, "00" through "ff". */
 	public static void toBase16(StringBuffer b, Data d) {
-		try {
 			
-			// Use 0-9 and a-f, 16 different characters, to describe the data
-			String alphabet = "0123456789abcdef";
+		// Use 0-9 and a-f, 16 different characters, to describe the data
+		String alphabet = "0123456789abcdef";
+		
+		// Loop through each byte in the data
+		for (int i = 0; i < d.size(); i++) {
 			
-			// Loop through each byte in the data
-			for (int i = 0; i < d.size(); i++) {
-				
-				// Encode the byte into 2 characters
-				b.append(alphabet.charAt((d.get(i) & 0xff) >> 4)); // Shift right 4 bits to read just the first part 1001----
-				b.append(alphabet.charAt((d.get(i) & 0xff) & 15)); // Mask with 15 1111 to read just the second part ----1001
-			}
-			
-		} catch (ChopException e) { throw new CodeException(); } // The index can't go out of bounds
+			// Encode the byte into 2 characters
+			b.append(alphabet.charAt((d.get(i) & 0xff) >> 4)); // Shift right 4 bits to read just the first part 1001----
+			b.append(alphabet.charAt((d.get(i) & 0xff) & 15)); // Mask with 15 1111 to read just the second part ----1001
+		}
 	}
 
 	/** Turn data into text using base 32, each 5 bits will become a character a-z and 2-7. */
 	public static void toBase32(StringBuffer b, Data d) {
-		try {
 
-			// Use a-z and 2-7, 32 different characters, to describe the data
-			String alphabet = "abcdefghijklmnopqrstuvwxyz234567"; // Base 32 encoding omits 0 and 1 because they look like uppercase o and lowercase L
+		// Use a-z and 2-7, 32 different characters, to describe the data
+		String alphabet = "abcdefghijklmnopqrstuvwxyz234567"; // Base 32 encoding omits 0 and 1 because they look like uppercase o and lowercase L
+		
+		// Loop through the memory, encoding its bits into letters and numbers
+		int byteIndex, bitIndex;                    // The bit index i as a distance in bytes followed by a distance in bits
+		int pair, mask, code;                       // Use the data bytes a pair at a time, with a mask of five 1s, to read a code 0 through 31
+		for (int i = 0; i < d.size() * 8; i += 5) { // Move the index in bits forward across the memory in steps of 5 bits
 			
-			// Loop through the memory, encoding its bits into letters and numbers
-			int byteIndex, bitIndex;                    // The bit index i as a distance in bytes followed by a distance in bits
-			int pair, mask, code;                       // Use the data bytes a pair at a time, with a mask of five 1s, to read a code 0 through 31
-			for (int i = 0; i < d.size() * 8; i += 5) { // Move the index in bits forward across the memory in steps of 5 bits
-				
-				// Calculate the byte and bit to move to from the bit index
-				byteIndex = i / 8; // Divide by 8 and chop off the remainder to get the byte index
-				bitIndex  = i % 8; // The bit index within that byte is the remainder
-				
-				// Copy the two bytes at byteIndex into pair
-				pair = (d.get(byteIndex) & 0xff) << 8; // Copy the byte at byteindex into pair, shifted left to bring eight 0s on the right
-				if (byteIndex + 1 < d.size()) pair |= (d.get(byteIndex + 1) & 0xff); // On the last byte, leave the right byte in pair all 0s
-				
-				// Read the 5 bits at i as a number, called code, which will be 0 through 31
-				mask = 31 << (11 - bitIndex);   // Start the mask 11111 31 shifted into position      0011111000000000
-				code = pair & mask;             // Use the mask to clip out just that portion of pair --10101---------
-				code = code >> (11 - bitIndex); // Shift it to the right to read it as a number       -----------10101
-				
-				// Describe the 5 bits with a numeral or letter
-				b.append(alphabet.charAt(code));
-			}
+			// Calculate the byte and bit to move to from the bit index
+			byteIndex = i / 8; // Divide by 8 and chop off the remainder to get the byte index
+			bitIndex  = i % 8; // The bit index within that byte is the remainder
 			
-		} catch (ChopException e) { throw new CodeException(); } // The index can't go out of bounds
+			// Copy the two bytes at byteIndex into pair
+			pair = (d.get(byteIndex) & 0xff) << 8; // Copy the byte at byteindex into pair, shifted left to bring eight 0s on the right
+			if (byteIndex + 1 < d.size()) pair |= (d.get(byteIndex + 1) & 0xff); // On the last byte, leave the right byte in pair all 0s
+			
+			// Read the 5 bits at i as a number, called code, which will be 0 through 31
+			mask = 31 << (11 - bitIndex);   // Start the mask 11111 31 shifted into position      0011111000000000
+			code = pair & mask;             // Use the mask to clip out just that portion of pair --10101---------
+			code = code >> (11 - bitIndex); // Shift it to the right to read it as a number       -----------10101
+			
+			// Describe the 5 bits with a numeral or letter
+			b.append(alphabet.charAt(code));
+		}
 	}
 
 	/** Turn data into text using base 62, each 4 or 6 bits will become a character 0-9, a-z, and A-Z. */
 	public static void toBase62(StringBuffer b, Data d) {
-		try {
 			
-			// Use 0-9, a-z and A-Z, 62 different characters, to describe the data
-			String alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		// Use 0-9, a-z and A-Z, 62 different characters, to describe the data
+		String alphabet = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		
+		// Loop through the memory, encoding its bits into letters and numbers
+		int i = 0;                 // The index in bits, from 0 through all the bits in the given data
+		int byteIndex, bitIndex;   // The same index as a distance in bytes followed by a distance in bits
+		int pair, mask, code;      // Use the data bytes a pair at a time, with a mask of six 1s, to read a code 0 through 63
+		while (i < d.size() * 8) { // When the bit index moves beyond the memory, we're done
 			
-			// Loop through the memory, encoding its bits into letters and numbers
-			int i = 0;                 // The index in bits, from 0 through all the bits in the given data
-			int byteIndex, bitIndex;   // The same index as a distance in bytes followed by a distance in bits
-			int pair, mask, code;      // Use the data bytes a pair at a time, with a mask of six 1s, to read a code 0 through 63
-			while (i < d.size() * 8) { // When the bit index moves beyond the memory, we're done
-				
-				// Calculate the byte and bit to move to from the bit index
-				byteIndex = i / 8; // Divide by 8 and chop off the remainder to get the byte index
-				bitIndex  = i % 8; // The bit index within that byte is the remainder
-				
-				// Copy the two bytes at byteIndex into pair
-				pair = (d.get(byteIndex) & 0xff) << 8; // Copy the byte at byteindex into pair, shifted left to bring eight 0s on the right
-				if (byteIndex + 1 < d.size()) pair |= (d.get(byteIndex + 1) & 0xff); // On the last byte, leave the right byte in pair all 0s
-				
-				// Read the 6 bits at i as a number, called code, which will be 0 through 63
-				mask = 63 << (10 - bitIndex);   // Start the mask 111111 63 shifted into position     0011111100000000
-				code = pair & mask;             // Use the mask to clip out just that portion of pair --101101--------
-				code = code >> (10 - bitIndex); // Shift it to the right to read it as a number       ----------101101
-				
-				// Describe the 6 bits with a numeral or letter, 111100 is 60 and Y, if more than that use Z and move forward 4, not 6
-				if (code < 61) { b.append(alphabet.charAt(code)); i += 6; } // 000000  0 '0' through 111100 60 'Y'
-				else           { b.append(alphabet.charAt(61));   i += 4; } // 111101 61, 111110 62, and 111111 63 are 'Z', move past the four 1s
-			}
-
-		} catch (ChopException e) { throw new CodeException(); } // The index can't go out of bounds
+			// Calculate the byte and bit to move to from the bit index
+			byteIndex = i / 8; // Divide by 8 and chop off the remainder to get the byte index
+			bitIndex  = i % 8; // The bit index within that byte is the remainder
+			
+			// Copy the two bytes at byteIndex into pair
+			pair = (d.get(byteIndex) & 0xff) << 8; // Copy the byte at byteindex into pair, shifted left to bring eight 0s on the right
+			if (byteIndex + 1 < d.size()) pair |= (d.get(byteIndex + 1) & 0xff); // On the last byte, leave the right byte in pair all 0s
+			
+			// Read the 6 bits at i as a number, called code, which will be 0 through 63
+			mask = 63 << (10 - bitIndex);   // Start the mask 111111 63 shifted into position     0011111100000000
+			code = pair & mask;             // Use the mask to clip out just that portion of pair --101101--------
+			code = code >> (10 - bitIndex); // Shift it to the right to read it as a number       ----------101101
+			
+			// Describe the 6 bits with a numeral or letter, 111100 is 60 and Y, if more than that use Z and move forward 4, not 6
+			if (code < 61) { b.append(alphabet.charAt(code)); i += 6; } // 000000  0 '0' through 111100 60 'Y'
+			else           { b.append(alphabet.charAt(61));   i += 4; } // 111101 61, 111110 62, and 111111 63 are 'Z', move past the four 1s
+		}
 	}
 
 	/** Turn base 16-encoded text back into the data it was made from. */
-	public static void fromBase16(Bay bay, String s) throws MessageException {
+	public static void fromBase16(Bay bay, String s) {
 
 		// Loop for each character in the text
 		char c;       // The character we are converting into bits
@@ -166,7 +150,7 @@ public class Encode {
 	}
 
 	/** Turn base 32-encoded text back into the data it was made from. */
-	public static void fromBase32(Bay bay, String s) throws MessageException {
+	public static void fromBase32(Bay bay, String s) {
 
 		// Loop for each character in the text
 		char c;        // The character we are converting into bits
@@ -196,7 +180,7 @@ public class Encode {
 	}
 
 	/** Turn base 62-encoded text back into the data it was made from. */
-	public static void fromBase62(Bay bay, String s) throws MessageException {
+	public static void fromBase62(Bay bay, String s) {
 
 		// Loop for each character in the text
 		char c;        // The character we are converting into bits
@@ -227,39 +211,36 @@ public class Encode {
 		}
 	}
 
-	// -------- Box encoding --------
+	// Box
 
 	/** Turn data into text by putting bytes that aren't characters in square braces in base 16, "a[b]c\r\n" becomes "a[[b]]c[0d0a]". */
 	public static void box(StringBuffer b, Data d) {
-		try {
 
-			// d is mostly text characters
-			if (text(d)) {
-				Data data = d.copy();    // Copy d to remove what we've encoded from data
-				while (data.hasData()) { // Stop when data is empty
-					byte y = data.first();
-					if      (y == '[') { b.append("[["); data.remove(1); } // Turn "[" into "[["
-					else if (y == ']') { b.append("]]"); data.remove(1); } // Turn "]" into "]]"
-					else if (text(y)) b.append(data.cut(count(data, true)).toString()); // Bytes that are text characters don't change
-					else { // Encode other bytes into base 16 in square braces
-						b.append('[');
-						toBase16(b, data.cut(count(data, false)));
-						b.append(']');
-					}
+		// d is mostly text characters
+		if (text(d)) {
+			Data data = d.copy();    // Copy d to remove what we've encoded from data
+			while (data.hasData()) { // Stop when data is empty
+				byte y = data.first();
+				if      (y == '[') { b.append("[["); data.remove(1); } // Turn "[" into "[["
+				else if (y == ']') { b.append("]]"); data.remove(1); } // Turn "]" into "]]"
+				else if (text(y)) b.append(data.cut(count(data, true)).toString()); // Bytes that are text characters don't change
+				else { // Encode other bytes into base 16 in square braces
+					b.append('[');
+					toBase16(b, data.cut(count(data, false)));
+					b.append(']');
 				}
-
-			// d is mostly data bytes
-			} else {
-				b.append('['); // Encode it all into a single block in square braces
-				toBase16(b, d);
-				b.append(']');
 			}
-
-		} catch (ChopException e) { throw new CodeException(); } // The index can't go out of bounds
+			
+			// d is mostly data bytes
+		} else {
+			b.append('['); // Encode it all into a single block in square braces
+			toBase16(b, d);
+			b.append(']');
+		}
 	}
 	
 	/** Turn box-encoded text back into the data it was made from. */
-	public static void unbox(Bay bay, String s) throws MessageException {
+	public static void unbox(Bay bay, String s) {
 		try {
 
 			// Move i down s, stopping when it reaches the end
@@ -304,47 +285,41 @@ public class Encode {
 		} catch (IndexOutOfBoundsException e) { throw new MessageException(); }
 	}
 
-	// -------- Print data for the user, showing the text bytes it contains --------
+	// Library
 
 	/** Turn data into text like "hello--", striking out non-text bytes with hyphens. */
 	public static void strike(StringBuffer b, Data d) {
-		try {
-			for (int i = 0; i < d.size(); i++) {
-				byte y = d.get(i);              // Loop for each byte of data y in d
-				if (text(y)) b.append((char)y); // If it's " " through "~", include it in the text
-				else         b.append('-');     // Otherwise, show a "-" in its place
-			}
-		} catch (ChopException e) { throw new CodeException(); } // The index can't go out of bounds
+		for (int i = 0; i < d.size(); i++) {
+			byte y = d.get(i);              // Loop for each byte of data y in d
+			if (text(y)) b.append((char)y); // If it's " " through "~", include it in the text
+			else         b.append('-');     // Otherwise, show a "-" in its place
+		}
 	}
 	
-	// -------- Determine if a byte is a text character " " through "~" --------
+	// Inside
 
 	/** Count how many bytes at the start of d are text characters, or false to count data bytes. */
 	private static int count(Data d, boolean text) {
-		try {
-			int i = 0;
-			while (i < d.size()) {
-				byte y = d.get(i);
-				if (y == '[' || y == ']') break; // Stop at "[" or "]" when counting safe or unsafe bytes
-				if (text ? !text(y) : text(y)) break;
-				i++;
-			}
-			return i;
-		} catch (ChopException e) { throw new CodeException(); } // The index can't go out of bounds
+		int i = 0;
+		while (i < d.size()) {
+			byte y = d.get(i);
+			if (y == '[' || y == ']') break; // Stop at "[" or "]" when counting safe or unsafe bytes
+			if (text ? !text(y) : text(y)) break;
+			i++;
+		}
+		return i;
 	}
 
 	/** true if d is mostly text characters, false to encode it all as data. */
 	private static boolean text(Data d) {
-		try {
-			int text = 0; // The number of text bytes in d
-			int data = 0; // The number of data bytes in d
-			for (int i = 0; i < d.size(); i++) {
-				byte y = d.get(i);   // Loop for each byte of data y in d
-				if (text(y)) text++; // It's a text byte, count it
-				else         data++; // It's a data byte, count it
-			}
-			return data == 0 || text > data; // Encode as text if no data, or more than half text
-		} catch (ChopException e) { throw new CodeException(); } // The index can't go out of bounds
+		int text = 0; // The number of text bytes in d
+		int data = 0; // The number of data bytes in d
+		for (int i = 0; i < d.size(); i++) {
+			byte y = d.get(i);   // Loop for each byte of data y in d
+			if (text(y)) text++; // It's a text byte, count it
+			else         data++; // It's a data byte, count it
+		}
+		return data == 0 || text > data; // Encode as text if no data, or more than half text
 	}
 
 	/** true if byte y is a text character " " through "~", false to encode y as data. */

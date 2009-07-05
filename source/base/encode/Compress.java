@@ -1,10 +1,8 @@
 package base.encode;
 
-
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
-
 
 import base.data.Bay;
 import base.data.Bin;
@@ -15,7 +13,7 @@ import base.exception.ProgramException;
 
 public class Compress {
 
-	// -------- Compress a series of data blocks with a Compress object --------
+	// Series of blocks
 	
 	/**
 	 * Compress the next block of data in a sequence of blocks.
@@ -41,7 +39,7 @@ public class Compress {
 	 *                    This method will clear this source Bay.
 	 * @return            The number of bytes of uncompressed data this method added to destination.
 	 */
-	public int decompressAdd(Bay destination, Bay source) throws MessageException {
+	public int decompressAdd(Bay destination, Bay source) {
 		if (inflater == null) inflater = new Inflater();  // Make our Inflater the first time we're called
 		int before = destination.size();                  // Watch how the destination grows
 		decompress(inflater, destination, source.data());
@@ -49,7 +47,7 @@ public class Compress {
 		return destination.size() - before;
 	}
 
-	// -------- Compress a single block of data with these methods --------
+	// Single block
 
 	/** Compress a single block of data by itself and all at once. */
 	public static Data compressAll(Data d) { Bay bay = new Bay(); compressAll(bay, d); return bay.data(); }
@@ -61,15 +59,15 @@ public class Compress {
 	}
 	
 	/** Decompress a single block of compressed data by itself and all at once. */
-	public static Data decompressAll(Data d) throws MessageException { Bay bay = new Bay(); decompressAll(bay, d); return bay.data(); }
+	public static Data decompressAll(Data d) { Bay bay = new Bay(); decompressAll(bay, d); return bay.data(); }
 	/** Decompress the single block of compressed data d by itself and all at once, add the decompressed data to bay. */
-	public static void decompressAll(Bay bay, Data d) throws MessageException {
+	public static void decompressAll(Bay bay, Data d) {
 		Inflater inflater = new Inflater(); // Make a Java Inflater object for us to use
 		decompress(inflater, bay, d);       // Decompress d into bay
 		inflater.end();                     // Tell the Inflater we're done with it
 	}
 
-	// -------- Inside parts --------
+	// Inside
 	
 	/** The Java Deflater object this Compress object will use to compress each block in sequence. */
 	private Deflater deflater;
@@ -148,7 +146,7 @@ public class Compress {
 	 * @param bay      A Bay this method will add the decompressed data to
 	 * @param d        The compressed source data
 	 */
-	private static void decompress(Inflater inflater, Bay bay, Data d) throws MessageException {
+	private static void decompress(Inflater inflater, Bay bay, Data d) {
 		try {
 
 			// Prepare the Inflater and make our temporary array
@@ -167,7 +165,8 @@ public class Compress {
 				if (wrote == 0) break;
 			}
 
-		} catch (DataFormatException e) { throw new MessageException(); // There is a mistake in the compressed data
-		} catch (ChopException e) { throw new ProgramException(); }     // The Inflater didn't tell us how many bytes it wrote
+		}
+		catch (DataFormatException e) { throw new MessageException(); } // There is a mistake in the compressed data
+		catch (ChopException e) { throw new ProgramException(); }       // The Inflater didn't tell us how many bytes it wrote
 	}
 }

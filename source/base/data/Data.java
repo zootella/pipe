@@ -6,7 +6,6 @@ import java.util.Random;
 import base.encode.Encode;
 import base.encode.Hash;
 import base.exception.ChopException;
-import base.exception.CodeException;
 
 public class Data implements Comparable<Data> {
 
@@ -71,19 +70,19 @@ public class Data implements Comparable<Data> {
 	// Change
 
 	/** Remove size bytes from the start of the data this Data object views. */
-	public void remove(int size) throws ChopException {
+	public void remove(int size) {
 		if (size == 0) return; // Nothing to remove
 		if (size > size()) throw new ChopException(); // Asked to remove more than we have
 		buffer.position(buffer.position() + size); // Move our ByteBuffer's position forward size bytes
 	}
 
 	/** Remove data from the start of this Data object, keeping only the last size bytes. */
-	public void keep(int size) throws ChopException {
+	public void keep(int size) {
 		remove(size() - size); // Remove everything but size bytes
 	}
 	
 	/** Remove size bytes from the start of this Data object, and return a new Data object that views them. */
-	public Data cut(int size) throws ChopException {
+	public Data cut(int size) {
 		Data d = start(size); // Make a new Data d to return that clips out size bytes at the start
 		remove(size); // Remove size bytes from the start of this Data object
 		return d;
@@ -101,21 +100,19 @@ public class Data implements Comparable<Data> {
 
 	/** Clip out up to size bytes from the start of this Data. */
 	public Data begin(int size) {
-		try {
-			return start(Math.min(size, size())); // Don't try to clip out more data than we have
-		} catch (ChopException e) { throw new CodeException(); } // There is a mistake in the code in this try block
+		return start(Math.min(size, size())); // Don't try to clip out more data than we have
 	}
 
 	/** Clip out the first size bytes of this Data, start(3) is DDDddddddd. */
-	public Data start(int size) throws ChopException { return clip(0, size); }
+	public Data start(int size) { return clip(0, size); }
 	/** Clip out the last size bytes of this Data, end(3) is dddddddDDD. */
-	public Data end(int size) throws ChopException { return clip(size() - size, size); }
+	public Data end(int size) { return clip(size() - size, size); }
 	/** Clip out the bytes after index i in this Data, after(3) is dddDDDDDDD. */
-	public Data after(int i) throws ChopException { return clip(i, size() - i); }
+	public Data after(int i) { return clip(i, size() - i); }
 	/** Chop the last size bytes off the end of this Data, returning the start before them, chop(3) is DDDDDDDddd. */
-	public Data chop(int size) throws ChopException { return clip(0, size() - size); }
+	public Data chop(int size) { return clip(0, size() - size); }
 	/** Clip out part this Data, clip(5, 3) is dddddDDDdd. */
-	public Data clip(int i, int size) throws ChopException {
+	public Data clip(int i, int size) {
 
 		// Make sure the requested index and size fits inside this Data
 		if (i < 0 || size < 0 || i + size > size()) throw new ChopException();
@@ -128,9 +125,9 @@ public class Data implements Comparable<Data> {
 	}
 
 	/** Get the first byte in this Data. */
-	public byte first() throws ChopException { return get(0); }
+	public byte first() { return get(0); }
 	/** Get the byte i bytes into this Data. */
-	public byte get(int i) throws ChopException {
+	public byte get(int i) {
 		if (i < 0 || i >= size()) throw new ChopException(); // Make sure i is in range
 		return buffer.get(buffer.position() + i); // ByteBuffer.get() takes an index from the start of the ByteBuffer
 	}
@@ -223,38 +220,35 @@ public class Data implements Comparable<Data> {
 	 *                -1 if not found.
 	 */
 	private int search(Data d, boolean forward, boolean scan) {
-		try {
 
-			// Check the sizes
-			if (d.size() == 0 || size() < d.size()) return -1;
+		// Check the sizes
+		if (d.size() == 0 || size() < d.size()) return -1;
+		
+		// Our search will scan this Data from the start index through the end index
+		int start = forward ? 0                 : size() - d.size();
+		int end   = forward ? size() - d.size() : 0;
+		int step  = forward ? 1                 : -1;
+		
+		// If we're not allowed to scan across this Data, set end to only look one place
+		if (!scan) end = start;
+		
+		// Scan i from the start through the end in the specified direction
+		for (int i = start; i != end + step; i += step) {
 			
-			// Our search will scan this Data from the start index through the end index
-			int start = forward ? 0                 : size() - d.size();
-			int end   = forward ? size() - d.size() : 0;
-			int step  = forward ? 1                 : -1;
-			
-			// If we're not allowed to scan across this Data, set end to only look one place
-			if (!scan) end = start;
-			
-			// Scan i from the start through the end in the specified direction
-			for (int i = start; i != end + step; i += step) {
+			// Look for d at i
+			int j;
+			for (j = 0; j < d.size(); j++) {
 				
-				// Look for d at i
-				int j;
-				for (j = 0; j < d.size(); j++) {
-					
-					// Mismatch found, break to move to the next spot in this Data
-					if (get(i + j) != d.get(j)) break;
-				}
-				
-				// We found d, return the index in this Data where it is located
-				if (j == d.size()) return i;
+				// Mismatch found, break to move to the next spot in this Data
+				if (get(i + j) != d.get(j)) break;
 			}
 			
-			// Not found
-			return -1;
+			// We found d, return the index in this Data where it is located
+			if (j == d.size()) return i;
+		}
 		
-		} catch (ChopException e) { throw new CodeException(); } // There is a mistake in the code in this try block
+		// Not found
+		return -1;
 	}
 
 	// Split
@@ -291,27 +285,24 @@ public class Data implements Comparable<Data> {
 	 *                If d is not found, split.before will clip out all our data, and split.after will be empty.
 	 */
 	private Split split(Data d, boolean forward) {
-		try {
 			
-			// Make a Split object to fill with answers and return
-			Split split = new Split();
-			
-			// Search this Data for d
-			int i = search(d, forward, true);
-			if (i == -1) { // Not found
-				split.found  = false;
-				split.before = copy();  // Make before a new Data that clips out everything we have
-				split.tag    = empty(); // Make tag and after to empty Data objects
-				split.after  = empty();
-			} else {       // We found d at i, clip out the parts before and after it
-				split.found  = true;
-				split.before = start(i);
-				split.tag    = clip(i, d.size());
-				split.after  = after(i + d.size());
-			}
-			return split;
-
-		} catch (ChopException e) { throw new CodeException(); } // There is a mistake in the code in this try block
+		// Make a Split object to fill with answers and return
+		Split split = new Split();
+		
+		// Search this Data for d
+		int i = search(d, forward, true);
+		if (i == -1) { // Not found
+			split.found  = false;
+			split.before = copy();  // Make before a new Data that clips out everything we have
+			split.tag    = empty(); // Make tag and after to empty Data objects
+			split.after  = empty();
+		} else {       // We found d at i, clip out the parts before and after it
+			split.found  = true;
+			split.before = start(i);
+			split.tag    = clip(i, d.size());
+			split.after  = after(i + d.size());
+		}
+		return split;
 	}
 	
 	// Compare

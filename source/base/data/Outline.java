@@ -1,13 +1,9 @@
 package base.data;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-
 import base.encode.Encode;
-import base.exception.ChopException;
-import base.exception.CodeException;
 import base.exception.MessageException;
 import base.internet.name.IpPort;
 
@@ -26,7 +22,7 @@ import base.internet.name.IpPort;
 
 public class Outline {
 
-	// -------- Inside parts --------
+	// Parts
 	
 	/** The name of this Outline object. */
 	public final String name;
@@ -35,20 +31,20 @@ public class Outline {
 	/** The contents of this Outline object, a List of more Outline objects beneath it in the outline. */
 	private List<Outline> contents;
 
-	// -------- Value --------
+	// Value
 	
 	/** Get this Outline object's data value. */
 	public Data getData() { return value; }
 	/** Get this Outline object's value as a String. */
 	public String getString() { return value.toString(); }
 	/** Get this Outline object's value as a number, throw MessageException if it's not a number. */
-	public long getNumber() throws MessageException { return Number.toLong(getString()); }
+	public long getNumber() { return Number.toLong(getString()); }
 	/** Get this Outline object's value as an IpPort object, throw MessageException if it's not an IP address and port number. */
-	public IpPort getIpPort() throws MessageException { return new IpPort(value); }
+	public IpPort getIpPort() { return new IpPort(value); }
 	/** Get this Outline object's value as a List of IpPort objects, throw MessageException if it's not IP addresses and port numbers. */
-	public List<IpPort> getIpPortList() throws MessageException { return IpPort.list(value); }
+	public List<IpPort> getIpPortList() { return IpPort.list(value); }
 	/** Get this Outline object's value as a boolean, throw MessageException if it's not a boolean. */
-	public boolean getBoolean() throws MessageException {
+	public boolean getBoolean() {
 		String s = getString();
 		if      (s.equals("t")) return true;
 		else if (s.equals("f")) return false;
@@ -92,7 +88,7 @@ public class Outline {
 		contents.clear(); // Remove all the Outline objects in our contents list
 	}
 
-	// -------- Make a new Outline object and set its name and value --------
+	// Make
 	
 	/** Make a new Outline object with no name, value, or contents. */
 	public Outline() { this(""); }
@@ -116,7 +112,7 @@ public class Outline {
 	/** Make a new Outline object with the given name and List of IpPort objects as its value. */
 	public Outline(String name, List<IpPort> list) { this(name); set(list); }
 	
-	// -------- Contents --------
+	// Contents
 
 	/** Add a new Outline to this one, with the given name and no value. */
 	public void add(String name) { add(new Outline(name)); }
@@ -164,10 +160,10 @@ public class Outline {
 		return list;
 	}
 	
-	// -------- Navigate --------
+	// Navigate
 
 	/** Move down from this Outline object to name within it, throw MessageException if name is not found. */
-	public Outline o(String name) throws MessageException {
+	public Outline o(String name) {
 		for (Outline o : contents)
 			if (o.name.equals(name)) return o; // Return the first Outline in our contents that has a matching name
 		throw new MessageException();
@@ -175,14 +171,12 @@ public class Outline {
 
 	/** Move down from this Outline object to name within it, make name if it doesn't exist yet. */
 	public Outline m(String name) {
-		try {
-			if (!has(name)) add(new Outline(name)); // If name isn't there, make it
-			return o(name);
-		} catch (MessageException e) { throw new CodeException(); } // We just added it, so it has to be there
+		if (!has(name)) add(new Outline(name)); // If name isn't there, make it
+		return o(name);
 	}
 
 	/** Move down into path like "name.name.name", throw MessageException if name is not found. */
-	public Outline path(String path) throws MessageException {
+	public Outline path(String path) {
 		List<String> names = Text.words(path, ".");
 		Outline o = this;
 		for (String name : names) o = o.o(name); // Move down, throw MessageException if name is not found
@@ -197,7 +191,7 @@ public class Outline {
 		return o; // Return the Outline object at the end of the path
 	}
 	
-	// -------- Convert to text --------
+	// Convert to text
 	
 	/** Turn this Outline into a text outline. */
 	public String toString() { StringBuffer b = new StringBuffer(); toString(b); return b.toString(); }
@@ -220,7 +214,7 @@ public class Outline {
 			o.toString(b, indent + "  "); // Have it describe itself, indented more than we are
 	}
 
-	// -------- Parse from text --------
+	// Parse from text
 
 	/**
 	 * Parse the data of a text outline at the start of d into a new Outline object.
@@ -228,7 +222,7 @@ public class Outline {
 	 * Returns a new Outline object, and removes the data it parsed from d.
 	 * If the text outline is invalid, removes it from d and throws a MessageException.
 	 */
-	public static Outline fromText(Data d) throws ChopException, MessageException {
+	public static Outline fromText(Data d) {
 		List<String> lines = Text.group(d); // Remove a group of lines that end with a blank line from the start of d
 		List<Outline> list = new ArrayList<Outline>();
 		for (String line : lines) list.add(parse(line)); // Parse each text line into an Outline object
@@ -247,7 +241,7 @@ public class Outline {
 	}
 
 	/** Parse a line of text from a text outline like "  name:value" into a new Outline object. */
-	private static Outline parse(String s) throws MessageException {
+	private static Outline parse(String s) {
 		try {
 			
 			// Count how many indent characters s has
@@ -272,7 +266,7 @@ public class Outline {
 	/** If this Outline was parsed from a line of text in a text outline, the number of indent characters it had, like 2 in "  name:value". */
 	private int indent;
 	
-	// -------- Convert to data --------
+	// Convert to data
 	
 	/** Turn this Outline into data. */
 	public Data data() { Bay bay = new Bay(); toBay(bay); return bay.data(); }
@@ -321,10 +315,10 @@ public class Outline {
 		else                      return 4; // 28 1s will fit in 4 bytes
 	}
 
-	// -------- Parse from data --------
+	// Parse from data
 	
 	/** Parse data at the start of d into this new Outline object, and remove it from d. */
-	public Outline(Data d) throws ChopException, MessageException {
+	public Outline(Data d) {
 		this.contents = new ArrayList<Outline>();
 		Data data = d.copy();                           // Copy d so if we throw an exception, it won't be changed
 		name = data.cut(numberParse(data)).toString();  // Parse the name size, and then the name
@@ -336,7 +330,7 @@ public class Outline {
 	}
 	
 	/** Parse 1 or more bytes at the start of d into a number, remove them from d, and return the number. */
-	private static int numberParse(Data d) throws ChopException, MessageException {
+	private static int numberParse(Data d) {
 		int n = 0;
 		while (true) {
 			byte y = d.cut(1).first();  // Cut one byte from the start of d

@@ -1,6 +1,5 @@
 package base.data;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +7,7 @@ import base.exception.ChopException;
 
 public class Text {
 
-	// -------- Same --------
+	// Same
 
 	/** Compare two strings, matching cases. */
 	public static boolean same(String s1, String s2) {
@@ -23,7 +22,7 @@ public class Text {
 		return search(s1, s2, true, false, false) != -1; // Search at the start only
 	}
 
-	// -------- Starts, ends, and has --------
+	// Starts, ends, and has
 
 	/** Determine if a String starts with a tag, matching cases. */
 	public static boolean starts(String s, String tag) { return search(s, tag, true, false, true) != -1; }
@@ -40,7 +39,7 @@ public class Text {
 	/** Determine if a String contains a tag, case sensitive. */
 	public static boolean hasCase(String s, String tag) { return search(s, tag, true, true, false) != -1; }
 
-	// -------- Find --------
+	// Find
 	
 	/** Find where tag1 or tag2 first appears in s, -1 if neither found. */
 	public static int find(String s, String tag1, String tag2) {
@@ -121,7 +120,7 @@ public class Text {
 		return -1;
 	}
 	
-	// -------- Blank or not --------
+	// Blank or not
 	
 	/** true if s is null or "", blank. */
 	public static boolean isBlank(String s) {
@@ -133,7 +132,7 @@ public class Text {
 		return !isBlank(s);
 	}
 
-	// -------- Split, clip and replace --------
+	// Split, clip and replace
 	
 	/** Clip the part of s that is before a tag, returns s if not found. */
 	public static String before(String s, String tag) {
@@ -255,7 +254,7 @@ public class Text {
 		return done.toString();
 	}
 
-	// -------- Trim --------
+	// Trim
 
 	/**
 	 * Remove all the instances of any number of tags from the start and end of a String.
@@ -297,7 +296,7 @@ public class Text {
 		}
 	}
 
-	// -------- Parse --------
+	// Parse
 
 	/**
 	 * Remove a group of lines of text from the start of d, and parse them into a List of String objects.
@@ -305,7 +304,7 @@ public class Text {
 	 * Removes the terminating blank line from d, but doesn't include it in the return List.
 	 * If d doesn't have a blank line, throws a ChopException without changing d.
 	 */
-	public static List<String> group(Data d) throws ChopException {
+	public static List<String> group(Data d) {
 		Data data = d.copy(); // Make a copy to throw an exception with d unchanged
 		List<String> list = new ArrayList<String>();
 		while (true) {
@@ -322,7 +321,7 @@ public class Text {
 	 * If d doesn't have a "\n", throws a ChopException and doesn't change d.
 	 * Works with lines that end with both "\r\n" and just "\n", removes both without trimming the String.
 	 */
-	public static String line(Data d) throws ChopException {
+	public static String line(Data d) {
 		Split split = d.split((byte)'\n'); // The line ends "\r\n" or just "\n", split around "\n"
 		if (!split.found) throw new ChopException(); // A whole line hasn't arrived yet
 		if (split.before.ends((byte)'\r')) split.before = split.before.chop(1); // Remove the "\r"
@@ -330,7 +329,7 @@ public class Text {
 		return split.before.toString();
 	}
 	
-	// -------- Character --------
+	// Character
 
 	/** true if c is a letter 'a' through 'z' or 'A' through 'Z'. */
 	public static boolean isLetter(char c) {
