@@ -3,9 +3,9 @@ package base.file;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-
 import base.data.Bay;
 import base.data.Data;
+import base.exception.DiskException;
 import base.size.Stripe;
 import base.size.StripePattern;
 import base.state.Close;
@@ -16,29 +16,32 @@ public class File extends Close {
 	// Make
 
 	/** Make and open the file at the given path. */
-	public File(Open open) throws IOException {
-		
-		// Get and save the path
-		path = open.path;
-
-		// Enforce and check how we are told to open the file
-		if (open.how == Open.overwrite) path.delete(); // Delete a file or empty folder at path, or throw an IOException
-		if ((open.how == Open.overwrite || open.how == Open.make) && path.exists()) throw new IOException("exists"); // Make requires available path
-		if ((open.how == Open.read || open.how == Open.write) && !path.existsFile()) throw new IOException("not found"); // Open requires file at path
-		
-		// Make or open the file
-		String access = "rw"; // For the make, overwrite, and write commands, get read and write access
-		if (open.how == Open.read) access = "r"; // For the read command, get read access
-		file = new RandomAccessFile(path.file, access);
-
-		// Get or create and save the pattern
-		StripePattern pattern = open.pattern;
-		if (pattern == null) { // If no pattern given in path, make one
-			pattern = new StripePattern(); // If file is empty, pattern is ready
-			long size = file.getChannel().size(); // If the file has gaps, size will be as if they are full
-			if (size > 0) pattern = pattern.add(new Stripe(0, size)); // Mark the whole file as full
-		}
-		this.pattern = pattern;
+	public File(Open open) {
+		try {
+			
+			// Get and save the path
+			path = open.path;
+			
+			// Enforce and check how we are told to open the file
+			if (open.how == Open.overwrite) path.delete(); // Delete a file or empty folder at path, or throw a DiskException
+			if ((open.how == Open.overwrite || open.how == Open.make) && path.exists()) throw new DiskException("exists"); // Make requires available path
+			if ((open.how == Open.read || open.how == Open.write) && !path.existsFile()) throw new DiskException("not found"); // Open requires file at path
+			
+			// Make or open the file
+			String access = "rw"; // For the make, overwrite, and write commands, get read and write access
+			if (open.how == Open.read) access = "r"; // For the read command, get read access
+			file = new RandomAccessFile(path.file, access);
+			
+			// Get or create and save the pattern
+			StripePattern pattern = open.pattern;
+			if (pattern == null) { // If no pattern given in path, make one
+				pattern = new StripePattern(); // If file is empty, pattern is ready
+				long size = file.getChannel().size(); // If the file has gaps, size will be as if they are full
+				if (size > 0) pattern = pattern.add(new Stripe(0, size)); // Mark the whole file as full
+			}
+			this.pattern = pattern;
+			
+		} catch (IOException e) { throw new DiskException(e); }
 	}
 
 	// Look
@@ -57,7 +60,7 @@ public class File extends Close {
 	}
 
 	/** Close and delete this file on the disk. */
-	public void delete() throws IOException {
+	public void delete() {
 		close();
 		path.delete(); // Delete it at its Path
 	}
@@ -83,34 +86,36 @@ public class File extends Close {
 	// Transfer
 
 	/** Read the contents of this File into memory. */
-	public Data read() throws IOException { Bay bay = new Bay(); read(bay); return bay.data(); }
+	public Data read() { Bay bay = new Bay(); read(bay); return bay.data(); }
 	/** Read the part of the File stripe identifies into memory. */
-	public Data read(Stripe stripe) throws IOException { Bay bay = new Bay(); read(bay, stripe); return bay.data(); }
+	public Data read(Stripe stripe) { Bay bay = new Bay(); read(bay, stripe); return bay.data(); }
 
 	/** Read the contents of this File into bay. */
-	public void read(Bay bay) throws IOException {
+	public void read(Bay bay) {
 		if (size() == 0) return; // This File is empty
 		read(bay, new Stripe(0, size())); // Call the next method with a Stripe that clips out this whole file
 	}
 
 	/** Read the part of this File stripe identifies into bay. */
-	public void read(Bay bay, Stripe stripe) throws IOException {
-		if (!pattern.is(true, stripe)) throw new IOException("hole"); // Make sure we have data where stripe is
+	public void read(Bay bay, Stripe stripe) {
+		if (!pattern.is(true, stripe)) throw new DiskException("hole"); // Make sure we have data where stripe is
 		bay.read(this, stripe); // Add stripe.size bytes from stripe.i in our file to bay
 	}
 
 	/** Write d a distance i bytes into this File. */
-	public void write(long i, Data data) throws IOException {
-		if (data.isEmpty()) return; // Nothing to write
-		int did = file.getChannel().write(data.toByteBuffer(), i);
-		if (did != data.size()) throw new IOException("did " + did); // Make sure write() wrote everything
-		add(new Stripe(i, data.size())); // Update pattern
+	public void write(long i, Data data) {
+		try {
+			if (data.isEmpty()) return; // Nothing to write
+			int did = file.getChannel().write(data.toByteBuffer(), i);
+			if (did != data.size()) throw new DiskException("did " + did); // Make sure write() wrote everything
+			add(new Stripe(i, data.size())); // Update pattern
+		} catch (IOException e) { throw new DiskException(e); }
 	}
 
 	// Small
 	
 	/** Open the file at path, copy its contents into memory, and close it. */
-	public static Data data(Path path) throws IOException {
+	public static Data data(Path path) {
 		File f = new File(new Open(path, null, Open.read));
 		Data d = f.read(); // Copy the file's contents into memory
 		f.close();
@@ -118,10 +123,12 @@ public class File extends Close {
 	}
 
 	/** Save d to a file at path, overwriting one already there. */
-	public static void save(Path path, Data d) throws IOException {
-		File f = new File(new Open(path, null, Open.overwrite));
-		f.write(0, d);
-		f.file.getChannel().truncate(d.size()); // Chop the file off after that
-		f.close();
+	public static void save(Path path, Data d) {
+		try {
+			File f = new File(new Open(path, null, Open.overwrite));
+			f.write(0, d);
+			f.file.getChannel().truncate(d.size()); // Chop the file off after that
+			f.close();
+		} catch (IOException e) { throw new DiskException(e); }
 	}
 }

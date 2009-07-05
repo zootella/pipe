@@ -7,7 +7,7 @@ public class Port {
 	// Make
 
 	/** Make sure port is 0 through 65535 or throw a MessageException. */
-	public Port(int port) throws MessageException {
+	public Port(int port) {
 		if (port < minimum || port > maximum) throw new MessageException();
 		this.port = port;
 	}
