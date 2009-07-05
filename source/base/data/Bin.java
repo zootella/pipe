@@ -6,12 +6,10 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-
 import base.exception.ChopException;
 import base.exception.CodeException;
 import base.exception.DiskException;
 import base.exception.NetException;
-import base.exception.TransferException;
 import base.file.File;
 import base.internet.name.IpPort;
 import base.internet.packet.ListenPacket;
@@ -116,13 +114,11 @@ public class Bin {
 
 	/** Move as much data as fits from data to this Bin, removing what we take from data. */
 	public void add(Data data) {
-		if (data.isEmpty() || isFull()) return; // Nothing given or no space here
-		try {
-			int did = Math.min(data.size(), space()); // Figure out how many bytes we can move
-			Data d = data.start(did);                 // Clip d around that size
-			buffer.put(d.toByteBuffer());             // Copy in the data
-			data.remove(did);                         // Remove what we took from the given Data object
-		} catch (ChopException e) { throw new CodeException(); }
+		if (data.isEmpty() || isFull()) return;   // Nothing given or no space here
+		int did = Math.min(data.size(), space()); // Figure out how many bytes we can move
+		Data d = data.start(did);                 // Clip d around that size
+		buffer.put(d.toByteBuffer());             // Copy in the data
+		data.remove(did);                         // Remove what we took from the given Data object
 	}
 
 	/** Remove size bytes from the start of the data in this Bin. */
@@ -209,32 +205,28 @@ public class Bin {
 	// Stream
 
 	/** Move 1 byte or more from stream in to this Bin. */
-	public Move in(InputStream stream, Range range) {
-		try {
-			int ask = range.ask(space()); // Don't try to bring in more bytes than buffer has space to hold
-			Now start = new Now();
-			int did = stream.read(array(), 0, ask); // Move from stream to array
-			if (did < 1 || did > ask) throw new TransferException("did " + did);
-			ByteBuffer space = in(did); // Move from array to buffer
-			space.put(array(), 0, did);
-			inCheck(did, space);
-			inDone(space);
-			return new Move(start, did);
-		} catch (IOException e) { throw new TransferException(e); }
+	public Move in(InputStream stream, Range range) throws IOException {
+		int ask = range.ask(space()); // Don't try to bring in more bytes than buffer has space to hold
+		Now start = new Now();
+		int did = stream.read(array(), 0, ask); // Move from stream to array
+		if (did < 1 || did > ask) throw new IOException("did " + did);
+		ByteBuffer space = in(did); // Move from array to buffer
+		space.put(array(), 0, did);
+		inCheck(did, space);
+		inDone(space);
+		return new Move(start, did);
 	}
 
 	/** Move 1 byte or more from this Bin out to stream. */
-	public Move out(OutputStream stream, Range range) {
-		try {
-			int ask = range.ask(size()); // Don't try to give out more data than buffer has
-			Now start = new Now();
-			ByteBuffer data = out(ask); // Move from buffer to array
-			data.get(array(), 0, ask);		
-			stream.write(array(), 0, ask); // Move from array to stream
-			outCheck(ask, data);
-			outDone(data);
-			return new Move(start, ask);
-		} catch (IOException e) { throw new TransferException(e); }
+	public Move out(OutputStream stream, Range range) throws IOException {
+		int ask = range.ask(size()); // Don't try to give out more data than buffer has
+		Now start = new Now();
+		ByteBuffer data = out(ask); // Move from buffer to array
+		data.get(array(), 0, ask);		
+		stream.write(array(), 0, ask); // Move from array to stream
+		outCheck(ask, data);
+		outDone(data);
+		return new Move(start, ask);
 	}
 
 	// File
@@ -250,41 +242,45 @@ public class Bin {
 			inCheck(did, space);
 			inDone(space);
 			return new Move(start, range.i, did);
-		}
-		catch (IOException e)       { throw new DiskException(e); }
-		catch (TransferException e) { throw new DiskException(e); }
+		} catch (IOException e) { throw new DiskException(e); }
 	}
 	
 	/** Write 1 byte or more from this Bin to file. */
 	public Move write(File file, Range range) {
-		ByteBuffer data = out(range.ask(size())); // Don't try to write more bytes than we have
-		Now start = new Now();
-		int did = file.file.getChannel().write(data, range.i); // Write to the file at trip.at and move data.position forward
-		outCheck(did, data);
-		outDone(data);
-		return new Move(start, range.i, did);
+		try {
+			ByteBuffer data = out(range.ask(size())); // Don't try to write more bytes than we have
+			Now start = new Now();
+			int did = file.file.getChannel().write(data, range.i); // Write to the file at trip.at and move data.position forward
+			outCheck(did, data);
+			outDone(data);
+			return new Move(start, range.i, did);
+		} catch (IOException e) { throw new DiskException(e); }
 	}
 
 	// Socket
 	
 	/** Download 1 byte or more from socket, adding it to this Bin. */
-	public Move download(Socket socket, Range range) throws IOException {
-		ByteBuffer space = in(range.ask(space()));
-		Now start = new Now();
-		int did = socket.channel.read(space); // Download data and move position forward
-		inCheck(did, space);
-		inDone(space);
-		return new Move(start, did);
+	public Move download(Socket socket, Range range) {
+		try {
+			ByteBuffer space = in(range.ask(space()));
+			Now start = new Now();
+			int did = socket.channel.read(space); // Download data and move position forward
+			inCheck(did, space);
+			inDone(space);
+			return new Move(start, did);
+		} catch (IOException e) { throw new NetException(e); }
 	}
 
 	/** Upload 1 byte or more from this Bin into socket. */
-	public Move upload(Socket socket, Range range) throws IOException {
-		ByteBuffer data = out(range.ask(size()));
-		Now start = new Now();
-		int did = socket.channel.write(data); // Upload data and move position forward
-		outCheck(did, data);
-		outDone(data);
-		return new Move(start, did);
+	public Move upload(Socket socket, Range range) {
+		try {
+			ByteBuffer data = out(range.ask(size()));
+			Now start = new Now();
+			int did = socket.channel.write(data); // Upload data and move position forward
+			outCheck(did, data);
+			outDone(data);
+			return new Move(start, did);
+		} catch (IOException e) { throw new NetException(e); }
 	}
 
 	// Packet
@@ -301,7 +297,6 @@ public class Bin {
 		} catch (IOException e) { throw new NetException(e); }
 	}
 	
-	//TODO change IOException to NetException everywhere else
 	/** Use listen to send the data in this Bin, 0 or more bytes, as a UDP packet to p. */
 	public PacketMove send(ListenPacket listen, IpPort p) {
 		try {
