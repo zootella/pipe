@@ -2,10 +2,9 @@ package base.file;
 
 import java.io.File;
 
-
 import base.data.Text;
 import base.exception.MessageException;
-import base.exception.ProgramException;
+import base.exception.PlatformException;
 import base.web.Url;
 
 public class Here {
@@ -16,6 +15,10 @@ public class Here {
 	// have two method, inside() and outside()
 	// have unjarred always return working for both
 	// have jarred look for a package, and then have inside() be where the jar is and outside() be where the package is
+	
+	// actually, you don't need here at all
+	// inside will be the present working directory, set by the win, mac, and linux launcher
+	// outside will be the preferences folder, well you might need here for that
 
 	/**
 	 * The Path to the folder this program is running in.
@@ -46,7 +49,7 @@ public class Here {
 			s = Text.before(s, "!");     //          /C:/Documents/program/hello/work/hello.jar
 			s = Text.beforeLast(s, "/"); //          /C:/Documents/program/hello/work
 		} else {
-			throw new ProgramException();
+			throw new PlatformException();
 		}
 
 		// Remove Mac app bundle
@@ -61,7 +64,7 @@ public class Here {
 		// Return it in a Path object
 		try {
 			return new Path(s);
-		} catch (MessageException e) { throw new ProgramException(); } // The Path constructor found s to be relative
+		} catch (MessageException e) { throw new PlatformException(); } // The Path constructor found s to be relative
 	}
 
 	/**
@@ -92,8 +95,6 @@ public class Here {
 	 * @throws ProgramException Unable to find the Path
 	 */
 	public static Path working() {
-		try {
-			return new Path((new File("")).getAbsoluteFile()); // Turn a blank relative path absolute
-		} catch (MessageException e) { throw new ProgramException(); } // We just made it absolute
+		return new Path((new File("")).getAbsoluteFile()); // Turn a blank relative path absolute
 	}
 }

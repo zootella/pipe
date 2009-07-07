@@ -9,7 +9,7 @@ import base.data.Bin;
 import base.data.Data;
 import base.exception.ChopException;
 import base.exception.MessageException;
-import base.exception.ProgramException;
+import base.exception.PlatformException;
 
 public class Compress {
 
@@ -136,7 +136,7 @@ public class Compress {
 			
 			return wrote != 0; // Return true if we got something
 			
-		} catch (ChopException e) { throw new ProgramException(); } // The Deflater didn't tell us how many bytes it wrote
+		} catch (ChopException e) { throw new PlatformException(); } // The Deflater didn't tell us how many bytes it wrote
 	}
 
 	/**
@@ -167,6 +167,6 @@ public class Compress {
 
 		}
 		catch (DataFormatException e) { throw new MessageException(); } // There is a mistake in the compressed data
-		catch (ChopException e) { throw new ProgramException(); }       // The Inflater didn't tell us how many bytes it wrote
+		catch (ChopException e) { throw new PlatformException(); }      // The Inflater didn't tell us how many bytes it wrote
 	}
 }
