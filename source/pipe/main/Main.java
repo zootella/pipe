@@ -2,7 +2,6 @@ package pipe.main;
 
 import javax.swing.SwingUtilities;
 
-import base.exception.Mistake;
 
 public class Main {
 	

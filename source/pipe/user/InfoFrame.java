@@ -19,6 +19,12 @@ public class InfoFrame extends Close {
 
 		panel = new Panel();
 		panel.add(Cell.wrap(new JLabel("In the future, all wars will be fought over Information")));
+		
+		//TODO
+		// Chosen port         1234
+		// Local IP address    1.2.3.4
+		// Internet IP address 1.2.3.4
+		// Age of information  22 seconds [ Refresh ]
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

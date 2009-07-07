@@ -1,6 +1,7 @@
 package pipe.main;
 
-import base.exception.Mistake;
+import pipe.core.Core;
+import pipe.user.User;
 import base.state.Close;
 
 public class Program extends Close {

@@ -13,7 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import base.exception.Mistake;
+import pipe.main.Mistake;
+
 import base.state.Close;
 import base.state.View;
 import base.user.Cell;

@@ -1,4 +1,4 @@
-package base.exception;
+package pipe.main;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

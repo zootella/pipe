@@ -1,4 +1,4 @@
-package pipe.main;
+package pipe.core;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;

@@ -1,4 +1,4 @@
-package pipe.main;
+package pipe.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +47,8 @@ public class PacketMachine extends Close {
 		if (already()) return;
 		
 		close(listen);
+		close(sendTask);
+		close(receiveTask);
 	}
 
 	// Receive

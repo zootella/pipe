@@ -9,7 +9,7 @@ import base.state.Close;
 import base.user.Cell;
 import base.user.Panel;
 import base.user.Screen;
-import pipe.core.Pipe;
+import pipe.core.museum.Pipe;
 import pipe.main.Program;
 
 public class PipeInfoFrame extends Close {

@@ -7,10 +7,10 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import pipe.core.Pipe;
+import pipe.core.museum.Pipe;
 import pipe.main.Main;
+import pipe.main.Mistake;
 import pipe.main.Program;
-import base.exception.Mistake;
 import base.state.Close;
 import base.user.Dialog;
 import base.user.Screen;
@@ -54,7 +54,7 @@ public class MainFrame extends Close {
 		final int title = 23;
 		
 		int x = PipePanel.width;
-		int y = program.core.pipes.size() * PipePanel.height;
+		int y = program.core.pipes.pipes.size() * PipePanel.height;
 		pipes.setSize(x, y);
 		
 		y += ToolPanel.height;
@@ -66,7 +66,7 @@ public class MainFrame extends Close {
 		
 		pipes.removeAll();
 		int i = 0;
-		for (Pipe pipe : program.core.pipes) {
+		for (Pipe pipe : program.core.pipes.pipes) {
 			JPanel panel = pipe.panel().panel;
 			panel.setLocation(0, i);
 			pipes.add(panel);
@@ -87,7 +87,7 @@ public class MainFrame extends Close {
 		public void windowClosing(WindowEvent w) {
 			try {
 				
-				if (program.core.pipes.size() == 0)
+				if (program.core.pipes.pipes.isEmpty())
 					program.close();
 				else
 					program.user.show(false);

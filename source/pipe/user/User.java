@@ -1,11 +1,9 @@
-package pipe.main;
+package pipe.user;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-import pipe.user.InfoFrame;
-import pipe.user.MainFrame;
-import pipe.user.MainIcon;
+import pipe.main.Program;
 import base.state.Close;
 
 public class User extends Close {

@@ -14,8 +14,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import pipe.main.Main;
+import pipe.main.Mistake;
 import pipe.main.Program;
-import base.exception.Mistake;
 import base.exception.PlatformException;
 import base.state.Close;
 

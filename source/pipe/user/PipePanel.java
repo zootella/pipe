@@ -7,9 +7,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
-import pipe.core.Pipe;
+import pipe.core.museum.Pipe;
+import pipe.main.Mistake;
 import pipe.main.Program;
-import base.exception.Mistake;
 
 /** A Status panel shows a pipe to the user. */
 public class PipePanel {
@@ -69,7 +69,7 @@ public class PipePanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				program.core.killPipe(pipe);
+				program.core.pipes.kill(pipe);
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

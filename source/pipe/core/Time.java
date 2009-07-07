@@ -1,5 +1,6 @@
-package pipe.main;
+package pipe.core;
 
+import pipe.main.Program;
 import base.data.Data;
 import base.internet.name.Ip;
 import base.internet.name.IpPort;

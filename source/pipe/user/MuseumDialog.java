@@ -6,11 +6,11 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
-import pipe.core.Pipe;
-import pipe.core.ReceivePipe;
-import pipe.core.SendPipe;
+import pipe.core.museum.Pipe;
+import pipe.core.museum.ReceivePipe;
+import pipe.core.museum.SendPipe;
+import pipe.main.Mistake;
 import pipe.main.Program;
-import base.exception.Mistake;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;

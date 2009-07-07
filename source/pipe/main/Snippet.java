@@ -1,5 +1,6 @@
 package pipe.main;
 
+import pipe.core.TimeClient;
 import base.file.Path;
 
 public class Snippet {

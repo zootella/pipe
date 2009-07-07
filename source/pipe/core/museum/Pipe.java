@@ -1,4 +1,4 @@
-package pipe.core;
+package pipe.core.museum;
 
 import pipe.user.PipeInfoFrame;
 import pipe.user.PipePanel;

@@ -11,13 +11,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import pipe.main.Main;
+import pipe.main.Mistake;
 import pipe.main.Program;
 import base.data.Data;
 import base.data.Outline;
 import base.desktop.Clipboard;
 import base.exception.ChopException;
 import base.exception.MessageException;
-import base.exception.Mistake;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
