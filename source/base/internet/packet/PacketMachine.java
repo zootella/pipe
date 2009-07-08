@@ -75,6 +75,17 @@ public class PacketMachine extends Close {
 	
 	private Exception exception;
 	public Exception exception() { return exception; }
+	
+	
+	
+	// make the interface like this
+	// send(data, ipPort), and you never hear anything back
+	// List<Packet> arrived(), and it's your job to empty the list
+	// program it like this, then later the 
+	// both PacketMachine and AcceptMachine have a list of people interested in new stuff that's arrived
+	// they call down the whole list, and then anything left, they delete
+	// subscriber.arrived(List<Packet>)
+	// in the udp case, they each just look at the list and then the machine deletes it all
 
 	// Send
 	
