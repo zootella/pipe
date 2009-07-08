@@ -142,7 +142,7 @@ public class UrlTestBox {
 		dialog = Dialog.make("Url Test");
 		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Make closing the dialog close the program
-		dialog.setBounds(Screen.positionPixel(800, 600)); // Set the dialog size and pick a random location
+		dialog.setBounds(Screen.positionSize(800, 600)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 		update(); // Parse and show output for the default starting text
 	}

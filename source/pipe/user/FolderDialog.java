@@ -58,7 +58,7 @@ public class FolderDialog {
 		
 		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
 
-		dialog.setBounds(Screen.positionPixel(600, 180)); // Set the dialog size and pick a random location
+		dialog.setBounds(Screen.positionSize(600, 180)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 

@@ -1,26 +1,8 @@
 package pipe.core;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
-import pipe.core.museum.Pipe;
 import pipe.main.Mistake;
 import pipe.main.Program;
-import pipe.user.ExchangeDialog;
-import pipe.user.FolderDialog;
-import pipe.user.MuseumDialog;
-
-import base.data.Outline;
-import base.encode.Encode;
-import base.file.Path;
-import base.internet.name.Ip;
-import base.internet.name.Port;
-import base.internet.packet.ListenPacket;
-import base.internet.packet.ReceiveTask;
-import base.internet.packet.SendTask;
-import base.setting.Store;
+import base.internet.packet.Packet;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
@@ -30,34 +12,17 @@ public class Core extends Close {
 
 	public Core(Program program) {
 		this.program = program;
-		
 		update = new Update(new MyReceive());
+		update.send();
 		
-		port = new Port(1234);
+		here = new Here(program);
+		
 		pipes = new Pipes(program);
-		packet = new PacketMachine(update, port);
+		packet = new PacketMachine(update, here.port);
 		
 		
-		/*
-		
-
 		
 		
-		// what's my ip address, lan first
-		try {
-			InetAddress me = InetAddress.getLocalHost();
-			Ip ip = new Ip(me);
-			System.out.println(ip.toString());
-			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-
-		// ok, now for the internet
-		// well, first let's try the time server thing
-		time = new Time(program, update, "time-c.timefreq.bldrdoc.gov", new Port(37), Encode.fromBase16("00"));
-		*/
 		
 		
 		
@@ -66,9 +31,10 @@ public class Core extends Close {
 
 	private final Program program;
 	private final Update update;
-	public final Port port;
 	public final Pipes pipes;
 	public final PacketMachine packet;
+	
+	public final Here here;
 	
 //	private final Time time;
 
@@ -77,6 +43,7 @@ public class Core extends Close {
 		
 		close(pipes);
 		close(packet);
+		close(here);
 	}
 
 	private class MyReceive implements Receive {
@@ -84,10 +51,11 @@ public class Core extends Close {
 			if (closed()) return;
 			try {
 				
-				/*
-				if (time.answer != null)
-					System.out.println("Answer: " + Encode.toBase16(time.answer));
-					*/
+				while (packet.receiveHas()) {
+					Packet p = packet.receiveLook();
+					System.out.println("Packet from " + p.ipPort.toString() + " data " + p.bin.data().base16());
+					packet.receiveDone();
+				}
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

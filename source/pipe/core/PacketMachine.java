@@ -89,6 +89,7 @@ public class PacketMachine extends Close {
 	// Use
 	
 	public void send(Data data, IpPort ipPort) {
+		System.out.println("UDP data " + data.base16() + " out to " + ipPort.toString());
 		
 		Packet packet = reuse();
 		packet.bin.add(data);
@@ -98,19 +99,9 @@ public class PacketMachine extends Close {
 		update.send();
 	}
 	
-	public boolean receiveHas() {
-		return !receive.isEmpty();
-	}
-	
-	public Packet receiveLook() {
-		if (receive.isEmpty())
-			return null;
-		return receive.get(0);
-	}
-	
-	public void receiveDone() {
-		recycle.add(receive.get(0));
-	}
+	public boolean receiveHas() { return !receive.isEmpty(); }
+	public Packet receiveLook() { return receive.get(0); }
+	public void receiveDone() { recycle.add(receive.remove(0)); }
 	
 	// Inside
 	

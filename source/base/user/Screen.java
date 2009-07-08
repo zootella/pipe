@@ -12,11 +12,11 @@ public class Screen {
 	/** Given a width and height like 75 and 50 percent of the screen size, choose a random position on the screen. */
 	public static Rectangle positionPercent(int w, int h) {
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		return positionPixel(w * screen.width / 100, h * screen.height / 100);
+		return positionSize(w * screen.width / 100, h * screen.height / 100);
 	}
 	
 	/** Given a width and height like 500 and 300 pixels, choose a random position on the screen. */
-	public static Rectangle positionPixel(int w, int h) {
+	public static Rectangle positionSize(int w, int h) {
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Rectangle(position(screen.width, w), position(screen.height, h), w, h);
 	}

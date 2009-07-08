@@ -4,10 +4,12 @@ import base.exception.MessageException;
 
 public class Port {
 	
-	// Look
+	// Define
 	
-	/** The port number, 0 through 65535. */
-	public final int port;
+	/** 0, the minimum possible port number. */
+	public static final int minimum = 0;
+	/** 65535, 0xffff in 2 bytes, the maximum possible port number. */
+	public static final int maximum = 65535;
 	
 	// Make
 
@@ -16,11 +18,15 @@ public class Port {
 		if (port < minimum || port > maximum) throw new MessageException();
 		this.port = port;
 	}
+	
+	// Look
+	
+	/** The port number, 0 through 65535. */
+	public final int port;
+	
+	// Text
 
-	// Define
-
-	/** 0, the minimum possible port number. */
-	public static final int minimum = 0;
-	/** 65535, 0xffff in 2 bytes, the maximum possible port number. */
-	public static final int maximum = 65535;
+	@Override public String toString() {
+		return port + "";
+	}
 }

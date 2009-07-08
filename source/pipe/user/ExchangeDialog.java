@@ -64,7 +64,7 @@ public class ExchangeDialog {
 
 		dialog = new JDialog(program.user.main.frame, "Code Exchange", true); // true to make a modal dialog
 		dialog.setContentPane(panel.panel);
-		dialog.setBounds(Screen.positionPixel(800, 400)); // Set the dialog size and pick a random location
+		dialog.setBounds(Screen.positionSize(800, 400)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 	

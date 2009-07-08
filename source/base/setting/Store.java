@@ -1,11 +1,9 @@
 package base.setting;
 
-import java.io.IOException;
-
-
 import base.data.Data;
 import base.data.Outline;
 import base.exception.ChopException;
+import base.exception.DiskException;
 import base.exception.MessageException;
 import base.file.File;
 import base.file.Here;
@@ -39,6 +37,7 @@ public class Store extends Close {
 		}
 		catch (ChopException e) {}
 		catch (MessageException e) {}
+		catch (DiskException e) {}
 	}
 
 	/** The Path where the store file is on the disk. */

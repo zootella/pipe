@@ -92,7 +92,7 @@ public class HashDialog extends Close {
 		dialog = Dialog.make("Hash");
 		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
 		dialog.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
-		dialog.setBounds(Screen.positionPixel(600, 180)); // Set the dialog size and pick a random location
+		dialog.setBounds(Screen.positionSize(600, 180)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 	
