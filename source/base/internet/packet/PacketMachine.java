@@ -16,9 +16,7 @@ public class PacketMachine extends Close {
 		this.up = up;
 		this.port = port;
 		
-		send = new ArrayList<Packet>();
-		receive = new ArrayList<Packet>();
-		recycle = new ArrayList<Packet>();
+		list = new ArrayList<Packet>();
 		
 		update = new Update(new MyReceive());
 		update.send();
@@ -33,9 +31,7 @@ public class PacketMachine extends Close {
 	private SendTask sendTask;
 	private ReceiveTask receiveTask;
 	
-	private final List<Packet> send;
-	private final List<Packet> receive;
-	private final List<Packet> recycle;
+	private final List<Packet> list;
 
 	@Override public void close() {
 		if (already()) return;
@@ -58,7 +54,7 @@ public class PacketMachine extends Close {
 
 				// Done
 				if (done(sendTask)) {
-					recycle.add(sendTask.result());
+					sendTask.result().clear();
 					sendTask = null;
 				}
 				if (done(receiveTask)) {

@@ -1,5 +1,6 @@
 package base.internet.packet;
 
+import base.size.PacketMove;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.TaskClose;
@@ -17,6 +18,9 @@ public class SendTask extends TaskClose {
 		this.listen = listen;
 		this.packet = packet;
 		
+		// Mark the Packet as in use by a Task thread
+		packet.send(packet.ipPort());
+		
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
@@ -33,18 +37,23 @@ public class SendTask extends TaskClose {
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
+		private PacketMove taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() throws Exception {
 				
 			// Use listen to send bin's data to ipPort in a UDP packet
-			packet.move = packet.bin.send(listen, packet.ipPort);
+			taskMove = packet.bin().send(listen, packet.ipPort());
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
 		public void done(Exception e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
+			if (e == null) {      // No exception, save what thread() did
+				
+				packet.blank();
+			}
 			close();              // We're done
 			update.send();        // Tell update we've changed
 		}
