@@ -52,10 +52,12 @@ public class Core extends Close {
 			if (closed()) return;
 			try {
 				
-				while (packet.receiveHas()) {
-					Packet p = packet.receiveLook();
+				while (packet.has()) {
+					Packet p = packet.look();
+					
 					System.out.println("Packet from " + p.ipPort.toString() + " data " + p.bin.data().base16());
-					packet.receiveDone();
+					
+					packet.done();
 				}
 
 			} catch (Exception e) { Mistake.grab(e); }

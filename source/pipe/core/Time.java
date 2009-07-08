@@ -64,9 +64,9 @@ public class Time extends Close {
 					machine.send(data, new IpPort(ip, port));
 				}
 				
-				if (machine.receiveHas() && answer == null) {
-					answer = machine.receiveLook().bin.data().copyData();
-					machine.receiveDone();
+				if (machine.has() && answer == null) {
+					answer = machine.look().bin.data().copyData();
+					machine.done();
 					up.send();
 				}
 

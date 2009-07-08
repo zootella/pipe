@@ -35,6 +35,9 @@ public abstract class Close {
 		return false;                  // Return false to run the contents of the close() method this first and only time
 	}
 
+	/** Make sure this object isn't closed before doing something that would change it. */
+	public void open() { if (objectClosed) throw new IllegalStateException(); }
+
 	// Program
 	
 	/** The total number of objects the program has made that still need to be closed. */

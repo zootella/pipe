@@ -3,8 +3,6 @@ package base.internet.packet;
 import java.util.ArrayList;
 import java.util.List;
 
-import base.data.Data;
-import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.state.Close;
 import base.state.Receive;
@@ -73,7 +71,7 @@ public class PacketMachine extends Close {
 				if (!send.isEmpty() && no(sendTask))
 					sendTask = new SendTask(update, listen, send.remove(0));
 				if (no(receiveTask))
-					receiveTask = new ReceiveTask(update, listen, reuse());
+					receiveTask = new ReceiveTask(update, listen, get());
 
 			} catch (Exception e) { exception = e; close(); }
 		}
@@ -82,32 +80,32 @@ public class PacketMachine extends Close {
 	private Exception exception;
 	public Exception exception() { return exception; }
 
-	// Use
+	// Send
 	
-	public void send(Data data, IpPort ipPort) {
-//		System.out.println("UDP data " + data.base16() + " out to " + ipPort.toString());
-		
-		Packet packet = reuse();
-		packet.bin.add(data);
-		packet.ipPort = ipPort;
-		
-		send.add(packet);
-		update.send();
-	}
-	
-	public boolean receiveHas() { return !receive.isEmpty(); }
-	public Packet receiveLook() { return receive.get(0); }
-	public void receiveDone() { recycle.add(receive.remove(0)); }
-	
-	// Inside
-	
-	private Packet reuse() {
-		
+	/** Get a fresh empty Packet to fill with data, address, and then send(). */
+	public Packet get() {
+		open();
+		if (closed()) throw new IllegalStateException();
 		if (recycle.isEmpty())
 			return new Packet();
-		
 		Packet packet = recycle.remove(0);
 		packet.clear();
 		return packet;
 	}
+
+	/** Send packet to the address written on it, don't look at packet after calling send(). */
+	public void send(Packet packet) {
+		open();
+		send.add(packet);
+		update.send();
+	}
+	
+	// Receive
+
+	/** true if this PacketMachine has received a Packet. */
+	public boolean has() { open(); return !receive.isEmpty(); }
+	/** Look at a Packet this PacketMachine has received. */
+	public Packet look() { open(); return receive.get(0); }
+	/** Tell this PacketMachine you're done looking at the Packet receiveLook() gave you. */
+	public void done() { open(); recycle.add(receive.remove(0)); }
 }
