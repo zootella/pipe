@@ -2,6 +2,7 @@ package pipe.main;
 
 import pipe.core.Core;
 import pipe.user.User;
+import base.process.Mistake;
 import base.state.Close;
 
 public class Program extends Close {

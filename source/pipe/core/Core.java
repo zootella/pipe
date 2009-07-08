@@ -1,8 +1,9 @@
 package pipe.core;
 
-import pipe.main.Mistake;
 import pipe.main.Program;
 import base.internet.packet.Packet;
+import base.internet.packet.PacketMachine;
+import base.process.Mistake;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;

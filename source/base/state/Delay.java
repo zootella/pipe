@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Timer;
 
-import pipe.main.Mistake;
+import base.process.Mistake;
+
 
 
 public class Delay extends Close {

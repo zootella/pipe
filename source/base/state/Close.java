@@ -1,6 +1,6 @@
 package base.state;
 
-import pipe.main.Mistake;
+import base.process.Mistake;
 
 /** Have your object extend Close so the program will notice if you forget to later call its close() method. */
 public abstract class Close {

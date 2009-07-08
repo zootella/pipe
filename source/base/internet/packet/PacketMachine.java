@@ -1,4 +1,4 @@
-package pipe.core;
+package base.internet.packet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,6 @@ import java.util.List;
 import base.data.Data;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
-import base.internet.packet.ListenPacket;
-import base.internet.packet.Packet;
-import base.internet.packet.ReceiveTask;
-import base.internet.packet.SendTask;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
@@ -89,7 +85,7 @@ public class PacketMachine extends Close {
 	// Use
 	
 	public void send(Data data, IpPort ipPort) {
-		System.out.println("UDP data " + data.base16() + " out to " + ipPort.toString());
+//		System.out.println("UDP data " + data.base16() + " out to " + ipPort.toString());
 		
 		Packet packet = reuse();
 		packet.bin.add(data);

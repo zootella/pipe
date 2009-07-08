@@ -10,11 +10,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import pipe.main.Mistake;
 import pipe.main.Snippet;
 
 
 
+import base.process.Mistake;
 import base.user.Cell;
 import base.user.Panel;
 import base.user.TextMenu;

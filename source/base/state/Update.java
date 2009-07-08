@@ -2,7 +2,8 @@ package base.state;
 
 import javax.swing.SwingUtilities;
 
-import pipe.main.Mistake;
+import base.process.Mistake;
+
 
 
 public class Update {

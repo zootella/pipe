@@ -7,8 +7,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
+import base.process.Mistake;
+
 import pipe.core.museum.Pipe;
-import pipe.main.Mistake;
 import pipe.main.Program;
 
 /** A Status panel shows a pipe to the user. */

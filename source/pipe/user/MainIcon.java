@@ -14,9 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import pipe.main.Main;
-import pipe.main.Mistake;
 import pipe.main.Program;
 import base.exception.PlatformException;
+import base.process.Mistake;
 import base.state.Close;
 
 public class MainIcon extends Close {

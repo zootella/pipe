@@ -10,11 +10,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import pipe.main.Main;
-import pipe.main.Mistake;
 import pipe.main.Program;
 import base.exception.DiskException;
 import base.exception.MessageException;
 import base.file.Path;
+import base.process.Mistake;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;

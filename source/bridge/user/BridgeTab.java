@@ -8,10 +8,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import pipe.main.Mistake;
 
 import base.internet.name.IpPort;
 import base.internet.name.Port;
+import base.process.Mistake;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;

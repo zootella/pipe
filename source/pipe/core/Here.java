@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.util.Map;
 
 import pipe.main.Main;
-import pipe.main.Mistake;
 import pipe.main.Program;
 import base.data.Number;
 import base.data.Text;
@@ -13,6 +12,7 @@ import base.internet.name.Ip;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.web.DomainTask;
+import base.process.Mistake;
 import base.state.Close;
 import base.state.Model;
 import base.state.Receive;
@@ -69,7 +69,7 @@ public class Here extends Close {
 				lan = new Ip(InetAddress.getLocalHost());
 
 				if (central != null && internet == null)
-					program.core.packet.send(Encode.fromBase16("00"), new IpPort("132.163.4.101:37"));
+					program.core.packet.send(Encode.fromBase16("0a"), new IpPort("127.0.0.1:9193"));
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

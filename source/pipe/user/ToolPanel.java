@@ -10,7 +10,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import pipe.main.Mistake;
+import base.process.Mistake;
+
 import pipe.main.Program;
 import pipe.main.Snippet;
 

@@ -9,10 +9,9 @@ import javax.swing.JPanel;
 
 import pipe.core.museum.Pipe;
 import pipe.main.Main;
-import pipe.main.Mistake;
 import pipe.main.Program;
+import base.process.Mistake;
 import base.state.Close;
-import base.user.Dialog;
 import base.user.Screen;
 
 /** The main window on the screen that lists the running pipes. */

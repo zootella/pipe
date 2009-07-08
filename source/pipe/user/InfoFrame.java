@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import pipe.core.Here;
-import pipe.main.Mistake;
 import pipe.main.Program;
+import base.process.Mistake;
 import base.state.Close;
 import base.state.View;
 import base.user.Cell;
