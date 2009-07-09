@@ -32,6 +32,7 @@ public class Now {
 		if (time > now.time) return this;
 		else return now;
 	}
+
 	
 	
 }

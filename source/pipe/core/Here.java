@@ -3,21 +3,24 @@ package pipe.core;
 import java.net.InetAddress;
 import java.util.Map;
 
-import pipe.main.Main;
+import pipe.center.Center;
 import pipe.main.Program;
 import base.data.Data;
 import base.data.Number;
 import base.data.Text;
-import base.encode.Encode;
 import base.internet.name.Ip;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
+import base.internet.packet.Packet;
+import base.internet.packet.PacketReceive;
 import base.internet.web.DomainTask;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.Model;
 import base.state.Receive;
 import base.state.Update;
+import base.time.Now;
+import base.time.Time;
 
 public class Here extends Close {
 	
@@ -26,6 +29,7 @@ public class Here extends Close {
 		update = new Update(new MyReceive());
 		update.send();
 		model = new MyModel();
+		
 		
 		
 		// choose our random port number or get it from settings
@@ -62,23 +66,39 @@ public class Here extends Close {
 				
 				// Look up the IP address of the central server
 				if (no(domain))
-					domain = new DomainTask(update, Text.before(Main.central, ":"));
+					domain = new DomainTask(update, Text.before(Center.site, ":"));
 				if (done(domain) && central == null)
-					central = new IpPort(domain.result(), new Port(Number.toInt(Text.after(Main.central, ":"))));
+					central = new IpPort(domain.result(), new Port(Number.toInt(Text.after(Center.site, ":"))));
 				
 				// Check our fake internal LAN IP address
 				lan = new Ip(InetAddress.getLocalHost());
 
 				if (central != null && internet == null) {
-					System.out.println("PIPE send");
 					program.core.packetMachine.send(new Data("What's my IP address?"), central);
+					program.core.packetMachine.add(new MyPacketReceive());
+					sent = new Now();
 				}
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	
+	private Now sent;
 	
+	private class MyPacketReceive implements PacketReceive {
+		public void receive(Packet packet) {
+			if (closed()) return;
+			try {
+				
+				if (!Time.within(sent, 4 * Time.second)) return;
+				
+				
+				
+				
+				
+			} catch (Exception e) { Mistake.ignore(e); }
+		}
+	}
 	
 	
 	

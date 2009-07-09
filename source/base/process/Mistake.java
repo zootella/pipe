@@ -11,22 +11,22 @@ public class Mistake {
 	public static void ignore(Exception e) {
 		
 		// Write it to standard output
-		System.out.println("Mistake.ignore() caught an exception --v--");
+		System.out.print("Mistake.ignore() caught an exception --v--\n");
 		System.out.print(describe(e));
-		System.out.println("Mistake.ignore() caught an exception --^--");
+		System.out.print("Mistake.ignore() caught an exception --^--\n");
 	}
 	
 	/** Show and report an exception code didn't catch, and terminate the Java process. */
 	public static void grab(Exception e) {
 		
 		// Write it to standard output
-		System.out.println("Mistake.grab() caught an exception --v--");
+		System.out.print("Mistake.grab() caught an exception --v--\n");
 		System.out.print(describe(e));
-		System.out.println("Mistake.grab() caught an exception --^--");
+		System.out.print("Mistake.grab() caught an exception --^--\n");
 
 		// Show it to the user
 		try {
-			JOptionPane.showMessageDialog(null, describe(e), "Error.error() caught an exception", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, describe(e), "Mistake.grab() caught an exception", JOptionPane.ERROR_MESSAGE);
 		} catch (Exception i) { ignore(i); }
 
 		// Send it in a packet to the programmer TODO

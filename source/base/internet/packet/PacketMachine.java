@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.data.Bin;
-import base.data.BinStack;
+import base.data.BinBin;
 import base.data.Data;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
@@ -12,135 +12,115 @@ import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
 
+/** A PacketMachine listens on a port to send and receive UDP packets. */
 public class PacketMachine extends Close {
-	
-	// Object
-	
+
+	/** Make a new PacketMachine that listens on the given port number. */
 	public PacketMachine(Port port) {
-		this.port = port;
-		
-		send = new ArrayList<Packet>();
-		receive = new ArrayList<PacketReceive>();
-		stack = new BinStack();
-		
+
+		// Make inside
+		packets = new ArrayList<Packet>();
+		receivers = new ArrayList<PacketReceive>();
+		bins = new BinBin();
+		listen = new ListenPacket(port);
+
+		// Start update
 		update = new Update(new MyReceive());
 		update.send();
 	}
 	
+	/** Packets we're about to send. */
+	private final List<Packet> packets;
+	/** A List of PacketReceive objects above that we show each packet we receive. */
+	private final List<PacketReceive> receivers;
+	/** A stack of empty bins to recycle. */
+	private final BinBin bins;
+	/** Our datagram socket bound to port that we use to send and receive UDP packets. */
+	private final ListenPacket listen;
+	/** Our Update object that objects below tell when they've changed. */
 	private final Update update;
-	private final Port port;
-	
-	private ListenPacket listen;
-	
-	private SendTask sendTask;
-	private ReceiveTask receiveTask;
-	
-	private final List<Packet> send;
-	
-	private final List<PacketReceive> receive;
-	
-	private final BinStack stack;
-	
-	private Exception exception;
+
+	/** A SendTask that sends a UDP packet. */
+	private SendTask send;
+	/** A ReceiveTask that waits for a UDP packet to arrive, and then receives it. */
+	private ReceiveTask receive;
+
+	/** The Exception that closed this PacketMachine, null if there isn't one. */
 	public Exception exception() { return exception; }
+	private Exception exception;
 
 	@Override public void close() {
 		if (already()) return;
-		
 		close(listen);
-		close(sendTask);
-		close(receiveTask);
-		
-		receive.clear();
+		close(send);
+		close(receive);
+		receivers.clear(); // Stop bothering objects above
 	}
-
-	// Receive
 
 	private class MyReceive implements Receive {
 		public void receive() {
 			if (closed()) return;
 			try {
-				
-				// Make
-				if (no(listen))
-					listen = new ListenPacket(port);
-				
+
 				// Send
-				if (done(sendTask)) {
-					Bin bin = sendTask.result();
-					sendTask = null;
-					stack.add(bin);
+				if (done(send)) { // Our SendTask finished sending a packet
+					Bin bin = send.result();
+					send = null;
+					bins.add(bin); // Recycle the Bin it used
 				}
-				if (no(sendTask) && !send.isEmpty())
-					sendTask = new SendTask(update, listen, send.remove(0));
+				if (no(send) && !packets.isEmpty()) // We're not sending a packet right now and we've got one to send
+					send = new SendTask(update, listen, packets.remove(0)); // Send it
 
 				// Receive
-				if (done(receiveTask)) {
-					Packet packet = receiveTask.result();
-					receiveTask = null;
-					for (PacketReceive o : receive)
+				if (done(receive)) { // Our ReceiveTask finished waiting for and getting a packet
+					Packet packet = receive.result(); // Get the packet
+					receive = null;
+					for (PacketReceive o : receivers) // Show it to each interested object above
 						o.receive(packet);
-					stack.add(packet.bin);
+					bins.add(packet.bin); // That's it for packet, recycle its Bin
 				}
-				if (no(receiveTask))
-					receiveTask = new ReceiveTask(update, listen, stack.get());
+				if (no(receive)) // Wait for the next packet to arrive
+					receive = new ReceiveTask(update, listen, bins.get());
 
 			} catch (Exception e) { exception = e; close(); }
 		}
 	}
 	
-	
-	
-	// make the interface like this
-	// send(data, ipPort), and you never hear anything back
-	// you register to find out when packets arrive
-	// when a packet arrives, you get called and have it handed to you, you have this one chance to do something with it
-	// arrived(packet)
-	
-	// packet.bin
-	// packet.ipPort
-	// packet.move
-	// only used in receive, send doesn't use it at all
-	// if sending a udp packet throws an exception, it breaks the machine, not the sender
-	
-	// no bin cache for now
-	// later, you could have machine cache 8 bins or whatever
-	
-
 	// Send
-	
-	/** Send data to ipPort as a new UDP packet. */
+
+	/** Send data to ipPort as the payload of a UDP packet. */
 	public void send(Data data, IpPort ipPort) {
 		open();
-		Bin bin = get();
+		Bin bin = bin();
 		bin.add(data);
 		send(bin, ipPort);
 	}
 	
-	/** Get an empty Bin to fill with the data of a new UDP packet you want to send. */
-	public Bin get() {
+	/** Get an empty Bin to fill with data and then send. */
+	public Bin bin() {
 		open();
-		return stack.get();
+		return bins.get();
 	}
 
 	/** Send the data in bin to ipPort as a new UDP packet. */
 	public void send(Bin bin, IpPort ipPort) {
 		open();
-		send.add(new Packet(bin, ipPort));
+		packets.add(new Packet(bin, ipPort));
 		update.send();
 	}
 	
 	// Receive
 
+	/** Add o to the list of objects this PacketMachine shows the packets it receives. */
 	public void add(PacketReceive o) {
 		open();
-		receive.add(o);
-	}
-	public void remove(PacketReceive o) {
-		open();
-		receive.remove(o);
+		if (!receivers.contains(o))
+			receivers.add(o);
 	}
 	
-
-
+	/** Remove o from the list of objects this PacketMachine bothers with arrived packets. */
+	public void remove(PacketReceive o) {
+		open();
+		receivers.remove(o);
+	}
 }

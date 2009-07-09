@@ -7,8 +7,6 @@ import javax.swing.Timer;
 
 import base.process.Mistake;
 
-
-
 public class Delay extends Close {
 	
 	// Make

@@ -4,6 +4,8 @@ import javax.swing.SwingUtilities;
 
 import base.data.Bin;
 import base.data.Data;
+import base.data.Number;
+import base.data.Text;
 import base.internet.name.Port;
 import base.internet.packet.Packet;
 import base.internet.packet.PacketMachine;
@@ -13,15 +15,14 @@ import base.process.Mistake;
 import base.state.Close;
 
 public class Center extends Close {
-	
-	/** The port we listen on. */
-	public static final int port = 9193;
-	
+
+	/** Domain name and port number of the central server. */
+	public static final String site = "bootcloud.info:9193";
+
 	public static void main(String[] arguments) {
 		SwingUtilities.invokeLater(new Runnable() { // Have the normal Swing thread call this run() method
 			public void run() {
 				try {
-					System.out.println("CENTER start");
 					new Center(); // Make and start the program
 				} catch (Exception e) { Mistake.grab(e); } // Exception starting up
 			}
@@ -29,7 +30,7 @@ public class Center extends Close {
 	}
 	
 	public Center() {
-		packetMachine = new PacketMachine(new Port(port));
+		packetMachine = new PacketMachine(new Port(Number.toInt(Text.after(site, ":"))));
 		packetMachine.add(new MyPacketReceive());
 		Alive.still();
 	}
@@ -48,29 +49,10 @@ public class Center extends Close {
 	private class MyPacketReceive implements PacketReceive {
 		public void receive(Packet packet) {
 			if (closed()) return;
-			try {
 				
-				System.out.println("CENTER receive");
-				Bin bin = packetMachine.get();
-				bin.add(new Data("Your address is " + packet.move.ipPort.toString()));
-				packetMachine.send(bin, packet.move.ipPort);
-
-			} catch (Exception e) { Mistake.ignore(e); }
+			Bin bin = packetMachine.bin();
+			bin.add(new Data("Your address is " + packet.move.ipPort.toString()));
+			packetMachine.send(bin, packet.move.ipPort);
 		}
 	}
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

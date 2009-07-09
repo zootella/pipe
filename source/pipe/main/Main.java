@@ -12,9 +12,6 @@ public class Main {
 	public static final String name = "Pipe";
 	/** Text that describes the version of this program. */
 	public static final String version = "2009 May 19";
-
-	/** Domain name and port number of the central server. */
-	public static final String central = "bootcloud.info:9193";
 	
 	// Main
 

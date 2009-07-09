@@ -23,4 +23,23 @@ public class Time {
 	public static final long week = 7 * day;
 	/** Number of milliseconds in a year, 365 days. */
 	public static final long year = 365 * day;
+	
+	
+
+	/** true if now was made within milliseconds ago. */
+	public static boolean within(Now now, long milliseconds) {
+		if (now == null) return false;
+		return !now.expired(milliseconds);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
