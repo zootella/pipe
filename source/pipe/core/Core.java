@@ -12,11 +12,13 @@ public class Core extends Close {
 	public Core(Program program) {
 		this.program = program;
 		
-		here = new Here(program);
+		Port port = new Port(1234);
+		
 		
 		pipes = new Pipes(program);
-		packetMachine = new PacketMachine(here.port);
+		packetMachine = new PacketMachine(port);
 		packetMachine.add(new MyPacketReceive());
+		here = new Here(packetMachine);
 		
 		
 		

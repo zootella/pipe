@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.util.Map;
 
 import pipe.center.Center;
-import pipe.main.Program;
 import base.data.Data;
 import base.data.Number;
 import base.data.Text;
@@ -12,6 +11,7 @@ import base.internet.name.Ip;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.packet.Packet;
+import base.internet.packet.PacketMachine;
 import base.internet.packet.PacketReceive;
 import base.internet.web.DomainTask;
 import base.process.Mistake;
@@ -24,8 +24,11 @@ import base.time.Time;
 
 public class Here extends Close {
 	
-	public Here(Program program) {
-		this.program = program;
+	public Here(PacketMachine packetMachine, Port port) {
+		
+		this.packetMachine = packetMachine;
+		packetMachine.add(new MyPacketReceive());
+		
 		update = new Update(new MyReceive());
 		update.send();
 		model = new MyModel();
@@ -33,10 +36,10 @@ public class Here extends Close {
 		
 		
 		// choose our random port number or get it from settings
-		port = new Port(1234);
+		this.port = port;
 	}
 	
-	private final Program program;
+	private final PacketMachine packetMachine;
 	
 	private final Update update;
 	
@@ -74,8 +77,7 @@ public class Here extends Close {
 				lan = new Ip(InetAddress.getLocalHost());
 
 				if (central != null && internet == null) {
-					program.core.packetMachine.send(new Data("What's my IP address?"), central);
-					program.core.packetMachine.add(new MyPacketReceive());
+					packetMachine.send(new Data("What's my IP address?"), central);
 					sent = new Now();
 				}
 

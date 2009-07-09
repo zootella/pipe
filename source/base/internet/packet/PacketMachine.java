@@ -110,6 +110,8 @@ public class PacketMachine extends Close {
 	}
 	
 	// Receive
+	//TODO what if sending a packet automatically got you on the list, and a TwoBoots pulled you off it 4-8 seconds later
+	//yes, that would be cool
 
 	/** Add o to the list of objects this PacketMachine shows the packets it receives. */
 	public void add(PacketReceive o) {
