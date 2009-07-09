@@ -80,12 +80,19 @@ public class PacketMachine extends Close {
 	
 	// make the interface like this
 	// send(data, ipPort), and you never hear anything back
-	// List<Packet> arrived(), and it's your job to empty the list
-	// program it like this, then later the 
-	// both PacketMachine and AcceptMachine have a list of people interested in new stuff that's arrived
-	// they call down the whole list, and then anything left, they delete
-	// subscriber.arrived(List<Packet>)
-	// in the udp case, they each just look at the list and then the machine deletes it all
+	// you register to find out when packets arrive
+	// when a packet arrives, you get called and have it handed to you, you have this one chance to do something with it
+	// arrived(packet)
+	
+	// packet.bin
+	// packet.ipPort
+	// packet.move
+	// only used in receive, send doesn't use it at all
+	// if sending a udp packet throws an exception, it breaks the machine, not the sender
+	
+	// no bin cache for now
+	// later, you could have machine cache 8 bins or whatever
+	
 
 	// Send
 	
