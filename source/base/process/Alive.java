@@ -3,6 +3,7 @@ package base.process;
 /** I'm making a note here: HUGE SUCCESS. */
 public class Alive {
 	
+	/** Keep Java from exiting the process so Update objects can get future Swing events. */
 	public static void still() {
 		
 		Runnable r = new Runnable() {

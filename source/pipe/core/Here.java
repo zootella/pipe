@@ -5,6 +5,7 @@ import java.util.Map;
 
 import pipe.main.Main;
 import pipe.main.Program;
+import base.data.Data;
 import base.data.Number;
 import base.data.Text;
 import base.encode.Encode;
@@ -68,8 +69,10 @@ public class Here extends Close {
 				// Check our fake internal LAN IP address
 				lan = new Ip(InetAddress.getLocalHost());
 
-				if (central != null && internet == null)
-					program.core.packet.send(Encode.fromBase16("0a"), new IpPort("127.0.0.1:9193"));
+				if (central != null && internet == null) {
+					System.out.println("PIPE send");
+					program.core.packetMachine.send(new Data("What's my IP address?"), central);
+				}
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

@@ -27,7 +27,7 @@ public class Mistake {
 		// Show it to the user
 		try {
 			JOptionPane.showMessageDialog(null, describe(e), "Error.error() caught an exception", JOptionPane.ERROR_MESSAGE);
-		} catch (Exception ignore) {}
+		} catch (Exception i) { ignore(i); }
 
 		// Send it in a packet to the programmer TODO
 

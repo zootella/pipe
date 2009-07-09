@@ -3,6 +3,10 @@ package base.internet.packet;
 import java.util.ArrayList;
 import java.util.List;
 
+import base.data.Bin;
+import base.data.BinStack;
+import base.data.Data;
+import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.state.Close;
 import base.state.Receive;
@@ -12,17 +16,17 @@ public class PacketMachine extends Close {
 	
 	// Object
 	
-	public PacketMachine(Update up, Port port) {
-		this.up = up;
+	public PacketMachine(Port port) {
 		this.port = port;
 		
-		list = new ArrayList<Packet>();
+		send = new ArrayList<Packet>();
+		receive = new ArrayList<PacketReceive>();
+		stack = new BinStack();
 		
 		update = new Update(new MyReceive());
 		update.send();
 	}
 	
-	private final Update up;
 	private final Update update;
 	private final Port port;
 	
@@ -31,7 +35,14 @@ public class PacketMachine extends Close {
 	private SendTask sendTask;
 	private ReceiveTask receiveTask;
 	
-	private final List<Packet> list;
+	private final List<Packet> send;
+	
+	private final List<PacketReceive> receive;
+	
+	private final BinStack stack;
+	
+	private Exception exception;
+	public Exception exception() { return exception; }
 
 	@Override public void close() {
 		if (already()) return;
@@ -39,6 +50,8 @@ public class PacketMachine extends Close {
 		close(listen);
 		close(sendTask);
 		close(receiveTask);
+		
+		receive.clear();
 	}
 
 	// Receive
@@ -51,30 +64,30 @@ public class PacketMachine extends Close {
 				// Make
 				if (no(listen))
 					listen = new ListenPacket(port);
-
-				// Done
-				if (done(sendTask)) {
-					sendTask.result().clear();
-					sendTask = null;
-				}
-				if (done(receiveTask)) {
-					receive.add(receiveTask.result());
-					receiveTask = null;
-					up.send();
-				}
 				
-				// Start
-				if (!send.isEmpty() && no(sendTask))
+				// Send
+				if (done(sendTask)) {
+					Bin bin = sendTask.result();
+					sendTask = null;
+					stack.add(bin);
+				}
+				if (no(sendTask) && !send.isEmpty())
 					sendTask = new SendTask(update, listen, send.remove(0));
+
+				// Receive
+				if (done(receiveTask)) {
+					Packet packet = receiveTask.result();
+					receiveTask = null;
+					for (PacketReceive o : receive)
+						o.receive(packet);
+					stack.add(packet.bin);
+				}
 				if (no(receiveTask))
-					receiveTask = new ReceiveTask(update, listen, get());
+					receiveTask = new ReceiveTask(update, listen, stack.get());
 
 			} catch (Exception e) { exception = e; close(); }
 		}
 	}
-	
-	private Exception exception;
-	public Exception exception() { return exception; }
 	
 	
 	
@@ -96,30 +109,38 @@ public class PacketMachine extends Close {
 
 	// Send
 	
-	/** Get a fresh empty Packet to fill with data, address, and then send(). */
-	public Packet get() {
+	/** Send data to ipPort as a new UDP packet. */
+	public void send(Data data, IpPort ipPort) {
 		open();
-		if (closed()) throw new IllegalStateException();
-		if (recycle.isEmpty())
-			return new Packet();
-		Packet packet = recycle.remove(0);
-		packet.clear();
-		return packet;
+		Bin bin = get();
+		bin.add(data);
+		send(bin, ipPort);
+	}
+	
+	/** Get an empty Bin to fill with the data of a new UDP packet you want to send. */
+	public Bin get() {
+		open();
+		return stack.get();
 	}
 
-	/** Send packet to the address written on it, don't look at packet after calling send(). */
-	public void send(Packet packet) {
+	/** Send the data in bin to ipPort as a new UDP packet. */
+	public void send(Bin bin, IpPort ipPort) {
 		open();
-		send.add(packet);
+		send.add(new Packet(bin, ipPort));
 		update.send();
 	}
 	
 	// Receive
 
-	/** true if this PacketMachine has received a Packet. */
-	public boolean has() { open(); return !receive.isEmpty(); }
-	/** Look at a Packet this PacketMachine has received. */
-	public Packet look() { open(); return receive.get(0); }
-	/** Tell this PacketMachine you're done looking at the Packet receiveLook() gave you. */
-	public void done() { open(); recycle.add(receive.remove(0)); }
+	public void add(PacketReceive o) {
+		open();
+		receive.add(o);
+	}
+	public void remove(PacketReceive o) {
+		open();
+		receive.remove(o);
+	}
+	
+
+
 }

@@ -3,6 +3,7 @@ package pipe.core;
 import pipe.main.Program;
 import base.internet.packet.Packet;
 import base.internet.packet.PacketMachine;
+import base.internet.packet.PacketReceive;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.Receive;
@@ -19,7 +20,8 @@ public class Core extends Close {
 		here = new Here(program);
 		
 		pipes = new Pipes(program);
-		packet = new PacketMachine(update, here.port);
+		packetMachine = new PacketMachine(here.port);
+		packetMachine.add(new MyPacketReceive());
 		
 		
 		
@@ -33,7 +35,7 @@ public class Core extends Close {
 	private final Program program;
 	private final Update update;
 	public final Pipes pipes;
-	public final PacketMachine packet;
+	public final PacketMachine packetMachine;
 	
 	public final Here here;
 	
@@ -43,8 +45,16 @@ public class Core extends Close {
 		if (already()) return;
 		
 		close(pipes);
-		close(packet);
+		close(packetMachine);
 		close(here);
+	}
+	
+	private class MyPacketReceive implements PacketReceive {
+		public void receive(Packet packet) {
+			
+			System.out.println("Packet from " + packet.move.ipPort.toString() + " has data " + packet.bin.data().strike());
+			
+		}
 	}
 
 	private class MyReceive implements Receive {
@@ -52,13 +62,6 @@ public class Core extends Close {
 			if (closed()) return;
 			try {
 				
-				while (packet.has()) {
-					Packet p = packet.look();
-					
-					System.out.println("Packet from " + p.ipPort.toString() + " data " + p.bin.data().base16());
-					
-					packet.done();
-				}
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

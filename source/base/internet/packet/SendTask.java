@@ -1,5 +1,6 @@
 package base.internet.packet;
 
+import base.data.Bin;
 import base.size.PacketMove;
 import base.state.Task;
 import base.state.TaskBody;
@@ -10,28 +11,27 @@ public class SendTask extends TaskClose {
 
 	// Make
 
-	/** Send bin's data to ipPort in a UDP packet, don't look at bin after this. */
+	/** Have listen send packet, don't look at packet after this. */
 	public SendTask(Update update, ListenPacket listen, Packet packet) {
 		this.update = update; // We'll tell above when we're done
 		
 		// Save the input
 		this.listen = listen;
 		this.packet = packet;
-		
-		// Mark the Packet as in use by a Task thread
-		packet.send(packet.ipPort());
-		
+
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	/** Our bound UDP socket we use to send the packet. */
 	private final ListenPacket listen;
+	/** The Packet with the data and the IP address and port number we send it to. */
+	private final Packet packet;
 
 	// Result
 	
-	/** A Packet that tells when it was sent and has an empty bin to reuse, or throws the exception that made us give up. */
-	public Packet result() throws Exception { return (Packet)check(packet); }
-	private final Packet packet;
+	/** The empty Bin you can reuse, or throws the exception that made us give up. */
+	public Bin result() throws Exception { return (Bin)check(bin); }
+	private Bin bin;
 
 	// Task
 
@@ -43,7 +43,7 @@ public class SendTask extends TaskClose {
 		public void thread() throws Exception {
 				
 			// Use listen to send bin's data to ipPort in a UDP packet
-			taskMove = packet.bin().send(listen, packet.ipPort());
+			taskMove = packet.bin.send(listen, packet.ipPort);
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
@@ -52,7 +52,8 @@ public class SendTask extends TaskClose {
 			exception = e;        // Get the exception our code above threw
 			if (e == null) {      // No exception, save what thread() did
 				
-				packet.blank();
+				bin = packet.bin;
+				bin.clear();
 			}
 			close();              // We're done
 			update.send();        // Tell update we've changed

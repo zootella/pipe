@@ -51,10 +51,11 @@ public class Time extends Close {
 		public void receive() {
 			if (closed()) return;
 			try {
+				/*
 				
 				// Make
 				if (no(machine))
-					machine = new PacketMachine(update, port);
+					machine = new PacketMachine(port);
 
 				// Turn domain name into IP address
 				if (no(domain))
@@ -69,6 +70,7 @@ public class Time extends Close {
 					machine.done();
 					up.send();
 				}
+				*/
 
 			} catch (Exception e) { exception = e; close(); }
 		}
