@@ -89,7 +89,7 @@ public class IpPort implements Comparable<IpPort> {
 	public IpPort(Data d, String pattern) {
 		if (d.size() != 6) throw new MessageException("size");
 		if (pattern.charAt(0) == '1' || pattern.charAt(0) == '4') { // IP first
-			ip = new Ip(d, Text.start(pattern, 4));
+			ip = new Ip(d.start(4), Text.start(pattern, 4));
 			if (pattern.charAt(4) == '0') port = new Port(Number.toInt(d.clip(4, 2), 0, 65535));
 			else                          port = new Port(Number.toIntLittle(d.clip(4, 2), 0, 65535));
 		} else {                                                    // Port first

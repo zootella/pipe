@@ -10,7 +10,7 @@ import base.internet.name.IpPort;
 
 public class Message {
 	
-	// "i" What does my Internet IP address look like to you?
+	// "i" Please tell me what my IP address and port number is.
 	
 	public static Data ipRequest() {
 		return sign((new Outline("i")).toData());
@@ -26,7 +26,7 @@ public class Message {
 		catch (MessageException e) { return false; }
 	}
 	
-	// "p" This is what your IP address looks like to me.
+	// "p" This is what your IP address and port number looks like to me.
 	
 	public static Data ipResponse(IpPort ipPort) {
 		return sign((new Outline("p", ipPort.data())).toData());

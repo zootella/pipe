@@ -5,7 +5,6 @@ import java.util.List;
 
 import base.encode.Encode;
 import base.exception.MessageException;
-import base.internet.name.IpPort;
 
 // rules for designing your outline
 // tag names can only be numbers and lowercase letters, as short as possible
@@ -39,10 +38,6 @@ public class Outline {
 	public String getString() { return value.toString(); }
 	/** Get this Outline object's value as a number, throw MessageException if it's not a number. */
 	public long getNumber() { return Number.toLong(getString()); }
-	/** Get this Outline object's value as an IpPort object, throw MessageException if it's not an IP address and port number. */
-	public IpPort getIpPort() { return new IpPort(value); }
-	/** Get this Outline object's value as a List of IpPort objects, throw MessageException if it's not IP addresses and port numbers. */
-	public List<IpPort> getIpPortList() { return IpPort.list(value); }
 	/** Get this Outline object's value as a boolean, throw MessageException if it's not a boolean. */
 	public boolean getBoolean() {
 		String s = getString();
@@ -64,16 +59,6 @@ public class Outline {
 	/** Set the value of this Outline object to the given number. */
 	public void set(long n) {
 		this.value = new Data(Number.toString(n)); // An Outline holds a number as a string of numerals like "786"
-	}
-	
-	/** Set the value of this Outline object to the given IpPort. */
-	public void set(IpPort p) {
-		this.value = p.data(); // Save 6 bytes of data like "123405"
-	}
-	
-	/** Set the value of this Outline object to the given List of IpPort objects. */
-	public void set(List<IpPort> list) {
-		this.value = IpPort.data(list); // Save data like "123405123405", a multiple of 6 bytes long
 	}
 	
 	/** Set the value of this Outline object to the given boolean. */
@@ -107,10 +92,6 @@ public class Outline {
 	public Outline(String name, long n) { this(name); set(n); }
 	/** Make a new Outline object with the given name and boolean value. */
 	public Outline(String name, boolean b) { this(name); set(b); }
-	/** Make a new Outline object with the given name and IpPort value. */
-	public Outline(String name, IpPort p) { this(name); set(p); }
-	/** Make a new Outline object with the given name and List of IpPort objects as its value. */
-	public Outline(String name, List<IpPort> list) { this(name); set(list); }
 	
 	// Contents
 
@@ -124,10 +105,6 @@ public class Outline {
 	public void add(String name, long n) { add(new Outline(name, n)); }
 	/** Add a new Outline to this one, with the given name and boolean value. */
 	public void add(String name, boolean b) { add(new Outline(name, b)); }
-	/** Add a new Outline to this one, with the given name and IpPort value. */
-	public void add(String name, IpPort p) { add(new Outline(name, p)); }
-	/** Add a new Outline to this one, with the given name and List of IpPort objects as its value. */
-	public void add(String name, List<IpPort> list) { add(new Outline(name, list)); }
 
 	/** Add o to this Outline object's contents. */
 	public void add(Outline o) {
