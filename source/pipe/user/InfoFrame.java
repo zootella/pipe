@@ -62,7 +62,9 @@ public class InfoFrame extends Close {
 
 		// Make our inner View object and connect the Model below to it
 		view = new MyView();
+		/*
 		program.core.here.model.add(view); // When the Model below changes, it will call our view.refresh() method
+		*/
 		view.refresh();
 		
 		
@@ -117,10 +119,12 @@ public class InfoFrame extends Close {
 
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
+			/*
 			Refresh.text(port,     program.core.here.model.port());
 			Refresh.text(lan,      program.core.here.model.lan());
 			Refresh.text(internet, program.core.here.model.internet());
 			Refresh.text(age,      program.core.here.model.age());
+			*/
 		}
 
 		// The Model beneath closed, take this View off the screen

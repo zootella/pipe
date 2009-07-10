@@ -269,7 +269,7 @@ public class Outline {
 	// Convert to data
 	
 	/** Turn this Outline into data. */
-	public Data data() { Bay bay = new Bay(); toBay(bay); return bay.data(); }
+	public Data toData() { Bay bay = new Bay(); toBay(bay); return bay.data(); }
 	/** Turn this Outline into data added to bay. */
 	public void toBay(Bay bay) {
 		numberToBay(bay, name.length());  // Add the size of the name, and then the name
