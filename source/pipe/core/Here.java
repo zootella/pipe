@@ -1,17 +1,12 @@
 package pipe.core;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import pipe.center.Center;
-import base.data.Bin;
-import base.data.Data;
 import base.data.Number;
 import base.data.Outline;
 import base.data.Text;
-import base.encode.Hash;
 import base.exception.DataException;
-import base.exception.PlatformException;
 import base.exception.TimeException;
 import base.internet.name.Ip;
 import base.internet.name.IpPort;
@@ -35,11 +30,7 @@ public class Here extends Close {
 	
 	public Here(Update up, Port port, PacketMachine packetMachine) {
 		
-		// Get information we can get right now
-		now = new Now(); // When we did this
-		try {
-			lan = new IpPort(new Ip(InetAddress.getLocalHost()), port); // Our internal IP address on the LAN
-		} catch (UnknownHostException e) { throw new PlatformException(e); }
+		this.port = port;
 
 		// Save and connect the given object that sends UDP packets
 		this.packetMachine = packetMachine;
@@ -54,13 +45,19 @@ public class Here extends Close {
 		update.send();
 	}
 
+	private final Port port;
 	private final Update up;
 	private final Update update;
 	private final PacketMachine packetMachine;
 	private final Pulse pulse;
+	
 	private DomainTask domain;
-	private IpPort central;
+	private IpPort center;
 	private Now sent;
+	
+	private IpPort lan;
+	private IpPort net;
+	private Exception exception;
 
 	@Override public void close() {
 		if (already()) return;
@@ -70,18 +67,24 @@ public class Here extends Close {
 		close(domain);
 	}
 
-	// Look
+	// Result
 	
-	/** When this Here was made and started collecting its information. */
-	public final Now now;
-	/** Our IP address and port number on the LAN. */
-	public final IpPort lan;
-	/** Our IP address and port number on the Internet, null before we know. */
-	public IpPort internet() { return internet; }
-	private IpPort internet;
-	/** The Exception that made us give up, null if everything worked. */
-	public Exception exception() { return exception; }
-	private Exception exception;
+	public Result result() {
+		return new Result(lan, net, exception);
+	}
+	
+	public class Result {
+		public Result(IpPort lan, IpPort internet, Exception exception) {
+			this.age = new Now();
+			this.lan = lan;
+			this.net = internet;
+			this.exception = exception;
+		}
+		public final Now age;
+		public final IpPort lan;
+		public final IpPort net;
+		public final Exception exception;
+	}
 
 	// Do
 
@@ -91,15 +94,19 @@ public class Here extends Close {
 			if (closed()) return;
 			try {
 				
+				// Get our fake internal LAN IP address
+				if (lan == null)
+					lan = new IpPort(new Ip(InetAddress.getLocalHost()), port); // Our internal IP address on the LAN
+
 				// Look up the IP address of the central server
 				if (no(domain))
 					domain = new DomainTask(update, Text.before(Center.site, ":"));
-				if (done(domain) && central == null)
-					central = new IpPort(domain.result(), new Port(Number.toInt(Text.after(Center.site, ":"))));
+				if (done(domain) && center == null)
+					center = new IpPort(domain.result(), new Port(Number.toInt(Text.after(Center.site, ":"))));
 
 				// Send the central server a UDP packet to find out what our IP address is
-				if (central != null && internet == null && sent == null) {
-					packetMachine.send((new Outline("aq")).toData(), central);
+				if (center != null && net == null && sent == null) {
+					packetMachine.send((new Outline("aq")).toData(), center);
 					sent = new Now();
 				}
 
@@ -122,10 +129,10 @@ public class Here extends Close {
 				if (o.name.equals("ap")) { // Address response
 					if (o.has("hash") && !o.o("hash").getData().equals(o.getData().hash())) // Hash check
 						throw new DataException("received corrupted ap");
-					internet = new IpPort(o.getData()); // Read
-					up.send(); // It worked
+					net = new IpPort(o.getData()); // Read
+					close(); // It worked, we're done
+					up.send();
 				}
-
 			}
 			catch (DataException e) { Mistake.ignore(e); }
 			catch (Exception e) { exception = e; close(); up.send(); }

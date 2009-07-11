@@ -75,7 +75,7 @@ public class PacketMachine extends Close {
 				if (done(receive)) { // Our ReceiveTask finished waiting for and getting a packet
 					Packet packet = receive.result(); // Get the packet
 					receive = null;
-					for (PacketReceive o : receivers) // Show it to each interested object above
+					for (PacketReceive o : new ArrayList<PacketReceive>(receivers)) // Show it to each interested object above
 						o.receive(packet);
 					bins.add(packet.bin); // That's it for packet, recycle its Bin
 				}

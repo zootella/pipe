@@ -27,44 +27,31 @@ public class InfoFrame extends Close {
 		
 		refreshAction = new RefreshAction();
 		
-		port = new SelectTextArea();
 		lan = new SelectTextArea();
-		internet = new SelectTextArea();
+		net = new SelectTextArea();
 		age = new SelectTextArea();
 
 		panel = new Panel();
 		panel.border();
 		
-		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("Chosen port")));
-		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("LAN IP address")));
-		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Internet IP address")));
-		panel.place(0, 3, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Age of information")));
+		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("LAN IP address")));
+		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Internet IP address")));
+		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Age of information")));
 		
-		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(port).fillWide());
-		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(lan).fillWide());
-		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(internet).fillWide());
-		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(age).fillWide());
+		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(lan).fillWide());
+		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(net).fillWide());
+		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(age).fillWide());
 		
-		panel.place(1, 4, 1, 1, 1, 1, 0, 0, Cell.wrap(new JButton(refreshAction)).grow());
+		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(new JButton(refreshAction)).grow());
 		
 		
-		
-		
-		
-		//TODO
-		// Chosen port         1234
-		// Local IP address    1.2.3.4
-		// Internet IP address 1.2.3.4
-		// Age of information  22 seconds [ Refresh ]
 		
 		// make these dialogs have a white background with the little font in light gray
 
 
 		// Make our inner View object and connect the Model below to it
 		view = new MyView();
-		/*
-		program.core.here.model.add(view); // When the Model below changes, it will call our view.refresh() method
-		*/
+		program.core.model.add(view); // When the Model below changes, it will call our view.refresh() method
 		view.refresh();
 		
 		
@@ -80,9 +67,8 @@ public class InfoFrame extends Close {
 	public final JFrame frame;
 	public final Panel panel;
 	
-	private final SelectTextArea port;
 	private final SelectTextArea lan;
-	private final SelectTextArea internet;
+	private final SelectTextArea net;
 	private final SelectTextArea age;
 	
 	
@@ -104,7 +90,8 @@ public class InfoFrame extends Close {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				
+				program.core.refreshHere();
+
 			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
@@ -119,12 +106,10 @@ public class InfoFrame extends Close {
 
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
-			/*
-			Refresh.text(port,     program.core.here.model.port());
-			Refresh.text(lan,      program.core.here.model.lan());
-			Refresh.text(internet, program.core.here.model.internet());
-			Refresh.text(age,      program.core.here.model.age());
-			*/
+			Refresh.can(refreshAction, program.core.model.canRefresh());
+			Refresh.text(lan, program.core.model.lan());
+			Refresh.text(net, program.core.model.net());
+			Refresh.text(age, program.core.model.age());
 		}
 
 		// The Model beneath closed, take this View off the screen

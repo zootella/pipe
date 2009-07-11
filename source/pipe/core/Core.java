@@ -2,22 +2,17 @@ package pipe.core;
 
 import java.util.Map;
 
-import pipe.center.Center;
 import pipe.main.Program;
-import base.data.Number;
-import base.data.Outline;
-import base.data.Text;
-import base.exception.TimeException;
-import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.packet.PacketMachine;
-import base.internet.web.DomainTask;
+import base.process.Mistake;
 import base.state.Close;
 import base.state.Model;
+import base.state.Pulse;
 import base.state.Receive;
 import base.state.Update;
-import base.time.Now;
 import base.time.Time;
+import base.user.Describe;
 
 /** The core program beneath the window that does everything. */
 public class Core extends Close {
@@ -25,7 +20,7 @@ public class Core extends Close {
 	public Core(Program program) {
 		this.program = program;
 		
-		Port port = new Port(1234);
+		port = new Port(1234);
 
 		pipes = new Pipes(program);
 		
@@ -33,23 +28,43 @@ public class Core extends Close {
 		
 		
 		
-		/*
-		
 		model = new MyModel();
-		 */
 		
-		update = new Update(new MyReceive());
-		here = new Here(update, port, packetMachine);
-
+		
+		receive = new MyReceive();
+		pulse = new Pulse(receive, Time.second);
+		update = new Update(receive);
+		
+		refreshHere();
 	}
 
+	private final Port port;
 	private final Update update;
 	private final Program program;
 	public final Pipes pipes;
 	public final PacketMachine packetMachine;
 
-	public Here here;
-	private boolean refreshHere;
+	private Here here;
+	public Here.Result hereResult;
+	
+	private final Pulse pulse;
+	
+	
+	public boolean canRefreshHere() {
+		if (here != null) return false; // Can't refresh because we've got a Here working right now
+		if (hereResult == null) return true; // No Here result at all yet, so yes, we can refresh
+		return hereResult.age.expired(5 * Time.second); // Allow refresh if our result is more than 5 seconds old
+	}
+
+	public void refreshHere() {
+		if (!canRefreshHere()) return;
+		
+		here = new Here(update, port, packetMachine);
+		model.changed();
+		
+		
+		
+	}
 	
 
 	@Override public void close() {
@@ -58,49 +73,58 @@ public class Core extends Close {
 		close(pipes);
 		close(packetMachine);
 		close(here);
+		close(model);
+		close(pulse);
 	}
 	
+	private final MyReceive receive;
 	private class MyReceive implements Receive {
 		public void receive() {
 			if (closed()) return;
-			/*
 			try {
 				
+				if (done(here)) {
+					hereResult = here.result();
+					here = null;
+					model.changed();
+				}
+				
+				model.changed();
 
-			} catch (Exception e) { exception = e; close(); up.send(); }
-			*/
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
 	
+
 	
-	/*
-	
-	/** This object's Model gives View objects above what they need to show us to the user. *
-	private Here me() { return this; } // Give the inner class a link to this outer object
+	/** This object's Model gives View objects above what they need to show us to the user. */
+	private Core me() { return this; } // Give the inner class a link to this outer object
 	public final MyModel model;
 	public class MyModel extends Model {
 		@Override public Object out() { return me(); } // The outer object that made and contains this Model
 		@Override public Map<String, String> view() { return null; }
 		
-		public String port()     { return text(port); }
-		public String lan()      { return text(lan); }
-		public String internet() { return text(internet); }
-		public String age()      { return "not implmented yet"; }
+		public boolean canRefresh() {
+			return canRefreshHere();
+		}
+		
+		public String lan() {
+			if (hereResult == null || hereResult.lan == null)
+				return "";
+			return hereResult.lan.toString();
+		}
+		public String net() {
+			if (hereResult == null || hereResult.net == null)
+				return "";
+			return hereResult.net.toString();
+		}
+		public String age() {
+			if (hereResult == null || hereResult.age == null)
+				return "";
+			return Describe.timeCoarse(hereResult.age.age()) + " ago";
+		}
 	}
 	
-	
-	public static String text(int i) {
-		return i + "";
-	}
-	public static String text(long l) {
-		return l + "";
-	}
-	public static String text(Object o) {
-		if (o == null) return "";
-		return o.toString();
-	}
-	
-	*/
 	
 
 }
