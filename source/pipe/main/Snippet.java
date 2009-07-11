@@ -1,9 +1,5 @@
 package pipe.main;
 
-import base.data.Data;
-import base.internet.name.IpPort;
-import pipe.message.Message;
-
 public class Snippet {
 
 	public static void snippet(Program program) {
@@ -11,6 +7,7 @@ public class Snippet {
 		
 		
 		
+		/*
 		Data d = Message.ipRequest();
 		System.out.println(d.strike());
 		System.out.println(d.box());
@@ -24,6 +21,7 @@ public class Snippet {
 
 		IpPort ipPort = Message.isIpResponse(d);
 		System.out.println(ipPort.toString());
+		*/
 		
 		
 		

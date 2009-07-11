@@ -132,6 +132,5 @@ public class ExchangeDialog {
 			return Outline.fromText(new Data(s));
 		}
 		catch (DataException e) { return null; }
-		catch (ChopException e) { return null; }
 	}
 }

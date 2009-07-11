@@ -5,7 +5,9 @@ import javax.swing.SwingUtilities;
 import base.data.Bin;
 import base.data.Data;
 import base.data.Number;
+import base.data.Outline;
 import base.data.Text;
+import base.encode.Hash;
 import base.internet.name.Port;
 import base.internet.packet.Packet;
 import base.internet.packet.PacketMachine;
@@ -49,10 +51,22 @@ public class Center extends Close {
 	private class MyPacketReceive implements PacketReceive {
 		public void receive(Packet packet) {
 			if (closed()) return;
+			try {
 				
-			Bin bin = packetMachine.bin();
-			bin.add(new Data("Your address is " + packet.move.ipPort.toString()));
-			packetMachine.send(bin, packet.move.ipPort);
+				// Receive packets and send responses
+				Outline q = new Outline(packet.bin.data()); // Parse the UDP payload into an Outline
+				if (q.name.equals("aq")) { // Address request
+					
+					Data data = packet.move.ipPort.data();
+					Outline p = new Outline("ap", data); // Address response
+					p.add("hash", Hash.hash(data)); // Optional integrity check
+
+					Bin bin = packetMachine.bin();
+					bin.add(p.toData());
+					packetMachine.send(bin, packet.move.ipPort);
+				}
+
+			} catch (Exception e) { Mistake.ignore(e); } // Log and drop unknown packets
 		}
 	}
 }

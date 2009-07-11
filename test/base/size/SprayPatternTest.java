@@ -48,7 +48,7 @@ public class SprayPatternTest {
 	}
 	
 	@Test
-	public void testFromData() throws ChopException, DataException {
+	public void testFromData() {
 			
 		SprayPattern p;
 		

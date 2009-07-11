@@ -7,6 +7,7 @@ import java.util.Map;
 import pipe.center.Center;
 import base.data.Data;
 import base.data.Number;
+import base.data.Outline;
 import base.data.Text;
 import base.exception.PlatformException;
 import base.internet.name.Ip;
@@ -94,7 +95,7 @@ public class Here extends Close {
 
 				// Send the central server a UDP packet to find out what our IP address is
 				if (central != null && internet == null && sent == null) {
-					packetMachine.send(new Data("What's my IP address?"), central);
+					packetMachine.send((new Outline("aq")).toData(), central);
 					sent = new Now();
 				}
 
