@@ -2,11 +2,22 @@ package pipe.core;
 
 import java.util.Map;
 
+import pipe.center.Center;
 import pipe.main.Program;
+import base.data.Number;
+import base.data.Outline;
+import base.data.Text;
+import base.exception.TimeException;
+import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.packet.PacketMachine;
+import base.internet.web.DomainTask;
 import base.state.Close;
 import base.state.Model;
+import base.state.Receive;
+import base.state.Update;
+import base.time.Now;
+import base.time.Time;
 
 /** The core program beneath the window that does everything. */
 public class Core extends Close {
@@ -25,14 +36,14 @@ public class Core extends Close {
 		/*
 		
 		model = new MyModel();
+		 */
 		
 		update = new Update(new MyReceive());
-		update.send();
 		here = new Here(update, port, packetMachine);
-		*/
 
 	}
 
+	private final Update update;
 	private final Program program;
 	public final Pipes pipes;
 	public final PacketMachine packetMachine;
@@ -48,6 +59,19 @@ public class Core extends Close {
 		close(packetMachine);
 		close(here);
 	}
+	
+	private class MyReceive implements Receive {
+		public void receive() {
+			if (closed()) return;
+			/*
+			try {
+				
+
+			} catch (Exception e) { exception = e; close(); up.send(); }
+			*/
+		}
+	}
+	
 	
 	/*
 	

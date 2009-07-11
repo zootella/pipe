@@ -12,10 +12,10 @@ public class Pulse extends Close {
 	// Make
 
 	/** Make a Pulse that will call the given receive() method every delay milliseconds. */
-	public Pulse(Receive receive, int delay) {
+	public Pulse(Receive receive, long delay) {
 		this.receive = receive;
 		if (delay < Delay.time) delay = Delay.time; // Make sure delay isn't too fast
-		timer = new Timer(delay, new MyActionListener());
+		timer = new Timer((int)delay, new MyActionListener());
 		timer.setRepeats(true);
 		timer.start();
 	}

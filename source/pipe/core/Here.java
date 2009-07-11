@@ -2,14 +2,17 @@ package pipe.core;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
 
 import pipe.center.Center;
+import base.data.Bin;
 import base.data.Data;
 import base.data.Number;
 import base.data.Outline;
 import base.data.Text;
+import base.encode.Hash;
+import base.exception.DataException;
 import base.exception.PlatformException;
+import base.exception.TimeException;
 import base.internet.name.Ip;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
@@ -19,10 +22,9 @@ import base.internet.packet.PacketReceive;
 import base.internet.web.DomainTask;
 import base.process.Mistake;
 import base.state.Close;
-import base.state.Model;
+import base.state.Pulse;
 import base.state.Receive;
 import base.state.Update;
-import base.time.Ago;
 import base.time.Now;
 import base.time.Time;
 
@@ -35,9 +37,8 @@ public class Here extends Close {
 		
 		// Get information we can get right now
 		now = new Now(); // When we did this
-		this.port = port; // The given port number we're listening on
 		try {
-			lan = new Ip(InetAddress.getLocalHost()); // Our internal IP address on the LAN
+			lan = new IpPort(new Ip(InetAddress.getLocalHost()), port); // Our internal IP address on the LAN
 		} catch (UnknownHostException e) { throw new PlatformException(e); }
 
 		// Save and connect the given object that sends UDP packets
@@ -47,13 +48,16 @@ public class Here extends Close {
 
 		// Save and connect our Update objects
 		this.up = up;
-		update = new Update(new MyReceive());
+		receive = new MyReceive();
+		pulse = new Pulse(receive, Time.second);
+		update = new Update(receive);
 		update.send();
 	}
 
 	private final Update up;
 	private final Update update;
 	private final PacketMachine packetMachine;
+	private final Pulse pulse;
 	private DomainTask domain;
 	private IpPort central;
 	private Now sent;
@@ -62,26 +66,26 @@ public class Here extends Close {
 		if (already()) return;
 		
 		packetMachine.remove(packetReceive);
+		close(pulse);
 		close(domain);
 	}
 
 	// Look
 	
-	/** When this Here was made and collected its information. */
+	/** When this Here was made and started collecting its information. */
 	public final Now now;
-	/** The local port number we're listening on. */
-	public final Port port;
-	/** Our IP address on the LAN. */
-	public final Ip lan;
-	/** Our IP address on the Internet, null before we know. */
-	public Ip internet() { return internet; }
-	private Ip internet;
+	/** Our IP address and port number on the LAN. */
+	public final IpPort lan;
+	/** Our IP address and port number on the Internet, null before we know. */
+	public IpPort internet() { return internet; }
+	private IpPort internet;
 	/** The Exception that made us give up, null if everything worked. */
 	public Exception exception() { return exception; }
 	private Exception exception;
 
 	// Do
 
+	private final MyReceive receive;
 	private class MyReceive implements Receive {
 		public void receive() {
 			if (closed()) return;
@@ -99,6 +103,10 @@ public class Here extends Close {
 					sent = new Now();
 				}
 
+				// Don't wait too long for the response
+				if (sent != null && sent.expired(4 * Time.second))
+					throw new TimeException();
+
 			} catch (Exception e) { exception = e; close(); up.send(); }
 		}
 	}
@@ -109,25 +117,18 @@ public class Here extends Close {
 			if (closed()) return;
 			try {
 				
-				
-				
-				
-				
-				
-				
-				
-			} catch (Exception e) { exception = e; close(); up.send(); }
+				// Look for the packet response
+				Outline o = new Outline(packet.bin.data()); // Parse the UDP payload into an Outline
+				if (o.name.equals("ap")) { // Address response
+					if (o.has("hash") && !o.o("hash").getData().equals(o.getData().hash())) // Hash check
+						throw new DataException("received corrupted ap");
+					internet = new IpPort(o.getData()); // Read
+					up.send(); // It worked
+				}
+
+			}
+			catch (DataException e) { Mistake.ignore(e); }
+			catch (Exception e) { exception = e; close(); up.send(); }
 		}
 	}
-	
-
-	// have this thing work within 4 seconds or fail with a WaitException exception
-	// have a little separate 4 second timer with its own receive that races the normal thing and does this
-	// no, it can use the same MyReceive
-	
-	
-	
-	
-	
-
 }
