@@ -1,6 +1,6 @@
 package base.internet.name;
 
-import base.exception.MessageException;
+import base.exception.DataException;
 
 public class Port {
 	
@@ -13,9 +13,9 @@ public class Port {
 	
 	// Make
 
-	/** Make sure port is 0 through 65535 or throw a MessageException. */
+	/** Make sure port is 0 through 65535 or throw a DataException. */
 	public Port(int port) {
-		if (port < minimum || port > maximum) throw new MessageException();
+		if (port < minimum || port > maximum) throw new DataException();
 		this.port = port;
 	}
 	

@@ -16,7 +16,7 @@ import base.data.Data;
 import base.data.Outline;
 import base.desktop.Clipboard;
 import base.exception.ChopException;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.process.Mistake;
 import base.user.Cell;
 import base.user.Dialog;
@@ -131,7 +131,7 @@ public class ExchangeDialog {
 		try {
 			return Outline.fromText(new Data(s));
 		}
-		catch (MessageException e) { return null; }
+		catch (DataException e) { return null; }
 		catch (ChopException e) { return null; }
 	}
 }

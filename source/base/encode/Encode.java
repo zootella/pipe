@@ -3,7 +3,7 @@ package base.encode;
 import base.data.Bay;
 import base.data.Data;
 import base.data.Text;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 // document which methods are reversible, and which are one way
 // which are readable by the user, and which are not
@@ -11,7 +11,7 @@ import base.exception.MessageException;
 // which keep the same length, which grow, and by how much
 // which always expand or contract by the same amount, and which grow depending on contents
 // talk about String, Data, Bay, and StringBuffer, and the shortcut methods
-// to throws CodeException, while from throws MessageException
+// to throws CodeException, while from throws DataException
 
 /** Use TextEncode methods to convert data to and from text letters and numbers using base 16, 32, and 62 encoding. */
 public class Encode {
@@ -129,7 +129,7 @@ public class Encode {
 			c = Character.toUpperCase(s.charAt(i));             // Accept uppercase and lowercase letters
 			if      (c >= '0' && c <= '9') code = c - '0';      // '0'  0 0000 through '9'  9 1001
 			else if (c >= 'A' && c <= 'F') code = c - 'A' + 10; // 'A' 10 1010 through 'F' 15 1111
-			else throw new MessageException();                  // Invalid character
+			else throw new DataException();                  // Invalid character
 
 			// This is the first character in a pair
 			if (i % 2 == 0) {
@@ -163,7 +163,7 @@ public class Encode {
 			c = Character.toUpperCase(s.charAt(i));             // Accept uppercase and lowercase letters
 			if      (c >= 'A' && c <= 'Z') code = c - 'A';      // 'A'  0 00000 through 'Z' 25 11001
 			else if (c >= '2' && c <= '7') code = c - '2' + 26; // '2' 26 11010 through '7' 31 11111
-			else throw new MessageException();                  // Invalid character
+			else throw new DataException();                  // Invalid character
 
 			// Insert the bits from code into hold
 			hold = (hold << 5) | code; // Shift the bits in hold to the left 5 spaces, and copy in code there
@@ -195,7 +195,7 @@ public class Encode {
 			else if (c >= 'a' && c <= 'z') code = c - 'a' + 10; // 'a' 10 001010 through 'z' 35 100011
 			else if (c >= 'A' && c <= 'Y') code = c - 'A' + 36; // 'A' 36 100100 through 'Y' 60 111100
 			else if (c == 'Z')             code = 61;           // 'Z' indicates 61 111101, 62 111110, or 63 111111 are next, we will just write four 1s
-			else throw new MessageException();                  // Invalid character
+			else throw new DataException();                  // Invalid character
 
 			// Insert the bits from code into hold
 			if (code == 61) { hold = (hold << 4) | 15;   bits += 4; } // Insert 1111 for 'Z'
@@ -271,7 +271,7 @@ public class Encode {
 
 					// The next character has to be the second "]" in "]]"
 					} else {
-						throw new MessageException();
+						throw new DataException();
 					}
 
 				// i is at a character like "a"
@@ -281,8 +281,8 @@ public class Encode {
 				}
 			}
 
-		// If we didn't have enough characters, like "hello[00", throw a MessageException
-		} catch (IndexOutOfBoundsException e) { throw new MessageException(); }
+		// If we didn't have enough characters, like "hello[00", throw a DataException
+		} catch (IndexOutOfBoundsException e) { throw new DataException(); }
 	}
 
 	// Library

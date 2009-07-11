@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 import base.data.Convert;
 import base.data.Text;
 import base.data.TextSplit;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.exception.PlatformException;
 import base.file.Name;
 import base.file.PathName;
@@ -65,9 +65,9 @@ public class Url {
 		// Parse the text into a Java URI object
 		try {
 			uri = new URI(s);
-		} catch (URISyntaxException e) { throw new MessageException(); } // Invalid
+		} catch (URISyntaxException e) { throw new DataException(); } // Invalid
 		if (Text.isBlank(uri.toString()) || Text.isBlank(uri.getScheme()) || Text.isBlank(uri.getHost()))
-			throw new MessageException(); // Missing required parts
+			throw new DataException(); // Missing required parts
 
 		// Make local blank objects to change before setting the corresponding final members of this new Url object
 		String address, get, protocol, user, pass, site;

@@ -2,7 +2,7 @@ package base.setting;
 
 
 import base.data.Outline;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.file.Path;
 
 
@@ -21,7 +21,7 @@ public class PathSetting {
 		// If store's Outline has path, get the Outline object there
 		try {
 			this.outline = store.outline.path(path);
-		} catch (MessageException e) {} // path not found, leave outline null
+		} catch (DataException e) {} // path not found, leave outline null
 	}
 	
 	/** The Store this setting will save itself in, the file Store.txt. */
@@ -41,7 +41,7 @@ public class PathSetting {
 		if (outline == null) return value; // Not found in Store.txt, return our default
 		try {
 			return new Path(outline.getString());
-		} catch (MessageException e) { return value; } // The outline value isn't a Path
+		} catch (DataException e) { return value; } // The outline value isn't a Path
 	}
 	
 	/** Give this setting a new value, and save it in Store.txt for the next time the program runs. */
@@ -61,6 +61,6 @@ public class PathSetting {
 	public void set(String value) {
 		try {
 			set(new Path(value));
-		} catch (MessageException e) {} // Couldn't turn the given String into a number
+		} catch (DataException e) {} // Couldn't turn the given String into a number
 	}
 }

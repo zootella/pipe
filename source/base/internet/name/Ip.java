@@ -8,7 +8,7 @@ import base.data.Bay;
 import base.data.Data;
 import base.data.Number;
 import base.data.Text;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.exception.PlatformException;
 
 public class Ip implements Comparable<Ip> {
@@ -55,8 +55,8 @@ public class Ip implements Comparable<Ip> {
 	/** Make a new Ip from a String like "1.2.3.4". */
 	public Ip(String s) {
 		List<String> list = Text.words(s, ".");
-		if (list.size() != 4) throw new MessageException(); // Make sure we got 4 parts
-		n1 = Number.toInt(list.get(0), 0, 255); // Throws MessageException if the text isn't numerals, or if a number isn't 0 through 255
+		if (list.size() != 4) throw new DataException(); // Make sure we got 4 parts
+		n1 = Number.toInt(list.get(0), 0, 255); // Throws DataException if the text isn't numerals, or if a number isn't 0 through 255
 		n2 = Number.toInt(list.get(1), 0, 255);
 		n3 = Number.toInt(list.get(2), 0, 255);
 		n4 = Number.toInt(list.get(3), 0, 255);
@@ -99,7 +99,7 @@ public class Ip implements Comparable<Ip> {
 	public Ip(Data d) { this(d, pattern); } // Use the default pattern
 	/** Make a new Ip from d which must be 4 bytes, use the pattern "1234" or "4321". */
 	public Ip(Data d, String pattern) {
-		if (d.size() != 4) throw new MessageException("size");
+		if (d.size() != 4) throw new DataException("size");
 		if (pattern.charAt(0) == '1') {              // pattern is "1234", use big endian network byte order
 			n1 = Number.toInt(d.clip(0, 1), 0, 255); // Turn each byte into a number
 			n2 = Number.toInt(d.clip(1, 1), 0, 255);

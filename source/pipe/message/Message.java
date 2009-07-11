@@ -5,7 +5,7 @@ import base.data.Data;
 import base.data.Outline;
 import base.encode.Hash;
 import base.exception.ChopException;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.internet.name.IpPort;
 
 public class Message {
@@ -23,7 +23,7 @@ public class Message {
 			return o.name.equals("i");
 		}
 		catch (ChopException e) { return false; }
-		catch (MessageException e) { return false; }
+		catch (DataException e) { return false; }
 	}
 	
 	// "p" This is what your IP address and port number looks like to me.
@@ -40,7 +40,7 @@ public class Message {
 			return new IpPort(o.getData());
 		}
 		catch (ChopException e) { return null; }
-		catch (MessageException e) { return null; }
+		catch (DataException e) { return null; }
 	}
 	
 	// Inside
@@ -48,12 +48,12 @@ public class Message {
 	/**
 	 * @param data Starts with a SHA1 hash of the message afterwards
 	 * @return     The message afterwards if the hash is good
-	 * @throws     ChopException or MessageException
+	 * @throws     ChopException or DataException
 	 */
 	private static Data check(Data data) {
 		Data hash = data.start(Hash.size);
 		Data message = data.after(Hash.size);
-		if (!hash.equals(Hash.hash(message))) throw new MessageException("bad hash");
+		if (!hash.equals(Hash.hash(message))) throw new DataException("bad hash");
 		return message;
 	}
 	

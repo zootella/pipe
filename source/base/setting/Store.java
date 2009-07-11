@@ -4,7 +4,7 @@ import base.data.Data;
 import base.data.Outline;
 import base.exception.ChopException;
 import base.exception.DiskException;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.file.File;
 import base.file.Here;
 import base.file.Path;
@@ -36,7 +36,7 @@ public class Store extends Close {
 		// That didn't work, outline will be the blank empty Outline
 		}
 		catch (ChopException e) {}
-		catch (MessageException e) {}
+		catch (DataException e) {}
 		catch (DiskException e) {}
 	}
 

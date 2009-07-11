@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import pipe.main.Main;
 import pipe.main.Program;
 import base.exception.DiskException;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.file.Path;
 import base.process.Mistake;
 import base.user.Cell;
@@ -132,7 +132,7 @@ public class FolderDialog {
 				return path;
 			return null;
 		}
-		catch (MessageException e) { return null; }
+		catch (DataException e) { return null; }
 		catch (DiskException e) { return null; }
 	}
 }

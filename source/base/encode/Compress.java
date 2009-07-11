@@ -8,7 +8,7 @@ import base.data.Bay;
 import base.data.Bin;
 import base.data.Data;
 import base.exception.ChopException;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.exception.PlatformException;
 
 public class Compress {
@@ -166,7 +166,7 @@ public class Compress {
 			}
 
 		}
-		catch (DataFormatException e) { throw new MessageException(); } // There is a mistake in the compressed data
+		catch (DataFormatException e) { throw new DataException(); } // There is a mistake in the compressed data
 		catch (ChopException e) { throw new PlatformException(); }      // The Inflater didn't tell us how many bytes it wrote
 	}
 }

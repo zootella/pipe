@@ -2,7 +2,7 @@ package base.setting;
 
 
 import base.data.Outline;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 
 public class BooleanSetting {
@@ -20,7 +20,7 @@ public class BooleanSetting {
 		// If store's Outline has path, get the Outline object there
 		try {
 			this.outline = store.outline.path(path);
-		} catch (MessageException e) {} // Leave outline null 
+		} catch (DataException e) {} // Leave outline null 
 	}
 	
 	/** The Store this setting will save itself in, the file Store.txt. */
@@ -40,7 +40,7 @@ public class BooleanSetting {
 		if (outline == null) return value; // Not found in Store.txt, return our default
 		try {
 			return outline.getBoolean();
-		} catch (MessageException e) { return value; } // The outline value isn't a boolean
+		} catch (DataException e) { return value; } // The outline value isn't a boolean
 	}
 	
 	/** Give this setting a new value, and save it in Store.txt for the next time the program runs. */

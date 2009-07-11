@@ -3,7 +3,7 @@ package base.web;
 import org.junit.Assert;
 import org.junit.Test;
 
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.web.Url;
 
 public class UrlTest {
@@ -16,7 +16,7 @@ public class UrlTest {
 		try {
 			url = new Url("");
 			Assert.fail();
-		} catch (MessageException e) {}
+		} catch (DataException e) {}
 		
 		// Minimal user input
 		url = new Url("www.site.com"); // User doesn't have to type "http://"

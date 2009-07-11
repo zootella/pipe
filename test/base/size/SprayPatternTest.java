@@ -11,7 +11,7 @@ import pipe.main.Main;
 import base.data.Data;
 import base.encode.Encode;
 import base.exception.ChopException;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.size.SprayPattern;
 
 public class SprayPatternTest {
@@ -48,7 +48,7 @@ public class SprayPatternTest {
 	}
 	
 	@Test
-	public void testFromData() throws ChopException, MessageException {
+	public void testFromData() throws ChopException, DataException {
 			
 		SprayPattern p;
 		

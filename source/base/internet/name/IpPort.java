@@ -9,7 +9,7 @@ import base.data.Data;
 import base.data.Number;
 import base.data.Text;
 import base.data.TextSplit;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 public class IpPort implements Comparable<IpPort> {
 	
@@ -41,7 +41,7 @@ public class IpPort implements Comparable<IpPort> {
 	/** Make a new IpPort from a String like "1.2.3.4:5". */
 	public IpPort(String s) {
 		TextSplit split = Text.split(s, ":");
-		if (!split.found) throw new MessageException();
+		if (!split.found) throw new DataException();
 		ip = new Ip(split.before);
 		port = new Port(Number.toInt(split.after, 0, 65535)); // Make sure the port number is 0 through 65535
 	}
@@ -87,7 +87,7 @@ public class IpPort implements Comparable<IpPort> {
 	public IpPort(Data d) { this(d, pattern); } // Use the default pattern
 	/** Make a new IpPort from d which must be 6 bytes, use pattern like "123405". */
 	public IpPort(Data d, String pattern) {
-		if (d.size() != 6) throw new MessageException("size");
+		if (d.size() != 6) throw new DataException("size");
 		if (pattern.charAt(0) == '1' || pattern.charAt(0) == '4') { // IP first
 			ip = new Ip(d.start(4), Text.start(pattern, 4));
 			if (pattern.charAt(4) == '0') port = new Port(Number.toInt(d.clip(4, 2), 0, 65535));
@@ -128,7 +128,7 @@ public class IpPort implements Comparable<IpPort> {
 	
 	/** Parse data like "123405123405123405", with each IP address and port number in 6 bytes, into a List of IpPort objects. */
 	public static List<IpPort> list(Data d) {
-		if (d.size() % 6 != 0) throw new MessageException("size");
+		if (d.size() % 6 != 0) throw new DataException("size");
 		Data data = d.copy(); // Make a copy to not change d
 		List<IpPort> list = new ArrayList<IpPort>();
 		while (data.hasData()) list.add(new IpPort(data.cut(6))); // Cut 6 bytes from the start of data until it runs out

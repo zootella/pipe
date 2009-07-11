@@ -3,7 +3,7 @@ package base.setting;
 
 import base.data.Data;
 import base.data.Outline;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 
 public class DataSetting {
@@ -21,7 +21,7 @@ public class DataSetting {
 		// If store's Outline has path, get the Outline object there
 		try {
 			this.outline = store.outline.path(path);
-		} catch (MessageException e) {} // path not found, leave outline null
+		} catch (DataException e) {} // path not found, leave outline null
 	}
 	
 	/** The Store this setting will save itself in, the file Store.txt. */

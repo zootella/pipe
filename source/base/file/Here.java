@@ -3,7 +3,7 @@ package base.file;
 import java.io.File;
 
 import base.data.Text;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.exception.PlatformException;
 import base.web.Url;
 
@@ -64,7 +64,7 @@ public class Here {
 		// Return it in a Path object
 		try {
 			return new Path(s);
-		} catch (MessageException e) { throw new PlatformException(); } // The Path constructor found s to be relative
+		} catch (DataException e) { throw new PlatformException(); } // The Path constructor found s to be relative
 	}
 
 	/**

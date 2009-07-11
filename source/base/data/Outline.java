@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.encode.Encode;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 // rules for designing your outline
 // tag names can only be numbers and lowercase letters, as short as possible
@@ -36,14 +36,14 @@ public class Outline {
 	public Data getData() { return value; }
 	/** Get this Outline object's value as a String. */
 	public String getString() { return value.toString(); }
-	/** Get this Outline object's value as a number, throw MessageException if it's not a number. */
+	/** Get this Outline object's value as a number, throw DataException if it's not a number. */
 	public long getNumber() { return Number.toLong(getString()); }
-	/** Get this Outline object's value as a boolean, throw MessageException if it's not a boolean. */
+	/** Get this Outline object's value as a boolean, throw DataException if it's not a boolean. */
 	public boolean getBoolean() {
 		String s = getString();
 		if      (s.equals("t")) return true;
 		else if (s.equals("f")) return false;
-		else throw new MessageException();
+		else throw new DataException();
 	}
 
 	/** Set the value of this Outline object to the given Data. */
@@ -139,11 +139,11 @@ public class Outline {
 	
 	// Navigate
 
-	/** Move down from this Outline object to name within it, throw MessageException if name is not found. */
+	/** Move down from this Outline object to name within it, throw DataException if name is not found. */
 	public Outline o(String name) {
 		for (Outline o : contents)
 			if (o.name.equals(name)) return o; // Return the first Outline in our contents that has a matching name
-		throw new MessageException();
+		throw new DataException();
 	}
 
 	/** Move down from this Outline object to name within it, make name if it doesn't exist yet. */
@@ -152,11 +152,11 @@ public class Outline {
 		return o(name);
 	}
 
-	/** Move down into path like "name.name.name", throw MessageException if name is not found. */
+	/** Move down into path like "name.name.name", throw DataException if name is not found. */
 	public Outline path(String path) {
 		List<String> names = Text.words(path, ".");
 		Outline o = this;
-		for (String name : names) o = o.o(name); // Move down, throw MessageException if name is not found
+		for (String name : names) o = o.o(name); // Move down, throw DataException if name is not found
 		return o; // Return the Outline object at the end of the path
 	}
 
@@ -197,15 +197,15 @@ public class Outline {
 	 * Parse the data of a text outline at the start of d into a new Outline object.
 	 * There must be a blank line marking the end of the text outline, throws a ChopException if it hasn't arrived yet.
 	 * Returns a new Outline object, and removes the data it parsed from d.
-	 * If the text outline is invalid, removes it from d and throws a MessageException.
+	 * If the text outline is invalid, removes it from d and throws a DataException.
 	 */
 	public static Outline fromText(Data d) {
 		List<String> lines = Text.group(d); // Remove a group of lines that end with a blank line from the start of d
 		List<Outline> list = new ArrayList<Outline>();
 		for (String line : lines) list.add(parse(line)); // Parse each text line into an Outline object
-		if (list.isEmpty()) throw new MessageException(); // Make sure we got at least one line
+		if (list.isEmpty()) throw new DataException(); // Make sure we got at least one line
 		Outline o = group(list); // Look at indent to group the list into a hierarchy
-		if (!list.isEmpty()) throw new MessageException(); // Make sure there was just one outline
+		if (!list.isEmpty()) throw new DataException(); // Make sure there was just one outline
 		return o;
 	}
 
@@ -228,7 +228,7 @@ public class Outline {
 			
 			// Split s around ":" to get the name and value
 			TextSplit text = Text.split(s, ":");
-			if (!text.found) throw new MessageException(); // Make sure there is a ":"
+			if (!text.found) throw new DataException(); // Make sure there is a ":"
 			String name = text.before;
 			Data value = Encode.unbox(text.after); // Turn the box-encoded text back into the data it was made from
 
@@ -237,7 +237,7 @@ public class Outline {
 			o.indent = indent; // Save the number of indent characters so group() will know what to do
 			return o;
 
-		} catch (IndexOutOfBoundsException e) { throw new MessageException(); } // charAt() went beyond the end of s
+		} catch (IndexOutOfBoundsException e) { throw new DataException(); } // charAt() went beyond the end of s
 	}
 
 	/** If this Outline was parsed from a line of text in a text outline, the number of indent characters it had, like 2 in "  name:value". */
@@ -314,7 +314,7 @@ public class Outline {
 			n = (n << 7) | (y & 0x7f);  // Move 7 bits into the bottom of n
 			if ((y & 0x80) == 0) break; // If the leading bit is 0, we're done
 		}
-		if (n < 0) throw new MessageException(); // Don't allow a negative size
+		if (n < 0) throw new DataException(); // Don't allow a negative size
 		return n;
 	}
 }

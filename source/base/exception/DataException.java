@@ -1,29 +1,29 @@
 package base.exception;
 
 /**
- * Throw a MessageException when you're parsing a message and come to a mistake.
- * When you catch a MessageException, skip that message and try parsing the next one, or disconnect from the peer.
+ * Throw a DataException when you're parsing a message and come to a mistake.
+ * When you catch a DataException, skip that message and try parsing the next one, or disconnect from the peer.
  */
-public class MessageException extends RuntimeException {
+public class DataException extends RuntimeException {
 	
 	// Make
 	
-	public MessageException() {
+	public DataException() {
 		this.message = null;
 		this.exception = null;
 	}
 	
-	public MessageException(String message) {
+	public DataException(String message) {
 		this.message = message;
 		this.exception = null;
 	}
 	
-	public MessageException(Exception exception) {
+	public DataException(Exception exception) {
 		this.message = null;
 		this.exception = exception;
 	}
 	
-	public MessageException(String message, Exception exception) {
+	public DataException(String message, Exception exception) {
 		this.message = message;
 		this.exception = exception;
 	}

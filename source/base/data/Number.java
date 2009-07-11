@@ -1,6 +1,6 @@
 package base.data;
 
-import base.exception.MessageException;
+import base.exception.DataException;
 
 public class Number {
 
@@ -51,22 +51,22 @@ public class Number {
 	// Data to number
 
 	/** Convert data into an int and make sure it's minimum or bigger, turns the 4 bytes 0a 0b 0c 0d into the number 0x0a0b0c0d. */
-	public static int toInt(Data d, int minimum) { int i = toInt(d); if (i < minimum) throw new MessageException(); return i; }
+	public static int toInt(Data d, int minimum) { int i = toInt(d); if (i < minimum) throw new DataException(); return i; }
 	/** Convert data into an int and make sure it's minimum or bigger, turns the 4 bytes 0d 0c 0b 0a into the number 0x0a0b0c0d reversed from little endian encoding. */
-	public static int toIntLittle(Data d, int minimum) { int i = toIntLittle(d); if (i < minimum) throw new MessageException(); return i; }
+	public static int toIntLittle(Data d, int minimum) { int i = toIntLittle(d); if (i < minimum) throw new DataException(); return i; }
 	/** Convert data into a long and make sure it's minimum or bigger, turns the 4 bytes 0a 0b 0c 0d into the number 0x0a0b0c0d. */
-	public static long toLong(Data d, long minimum) { long l = toLong(d); if (l < minimum) throw new MessageException(); return l; }
+	public static long toLong(Data d, long minimum) { long l = toLong(d); if (l < minimum) throw new DataException(); return l; }
 	/** Convert data into a long and make sure it's minimum or bigger, turns the 4 bytes 0d 0c 0b 0a into the number 0x0a0b0c0d reversed from little endian encoding. */
-	public static long toLongLittle(Data d, long minimum) { long l = toLongLittle(d); if (l < minimum) throw new MessageException(); return l; }
+	public static long toLongLittle(Data d, long minimum) { long l = toLongLittle(d); if (l < minimum) throw new DataException(); return l; }
 
 	/** Convert data into an int and make sure its minimum through maximum, turns the 4 bytes 0a 0b 0c 0d into the number 0x0a0b0c0d. */
-	public static int toInt(Data d, int minimum, int maximum) { int i = toInt(d); if (i < minimum || i > maximum) throw new MessageException(); return i; }
+	public static int toInt(Data d, int minimum, int maximum) { int i = toInt(d); if (i < minimum || i > maximum) throw new DataException(); return i; }
 	/** Convert data into an int and make sure its minimum through maximum, turns the 4 bytes 0d 0c 0b 0a into the number 0x0a0b0c0d reversed from little endian encoding. */
-	public static int toIntLittle(Data d, int minimum, int maximum) { int i = toIntLittle(d); if (i < minimum || i > maximum) throw new MessageException(); return i; }
+	public static int toIntLittle(Data d, int minimum, int maximum) { int i = toIntLittle(d); if (i < minimum || i > maximum) throw new DataException(); return i; }
 	/** Convert data into a long and make sure its minimum through maximum, turns the 4 bytes 0a 0b 0c 0d into the number 0x0a0b0c0d. */
-	public static long toLong(Data d, long minimum, long maximum) { long l = toLong(d); if (l < minimum || l > maximum) throw new MessageException(); return l; }
+	public static long toLong(Data d, long minimum, long maximum) { long l = toLong(d); if (l < minimum || l > maximum) throw new DataException(); return l; }
 	/** Convert data into a long and make sure its minimum through maximum, turns the 4 bytes 0d 0c 0b 0a into the number 0x0a0b0c0d reversed from little endian encoding. */
-	public static long toLongLittle(Data d, long minimum, long maximum) { long l = toLongLittle(d); if (l < minimum || l > maximum) throw new MessageException(); return l; }
+	public static long toLongLittle(Data d, long minimum, long maximum) { long l = toLongLittle(d); if (l < minimum || l > maximum) throw new DataException(); return l; }
 
 	/** Convert data into an int, turns the 4 bytes 0a 0b 0c 0d into the number 0x0a0b0c0d. */
 	public static int toInt(Data d) { return (int)dataToNumber(d, false); }
@@ -89,7 +89,7 @@ public class Number {
 	private static long dataToNumber(Data d, boolean little) {
 			
 		// Make sure we are given 1 through 8 bytes
-		if (d.size() < 1 || d.size() > 8) throw new MessageException();
+		if (d.size() < 1 || d.size() > 8) throw new DataException();
 		
 		// The number we'll build up from data's bits, and return
 		long n = 0;
@@ -110,31 +110,31 @@ public class Number {
 
 	// Text to number
 
-	/** Convert text into an int and make sure it's minimum or bigger, turns "5" into 5, throw MessageException if s is "" or not numerals. */
-	public static int toInt(String s, int minimum) { int i = toInt(s); if (i < minimum) throw new MessageException(); return i; }
-	/** Convert base 16 numerals into an int and make sure it's minimum or bigger, turns "a" or "A" into 10, throw MessageException if s is "" or not numerals. */
-	public static int toIntBase16(String s, int minimum) { int i = toIntBase16(s); if (i < minimum) throw new MessageException(); return i; }
-	/** Convert text into a long and make sure it's minimum or bigger, turns "5" into 5, throw MessageException if s is "" or not numerals. */
-	public static long toLong(String s, long minimum) { long l = toLong(s); if (l < minimum) throw new MessageException(); return l; }
-	/** Convert base 16 numerals into a long and make sure it's minimum or bigger, turns "a" into 10, throw MessageException if s is "" or not numerals. */
-	public static long toLongBase16(String s, long minimum) { long l = toLongBase16(s); if (l < minimum) throw new MessageException(); return l; }
+	/** Convert text into an int and make sure it's minimum or bigger, turns "5" into 5, throw DataException if s is "" or not numerals. */
+	public static int toInt(String s, int minimum) { int i = toInt(s); if (i < minimum) throw new DataException(); return i; }
+	/** Convert base 16 numerals into an int and make sure it's minimum or bigger, turns "a" or "A" into 10, throw DataException if s is "" or not numerals. */
+	public static int toIntBase16(String s, int minimum) { int i = toIntBase16(s); if (i < minimum) throw new DataException(); return i; }
+	/** Convert text into a long and make sure it's minimum or bigger, turns "5" into 5, throw DataException if s is "" or not numerals. */
+	public static long toLong(String s, long minimum) { long l = toLong(s); if (l < minimum) throw new DataException(); return l; }
+	/** Convert base 16 numerals into a long and make sure it's minimum or bigger, turns "a" into 10, throw DataException if s is "" or not numerals. */
+	public static long toLongBase16(String s, long minimum) { long l = toLongBase16(s); if (l < minimum) throw new DataException(); return l; }
 
-	/** Convert text into an int and make sure it's minimum through maximum, turns "5" into 5, throw MessageException if s is "" or not numerals. */
-	public static int toInt(String s, int minimum, int maximum) { int i = toInt(s); if (i < minimum || i > maximum) throw new MessageException(); return i; }
-	/** Convert base 16 numerals into an int and make sure it's minimum through maximum, turns "a" or "A" into 10, throw MessageException if s is "" or not numerals. */
-	public static int toIntBase16(String s, int minimum, int maximum) { int i = toIntBase16(s); if (i < minimum || i > maximum) throw new MessageException(); return i; }
-	/** Convert text into a long and make sure it's minimum through maximum, turns "5" into 5, throw MessageException if s is "" or not numerals. */
-	public static long toLong(String s, long minimum, long maximum) { long l = toLong(s); if (l < minimum || l > maximum) throw new MessageException(); return l; }
-	/** Convert base 16 numerals into a long and make sure it's minimum through maximum, turns "a" into 10, throw MessageException if s is "" or not numerals. */
-	public static long toLongBase16(String s, long minimum, long maximum) { long l = toLongBase16(s); if (l < minimum || l > maximum) throw new MessageException(); return l; }
+	/** Convert text into an int and make sure it's minimum through maximum, turns "5" into 5, throw DataException if s is "" or not numerals. */
+	public static int toInt(String s, int minimum, int maximum) { int i = toInt(s); if (i < minimum || i > maximum) throw new DataException(); return i; }
+	/** Convert base 16 numerals into an int and make sure it's minimum through maximum, turns "a" or "A" into 10, throw DataException if s is "" or not numerals. */
+	public static int toIntBase16(String s, int minimum, int maximum) { int i = toIntBase16(s); if (i < minimum || i > maximum) throw new DataException(); return i; }
+	/** Convert text into a long and make sure it's minimum through maximum, turns "5" into 5, throw DataException if s is "" or not numerals. */
+	public static long toLong(String s, long minimum, long maximum) { long l = toLong(s); if (l < minimum || l > maximum) throw new DataException(); return l; }
+	/** Convert base 16 numerals into a long and make sure it's minimum through maximum, turns "a" into 10, throw DataException if s is "" or not numerals. */
+	public static long toLongBase16(String s, long minimum, long maximum) { long l = toLongBase16(s); if (l < minimum || l > maximum) throw new DataException(); return l; }
 
-	/** Convert text into an int, turns "5" into 5, throw MessageException if s is "" or not numerals. */
+	/** Convert text into an int, turns "5" into 5, throw DataException if s is "" or not numerals. */
 	public static int toInt(String s) { return (int)textToNumber(s, 10); }
-	/** Convert base 16 numerals into an int, turns "a" or "A" into 10, throw MessageException if s is "" or not numerals. */
+	/** Convert base 16 numerals into an int, turns "a" or "A" into 10, throw DataException if s is "" or not numerals. */
 	public static int toIntBase16(String s) { return (int)textToNumber(s, 16); }
-	/** Convert text into a long, turns "5" into 5, throw MessageException if s is "" or not numerals. */
+	/** Convert text into a long, turns "5" into 5, throw DataException if s is "" or not numerals. */
 	public static long toLong(String s) { return textToNumber(s, 10); }
-	/** Convert base 16 numerals into a long, turns "a" into 10, throw MessageException if s is "" or not numerals. */
+	/** Convert base 16 numerals into a long, turns "a" into 10, throw DataException if s is "" or not numerals. */
 	public static long toLongBase16(String s) { return textToNumber(s, 16); }
 
 	/**
@@ -143,11 +143,11 @@ public class Number {
 	 * @param  s                Text numerals in a String, like "0", "-3", or "a"
 	 * @param  base             The base to use, like 10 or 16
 	 * @return                  The number, as a long
-	 * @throws MessageException We can't read the text as a number
+	 * @throws DataException We can't read the text as a number
 	 */
 	private static long textToNumber(String s, int base) {
 		try {
 			return Long.parseLong(s, base);
-		} catch (NumberFormatException e) { throw new MessageException(); }
+		} catch (NumberFormatException e) { throw new DataException(); }
 	}
 }

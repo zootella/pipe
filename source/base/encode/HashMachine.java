@@ -6,7 +6,7 @@ import java.util.Map;
 
 
 import base.data.Data;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.size.Range;
 import base.state.Close;
 import base.state.Model;
@@ -140,7 +140,7 @@ public class HashMachine extends Close {
 		/** Status text. */
 		public String status() {
 			if (exception != null) {
-				if (exception instanceof MessageException) return "Bad Path";
+				if (exception instanceof DataException) return "Bad Path";
 				if (exception instanceof IOException) {
 					if      (exception.getMessage().equals("not found")) return "File Not Found";
 					else if (exception.getMessage().equals("empty"))     return "File Empty";

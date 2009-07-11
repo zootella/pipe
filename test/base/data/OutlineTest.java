@@ -9,7 +9,7 @@ import pipe.main.Main;
 
 import base.data.Data;
 import base.data.Outline;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 import static org.junit.Assert.*;
 
@@ -39,7 +39,7 @@ public class OutlineTest {
 		try {
 			test(s);
 			fail();
-		} catch (MessageException e) {}
+		} catch (DataException e) {}
 
 		s = "";
 		s += "a:hello\r\n";
@@ -48,7 +48,7 @@ public class OutlineTest {
 		try {
 			test(s);
 			fail();
-		} catch (MessageException e) {}
+		} catch (DataException e) {}
 		
 		s = "";
 		s += "a:\r\n";

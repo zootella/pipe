@@ -6,14 +6,14 @@ import java.util.List;
 
 import base.data.Text;
 import base.exception.DiskException;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 /** A Path is a parsed and valid looking absolute disk path, like "C:\folder\folder\file.ext". */
 public class Path {
 	
 	// Make
 
-	/** Parse the given String into a new absolute Path, or throw a MessageException. */
+	/** Parse the given String into a new absolute Path, or throw a DataException. */
 	public Path(String s) {
 
 		// Turn "C:" into "C:/", "/C:" into "/C:/", otherwise the Java File constructor will make a relative File
@@ -23,13 +23,13 @@ public class Path {
 
 		// Have the Java File constructor parse and keep the text, this doesn't use the disk
 		File file = new File(s);
-		if (!file.isAbsolute()) throw new MessageException(); // Absolute like "C:\file" or "\\computer\share\file", not relative like "file" or "folder\file"
+		if (!file.isAbsolute()) throw new DataException(); // Absolute like "C:\file" or "\\computer\share\file", not relative like "file" or "folder\file"
 		this.file = file; // Save it
 	}
 
-	/** Confirm File is absolute and make it into a new Path, or throw a MessageException. */
+	/** Confirm File is absolute and make it into a new Path, or throw a DataException. */
 	public Path(File file) {
-		if (!file.isAbsolute()) throw new MessageException(); // Make sure it's absolute
+		if (!file.isAbsolute()) throw new DataException(); // Make sure it's absolute
 		this.file = file; // Save it
 	}
 	
@@ -65,7 +65,7 @@ public class Path {
 		try {
 			File f = new File(file, s); // Have the Java File constructor combine them
 			return new Path(f);
-		} catch (MessageException e) { throw new IndexOutOfBoundsException(); } // New Path not absolute
+		} catch (DataException e) { throw new IndexOutOfBoundsException(); } // New Path not absolute
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class Path {
 			File f = file.getParentFile(); // As our File for its parent
 			if (f == null) throw new IndexOutOfBoundsException(); // Make sure it has one
 			return new Path(f);
-		} catch (MessageException e) { throw new IndexOutOfBoundsException(); } // New Path not absolute
+		} catch (DataException e) { throw new IndexOutOfBoundsException(); } // New Path not absolute
 	}
 	
 	// Look

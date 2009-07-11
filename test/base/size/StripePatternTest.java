@@ -11,14 +11,14 @@ import org.junit.Test;
 import pipe.main.Main;
 
 
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.size.Stripe;
 import base.size.StripePattern;
 
 public class StripePatternTest {
 	
 	@Test
-	public void test() throws MessageException {
+	public void test() throws DataException {
 		
 		testOperations("",  "",  "",  "",  "0");
 		testOperations("",  "0", "",  "0", "0");
@@ -46,7 +46,7 @@ public class StripePatternTest {
 		testXor("0 2 3 2", "1 2 1 2 2", "0 1 1 1 1 1 1 1 1");
 	}
 	
-	public void testOperations(String sa, String sb, String sand, String sor, String snot) throws MessageException {
+	public void testOperations(String sa, String sb, String sand, String sor, String snot) throws DataException {
 		
 		StripePattern a = new StripePattern(sa);
 		StripePattern b = new StripePattern(sb);
@@ -69,7 +69,7 @@ public class StripePatternTest {
 		assertTrue((a.or(b).equals(b.or(a)))); // order mattered for or
 	}
 	
-	public void testXor(String sa, String sb, String sx) throws MessageException {
+	public void testXor(String sa, String sb, String sx) throws DataException {
 
 		StripePattern a = new StripePattern(sa);
 		StripePattern b = new StripePattern(sb);
@@ -79,7 +79,7 @@ public class StripePatternTest {
 	}
 	
 	@Test
-	public void testClip() throws MessageException {
+	public void testClip() throws DataException {
 			
 		StripePattern a = new StripePattern("0");
 		StripePattern b = a.clip(new Stripe(5, 5));
@@ -91,7 +91,7 @@ public class StripePatternTest {
 	}
 	
 	@Test
-	public void testStripes() throws MessageException {
+	public void testStripes() throws DataException {
 		try {
 			
 			Stripe clip = new Stripe(0, 100);
@@ -122,7 +122,7 @@ public class StripePatternTest {
 			if (sizeFalse != 86) System.out.println("mismatch");
 			if (sizeTrue + sizeFalse != clip.size) System.out.println("mismatch");
 			
-		} catch (MessageException e) {
+		} catch (DataException e) {
 			System.out.println("message exception");
 		}
 	}

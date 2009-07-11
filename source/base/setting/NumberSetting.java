@@ -3,7 +3,7 @@ package base.setting;
 
 import base.data.Number;
 import base.data.Outline;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 
 public class NumberSetting {
@@ -22,7 +22,7 @@ public class NumberSetting {
 		// If store's Outline has path, get the Outline object there
 		try {
 			this.outline = store.outline.path(path);
-		} catch (MessageException e) {} // path not found, leave outline null
+		} catch (DataException e) {} // path not found, leave outline null
 	}
 	
 	/** The Store this setting will save itself in, the file Store.txt. */
@@ -46,7 +46,7 @@ public class NumberSetting {
 			long n = outline.getNumber();
 			if (n < minimum) return value; // The outline value is too small
 			return n;
-		} catch (MessageException e) { return value; } // The outline value isn't a number
+		} catch (DataException e) { return value; } // The outline value isn't a number
 	}
 	
 	/** Give this setting a new value, and save it in Store.txt for the next time the program runs. */
@@ -67,6 +67,6 @@ public class NumberSetting {
 	public void set(String value) {
 		try {
 			set(Number.toLong(value));
-		} catch (MessageException e) {} // Couldn't turn the given String into a number
+		} catch (DataException e) {} // Couldn't turn the given String into a number
 	}
 }

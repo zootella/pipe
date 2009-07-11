@@ -10,7 +10,7 @@ import base.data.Number;
 import base.data.Text;
 import base.data.TextSplit;
 import base.exception.ChopException;
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.file.Name;
 
 public class HeaderGroup {
@@ -100,7 +100,7 @@ public class HeaderGroup {
 	public long number(String name) {
 		try {
 			return Number.toLong(header(name)); // Get the text and convert it into a number
-		} catch (MessageException e) { return -1; } // If that didn't work, return -1
+		} catch (DataException e) { return -1; } // If that didn't work, return -1
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class HeaderGroup {
 		if (words.size() < 3) return -1;            // Make sure we got at least 3 parts
 		try {
 			return Number.toInt(words.get(1), 0);   // Turn the 2nd one into a number, ane make sure it isn't negative
-		} catch (MessageException e) { return -1; } // If that didn't work, return -1
+		} catch (DataException e) { return -1; } // If that didn't work, return -1
 	}
 
 	/**

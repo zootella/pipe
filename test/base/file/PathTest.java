@@ -3,7 +3,7 @@ package base.file;
 import org.junit.Test;
 import org.junit.Assert;
 
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.file.Path;
 
 public class PathTest {
@@ -83,6 +83,6 @@ public class PathTest {
 		try {
 			new Path(s);
 			Assert.fail("expected message exception");
-		} catch (MessageException e) {}
+		} catch (DataException e) {}
 	}
 }

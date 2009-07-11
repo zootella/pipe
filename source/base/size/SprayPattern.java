@@ -7,7 +7,7 @@ import java.util.BitSet;
 import base.data.Bay;
 import base.data.Data;
 import base.exception.ChopException;
-import base.exception.MessageException;
+import base.exception.DataException;
 
 public class SprayPattern {
 
@@ -107,7 +107,7 @@ public class SprayPattern {
 		
 		// Make sure d isn't empty and bits isn't 0
 		int bytes = d.size();
-		if (bytes < 1 || bits < 1) throw new MessageException();
+		if (bytes < 1 || bits < 1) throw new DataException();
 		
 		// Save the bit size in this new SprayPattern object
 		size = bits;

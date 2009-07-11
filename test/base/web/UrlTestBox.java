@@ -12,7 +12,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 
-import base.exception.MessageException;
+import base.exception.DataException;
 import base.user.Cell;
 import base.user.Dialog;
 import base.user.Panel;
@@ -170,7 +170,7 @@ public class UrlTestBox {
 			port.setText(url.port + "");
 			path.setText(url.path.toString());
 			
-		} catch (MessageException e) {
+		} catch (DataException e) {
 
 			address.setText("(message exception)");
 			get.setText("");
