@@ -12,11 +12,11 @@ import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
 
-/** A PacketMachine listens on a port to send and receive UDP packets. */
-public class PacketMachine extends Close {
+/** The program's Packets object listens on a port to send and receive UDP packets. */
+public class Packets extends Close {
 
-	/** Make a new PacketMachine that listens on the given port number. */
-	public PacketMachine(Port port) {
+	/** Make a new Packets object that listens on the given port number. */
+	public Packets(Port port) {
 
 		// Make inside
 		packets = new ArrayList<Packet>();
@@ -45,7 +45,7 @@ public class PacketMachine extends Close {
 	/** A ReceiveTask that waits for a UDP packet to arrive, and then receives it. */
 	private ReceiveTask receive;
 
-	/** The Exception that closed this PacketMachine, null if there isn't one. */
+	/** The Exception that closed this Packets object, null if there isn't one. */
 	public Exception exception() { return exception; }
 	private Exception exception;
 
@@ -111,14 +111,14 @@ public class PacketMachine extends Close {
 	
 	// Receive
 
-	/** Add o to the list of objects this PacketMachine shows the packets it receives. */
+	/** Add o to the list of objects this Packets object shows the packets it receives. */
 	public void add(PacketReceive o) {
 		open();
 		if (!receivers.contains(o))
 			receivers.add(o);
 	}
 	
-	/** Remove o from the list of objects this PacketMachine bothers with arrived packets. */
+	/** Remove o from the list of objects this Packets object bothers with arrived packets. */
 	public void remove(PacketReceive o) {
 		open();
 		receivers.remove(o);

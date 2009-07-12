@@ -4,7 +4,7 @@ import java.util.Map;
 
 import pipe.main.Program;
 import base.internet.name.Port;
-import base.internet.packet.PacketMachine;
+import base.internet.packet.Packets;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.Model;
@@ -24,7 +24,7 @@ public class Core extends Close {
 
 		pipes = new Pipes(program);
 		
-		packetMachine = new PacketMachine(port);
+		packetMachine = new Packets(port);
 		
 		
 		
@@ -42,7 +42,7 @@ public class Core extends Close {
 	private final Update update;
 	private final Program program;
 	public final Pipes pipes;
-	public final PacketMachine packetMachine;
+	public final Packets packetMachine;
 
 	private Here here;
 	public Here.Result hereResult;

@@ -10,7 +10,7 @@ import base.data.Text;
 import base.encode.Hash;
 import base.internet.name.Port;
 import base.internet.packet.Packet;
-import base.internet.packet.PacketMachine;
+import base.internet.packet.Packets;
 import base.internet.packet.PacketReceive;
 import base.process.Alive;
 import base.process.Mistake;
@@ -32,12 +32,12 @@ public class Center extends Close {
 	}
 	
 	public Center() {
-		packetMachine = new PacketMachine(new Port(Number.toInt(Text.after(site, ":"))));
+		packetMachine = new Packets(new Port(Number.toInt(Text.after(site, ":"))));
 		packetMachine.add(new MyPacketReceive());
 		Alive.still();
 	}
 
-	public final PacketMachine packetMachine;
+	public final Packets packetMachine;
 
 	@Override public void close() {
 		if (already()) return;
