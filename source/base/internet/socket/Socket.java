@@ -7,6 +7,7 @@ import java.nio.channels.SocketChannel;
 import base.data.Bin;
 import base.exception.NetException;
 import base.internet.name.IpPort;
+import base.process.Mistake;
 import base.state.Close;
 import base.time.Duration;
 import base.time.Now;
@@ -65,6 +66,6 @@ public class Socket extends Close {
 	/** Disconnect this TCP socket connection. */
 	@Override public void close() {
 		if (already()) return;
-		try { channel.close(); } catch (Exception e) {}
+		try { channel.close(); } catch (IOException e) { Mistake.ignore(e); }
 	}
 }

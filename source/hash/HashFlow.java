@@ -1,7 +1,8 @@
-package base.encode;
+package hash;
 
 
 import base.data.Data;
+import base.encode.HashValve;
 import base.file.File;
 import base.file.Open;
 import base.file.OpenTask;
@@ -112,13 +113,14 @@ public class HashFlow extends Close {
 
 				// The list is done
 				if (list != null && list.isEmpty() && !list.closed()) {
-					list.close();
+					close(list);
 					value = hashValve.hash.done();
-					close();
+					close(me());
 					up.send();
 				}
 
-			} catch (Exception e) { exception = e; close(); }
+			} catch (Exception e) { exception = e; close(me()); }
 		}
 	}
+	private HashFlow me() { return this; }
 }

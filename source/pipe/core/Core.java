@@ -84,17 +84,14 @@ public class Core extends Close {
 	private class MyReceive implements Receive {
 		public void receive() {
 			if (closed()) return;
-			try {
 				
-				if (done(here)) {
-					hereResult = here.result();
-					here = null;
-					model.changed();
-				}
-				
+			if (done(here)) {
+				hereResult = here.result();
+				here = null;
 				model.changed();
-
-			} catch (Exception e) { Mistake.grab(e); }
+			}
+			
+			model.changed();
 		}
 	}
 	

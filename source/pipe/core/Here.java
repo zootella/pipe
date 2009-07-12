@@ -7,6 +7,7 @@ import base.data.Number;
 import base.data.Outline;
 import base.data.Text;
 import base.exception.DataException;
+import base.exception.ProgramException;
 import base.exception.TimeException;
 import base.internet.name.Ip;
 import base.internet.name.IpPort;
@@ -57,7 +58,7 @@ public class Here extends Close {
 	
 	private IpPort lan;
 	private IpPort net;
-	private Exception exception;
+	private ProgramException exception;
 
 	@Override public void close() {
 		if (already()) return;
@@ -74,7 +75,7 @@ public class Here extends Close {
 	}
 	
 	public class Result {
-		public Result(IpPort lan, IpPort internet, Exception exception) {
+		public Result(IpPort lan, IpPort internet, ProgramException exception) {
 			this.age = new Now();
 			this.lan = lan;
 			this.net = internet;
@@ -83,14 +84,14 @@ public class Here extends Close {
 		public final Now age;
 		public final IpPort lan;
 		public final IpPort net;
-		public final Exception exception;
+		public final ProgramException exception;
 	}
 
 	// Do
 
 	private final MyReceive receive;
 	private class MyReceive implements Receive {
-		public void receive() {
+		public void receive() throws Exception {
 			if (closed()) return;
 			try {
 				
@@ -114,7 +115,7 @@ public class Here extends Close {
 				if (sent != null && sent.expired(4 * Time.second))
 					throw new TimeException();
 
-			} catch (Exception e) { exception = e; close(); up.send(); }
+			} catch (ProgramException e) { exception = e; close(me()); up.send(); }
 		}
 	}
 	
@@ -130,12 +131,14 @@ public class Here extends Close {
 					if (o.has("hash") && !o.o("hash").getData().equals(o.getData().hash())) // Hash check
 						throw new DataException("received corrupted ap");
 					net = new IpPort(o.getData()); // Read
-					close(); // It worked, we're done
+					close(me()); // It worked, we're done
 					up.send();
 				}
 			}
 			catch (DataException e) { Mistake.ignore(e); }
-			catch (Exception e) { exception = e; close(); up.send(); }
+			catch (ProgramException e) { exception = e; close(me()); up.send(); }
 		}
 	}
+	
+	private Here me() { return this; }
 }

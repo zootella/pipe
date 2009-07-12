@@ -40,7 +40,7 @@ public class Flow extends Close {
 	public void close() {
 		if (already()) return;
 		for (Valve valve : list)
-			((Close)valve).close(); // Close each Valve in our list
+			close((Close)valve); // Close each Valve in our list
 		update.send();
 	}
 	

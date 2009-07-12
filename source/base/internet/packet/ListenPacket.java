@@ -7,6 +7,7 @@ import java.nio.channels.DatagramChannel;
 import base.data.Bin;
 import base.exception.NetException;
 import base.internet.name.Port;
+import base.process.Mistake;
 import base.state.Close;
 
 /** A UDP socket bound to port that can send and receive packets. */
@@ -33,6 +34,6 @@ public class ListenPacket extends Close {
 	/** Stop listening on port. */
 	@Override public void close() {
 		if (already()) return;
-		try { channel.close(); } catch (IOException e) {}
+		try { channel.close(); } catch (IOException e) { Mistake.ignore(e); }
 	}
 }

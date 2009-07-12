@@ -6,6 +6,7 @@ import java.util.List;
 import base.data.Bin;
 import base.data.BinBin;
 import base.data.Data;
+import base.exception.ProgramException;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.state.Close;
@@ -45,9 +46,9 @@ public class Packets extends Close {
 	/** A ReceiveTask that waits for a UDP packet to arrive, and then receives it. */
 	private ReceiveTask receive;
 
-	/** The Exception that closed this Packets object, null if there isn't one. */
-	public Exception exception() { return exception; }
-	private Exception exception;
+	/** The ProgramException that closed this Packets object, null if there isn't one. */
+	public ProgramException exception() { return exception; }
+	private ProgramException exception;
 
 	@Override public void close() {
 		if (already()) return;
@@ -58,7 +59,7 @@ public class Packets extends Close {
 	}
 
 	private class MyReceive implements Receive {
-		public void receive() {
+		public void receive() throws Exception {
 			if (closed()) return;
 			try {
 
@@ -82,9 +83,10 @@ public class Packets extends Close {
 				if (no(receive)) // Wait for the next packet to arrive
 					receive = new ReceiveTask(update, listen, bins.get());
 
-			} catch (Exception e) { exception = e; close(); }
+			} catch (ProgramException e) { exception = e; close(me()); }
 		}
 	}
+	private Packets me() { return this; }
 	
 	// Send
 

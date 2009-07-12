@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import base.process.Mistake;
+import base.state.Close;
 
 import pipe.main.Program;
 import pipe.main.Snippet;
@@ -97,7 +98,7 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				program.close();
+				Close.close(program);
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

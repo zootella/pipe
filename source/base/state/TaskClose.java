@@ -20,7 +20,7 @@ public abstract class TaskClose extends Close {
 	 */
 	public void close() {
 		if (already()) return;
-		task.close();
+		close(task);
 	}
 
 	/** Make sure we closed without exception and o isn't null before returning it as a result. */

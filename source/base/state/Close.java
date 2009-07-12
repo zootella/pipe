@@ -19,7 +19,7 @@ public abstract class Close {
 	public boolean closed() { return objectClosed; }
 	private boolean objectClosed; // Private so objects that extend Close can't get to this
 
-	/** Call close() on an object to have it close objects inside, put away resources, and never change again. */
+	/** Close your objects inside, put away resources, and never change again. */
 	public abstract void close(); // Your object that extends Close must have this method
 
 	/**
@@ -51,16 +51,16 @@ public abstract class Close {
 
 	// Help
 
-	/** Close c ignoring null and exceptions */
+	/** Close c ignoring null and exceptions. */
 	public static void close(Close c) {
 		if (c == null) return;
-		try { c.close(); } catch (Exception e) { Mistake.ignore(e); }
+		try { c.close(); } catch (Exception e) { Mistake.ignore(e); } // Log the exception, but keep going to close the next object
 	}
 
-	/** true if c is null */
+	/** true if c is null. */
 	public static boolean no(Close c) { return c == null; }
-	/** true if c exists */
+	/** true if c exists. */
 	public static boolean is(Close c) { return c != null; }
-	/** true if c exists and is closed */
+	/** true if c exists and is closed. */
 	public static boolean done(Close c) { return c != null && c.closed(); }
 }

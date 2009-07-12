@@ -87,7 +87,7 @@ public class MainFrame extends Close {
 			try {
 				
 				if (program.core.pipes.pipes.isEmpty())
-					program.close();
+					close(program);
 				else
 					program.user.show(false);
 				

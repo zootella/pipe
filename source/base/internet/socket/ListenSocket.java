@@ -6,6 +6,7 @@ import java.nio.channels.ServerSocketChannel;
 
 import base.exception.NetException;
 import base.internet.name.Port;
+import base.process.Mistake;
 import base.state.Close;
 
 /** A TCP server socket bound to port that can listen for a new incoming connection. */
@@ -34,6 +35,6 @@ public class ListenSocket extends Close {
 	/** Stop listening on port. */
 	@Override public void close() {
 		if (already()) return;
-		try { channel.close(); } catch (IOException e) {}
+		try { channel.close(); } catch (IOException e) { Mistake.ignore(e); }
 	}
 }

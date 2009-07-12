@@ -31,7 +31,7 @@ public abstract class Model extends Close {
 	/** The object this Model is a part of is closed, have Model tell all the views above to close. */
 	public void close() {
 		if (already()) return;
-		delay.close();
+		close(delay);
 		Set<View> copy = new HashSet<View>(); // Copy the Set so we can change the original
 		copy.addAll(views);
 		for (View view : copy)

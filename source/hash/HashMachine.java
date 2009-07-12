@@ -1,4 +1,5 @@
-package base.encode;
+package hash;
+
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -30,7 +31,7 @@ public class HashMachine extends Close {
 	public void close() {
 		if (already()) return;
 		reset();
-		model.close();
+		close(model);
 	}
 	
 	/** The Path to the file we're hashing, null if none right now. */

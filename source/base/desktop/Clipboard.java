@@ -3,6 +3,10 @@ package base.desktop;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+
+import base.exception.PlatformException;
 
 public class Clipboard {
 	
@@ -11,9 +15,7 @@ public class Clipboard {
 	/** Copy the given String onto the clipboard. */
 	public static void copy(String s) {
 		StringSelection selection = new StringSelection(s); // Wrap the given String into a StringSelection object
-		try {
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
-		} catch (Exception e) {}
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
 	}
 	
 	/** true if the clipboard has some text we could get with paste(). */
@@ -30,7 +32,9 @@ public class Clipboard {
 		String s = null;
 		try {
 			s = (String)Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-		} catch (Exception e) {}
+		}
+		catch (IOException e) { throw new PlatformException(e); }
+		catch (UnsupportedFlavorException e) { throw new PlatformException(e); }
 		if (s == null) s = ""; // Return "", not null
 		return s;
 	}

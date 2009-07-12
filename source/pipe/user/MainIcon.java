@@ -76,7 +76,7 @@ public class MainIcon extends Close {
 				if (a.getActionCommand().equals("Restore"))
 					program.user.show(true);
 				else if (a.getActionCommand().equals("Exit"))
-					program.close();
+					close(program);
 
 			} catch (Exception e) { Mistake.grab(e); }
 		}

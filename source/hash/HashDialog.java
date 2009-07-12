@@ -1,4 +1,4 @@
-package base.encode;
+package hash;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -108,14 +108,14 @@ public class HashDialog extends Close {
 	public void close() {
 		if (already()) return;
 		dialog.dispose();
-		hash.close();
+		close(hash);
 	}
 	
 	// When the user clicks the dialog's corner X, Java calls this windowClosing() method and then takes the dialog off the screen
 	private class MyWindowListener extends WindowAdapter {
 		public void windowClosing(WindowEvent w) {
 			try {
-				close();
+				close(me());
 			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
@@ -125,7 +125,7 @@ public class HashDialog extends Close {
 		public CloseAction() { super("Close"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
 			try {
-				close();
+				close(me());
 			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
@@ -187,7 +187,7 @@ public class HashDialog extends Close {
 		}
 
 		// The Model beneath closed, take this View off the screen
-		public void vanish() { me().close(); }
+		public void vanish() { close(me()); }
 	}
 	
 	/** Give inner classes a link to this outer object. */

@@ -4,5 +4,5 @@ package base.state;
 public interface Receive {
 
 	/** Implement a receive() method that Java will call when the event happens. */
-	public void receive();
+	public void receive() throws Exception;
 }

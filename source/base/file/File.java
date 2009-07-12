@@ -6,6 +6,7 @@ import java.io.RandomAccessFile;
 import base.data.Bay;
 import base.data.Data;
 import base.exception.DiskException;
+import base.process.Mistake;
 import base.size.Stripe;
 import base.size.StripePattern;
 import base.state.Close;
@@ -56,12 +57,12 @@ public class File extends Close {
 	/** Close our open connection to this file on the disk. */
 	public void close() {
 		if (already()) return;
-		try { file.close(); } catch (IOException e) {} // Also closes file's FileChannel
+		try { file.close(); } catch (IOException e) { Mistake.ignore(e); } // Also closes file's FileChannel
 	}
 
 	/** Close and delete this file on the disk. */
 	public void delete() {
-		close();
+		close(this);
 		path.delete(); // Delete it at its Path
 	}
 
@@ -118,7 +119,7 @@ public class File extends Close {
 	public static Data data(Path path) {
 		File f = new File(new Open(path, null, Open.read));
 		Data d = f.read(); // Copy the file's contents into memory
-		f.close();
+		close(f);
 		return d;
 	}
 
@@ -128,7 +129,7 @@ public class File extends Close {
 			File f = new File(new Open(path, null, Open.overwrite));
 			f.write(0, d);
 			f.file.getChannel().truncate(d.size()); // Chop the file off after that
-			f.close();
+			close(f);
 		} catch (IOException e) { throw new DiskException(e); }
 	}
 }

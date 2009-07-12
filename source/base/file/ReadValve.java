@@ -31,7 +31,7 @@ public class ReadValve extends Close implements Valve {
 	public void close() {
 		if (already()) return;
 		if (task != null) {
-			task.close();
+			close(task);
 			task = null; // Discard the closed later so in() and out() work
 		}
 	}
@@ -61,7 +61,7 @@ public class ReadValve extends Close implements Valve {
 			meter.add(task.result().stripe.size); // If an exception closed later, throw it
 			task = null; // Discard the closed later, now in() and out() will work
 		}
-		if (meter.isDone()) close(); // All done
+		if (meter.isDone()) close(this); // All done
 	}
 	
 	public boolean isEmpty() {

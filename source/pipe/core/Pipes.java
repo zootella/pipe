@@ -56,7 +56,7 @@ public class Pipes extends Close {
 
 		// Close a pipe we made but then didn't add
 		if (pipe != null && !pipes.contains(pipe))
-			pipe.close();
+			close((Close)pipe);
 	}
 	
 	public void kill(Pipe pipe) {
@@ -64,7 +64,7 @@ public class Pipes extends Close {
 			throw new IllegalArgumentException();
 		
 		pipes.remove(pipe);
-		pipe.close();
+		close((Close)pipe);
 		
 		program.user.main.fill();
 	}
@@ -73,7 +73,7 @@ public class Pipes extends Close {
 		if (already()) return;
 		
 		for (Pipe pipe : pipes)
-			pipe.close();
+			close((Close)pipe);
 	}
 	
 
