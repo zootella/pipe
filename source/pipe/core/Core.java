@@ -5,6 +5,7 @@ import java.util.Map;
 import pipe.main.Program;
 import base.internet.name.Port;
 import base.internet.packet.Packets;
+import base.internet.socket.Sockets;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.Model;
@@ -24,7 +25,8 @@ public class Core extends Close {
 
 		pipes = new Pipes(program);
 		
-		packetMachine = new Packets(port);
+		packets = new Packets(port);
+		sockets = new Sockets(port);
 		
 		
 		
@@ -42,7 +44,8 @@ public class Core extends Close {
 	private final Update update;
 	private final Program program;
 	public final Pipes pipes;
-	public final Packets packetMachine;
+	public final Packets packets;
+	public final Sockets sockets;
 
 	private Here here;
 	public Here.Result hereResult;
@@ -59,7 +62,7 @@ public class Core extends Close {
 	public void refreshHere() {
 		if (!canRefreshHere()) return;
 		
-		here = new Here(update, port, packetMachine);
+		here = new Here(update, port, packets);
 		model.changed();
 		
 		
@@ -71,7 +74,7 @@ public class Core extends Close {
 		if (already()) return;
 		
 		close(pipes);
-		close(packetMachine);
+		close(packets);
 		close(here);
 		close(model);
 		close(pulse);

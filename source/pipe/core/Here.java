@@ -28,14 +28,14 @@ public class Here extends Close {
 	
 	// Make
 	
-	public Here(Update up, Port port, Packets packetMachine) {
+	public Here(Update up, Port port, Packets packets) {
 		
 		this.port = port;
 
 		// Save and connect the given object that sends UDP packets
-		this.packetMachine = packetMachine;
+		this.packets = packets;
 		packetReceive = new MyPacketReceive();
-		packetMachine.add(packetReceive);
+		packets.add(packetReceive);
 
 		// Save and connect our Update objects
 		this.up = up;
@@ -48,7 +48,7 @@ public class Here extends Close {
 	private final Port port;
 	private final Update up;
 	private final Update update;
-	private final Packets packetMachine;
+	private final Packets packets;
 	private final Pulse pulse;
 	
 	private DomainTask domain;
@@ -62,7 +62,7 @@ public class Here extends Close {
 	@Override public void close() {
 		if (already()) return;
 		
-		packetMachine.remove(packetReceive);
+		packets.remove(packetReceive);
 		close(pulse);
 		close(domain);
 	}
@@ -106,7 +106,7 @@ public class Here extends Close {
 
 				// Send the central server a UDP packet to find out what our IP address is
 				if (center != null && net == null && sent == null) {
-					packetMachine.send((new Outline("aq")).toData(), center);
+					packets.send((new Outline("aq")).toData(), center);
 					sent = new Now();
 				}
 

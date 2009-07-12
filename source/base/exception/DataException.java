@@ -4,7 +4,7 @@ package base.exception;
  * Throw a DataException when you're looking at some data or text and find a mistake.
  * When you catch a DataException, skip that message and try parsing the next one, or disconnect from the peer.
  */
-public class DataException extends RuntimeException {
+public class DataException extends ProgramException {
 	
 	// Make
 	
