@@ -1,41 +1,44 @@
 package base.file;
 
-
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.size.Move;
 import base.size.Range;
+import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
-import base.state.TaskClose;
 import base.state.Update;
 
-public class WriteTask extends TaskClose {
+public class WriteTask extends Close {
 	
 	// Make
 
 	/** Write 1 or more bytes from bin to range in file, don't look at bin until this is closed. */
-	public WriteTask(Update update, File file, Range range, Bin bin) {
-		this.update = update; // We'll tell above when we're done
-		
-		// Save the input
+	public WriteTask(Update up, File file, Range range, Bin bin) {
+		this.up = up; // We'll tell above when we're done
 		this.file = file;
 		this.range = range;
 		this.bin = bin;
-
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
-
-	/** The file we write to. */
+	
+	private final Update up;
 	private final File file;
-	/** We write at least 1 byte in file at trip.at. */
 	public final Range range;
-	/** The Bin we take the data from. */
 	private final Bin bin;
+	private final Task task;
+
+	@Override public void close() {
+		if (already()) return;
+		close(task);
+		up.send();
+	}
 
 	// Result
 	
 	/** How much of stripe we wrote and how long it took, or throws the exception that made us give up. */
-	public Move result() throws Exception { return (Move)check(move); }
+	public Move result() { taskCheck(exception, move); return move; }
+	private ProgramException exception;
 	private Move move;
 	
 	// Task
@@ -52,16 +55,13 @@ public class WriteTask extends TaskClose {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(Exception e) {
-			if (closed()) return; // Don't let anything change if we're already closed
-			exception = e;        // Get the exception our code above threw
-			if (e == null) {      // No exception, save what thread() did
-				
-				move = taskMove;
-				file.add(move.stripe); // Record the Stripe of data we wrote in file's StripePattern
-			}
-			close();       // We're done
-			update.send(); // Tell update we've changed
+		public void done(ProgramException e) {
+			if (closed()) return;  // Don't let anything change if we're already closed
+			exception = e;         // Get the exception our code above threw
+			move = taskMove;
+			file.add(move.stripe); // Record the Stripe of data we wrote in file's StripePattern
+			close(me());           // We're done
 		}
 	}
+	private WriteTask me() { return this; } // Give inner code a link to the outer object
 }

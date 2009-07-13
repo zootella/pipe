@@ -1,40 +1,41 @@
 package base.internet.packet;
 
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.size.PacketMove;
+import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
-import base.state.TaskClose;
 import base.state.Update;
 
-public class ReceiveTask extends TaskClose {
+public class ReceiveTask extends Close {
 
 	// Make
 
 	/** Wait on listen until a new Packet arrives, given the empty bin or null to have us make one. */
-	public ReceiveTask(Update update, ListenPacket listen, Bin bin) {
-		this.update = update; // We'll tell above when we're done
-		
-		// Make a bin if we weren't given one
-		if (bin == null) bin = Bin.big();
-		bin.clear();
-		
-		// Save the input
+	public ReceiveTask(Update up, ListenPacket listen, Bin bin) {
+		this.up = up; // We'll tell above when we're done
 		this.listen = listen;
 		this.bin = bin;
-
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
-	/** Our bound UDP socket that receives the packet. */
+	private final Update up;
 	private final ListenPacket listen;
-	/** The Bin that holds the data of the arrived UDP packet. */
 	private final Bin bin;
+	private final Task task;
+
+	@Override public void close() {
+		if (already()) return;
+		close(task);
+		up.send();
+	}
 
 	// Result
 	
 	/** The Packet we received, or throws the exception that made us give up. */
-	public Packet result() throws Exception { return (Packet)check(packet); }
+	public Packet result() { taskCheck(exception, packet); return packet; }
+	private ProgramException exception;
 	private Packet packet;
 
 	// Task
@@ -51,15 +52,12 @@ public class ReceiveTask extends TaskClose {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(Exception e) {
+		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			if (e == null) {      // No exception, save what thread() did
-
-				packet = new Packet(bin, taskMove);
-			}
-			close();              // We're done
-			update.send();        // Tell update we've changed
+			packet = new Packet(bin, taskMove);
+			close(me());          // We're done
 		}
 	}
+	private ReceiveTask me() { return this; } // Give inner code a link to the outer object
 }

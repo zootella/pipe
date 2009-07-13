@@ -1,5 +1,6 @@
 package base.state;
 
+import base.exception.ProgramException;
 import base.process.Mistake;
 
 /** Have your object extend Close so the program will notice if you forget to later call its close() method. */
@@ -35,9 +36,6 @@ public abstract class Close {
 		return false;                  // Return false to run the contents of the close() method this first and only time
 	}
 
-	/** Make sure this object isn't closed before doing something that would change it. */
-	public void open() { if (objectClosed) throw new IllegalStateException(); }
-
 	// Program
 	
 	/** The total number of objects the program has made that still need to be closed. */
@@ -45,6 +43,18 @@ public abstract class Close {
 
 	/** Before the program closes, make sure every object with a close() method had it run. */
 	public static int checkAll() { return programOpen; }
+	
+	// Check
+
+	/** Make sure this object isn't closed before doing something that would change it. */
+	public void open() { if (objectClosed) throw new IllegalStateException(); }
+
+	/** Make sure this object is closed, throw e if given, and make sure o exists. */
+	public void taskCheck(ProgramException e, Object o) {
+		if (!objectClosed) throw new IllegalStateException();
+		if (e != null) throw e;
+		if (o == null) throw new NullPointerException();
+	}
 
 	// Help
 

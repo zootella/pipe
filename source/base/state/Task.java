@@ -2,6 +2,9 @@ package base.state;
 
 import javax.swing.SwingUtilities;
 
+import base.exception.ProgramException;
+import base.process.Mistake;
+
 /** Make a Task to run some code in a separate thread. */
 public class Task extends Close {
 	
@@ -15,13 +18,10 @@ public class Task extends Close {
 		thread.start(); // Have thread call ThreadRun.run() below now
 	}
 
-	/** A link to the code this Task will run. */
 	private final TaskBody body;
-	/** Our Thread we make, run, and let exit. */
 	private Thread thread;
 	
-	/** Interrupt this Task's Thread. */
-	public void close() {
+	@Override public void close() {
 		if (already()) return;
 		if (thread != null) // If thread is running, have it throw an Exception
 			thread.interrupt();
@@ -33,22 +33,28 @@ public class Task extends Close {
 	private class ThreadRun implements Runnable {
 		public void run() {
 			try {
-				body.thread();                          // Call the code we were given
-			} catch (Exception e) { exception = e; }    // Catch and save any Exception it throws
+				body.thread(); // Call the code we were given
+			}
+			catch (ProgramException e) { programException = e; } // Catch and save any exceptions it throws
+			catch (Exception e) { exception = e; }
 			SwingUtilities.invokeLater(new EventRun()); // We're done, send an event
-		}                                               // When thread exits run(), it closes
+		} // When thread exits run(), it closes
 	}	
 	
-	/** The Exception body's code threw when thread ran it, null if none. */
+	private ProgramException programException;
 	private Exception exception;
 
 	// Soon after thread calls invokeLater() above, the normal event thread calls run() here
 	private class EventRun implements Runnable {
 		public void run() {
-			if (closed()) return; // Do nothing once closed
-			thread = null;        // thread is done and exited, null our reference to it
-			close();              // Mark this Task closed
-			body.done(exception); // Call the given done() method with the Exception we got
+			if (exception != null) Mistake.grab(exception); // Have a system exception stop the program
+			if (closed()) return;                           // Do nothing once closed
+			try {
+				thread = null;                              // thread is done and exited, null our reference to it
+				close(me());                                // Mark this Task closed
+				body.done(programException);                // Call the given done() method with the ProgramException we got
+			} catch (Exception e) { Mistake.grab(e); }
 		}
 	}
+	private final Task me() { return this; }
 }

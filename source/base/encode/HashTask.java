@@ -1,42 +1,45 @@
 package base.encode;
 
-
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.size.Move;
 import base.size.Range;
+import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
-import base.state.TaskClose;
 import base.state.Update;
 import base.time.Now;
 
-public class HashTask extends TaskClose {
+public class HashTask extends Close {
 	
 	// Make
 
 	/** SHA1 hash and clear bin's data with the given Hash object, don't look at hash or bin until this is closed. */
-	public HashTask(Update update, Hash hash, Bin bin, Range range) {
-		this.update = update; // We'll tell update when we're done
-		
-		// Save the input
+	public HashTask(Update up, Hash hash, Bin bin, Range range) {
+		this.up = up; // We'll tell update when we're done
 		this.hash = hash;
 		this.bin = bin;
 		this.range = range;
-
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
-
-	/** The Hash object we use. */
+	
+	private final Update up;
 	private final Hash hash;
-	/** The Bin we put the data in. */
 	private final Bin bin;
-	/** The limit of how much data we'll hash. */
 	private final Range range;
+	private final Task task;
+
+	@Override public void close() {
+		if (already()) return;
+		close(task);
+		up.send();
+	}
 
 	// Result
 	
 	/** How much we hashed when we're done, or throws the exception that made us give up. */
-	public Move result() throws Exception { return (Move)check(move); }
+	public Move result() { taskCheck(exception, move); return move; }
+	private ProgramException exception;
 	private Move move;
 	
 	// Task
@@ -57,15 +60,12 @@ public class HashTask extends TaskClose {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(Exception e) {
+		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			if (e == null) {      // No exception, save what thread() did
-				
-				move = taskMove;
-			}
-			close();       // We're done
-			update.send(); // Tell update we've changed
+			move = taskMove;
+			close(me());          // We're done
 		}
 	}
+	private HashTask me() { return this; } // Give inner code a link to the outer object
 }

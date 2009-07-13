@@ -1,41 +1,44 @@
 package base.internet.socket;
 
-
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.size.Move;
 import base.size.Range;
+import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
-import base.state.TaskClose;
 import base.state.Update;
 
-public class DownloadTask extends TaskClose {
+public class DownloadTask extends Close {
 	
 	// Make
 
-	/** Download 1 or more bytes from socket to bin, don't look at bin until this is closed. */
-	public DownloadTask(Update update, Socket socket, Range range, Bin bin) {
-		this.update = update; // We'll tell above when we're done
-		
-		// Save the input
+	/** Download 1 or more bytes from socket to bin limited by range, don't look at bin until this is closed. */
+	public DownloadTask(Update up, Socket socket, Range range, Bin bin) {
+		this.up = up; // We'll tell above when we're done
 		this.socket = socket;
 		this.range = range;
 		this.bin = bin;
-
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
-
-	/** The socket we download from. */
+	
+	private final Update up;
 	private final Socket socket;
-	/** Limit how much we download. */
 	private final Range range;
-	/** The Bin we put the data in. */
 	private final Bin bin;
+	private final Task task;
+
+	@Override public void close() {
+		if (already()) return;
+		close(task);
+		up.send();
+	}
 
 	// Result
 	
 	/** How much data we downloaded and how long it took, or throws the exception that made us give up. */
-	public Move result() throws Exception { return (Move)check(move); }
+	public Move result() { taskCheck(exception, move); return move; }
+	private ProgramException exception;
 	private Move move;
 	
 	// Task
@@ -52,15 +55,12 @@ public class DownloadTask extends TaskClose {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(Exception e) {
+		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			if (e == null) {      // No exception, save what thread() did
-				
-				move = taskMove;
-			}
-			close();       // We're done
-			update.send(); // Tell update we've changed
+			move = taskMove;
+			close(me());          // We're done
 		}
 	}
+	private DownloadTask me() { return this; } // Give inner code a link to the outer object
 }
