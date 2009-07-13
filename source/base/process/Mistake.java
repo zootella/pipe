@@ -5,34 +5,40 @@ import java.io.StringWriter;
 
 import javax.swing.JOptionPane;
 
+import base.state.Close;
+
 public class Mistake {
 	
 	/** Notice an exception that we can ignore, and let the program keep going. */
 	public static void ignore(Exception e) {
+		String title = "Mistake.ignore() caught an exception"; // Compose
+		String body = describe(e);
 		
-		// Write it to standard output
-		System.out.print("Mistake.ignore() caught an exception --v--\n");
-		System.out.print(describe(e));
-		System.out.print("Mistake.ignore() caught an exception --^--\n");
+		log(title, body); // Report
+		send(title + "\n" + body);
 	}
 	
 	/** Show and report an exception code didn't catch, and terminate the Java process. */
 	public static void grab(Exception e) {
+		String title = "Mistake.grab() caught an exception"; // Compose
+		String body = describe(e);
 		
-		// Write it to standard output
-		System.out.print("Mistake.grab() caught an exception --v--\n");
-		System.out.print(describe(e));
-		System.out.print("Mistake.grab() caught an exception --^--\n");
+		log(title, body); // Report
+		send(title + "\n" + body);
+		show(title, body);
+		System.exit(0); // Terminate the process right here without closing the program properly
+	}
 
-		// Show it to the user
-		try {
-			JOptionPane.showMessageDialog(null, describe(e), "Mistake.grab() caught an exception", JOptionPane.ERROR_MESSAGE);
-		} catch (Exception i) { Mistake.ignore(i); }
+	/** Make sure the program closed all the objects that needed to be closed. */
+	public static void close() {
+		if (Close.checkAll() == 0) return; // Check
+		String title = "Mistake.close() found open objects"; // Compose
+		String body = Close.checkAll() + " objects still open\n";
 
-		// Send it in a packet to the programmer TODO
-
-		// Terminate the process without closing the program properly
-		System.exit(0); // This never returns
+		log(title, body); // Report
+		send(title + "\n" + body);
+		show(title, body);
+		System.exit(0); // Terminate the process right here without closing the program properly
 	}
 
 	// Help
@@ -45,5 +51,26 @@ public class Mistake {
 		p.flush();
 		s.flush();
 		return s.toString();
+	}
+	
+	/** Make a note in the local debugging log. */
+	private static void log(String title, String body) {
+		System.out.print(title + " --v--\n");
+		System.out.print(body);
+		System.out.print(title + " --^--\n");
+	}
+	
+	/** Send the error in a packet to the programmer. */
+	private static void send(String body) {
+		try {
+			//TODO
+		} catch (Exception e) {} // Ignore an exception and keep going
+	}
+	
+	/** Show the error to the user. */
+	private static void show(String title, String body) {
+		try {
+			JOptionPane.showMessageDialog(null, body, title, JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {} // Ignore an exception and keep going
 	}
 }

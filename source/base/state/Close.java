@@ -43,11 +43,8 @@ public abstract class Close {
 	/** The total number of objects the program has made that still need to be closed. */
 	private static volatile int programOpen; // volatile because a Task thread may make an object that extends Close
 
-	/** Before the program closes, call Close.checkAll() to make sure every object with a close() method had it run. */
-	public static void checkAll() {
-		if (programOpen != 0)
-			throw new IllegalStateException("program closed with " + programOpen + " open objects");
-	}
+	/** Before the program closes, make sure every object with a close() method had it run. */
+	public static int checkAll() { return programOpen; }
 
 	// Help
 

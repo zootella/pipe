@@ -43,9 +43,8 @@ public class Center extends Close {
 		if (already()) return;
 
 		close(packetMachine);
-
-		// Make sure every object with a close() method ran
-		try { Close.checkAll(); } catch (Exception e) { Mistake.grab(e); }
+		
+		Mistake.close();
 	}
 	
 	private class MyPacketReceive implements PacketReceive {

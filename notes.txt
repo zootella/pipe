@@ -2,39 +2,6 @@
 
 search for "catch (Exception" and "close();"
 
-==events==
-
-// Dialogs, panels, and event sources catch Exception and give it to grab, which kills the program
-C:\Documents\program\pipe\source\hash\HashDialog.java(40):    			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\hash\HashDialog.java(119):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\hash\HashDialog.java(129):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\hash\HashDialog.java(139):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\hash\HashDialog.java(149):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\hash\HashDialog.java(157):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\hash\HashDialog.java(165):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ExchangeDialog.java(86):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ExchangeDialog.java(97):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ExchangeDialog.java(113):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ExchangeDialog.java(124):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\FolderDialog.java(80):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\FolderDialog.java(96):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\FolderDialog.java(108):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\InfoFrame.java(95):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\MainFrame.java(94):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\MainIcon.java(65):    		} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\MainIcon.java(81):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\MuseumDialog.java(57):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\MuseumDialog.java(69):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\PipePanel.java(63):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\PipePanel.java(75):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ToolPanel.java(67):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ToolPanel.java(79):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ToolPanel.java(91):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\user\ToolPanel.java(103):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\base\state\Delay.java(59):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\base\state\Pulse.java(43):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\base\state\Update.java(46):			} catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\base\user\TextMenu.java(140):			} catch (Exception e) { Mistake.grab(e); }
 
 ==task==
 
@@ -58,27 +25,10 @@ C:\Documents\program\pipe\source\base\internet\socket\DownloadTask.java(62):			c
 C:\Documents\program\pipe\source\base\internet\socket\UploadTask.java(62):			close();       // We're done
 C:\Documents\program\pipe\source\base\internet\web\DomainTask.java(56):			close();       // We're done
 
-==hash==
 
-// The hash package doesn't matter because you're gonna delete it
-C:\Documents\program\pipe\source\hash\HashFlow.java(122):			} catch (Exception e) { exception = e; close(me()); }
-C:\Documents\program\pipe\source\hash\HashMachine.java(61):		} catch (Exception e) { exception = e; }
-C:\Documents\program\pipe\source\hash\HashMachine.java(74):		} catch (Exception e) { exception = e; }
-C:\Documents\program\pipe\source\hash\HashMachine.java(91):		} catch (Exception e) { exception = e; }
-C:\Documents\program\pipe\source\hash\HashMachine.java(116):			} catch (Exception e) { exception = e; model.changed(); }
 
-==main==
 
-C:\Documents\program\pipe\source\pipe\center\Center.java(29):				} catch (Exception e) { Mistake.grab(e); } // Exception starting up
-C:\Documents\program\pipe\source\pipe\center\Center.java(48):		try { Close.checkAll(); } catch (Exception e) { Mistake.grab(e); }
-C:\Documents\program\pipe\source\pipe\center\Center.java(69):			} catch (Exception e) { Mistake.ignore(e); } // Log and drop unknown packets
 
-C:\Documents\program\pipe\source\pipe\main\Main.java(27):				} catch (Exception e) { Mistake.grab(e); } // Exception starting up
-
-==check==
-
-// Have checkAll() just show an error message instead of throwing an exception to do so
-C:\Documents\program\pipe\source\pipe\main\Program.java(26):		try { Close.checkAll(); } catch (Exception e) { Mistake.grab(e); }
 
 
 
