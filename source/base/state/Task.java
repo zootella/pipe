@@ -47,8 +47,8 @@ public class Task extends Close {
 	// Soon after thread calls invokeLater() above, the normal event thread calls run() here
 	private class EventRun implements Runnable {
 		public void run() {
-			if (exception != null) Mistake.grab(exception); // Have a system exception stop the program
 			if (closed()) return;                           // Do nothing once closed
+			if (exception != null) Mistake.grab(exception); // Have a system exception stop the program
 			try {
 				thread = null;                              // thread is done and exited, null our reference to it
 				close(me());                                // Mark this Task closed
