@@ -4,8 +4,6 @@ import javax.swing.SwingUtilities;
 
 import base.process.Mistake;
 
-
-
 public class Update {
 	
 	// Make

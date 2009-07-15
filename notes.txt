@@ -28,6 +28,27 @@ C:\Documents\program\pipe\source\base\internet\web\DomainTask.java(56):			close(
 
 
 
+====
+
+
+C:\Documents\program\pipe\source\base\file\File.java(60):		try { file.close(); } catch (IOException e) { Mistake.ignore(e); } // Also closes file's FileChannel
+
+
+C:\Documents\program\pipe\source\base\internet\packet\ListenPacket.java(37):		try { channel.close(); } catch (IOException e) { Mistake.ignore(e); }
+C:\Documents\program\pipe\source\base\internet\socket\ListenSocket.java(38):		try { channel.close(); } catch (IOException e) { Mistake.ignore(e); }
+C:\Documents\program\pipe\source\base\internet\socket\Socket.java(69):		try { channel.close(); } catch (IOException e) { Mistake.ignore(e); }
+C:\Documents\program\pipe\source\base\state\Close.java(24):	public abstract void close(); // Your object that extends Close must have this method
+C:\Documents\program\pipe\source\base\state\Close.java(64):		try { c.close(); } catch (Exception e) { Mistake.ignore(e); } // Log the exception, but keep going to close the next object
+C:\Documents\program\pipe\source\pipe\center\Center.java(47):		Mistake.close();
+C:\Documents\program\pipe\source\pipe\core\museum\Pipe.java(14):	public void close();
+C:\Documents\program\pipe\source\pipe\core\museum\SendPipe.java(28):			pipe.close();
+C:\Documents\program\pipe\source\pipe\main\Program.java(25):		Mistake.close();
+
+
+
+
+
+
 
 
 

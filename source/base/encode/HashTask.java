@@ -1,7 +1,6 @@
 package base.encode;
 
 import base.data.Bin;
-import base.exception.ProgramException;
 import base.size.Move;
 import base.size.Range;
 import base.state.Close;
@@ -38,8 +37,8 @@ public class HashTask extends Close {
 	// Result
 	
 	/** How much we hashed when we're done, or throws the exception that made us give up. */
-	public Move result() { taskCheck(exception, move); return move; }
-	private ProgramException exception;
+	public Move result() throws Exception { taskCheck(exception, move); return move; }
+	private Exception exception;
 	private Move move;
 	
 	// Task
@@ -60,7 +59,7 @@ public class HashTask extends Close {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(ProgramException e) {
+		public void done(Exception e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			move = taskMove;

@@ -1,7 +1,5 @@
 package base.state;
 
-import base.exception.ProgramException;
-
 /** Put your code for a separate thread to run in a TaskBody. */
 public interface TaskBody {
 	
@@ -15,5 +13,5 @@ public interface TaskBody {
 	 * After thread() returns, the normal event thread will call this done() method.
 	 * @return exception The Exception your code in thread() threw, null if none
 	 */
-	public void done(ProgramException exception);
+	public void done(Exception exception);
 }

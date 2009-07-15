@@ -30,8 +30,8 @@ public class AcceptTask extends Close {
 	// Result
 	
 	/** The socket that connected to server, it's yours to use and then close, or throws the exception that made us give up. */
-	public Socket result() { taskCheck(exception, socket); return socket; }
-	private ProgramException exception;
+	public Socket result() throws Exception { taskCheck(exception, socket); return socket; }
+	private Exception exception;
 	private Socket socket;
 	
 	// Task
@@ -48,7 +48,7 @@ public class AcceptTask extends Close {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(ProgramException e) {
+		public void done(Exception e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			socket = taskSocket;
