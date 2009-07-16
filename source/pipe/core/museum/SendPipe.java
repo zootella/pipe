@@ -25,7 +25,7 @@ public class SendPipe extends Close implements Pipe {
 			
 		} else {
 			
-			pipe.close();
+			close(pipe);
 		}
 		*/
 		

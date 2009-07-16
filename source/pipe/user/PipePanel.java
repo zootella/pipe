@@ -60,7 +60,7 @@ public class PipePanel {
 				
 				pipe.info().frame.setVisible(true);
 
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 
@@ -72,7 +72,7 @@ public class PipePanel {
 				
 				program.core.pipes.kill(pipe);
 
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 	

@@ -64,7 +64,7 @@ public class ToolPanel {
 
 				program.core.pipes.make();
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 
@@ -76,7 +76,7 @@ public class ToolPanel {
 				
 				program.user.info.frame.setVisible(true);
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 
@@ -88,7 +88,7 @@ public class ToolPanel {
 				
 				Snippet.snippet(program);
 
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 
@@ -100,7 +100,7 @@ public class ToolPanel {
 				
 				Close.close(program);
 
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 }

@@ -24,7 +24,7 @@ public class Main {
 					// Make and start the program
 					new Program();
 
-				} catch (Exception e) { Mistake.grab(e); } // Exception starting up
+				} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
 			}
 		});
 	}

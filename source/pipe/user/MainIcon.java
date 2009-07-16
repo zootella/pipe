@@ -62,7 +62,7 @@ public class MainIcon extends Close {
     			if (m.getButton() == MouseEvent.BUTTON1)
     				program.user.show(true);
     			
-    		} catch (Exception e) { Mistake.grab(e); }
+    		} catch (Exception e) { Mistake.stop(e); }
     	}
     }
 	
@@ -78,7 +78,7 @@ public class MainIcon extends Close {
 				else if (a.getActionCommand().equals("Exit"))
 					close(program);
 
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 	

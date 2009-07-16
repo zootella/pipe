@@ -83,7 +83,7 @@ public class ExchangeDialog {
 				
 				Clipboard.copy(home.getText());
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 	
@@ -94,7 +94,7 @@ public class ExchangeDialog {
 				
 				away.setText(Clipboard.paste());
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 	
@@ -110,7 +110,7 @@ public class ExchangeDialog {
 					dialog.dispose();
 
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 	
@@ -121,7 +121,7 @@ public class ExchangeDialog {
 				
 				dialog.dispose();
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 	

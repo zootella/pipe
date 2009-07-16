@@ -11,7 +11,7 @@ public interface Pipe {
 	// Close
 
 	/** Put resources away and never change again. */
-	public void close();
+	public void close(); //TODO don't put this here
 	
 	// Configure
 

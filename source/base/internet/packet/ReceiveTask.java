@@ -1,6 +1,7 @@
 package base.internet.packet;
 
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.size.PacketMove;
 import base.state.Close;
 import base.state.Task;
@@ -33,8 +34,8 @@ public class ReceiveTask extends Close {
 	// Result
 	
 	/** The Packet we received, or throws the exception that made us give up. */
-	public Packet result() throws Exception { taskCheck(exception, packet); return packet; }
-	private Exception exception;
+	public Packet result() { taskCheck(exception, packet); return packet; }
+	private ProgramException exception;
 	private Packet packet;
 
 	// Task
@@ -51,7 +52,7 @@ public class ReceiveTask extends Close {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(Exception e) {
+		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			packet = new Packet(bin, taskMove);

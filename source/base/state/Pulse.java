@@ -38,9 +38,9 @@ public class Pulse extends Close {
 	private class MyActionListener extends AbstractAction {
 		public void actionPerformed(ActionEvent a) {
 			try {
-				if (closed()) return; // Don't let a closed Pulse call receive()
-				receive.receive();    // Call our given receive() method
-			} catch (Exception e) { Mistake.grab(e); }
+				if (closed()) return;                  // Don't let a closed Pulse call receive()
+				receive.receive();                     // Call our given receive() method
+			} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
 		}
 	}
 }

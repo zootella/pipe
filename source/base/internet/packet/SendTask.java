@@ -1,6 +1,7 @@
 package base.internet.packet;
 
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
@@ -32,8 +33,8 @@ public class SendTask extends Close {
 	// Result
 	
 	/** The empty Bin you can reuse, or throws the exception that made us give up. */
-	public Bin result() throws Exception { taskCheck(exception, bin); return bin; }
-	private Exception exception;
+	public Bin result() { taskCheck(exception, bin); return bin; }
+	private ProgramException exception;
 	private Bin bin;
 
 	// Task
@@ -49,7 +50,7 @@ public class SendTask extends Close {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(Exception e) {
+		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			bin = packet.bin;

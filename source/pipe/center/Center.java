@@ -26,7 +26,7 @@ public class Center extends Close {
 			public void run() {
 				try {
 					new Center(); // Make and start the program
-				} catch (Exception e) { Mistake.grab(e); } // Exception starting up
+				} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
 			}
 		});
 	}
@@ -44,7 +44,7 @@ public class Center extends Close {
 
 		close(packetMachine);
 		
-		Mistake.close();
+		Mistake.closeCheck();
 	}
 	
 	private class MyPacketReceive implements PacketReceive {

@@ -1,6 +1,5 @@
 package base.user;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -64,37 +63,39 @@ public class TextMenu {
 		
 		// When we get the trigger event, if some rows are selected, show the menu
 		private void show(MouseEvent e) {
-			if (e.isPopupTrigger()) { // Only do something if this is the correct event
-
-				// Disable all the menu items, we'll enable those that can work next
-				cutItem.setEnabled(false);
-				copyItem.setEnabled(false);
-				pasteItem.setEnabled(false);
-				deleteItem.setEnabled(false);
-				selectAllItem.setEnabled(false);
-
-				// Find out if our text component is editable or read-only, and if it has some selected text
-				boolean editable = component.isEditable();
-				boolean selection = Text.hasText(component.getSelectedText());
-
-				// Enable Cut and Delete if the text component is editable and has selected text
-				if (editable && selection) {
-					cutItem.setEnabled(true);
-					deleteItem.setEnabled(true);
+			try {
+				if (e.isPopupTrigger()) { // Only do something if this is the correct event
+					
+					// Disable all the menu items, we'll enable those that can work next
+					cutItem.setEnabled(false);
+					copyItem.setEnabled(false);
+					pasteItem.setEnabled(false);
+					deleteItem.setEnabled(false);
+					selectAllItem.setEnabled(false);
+					
+					// Find out if our text component is editable or read-only, and if it has some selected text
+					boolean editable = component.isEditable();
+					boolean selection = Text.hasText(component.getSelectedText());
+					
+					// Enable Cut and Delete if the text component is editable and has selected text
+					if (editable && selection) {
+						cutItem.setEnabled(true);
+						deleteItem.setEnabled(true);
+					}
+					
+					// Enable Copy if the text component has selected text
+					if (selection) copyItem.setEnabled(true);
+					
+					// Enable Paste if the text component is editable and there's text on the clipboard
+					if (editable && Clipboard.hasText()) pasteItem.setEnabled(true);
+					
+					// Enable Select All of the text component has text
+					if (Text.hasText(component.getText())) selectAllItem.setEnabled(true);
+					
+					// Show the menu to the user
+					menu.show(e.getComponent(), e.getX(), e.getY());
 				}
-
-				// Enable Copy if the text component has selected text
-				if (selection) copyItem.setEnabled(true);
-
-				// Enable Paste if the text component is editable and there's text on the clipboard
-				if (editable && Clipboard.hasText()) pasteItem.setEnabled(true);
-
-				// Enable Select All of the text component has text
-				if (Text.hasText(component.getText())) selectAllItem.setEnabled(true);
-
-				// Show the menu to the user
-				menu.show(e.getComponent(), e.getX(), e.getY());
-			}
+			} catch (Exception x) { Mistake.stop(x); }
 		}
 	}
 
@@ -136,8 +137,7 @@ public class TextMenu {
 				} else if (a.getActionCommand().equals("Select All")) {
 					component.selectAll();
 				}
-				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 }

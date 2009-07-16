@@ -91,7 +91,7 @@ public class MainFrame extends Close {
 				else
 					program.user.show(false);
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 

@@ -22,6 +22,6 @@ public class Program extends Close {
 		close(user);
 		close(core);
 		
-		Mistake.close();
+		Mistake.closeCheck();
 	}
 }

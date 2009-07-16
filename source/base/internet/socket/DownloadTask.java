@@ -1,6 +1,7 @@
 package base.internet.socket;
 
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.size.Move;
 import base.size.Range;
 import base.state.Close;
@@ -36,8 +37,8 @@ public class DownloadTask extends Close {
 	// Result
 	
 	/** How much data we downloaded and how long it took, or throws the exception that made us give up. */
-	public Move result() throws Exception { taskCheck(exception, move); return move; }
-	private Exception exception;
+	public Move result() { taskCheck(exception, move); return move; }
+	private ProgramException exception;
 	private Move move;
 	
 	// Task
@@ -54,7 +55,7 @@ public class DownloadTask extends Close {
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
-		public void done(Exception e) {
+		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			move = taskMove;

@@ -54,7 +54,7 @@ public class MuseumDialog {
 				dialog.dispose();
 				pipe = new SendPipe(program);
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 	
@@ -66,7 +66,7 @@ public class MuseumDialog {
 				dialog.dispose();
 				pipe = new ReceivePipe();
 				
-			} catch (Exception e) { Mistake.grab(e); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 }

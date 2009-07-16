@@ -19,8 +19,8 @@ public class Mistake {
 	}
 	
 	/** Show and report an exception code didn't catch, and terminate the Java process. */
-	public static void grab(Exception e) {
-		String title = "Mistake.grab() caught an exception"; // Compose
+	public static void stop(Exception e) {
+		String title = "Mistake.stop() caught an exception"; // Compose
 		String body = describe(e);
 		
 		log(title, body); // Report
@@ -30,7 +30,7 @@ public class Mistake {
 	}
 
 	/** Make sure the program closed all the objects that needed to be closed. */
-	public static void close() {
+	public static void closeCheck() {
 		if (Close.checkAll() == 0) return; // Check
 		String title = "Mistake.close() found open objects"; // Compose
 		String body = Close.checkAll() + " objects still open\n";

@@ -50,7 +50,7 @@ public abstract class Close {
 	public void open() { if (objectClosed) throw new IllegalStateException(); }
 
 	/** Make sure this object is closed, throw e if given, and make sure o exists. */
-	public void taskCheck(Exception e, Object o) throws Exception {
+	public void taskCheck(ProgramException e, Object o) {
 		if (!objectClosed) throw new IllegalStateException();
 		if (e != null) throw e;
 		if (o == null) throw new NullPointerException();

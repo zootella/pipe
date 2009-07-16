@@ -38,10 +38,10 @@ public class Update {
 	private class MyRunnable implements Runnable {
 		public void run() {
 			try {
-				set = false;       // Let the next call to send() go through
-				spin.count();      // Make sure we haven't been doing this too frequently
-				receive.receive(); // Call our given receive() method
-			} catch (Exception e) { Mistake.grab(e); }
+				set = false;                           // Let the next call to send() go through
+				spin.count();                          // Make sure we haven't been doing this too frequently
+				receive.receive();                     // Call our given receive() method
+			} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
 		}
 	}
 }
