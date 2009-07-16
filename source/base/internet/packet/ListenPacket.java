@@ -2,6 +2,7 @@ package base.internet.packet;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.nio.channels.DatagramChannel;
 
 import base.data.Bin;
@@ -23,7 +24,9 @@ public class ListenPacket extends Close {
 			if (channel.socket().getReceiveBufferSize() < Bin.big)
 				channel.socket().setReceiveBufferSize(Bin.big);
 			channel.socket().bind(new InetSocketAddress(port.port));
-		} catch (IOException e) { throw new NetException(e); }
+		}
+		catch (SocketException e) { throw new NetException(e, "already bound"); }
+		catch (IOException e) { throw new NetException(e); }
 	}
 
 	/** The port number this socket is bound to. */

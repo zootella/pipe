@@ -94,7 +94,7 @@ public class MainIcon extends Close {
 		if (b) {
 	       	try {
 				tray.add(trayIcon);
-			} catch (AWTException e) { throw new PlatformException("cant add tray icon", e); }
+			} catch (AWTException e) { throw new PlatformException(e, "cant add tray icon"); }
 		} else {
 			tray.remove(trayIcon);
 		}
