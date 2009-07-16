@@ -6,25 +6,8 @@ package base.exception;
  * A ChopException is a special kind of DataException, it says the data is bad because it's not all here yet.
  */
 public class ChopException extends DataException {
-	
-	// Make
-	
 	public ChopException() {}
-	
-	public ChopException(String message) { super()
-		this.exception = null;
-		this.message = message;
-	}
-	
-	public ChopException(Exception exception) {
-		this.exception = exception;
-		this.message = null;
-	}
-	
-	public ChopException(Exception exception, String message) {
-		this.exception = exception;
-		this.message = message;
-	}
-	
-	// Look
+	public ChopException(String message) { super(message); }
+	public ChopException(String message, Throwable cause) { super(message, cause); }
+	public ChopException(Throwable cause) { super(cause); }
 }

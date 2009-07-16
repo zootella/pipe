@@ -50,10 +50,7 @@ public class Mistake {
 		e.printStackTrace(p);
 		p.flush();
 		s.flush();
-		
-		String body = e.toString() + "\n" + s.toString();
-		
-		return body;
+		return s.toString();
 	}
 	
 	/** Make a note in the local debugging log. */

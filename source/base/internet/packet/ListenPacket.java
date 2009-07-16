@@ -25,7 +25,7 @@ public class ListenPacket extends Close {
 				channel.socket().setReceiveBufferSize(Bin.big);
 			channel.socket().bind(new InetSocketAddress(port.port));
 		}
-		catch (SocketException e) { throw new NetException(e, "already bound"); }
+		catch (SocketException e) { throw new NetException("already bound", e); }
 		catch (IOException e) { throw new NetException(e); }
 	}
 
