@@ -3,7 +3,6 @@ package example;
 import java.awt.Color;
 import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 public class BlankArea extends JLabel {
@@ -12,7 +11,7 @@ public class BlankArea extends JLabel {
 	  public BlankArea(Color color) {
 	    setBackground(color);
 	    setOpaque(true);
-	    setBorder(BorderFactory.createLineBorder(Color.black));
+//	    setBorder(BorderFactory.createLineBorder(Color.black));
 	  }
 
 	  public Dimension getMinimumSize() {
