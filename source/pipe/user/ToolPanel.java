@@ -10,6 +10,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import example.Grip;
+
 import base.process.Mistake;
 import base.state.Close;
 
@@ -25,8 +27,8 @@ public class ToolPanel {
 	
 	// Object
 	
-	public ToolPanel(Program program) {
-		this.program = program;
+	public ToolPanel(MainFrame main) {
+		this.program = main.program;
 
 		
 		panel = new JPanel();
@@ -44,11 +46,13 @@ public class ToolPanel {
 		Button info = new Button(infoAction, new Rectangle(100, 10, 80, 25));
 		Button snip = new Button(snippetAction, new Rectangle(190, 10, 80, 25));
 		Button exit = new Button(exitAction, new Rectangle(280, 10, 80, 25));
+		Grip grip = new Grip(main.frame, new Rectangle(370, 10, 80, 25));
 		
 		panel.add(make.button);
 		panel.add(info.button);
 		panel.add(snip.button);
 		panel.add(exit.button);
+		panel.add(grip.label);
 	}
 
 	public final JPanel panel;

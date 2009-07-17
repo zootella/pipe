@@ -32,7 +32,7 @@ public class MainFrame extends Close {
 		panel.setLayout(null);
 		pipes.setLayout(null);
 
-		tool = new ToolPanel(program);
+		tool = new ToolPanel(this);
 		tool.panel.setLocation(0, 0);
 		panel.add(tool.panel);
 
@@ -73,7 +73,7 @@ public class MainFrame extends Close {
 		}
 	}
 
-	private final Program program;
+	public final Program program;
 
 	public final JFrame frame;
 	public final JPanel panel;

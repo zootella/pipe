@@ -1,6 +1,5 @@
 package example;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 public class ExampleFrame {
@@ -8,12 +7,13 @@ public class ExampleFrame {
 	public ExampleFrame() {
 
 		frame = new JFrame("Example Frame");
-
-		JComponent newContentPane = new GripPanel(frame);
-		newContentPane.setOpaque(true); //content panes must be opaque
+		frame.setResizable(false);
+		frame.setLayout(null);
+		
+		ExamplePanel grip = new ExamplePanel(frame);
 
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setContentPane(newContentPane);
+		frame.setContentPane(grip.panel);
 		frame.pack();
 		frame.setVisible(true);
 	}
