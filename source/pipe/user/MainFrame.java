@@ -86,10 +86,7 @@ public class MainFrame extends Close {
 		public void windowClosing(WindowEvent w) {
 			try {
 				
-				if (program.core.pipes.pipes.isEmpty())
-					close(program);
-				else
-					program.user.show(false);
+				program.user.show(false);
 				
 			} catch (Exception e) { Mistake.stop(e); }
 		}

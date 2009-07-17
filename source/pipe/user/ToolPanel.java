@@ -23,36 +23,38 @@ public class ToolPanel {
 	
 	// Define
 	
-	public static final int height = 45;
+	public static final int height = 80;
 	
 	// Object
 	
 	public ToolPanel(MainFrame main) {
 		this.program = main.program;
 
-		
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setSize(new Dimension(PipePanel.width, height));
 		
-		panel.setBackground(new Color(200, 200, 200));
+		panel.setBackground(new Color(0xdedede));
 		
-		newAction = new NewAction();
+		closeAction = new CloseAction();
+		makeAction = new MakeAction();
 		infoAction = new InfoAction();
 		snippetAction = new SnippetAction();
 		exitAction = new ExitAction();
+
+		Grip grip = new Grip(main.frame, new Rectangle(10, 10, 445, 25));
+		Button close = new Button(closeAction, new Rectangle(465, 10, 25, 25));
+		Button make = new Button(makeAction, new Rectangle(10, 45, 80, 25));
+		Button info = new Button(infoAction, new Rectangle(100, 45, 80, 25));
+		Button snippet = new Button(snippetAction, new Rectangle(190, 45, 80, 25));
+		Button exit = new Button(exitAction, new Rectangle(280, 45, 80, 25));
 		
-		Button make = new Button(newAction, new Rectangle(10, 10, 80, 25));
-		Button info = new Button(infoAction, new Rectangle(100, 10, 80, 25));
-		Button snip = new Button(snippetAction, new Rectangle(190, 10, 80, 25));
-		Button exit = new Button(exitAction, new Rectangle(280, 10, 80, 25));
-		Grip grip = new Grip(main.frame, new Rectangle(370, 10, 80, 25));
-		
+		panel.add(grip.label);
+		panel.add(close.button);
 		panel.add(make.button);
 		panel.add(info.button);
-		panel.add(snip.button);
+		panel.add(snippet.button);
 		panel.add(exit.button);
-		panel.add(grip.label);
 	}
 
 	public final JPanel panel;
@@ -60,9 +62,21 @@ public class ToolPanel {
 
 	// Action
 
-	private final NewAction newAction;
-	private class NewAction extends AbstractAction {
-		public NewAction() { super("New"); } // Text for the button
+	private final CloseAction closeAction;
+	private class CloseAction extends AbstractAction {
+		public CloseAction() { super("X"); } // Text for the button
+		public void actionPerformed(ActionEvent a) {
+			try {
+
+				program.user.show(false);
+				
+			} catch (Exception e) { Mistake.stop(e); }
+		}
+	}
+
+	private final MakeAction makeAction;
+	private class MakeAction extends AbstractAction {
+		public MakeAction() { super("New"); } // Text for the button
 		public void actionPerformed(ActionEvent a) {
 			try {
 
