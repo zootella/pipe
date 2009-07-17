@@ -1,11 +1,10 @@
-package example;
+package base.user;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JFrame;
@@ -23,64 +22,36 @@ public class Grip {
 	    label.setBackground(new Color(0xfee5ac));
 	    label.setOpaque(true);
 	    
-	    mouse = new MyMouseListener();
-	    motion = new MyMouseMotionListener();
-	    
-	    label.addMouseListener(mouse);
-	    label.addMouseMotionListener(motion);
-		
-		
-		
+	    label.addMouseListener(new MyMouseListener());
+	    label.addMouseMotionListener(new MyMouseMotionListener());
 	}
 	
-	public final JFrame frame;
+	private final JFrame frame;
 	public final JLabel label;
-	
-	
-	
-	private Point a;
-	private Point b;
-	
-	
-	
-	
-	private final MouseListener mouse;
+	private Point press;
+
     private class MyMouseListener extends MouseAdapter {
     	@Override public void mousePressed(MouseEvent m) {
     		try {
-    			
-    			a = m.getPoint();
+
+    			// Remember where the drag started
+    			press = m.getPoint();
     			
     		} catch (Exception e) { Mistake.stop(e); }
     	}
     }
 
-	private final MouseMotionListener motion;
 	private class MyMouseMotionListener implements MouseMotionListener {
 		@Override public void mouseMoved(MouseEvent m) {}
 		@Override public void mouseDragged(MouseEvent m) {
 			try {
-				
-				b = m.getPoint();
-				
-				Point f = frame.getLocation();
-				
-				Point g = new Point(f.x + b.x - a.x, f.y + b.y - a.y);
-				
-				System.out.println(a.toString() + " to " + b.toString() + " move " + g.toString());
-				
-				frame.setLocation(g);
-				
-				
+
+				// Nudge the frame the distance and direction of the drag
+				frame.setLocation(new Point(
+					frame.getLocation().x + m.getPoint().x - press.x,
+					frame.getLocation().y + m.getPoint().y - press.y));
+
 			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-
 }

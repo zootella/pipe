@@ -10,10 +10,10 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import example.Grip;
 
 import base.process.Mistake;
 import base.state.Close;
+import base.user.Grip;
 
 import pipe.main.Program;
 import pipe.main.Snippet;
