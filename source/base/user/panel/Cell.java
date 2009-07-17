@@ -1,4 +1,4 @@
-package base.user;
+package base.user.panel;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

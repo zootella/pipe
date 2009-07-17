@@ -2,21 +2,18 @@ package pipe.user;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JPanel;
-
-
-import base.process.Mistake;
-import base.state.Close;
-import base.user.Grip;
 
 import pipe.main.Program;
 import pipe.main.Snippet;
+import base.process.Mistake;
+import base.state.Close;
+import base.user.widget.Button;
+import base.user.widget.Grip;
 
 /** The toolbar at the top of the main window. */
 public class ToolPanel {
@@ -34,7 +31,7 @@ public class ToolPanel {
 		panel.setLayout(null);
 		panel.setSize(new Dimension(PipePanel.width, height));
 		
-		panel.setBackground(new Color(0xdedede));
+		panel.setBackground(new Color(0xebebeb));
 		
 		closeAction = new CloseAction();
 		makeAction = new MakeAction();
@@ -64,7 +61,7 @@ public class ToolPanel {
 
 	private final CloseAction closeAction;
 	private class CloseAction extends AbstractAction {
-		public CloseAction() { super("X"); } // Text for the button
+		public CloseAction() { super(); } // No button text
 		public void actionPerformed(ActionEvent a) {
 			try {
 

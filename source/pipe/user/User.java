@@ -1,8 +1,5 @@
 package pipe.user;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-
 import pipe.main.Program;
 import base.state.Close;
 
@@ -12,14 +9,10 @@ public class User extends Close {
 	
 	public User(Program program) {
 
-		// Java settings
-		JFrame.setDefaultLookAndFeelDecorated(true);	
-		JDialog.setDefaultLookAndFeelDecorated(true);
-
 		main = new MainFrame(program);
 		info = new InfoFrame(program);
 		icon = new MainIcon(program);
-		
+
 		show(true);
 	}
 	

@@ -1,4 +1,4 @@
-package base.user;
+package base.user.table;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import base.state.Model;
 
-public class OldTable {
+public class Table {
 
 	// -------- Make a Table and set up its columns --------
 	
@@ -27,10 +27,10 @@ public class OldTable {
 	 * It will be a JTable on the screen with some added features.
 	 * The Table object will keep the table's data, so you won't have to deal with TableModel events.
 	 * 
-	 * @param header The colum titles in a String array.
+	 * @param header The column titles in a String array.
 	 *               For instance, new Table("Name", "Color", "Location") makes a 3-column table.
 	 */
-	public OldTable(String... header) {
+	public Table(String... header) {
 
 		// Save the given column titles
 		this.header = header; // This also tells us how many columns we have
@@ -64,9 +64,8 @@ public class OldTable {
 	public void setColumnWidths(int... widths) {
 
 		// Loop for each of the given widths, setting the column with index c to it
-		for (int c = 0; c < widths.length; c++) {
+		for (int c = 0; c < widths.length; c++)
 			jtable.getColumnModel().getColumn(c).setPreferredWidth(widths[c]);
-		}
 	}
 
 	/** Right-align the text in column c, 0 is the first column. */
@@ -83,48 +82,6 @@ public class OldTable {
 		}
 	}
 
-	// -------- Add, update, and remove rows in this Table --------
-	
-	/**
-	 * Add a new row to this Table.
-	 * @param behind The object that will sit behind the new row
-	 * @param map    A String map with the text for each column
-	 */
-	public void add(Model behind) {
-		
-		
-		Map<String, String> view = behind.view();
-		
-		TableRow row = new TableRow(this, behind);    // Make a TableRow object
-		row.cells = new String[header.length];  // Prepare the array
-		for (int i = 0; i < header.length; i++) // Loop for each column
-			row.cells[i] = view.get(header[i]);  // Copy in the cell text
-		add(row);                               // Call the next method
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	/**
-	 * Add a new row to this Table.
-	 * Before you call this method, make a new TableRow object and add the text to its cells.
-	 * The row will show up at the bottom of the list.
-	 */
-	public void add(TableRow row) {
-		int r = rows.size();               // Find out how many rows we already have
-		rows.add(row);                     // Add the given TableRow object to our ArrayList of table data
-		model.fireTableRowsInserted(r, r); // Tell our JTable we added a row at index r
-	}
-
 	/** Scroll this Table to the bottom. */
 	public void scroll() {
 		if (rows.isEmpty()) return; // No rows
@@ -132,53 +89,73 @@ public class OldTable {
         jtable.scrollRectToVisible(rectangle); // Scroll to bring it into view
 	}
 
-	/**
-	 * Update the text in a row in this Table.
-	 * 
-	 * After adding a TableRow, don't change its text.
-	 * Instead, call this method passing it a copy of the TableRow with updated text.
-	 * This method will copy the text of a changed cell into the added TableRow and onto the screen.
-	 * 
-	 * @param row    A TableRow object added to this Table
-	 * @param update Updated text in a TableRow object that is not a part of this Table
-	 */
-	public void update(TableRow row, TableRow update) {
+	// -------- Add, update, and remove rows in this Table --------
+	
+	/** Given a Model object with a view() method, make a new row for it in this Table. */
+	public void add(Model under) {
+		
+		// Make a Row object
+		Row row = new Row(this, under);          // Make a Row object
+		Map<String, String> view = under.view(); // Get the cell text
+		for (int i = 0; i < header.length; i++)  // Loop for each column
+			row.cells[i] = view.get(header[i]);  // Copy in the cell text
+		
+		// Have the Model underneath tell the Row when it needs to refresh
+		under.add(row.view);
 
+		// Add it to this Table
+		int r = rows.size();               // Find out how many rows we already have
+		rows.add(row);                     // Add the given Row object to our ArrayList of table data
+		model.fireTableRowsInserted(r, r); // Tell our JTable we added a row at index r
+	}
+
+	/** The Model object beneath a row has changed, update its Row in this Table. */
+	public void update(Model under) {
+		
 		// Find the row's current index in the JTable
-		int r = find(row);
+		int r = find(under);
 		if (r == -1) return; // Not found
 		
-		// Loop through the cells in that row
-		for (int c = 0; c < header.length; c++) {
-
-			// The text in this cell is different
-			if (!row.cells[c].equals(update.cells[c])) {
-
-				// Update our TableRow object and the cell on the screen
-				row.cells[c] = update.cells[c];
-				model.fireTableCellUpdated(r, c);
+		// Update the cells that need updating
+		Map<String, String> view = under.view();   // Get the current text for display
+		for (int c = 0; c < header.length; c++) {  // Loop for each cell in the Row
+			String s = view.get(header[c]);        // Current text for the cell
+			if (!rows.get(r).cells[c].equals(s)) { // The cell is out of date
+				rows.get(r).cells[c] = s;          // Update our row object
+				model.fireTableCellUpdated(r, c);  // Update the cell on the screen
 			}
 		}
 	}
+	
+	/** Remove all the rows in this Table, leaving it empty. */
+	public void clear() {
+		int r = rows.size();              // Find out how many rows we have
+		for (Row row : rows)
+			row.model.remove(row.view);   // Disconnect each Row's View from the Model beneath
+		rows.clear();                     // Discard our data about the rows
+		model.fireTableRowsDeleted(0, r); // Remove all the rows from the JTable's display
+	}
 
-	/** Remove a row from this Table. */
-	public void remove(TableRow row) {
-		int r = find(row);                // Find where the TableRow is in our JTable right now
+	/** Remove a row from this Table given the Model object under it. */
+	public void remove(Model under) {
+		int r = find(under);              // Find where the Row is in our JTable right now
 		if (r == -1) return;              // Not found
-		rows.remove(r);                   // Remove the TableRow object from our ArrayList of table data
+		under.remove(rows.get(r).view);   // Stop having under call row.view.refresh()
+		rows.remove(r);                   // Remove the Row object from our ArrayList of table data
 		model.fireTableRowsDeleted(r, r); // Remove the row from the JTable's display
 	}
 
-	/**
-	 * Given a TableRow object, find the index where it's row is currently located in our JTable.
-	 * As the user sorts the Table, a TableRow's row index can change.
-	 * 
-	 * @param row A TableRow object with a row added to our JTable.
-	 * @return    The row index where its row is located, the first 3 rows have indices 0, 1, and 2.
-	 *            -1 if not found.
-	 */
-	private int find(TableRow row) {
-		for (int i = 0; i < rows.size(); i++) { // rows, our ArrayList of TableRow objects, is in the same order as the rows on the screen
+	/** Find the row number that the given Model object under is currently underneath, 0 first row, -1 not found. */
+	private int find(Model under) {
+		for (int i = 0; i < rows.size(); i++) {       // rows, our ArrayList of Row objects, is in the same order as the rows on the screen
+			if (rows.get(i).model == under) return i; // Compare the object references to find the row
+		}
+		return -1; // Not found
+	}
+	
+	/** Find the row number the given Row object is currently sorted to, 0 first row, -1 not found. */
+	private int find(Row row) {
+		for (int i = 0; i < rows.size(); i++) { // rows, our ArrayList of Row objects, is in the same order as the rows on the screen
 			if (rows.get(i) == row) return i;   // Compare the object references to find the row
 		}
 		return -1; // Not found
@@ -192,33 +169,33 @@ public class OldTable {
 	}
 	
 	/** Get the rows that are selected in this Table. */
-	public List<TableRow> getSelectedRows() {
-		ArrayList<TableRow> l = new ArrayList<TableRow>(); // Make a new empty list to fill and return
+	public List<Row> getSelectedRows() {
+		ArrayList<Row> l = new ArrayList<Row>(); // Make a new empty list to fill and return
 		for (int r : jtable.getSelectedRows())             // Loop through the selected row indices
-			l.add(rows.get(r));                            // Add the TableRow object at that row index to our list
+			l.add(rows.get(r));                            // Add the Row object at that row index to our list
 		return l;                                          // Return the list we filled
 	}
 	
-	/** Get the first or only row that is selected in this Table. */
-	public TableRow getSelectedRow() {
+	/** Get the first or only row that is selected in this Table, null if none selected. */
+	public Row getSelectedRow() {
 		int r = jtable.getSelectedRow(); // Get the index of the first selected row
 		if (r == -1) return null;
-		return rows.get(r);              // Get the TableRow object beneath it
+		return rows.get(r);              // Get the Row object beneath it
 	}
 
 	// -------- The Table's data, including the text in the header and cells --------
 
 	/** The text in the column headers in a String array. */
-	private String[] header;
+	public final String[] header;
 	
 	/**
 	 * The data in this Table.
-	 * To loop through all the rows in this Table, loop through the TableRow objects in this ArrayList.
+	 * To loop through all the rows in this Table, loop through the Row objects in this ArrayList.
 	 * rows.size() is the number of rows this Table has.
 	 * rows.get(0) is the first row, rows.get(1) is the second row, and so on.
 	 * The order of the objects in this ArrayList matches the order of the rows on the screen.
 	 */
-	public ArrayList<TableRow> rows = new ArrayList<TableRow>();
+	public ArrayList<Row> rows = new ArrayList<Row>();
 	
 	/** Our JTable will call methods on this TableModel object to find out what text to put in a cell on the screen. */
 	private MyTableModel model;
@@ -238,7 +215,7 @@ public class OldTable {
 
 		// Java wants to know how many rows we have
 		public int getRowCount() {
-			return rows.size(); // It's the number of TableRow objects in our rows ArrayList
+			return rows.size(); // It's the number of Row objects in our rows ArrayList
 		}
 
 		// Java needs the text to put in a cell
@@ -255,7 +232,7 @@ public class OldTable {
 	 * Comparator1 is a class that implements the Comparator interface, meaning it has a compare(o1, o2) method.
 	 * When this Table needs to sort by the first column, it will call comparator1.compare(row1, row2) to see which goes first.
 	 */
-	@SuppressWarnings("unchecked") // The variable argument feature of Java doesn't like Comparator<TableRow> 
+	@SuppressWarnings("unchecked") // The variable argument feature of Java doesn't like Comparator<Row> 
 	public void setComparators(Comparator... comparators) {
 		this.comparators = comparators; // Save the given array
 	}
@@ -264,7 +241,7 @@ public class OldTable {
 	 * An array of Comparator objects, which are just objects that have a compare(o1, o2) method.
 	 * Use the Comparator object stored in comparators[0] to sort the first column, comparators[1] to sort the second, and so on.
 	 */
-	private Comparator<TableRow>[] comparators;
+	private Comparator<Row>[] comparators;
 	
 	// When the user clicks a column header, Java will call the mouseClicked() method here
 	private class MyHeaderMouseListener extends MouseAdapter {
@@ -300,10 +277,10 @@ public class OldTable {
 		jtable.getColumnModel().getColumn(view(sort)).setHeaderValue(header[sort] + (reverse ? "  \\/" : "  /\\"));
 		
 		// Save the row selections
-		for (int r : jtable.getSelectedRows()) rows.get(r).selected = true; // Mark selected rows in their TableRow objects
+		for (int r : jtable.getSelectedRows()) rows.get(r).selected = true; // Mark selected rows in their Row objects
 
-		// Sort our rows ArrayList of TableRow objects into a new order
-		Comparator<TableRow> comparator = comparators[sort]; // Use the Comparator object for the clicked column
+		// Sort our rows ArrayList of Row objects into a new order
+		Comparator<Row> comparator = comparators[sort]; // Use the Comparator object for the clicked column
 		if (reverse) comparator = Collections.reverseOrder(comparator); // Sort into descending order
 		Collections.sort(rows, comparator);
 
@@ -311,7 +288,7 @@ public class OldTable {
 		model.fireTableDataChanged(); // This kills the selection
 
 		// Restore the row selections
-		for (TableRow row : rows) {
+		for (Row row : rows) {
 			if (row.selected) {
 				int r = find(row);
 				jtable.addRowSelectionInterval(r, r); // Select the row with row index r

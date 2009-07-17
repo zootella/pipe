@@ -1,10 +1,14 @@
-package base.user;
+package base.user.panel;
 
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+
+import base.user.Dialog;
+import base.user.Graphics;
+
 
 public class Panel {
 	
@@ -14,6 +18,7 @@ public class Panel {
 	public Panel() {
 		panel = new JPanel(); // Make our JPanel object, and configure it for grid bag layout
 		panel.setLayout(new GridBagLayout());
+		panel.setBackground(Graphics.background());
 	}
 
 	/** Make a new Panel to arrange user inteface components like buttons in a single horizontal row. */

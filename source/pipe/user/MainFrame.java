@@ -27,6 +27,7 @@ public class MainFrame extends Close {
 		panel = new JPanel();
 		pipes = new JPanel();
 		
+		frame.setUndecorated(true);
 		frame.setResizable(false);
 		frame.setLayout(null);
 		panel.setLayout(null);
@@ -49,8 +50,8 @@ public class MainFrame extends Close {
 
 	public void fill() {
 		
-		final int border = 5;
-		final int title = 23;
+		final int border = 0;
+		final int title = 0;
 		
 		int x = PipePanel.width;
 		int y = program.core.pipes.pipes.size() * PipePanel.height;

@@ -1,23 +1,23 @@
 package pipe.user;
 
+import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
-import pipe.core.Here;
 import pipe.main.Program;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.View;
-import base.user.Cell;
-import base.user.Panel;
 import base.user.Refresh;
 import base.user.Screen;
-import base.user.SelectTextArea;
+import base.user.panel.Cell;
+import base.user.panel.Panel;
+import base.user.widget.Button;
+import base.user.widget.Label;
+import base.user.widget.SelectTextArea;
 
 /** The Info window that shows advanced statistics and diagnostic information. */
 public class InfoFrame extends Close {
@@ -34,20 +34,19 @@ public class InfoFrame extends Close {
 		panel = new Panel();
 		panel.border();
 		
-		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("LAN IP address")));
-		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Internet IP address")));
-		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Age of information")));
+		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap((new Label("LAN IP address")).label));
+		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap((new Label("Internet IP address")).label));
+		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap((new Label("Age of information")).label));
 		
 		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(lan).fillWide());
 		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(net).fillWide());
 		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(age).fillWide());
 		
-		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(new JButton(refreshAction)).grow());
+		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap((new Button(refreshAction)).button).grow());
 		
 		
-		
-		// make these dialogs have a white background with the little font in light gray
 
+		// make these dialogs have a white background with the little font in light gray
 
 		// Make our inner View object and connect the Model below to it
 		view = new MyView();

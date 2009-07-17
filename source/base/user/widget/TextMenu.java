@@ -1,4 +1,4 @@
-package base.user;
+package base.user.widget;
 
 
 import java.awt.event.ActionEvent;
@@ -11,9 +11,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.text.JTextComponent;
 
 
+
 import base.data.Text;
 import base.desktop.Clipboard;
 import base.process.Mistake;
+import base.user.Graphics;
 
 public class TextMenu {
 
@@ -32,6 +34,11 @@ public class TextMenu {
 		pasteItem = new JMenuItem("Paste");
 		deleteItem = new JMenuItem("Delete");
 		selectAllItem = new JMenuItem("Select All");
+		cutItem.setFont(Graphics.font());
+		copyItem.setFont(Graphics.font());
+		pasteItem.setFont(Graphics.font());
+		deleteItem.setFont(Graphics.font());
+		selectAllItem.setFont(Graphics.font());
 		menu = new JPopupMenu(); // Make the menu
 		menu.add(cutItem); // Add the menu items to the menu
 		menu.add(copyItem);

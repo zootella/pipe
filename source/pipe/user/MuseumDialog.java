@@ -11,10 +11,10 @@ import pipe.core.museum.ReceivePipe;
 import pipe.core.museum.SendPipe;
 import pipe.main.Program;
 import base.process.Mistake;
-import base.user.Cell;
 import base.user.Dialog;
-import base.user.Panel;
 import base.user.Screen;
+import base.user.panel.Cell;
+import base.user.panel.Panel;
 
 public class MuseumDialog {
 	

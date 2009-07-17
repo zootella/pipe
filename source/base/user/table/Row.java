@@ -1,4 +1,4 @@
-package base.user;
+package base.user.table;
 
 import base.state.Model;
 import base.state.View;

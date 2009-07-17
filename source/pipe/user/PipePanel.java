@@ -8,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 import base.process.Mistake;
+import base.user.widget.Button;
 
 import pipe.core.museum.Pipe;
 import pipe.main.Program;

@@ -13,12 +13,12 @@ import javax.swing.event.DocumentListener;
 
 
 import base.exception.DataException;
-import base.user.Cell;
 import base.user.Dialog;
-import base.user.Panel;
 import base.user.Screen;
-import base.user.SelectTextArea;
-import base.user.TextMenu;
+import base.user.panel.Cell;
+import base.user.panel.Panel;
+import base.user.widget.SelectTextArea;
+import base.user.widget.TextMenu;
 import base.web.Url;
 
 public class UrlTestBox {

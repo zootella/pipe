@@ -1,6 +1,10 @@
-package base.user;
+package base.user.widget;
 
 import javax.swing.JTextArea;
+
+import base.user.Graphics;
+
+
 
 /** A wrapping, read-only text area that lets the user select and copy. */
 public class SelectTextArea extends JTextArea {
@@ -15,6 +19,7 @@ public class SelectTextArea extends JTextArea {
 		setOpaque(false);
 		setBorder(null);
 		setEditable(false);
+		setFont(Graphics.font());
 		new TextMenu(this);
 	}
 }

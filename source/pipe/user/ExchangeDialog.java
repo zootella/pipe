@@ -18,11 +18,11 @@ import base.desktop.Clipboard;
 import base.exception.ChopException;
 import base.exception.DataException;
 import base.process.Mistake;
-import base.user.Cell;
 import base.user.Dialog;
-import base.user.Panel;
 import base.user.Screen;
-import base.user.TextMenu;
+import base.user.panel.Cell;
+import base.user.panel.Panel;
+import base.user.widget.TextMenu;
 
 public class ExchangeDialog {
 	

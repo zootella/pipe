@@ -6,9 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import base.state.Close;
-import base.user.Cell;
-import base.user.Panel;
 import base.user.Screen;
+import base.user.panel.Cell;
+import base.user.panel.Panel;
 import pipe.core.museum.Pipe;
 import pipe.main.Program;
 

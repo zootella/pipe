@@ -17,13 +17,13 @@ import javax.swing.SwingUtilities;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.View;
-import base.user.Cell;
 import base.user.Dialog;
-import base.user.Panel;
 import base.user.Refresh;
 import base.user.Screen;
-import base.user.SelectTextArea;
-import base.user.TextMenu;
+import base.user.panel.Cell;
+import base.user.panel.Panel;
+import base.user.widget.SelectTextArea;
+import base.user.widget.TextMenu;
 
 /** A Hash dialog on the screen that views a HashMachine below. */
 public class HashDialog extends Close {

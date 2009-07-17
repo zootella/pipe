@@ -1,4 +1,4 @@
-package base.user;
+package base.user.widget;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -19,7 +19,7 @@ public class Grip {
 		
 		label = new JLabel();
 		label.setBounds(rectangle);
-	    label.setBackground(new Color(0xfee5ac));
+	    label.setBackground(new Color(0xdedede));
 	    label.setOpaque(true);
 	    
 	    label.addMouseListener(new MyMouseListener());
