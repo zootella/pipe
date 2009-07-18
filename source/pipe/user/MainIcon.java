@@ -18,7 +18,6 @@ import pipe.main.Program;
 import base.exception.PlatformException;
 import base.process.Mistake;
 import base.state.Close;
-import base.user.Graphics;
 
 public class MainIcon extends Close {
 	
@@ -40,8 +39,8 @@ public class MainIcon extends Close {
         MenuItem restoreItem = new MenuItem("Restore"); // This is an AWTMenuItem, not a Swing JMenuItem
         MenuItem exitItem = new MenuItem("Exit");
         
-        restoreItem.setFont(Graphics.font());
-        exitItem.setFont(Graphics.font());
+        restoreItem.setFont(Skin.font());
+        exitItem.setFont(Skin.font());
 
         restoreItem.addActionListener(listen);
         exitItem.addActionListener(listen);

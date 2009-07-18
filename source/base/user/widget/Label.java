@@ -2,14 +2,17 @@ package base.user.widget;
 
 import javax.swing.JLabel;
 
-import base.user.Graphics;
+import pipe.user.Skin;
+
+
+
 
 public class Label {
 	
 	public Label(String s) {
 		label = new JLabel(s);
-		label.setFont(Graphics.font());
-		label.setForeground(Graphics.foreground());
+		label.setFont(Skin.font());
+//		label.setForeground(Skin.ink());
 	}
 	
 	

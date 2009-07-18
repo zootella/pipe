@@ -19,7 +19,7 @@ public class Grip {
 		
 		label = new JLabel();
 		label.setBounds(rectangle);
-	    label.setBackground(new Color(0xdedede));
+	    label.setBackground(new Color(0xdedede)); //TODO remove this later
 	    label.setOpaque(true);
 	    
 	    label.addMouseListener(new MyMouseListener());
@@ -47,9 +47,9 @@ public class Grip {
 			try {
 
 				// Nudge the frame the distance and direction of the drag
-				frame.setLocation(new Point(
+				frame.setLocation(
 					frame.getLocation().x + m.getPoint().x - press.x,
-					frame.getLocation().y + m.getPoint().y - press.y));
+					frame.getLocation().y + m.getPoint().y - press.y);
 
 			} catch (Exception e) { Mistake.stop(e); }
 		}

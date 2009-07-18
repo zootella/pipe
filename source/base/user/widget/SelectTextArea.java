@@ -1,8 +1,13 @@
 package base.user.widget;
 
+import java.awt.Color;
+
 import javax.swing.JTextArea;
 
-import base.user.Graphics;
+import pipe.user.Skin;
+
+
+
 
 
 
@@ -19,7 +24,14 @@ public class SelectTextArea extends JTextArea {
 		setOpaque(false);
 		setBorder(null);
 		setEditable(false);
-		setFont(Graphics.font());
+		setFont(Skin.font());
+//		setForeground(Skin.ink());
+		
+		setSelectedTextColor(Skin.highInk());
+		setSelectionColor(Skin.high());
+		
+		
+		
 		new TextMenu(this);
 	}
 }
