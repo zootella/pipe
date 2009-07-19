@@ -25,10 +25,11 @@ public class SelectTextArea extends JTextArea {
 		setBorder(null);
 		setEditable(false);
 		setFont(Skin.font());
-//		setForeground(Skin.ink());
+		/*
 		
 		setSelectedTextColor(Skin.highInk());
 		setSelectionColor(Skin.high());
+		*/
 		
 		
 		

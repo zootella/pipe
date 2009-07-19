@@ -54,6 +54,7 @@ public class Dialog {
 			
 		// Make a Swing JFileChooser object
 		JFileChooser chooser = new JFileChooser();
+		
 		chooser.setFileSelectionMode(mode); // Have it limit the choice to just files or just folders
 		
 		// Have our JFileChooser show the user the standard dialog box

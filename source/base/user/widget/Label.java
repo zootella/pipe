@@ -11,8 +11,11 @@ public class Label {
 	
 	public Label(String s) {
 		label = new JLabel(s);
+		/*
 		label.setFont(Skin.font());
 //		label.setForeground(Skin.ink());
+ * 
+ */
 	}
 	
 	

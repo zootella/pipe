@@ -14,14 +14,18 @@ public class Button {
 	
 	public Button(Action action) {
 		button = new JButton(action);
+		/*
 		button.setFont(Skin.font());
 		button.setBackground(Skin.page());
+		*/
 	}
 	
 	public Button(Action action, Rectangle rectangle) {
 		button = new JButton(action);
+		/*
 		button.setFont(Skin.font());
 		button.setBackground(Skin.page());
+		 */
 		button.setLayout(null);
 		button.setBounds(rectangle);
 	}

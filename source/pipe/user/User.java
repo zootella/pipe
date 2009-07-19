@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.BorderUIResource;
@@ -11,6 +12,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
 import pipe.main.Program;
+import base.exception.PlatformException;
 import base.state.Close;
 
 public class User extends Close {
@@ -19,34 +21,42 @@ public class User extends Close {
 	
 	public User(Program program) {
 		
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) { throw new PlatformException(e); }
+
+		
 		/*
-		OceanTheme.getSecondary1();
-		*/
-		
-		
 		MetalLookAndFeel.setCurrentTheme(new MyTheme());
-//		UIManager.setLookAndFeel(new MetalLookAndFeel()); 
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+		} catch (Exception e) { throw new PlatformException(e); }
+		
 		
 		UIDefaults defaults = UIManager.getDefaults();
+		 */
 		
-		for (Object key: defaults.keySet())
-		    System.out.println(key);
-		
+
+		//necessary
+		/*
 		defaults.put("MenuItem.selectionBackground", Skin.high()); // selection color
 		defaults.put("MenuItem.selectionForeground", Skin.highInk()); // selected text color
+		*/
+		
+		//unnecessary
 		/*
 		defaults.put("MenuItem.background", Skin.page()); //background color
 		defaults.put("MenuItem.disabledForeground", Skin.ghost()); // grayed out text color
 		defaults.put("MenuItem.foreground", Skin.ink()); // text color
-		/*
 		defaults.put("MenuItem.acceleratorForeground", Color.red); //dn
 		defaults.put("MenuItem.acceleratorSelectionForeground", Color.red); //dn
 		defaults.put("PopupMenu.border", new LineBorder(Color.red));
 		defaults.put("MenuItem.border", new LineBorder(Color.red));//disaster
 		defaults.put("Menu.border", new LineBorder(Color.red));//nothing
+		defaults.put("InternalFrame.border", new LineBorder(Color.red));//nothing
 		 */
 
-		defaults.put("InternalFrame.border", new LineBorder(Color.red));
 		
 		/*
 		BorderUIResource border = (BorderUIResource)defaults.get("PopupMenu.border");

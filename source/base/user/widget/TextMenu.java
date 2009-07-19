@@ -36,11 +36,13 @@ public class TextMenu {
 		pasteItem = new JMenuItem("Paste");
 		deleteItem = new JMenuItem("Delete");
 		selectAllItem = new JMenuItem("Select All");
+		/*
 		cutItem.setFont(Skin.font());
 		copyItem.setFont(Skin.font());
 		pasteItem.setFont(Skin.font());
 		deleteItem.setFont(Skin.font());
 		selectAllItem.setFont(Skin.font());
+		*/
 		menu = new JPopupMenu(); // Make the menu
 		menu.add(cutItem); // Add the menu items to the menu
 		menu.add(copyItem);

@@ -39,8 +39,10 @@ public class MainIcon extends Close {
         MenuItem restoreItem = new MenuItem("Restore"); // This is an AWTMenuItem, not a Swing JMenuItem
         MenuItem exitItem = new MenuItem("Exit");
         
+        /*
         restoreItem.setFont(Skin.font());
         exitItem.setFont(Skin.font());
+        */
 
         restoreItem.addActionListener(listen);
         exitItem.addActionListener(listen);

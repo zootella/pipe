@@ -3,23 +3,22 @@ package pipe.user;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 import pipe.main.Main;
 import pipe.main.Program;
-import base.exception.DiskException;
 import base.exception.DataException;
+import base.exception.DiskException;
 import base.file.Path;
 import base.process.Mistake;
 import base.user.Dialog;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.widget.TextMenu;
+import base.user.widget.Button;
+import base.user.widget.Label;
+import base.user.widget.TextField;
 
 public class FolderDialog {
 	
@@ -38,21 +37,20 @@ public class FolderDialog {
 		okAction = new OkAction();
 		cancelAction = new CancelAction();
 		
-		folder = new JTextField();
-		new TextMenu(folder);
+		folder = new TextField();
 
 		dialog = new JDialog(program.user.main.frame, title, true); // true to make a modal dialog
 		
 		Panel input = Panel.row();
-		input.add(Cell.wrap(folder).fillWide());
-		input.add(Cell.wrap(new JButton(browseAction)).upperRight());
+		input.add(Cell.wrap(folder.field).fillWide());
+		input.add(Cell.wrap(new Button(browseAction).button).upperRight());
 
 		Panel buttons = Panel.row();
-		buttons.add(Cell.wrap(new JButton(okAction)));
-		buttons.add(Cell.wrap(new JButton(cancelAction)));
+		buttons.add(Cell.wrap(new Button(okAction).button));
+		buttons.add(Cell.wrap(new Button(cancelAction).button));
 
 		Panel panel = Panel.column().border();
-		panel.add(Cell.wrap(new JLabel(instruction)));
+		panel.add(Cell.wrap(new Label(instruction).label));
 		panel.add(Cell.wrap(input.panel).fillWide().growTall());
 		panel.add(Cell.wrap(buttons.panel).lowerRight());
 		
@@ -64,7 +62,7 @@ public class FolderDialog {
 
 	private final Program program;
 	private final JDialog dialog;
-	private final JTextField folder;
+	private final TextField folder;
 	private Path path;
 	
 	// Action
@@ -75,7 +73,7 @@ public class FolderDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				Dialog.chooseFolder(dialog, folder);
+				Dialog.chooseFolder(dialog, folder.field);
 				
 			} catch (Exception e) { Mistake.stop(e); }
 		}
@@ -87,7 +85,7 @@ public class FolderDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				path = check(folder.getText());
+				path = check(folder.field.getText());
 				if (path == null)
 					JOptionPane.showMessageDialog(program.user.main.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
 				else
