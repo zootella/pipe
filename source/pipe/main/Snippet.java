@@ -4,25 +4,38 @@ public class Snippet {
 
 	public static void snippet(Program program) {
 		
-		
-		
-		
-		/*
-		Data d = Message.ipRequest();
-		System.out.println(d.strike());
-		System.out.println(d.box());
 
-		boolean result = Message.isIpRequest(d);
-		System.out.println(result ? "true" : "false");
+		// what should the api be for sockets?
 		
-		d = Message.ipResponse(new IpPort("1.2.3.4:5"));
-		System.out.println(d.strike());
-		System.out.println(d.box());
+		//send
+		// you have a domain or ip and port, and want to make a new socket connection
+		// you set the time you're willing to wait
+		// when it connects, you'll chuck it into a flow chain
+		
+//		Socket socket = new Socket(update, new Address("site.com:1234"), 10 * Time.second);
+		// it starts trying to connect
+		// within 10 seconds, your update will get it and it'll be done
+		// this is actually all a fancy connect task
+		// do it from an ephemeral port, that's good in this case
+		
+		//basically, you just need to improve ConnectTask by adding the following things:
+		//takes a Site, not an IpPort
+		//times out in 4 seconds
+		//call this object Connect
+		
+		
+		
 
-		IpPort ipPort = Message.isIpResponse(d);
-		System.out.println(ipPort.toString());
-		*/
+		//receive
+		// you want to look at a new socket when it connects
+		// you want to know when it connected
+		// you want to see the data it sent
+		// you then either grab it or discard it
 		
+		//call this object Accept
+		
+		
+		//have Packets take a Site
 		
 		
 
