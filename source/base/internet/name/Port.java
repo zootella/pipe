@@ -1,5 +1,6 @@
 package base.internet.name;
 
+import base.data.Number;
 import base.exception.DataException;
 
 public class Port {
@@ -12,6 +13,11 @@ public class Port {
 	public static final int maximum = 65535;
 	
 	// Make
+	
+	/** Make sure s is "0" through "65535" or throw a DataException. */
+	public Port(String s) {
+		this(Number.toInt(s));
+	}
 
 	/** Make sure port is 0 through 65535 or throw a DataException. */
 	public Port(int port) {

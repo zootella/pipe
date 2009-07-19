@@ -8,21 +8,20 @@ import base.data.Outline;
 import base.data.Text;
 import base.exception.DataException;
 import base.exception.ProgramException;
-import base.exception.TimeException;
 import base.internet.name.Ip;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.packet.Packet;
-import base.internet.packet.Packets;
 import base.internet.packet.PacketReceive;
+import base.internet.packet.Packets;
 import base.internet.web.DomainTask;
 import base.process.Mistake;
 import base.state.Close;
-import base.state.Pulse;
+import base.state.Egg;
+import base.state.Once;
 import base.state.Receive;
 import base.state.Update;
 import base.time.Now;
-import base.time.Time;
 
 /** A Here figures out what our IP address is once and right now. */
 public class Here extends Close {
@@ -41,7 +40,8 @@ public class Here extends Close {
 		// Save and connect our Update objects
 		this.up = up;
 		receive = new MyReceive();
-		pulse = new Pulse(receive, Time.second);
+		egg = new Egg(receive);
+		sent = new Once();
 		update = new Update(receive);
 		update.send();
 	}
@@ -50,11 +50,11 @@ public class Here extends Close {
 	private final Update up;
 	private final Update update;
 	private final Packets packets;
-	private final Pulse pulse;
+	private final Egg egg;
+	private final Once sent;
 	
 	private DomainTask domain;
 	private IpPort center;
-	private Now sent;
 	
 	private IpPort lan;
 	private IpPort net;
@@ -64,7 +64,7 @@ public class Here extends Close {
 		if (already()) return;
 		
 		packets.remove(packetReceive);
-		close(pulse);
+		close(egg);
 		close(domain);
 	}
 
@@ -94,6 +94,9 @@ public class Here extends Close {
 		public void receive() throws Exception {
 			if (closed()) return;
 			try {
+
+				// Throw a TimeException if we've been trying to finish for more than 4 seconds
+				egg.check();
 				
 				// Get our fake internal LAN IP address
 				if (lan == null)
@@ -106,14 +109,8 @@ public class Here extends Close {
 					center = new IpPort(domain.result(), new Port(Number.toInt(Text.after(Center.site, ":"))));
 
 				// Send the central server a UDP packet to find out what our IP address is
-				if (center != null && net == null && sent == null) {
+				if (center != null && net == null && sent.once())
 					packets.send((new Outline("aq")).toData(), center);
-					sent = new Now();
-				}
-
-				// Don't wait too long for the response
-				if (sent != null && sent.expired(4 * Time.second))
-					throw new TimeException();
 
 			} catch (ProgramException e) { exception = e; close(me()); up.send(); }
 		}

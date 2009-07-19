@@ -148,6 +148,6 @@ public class Number {
 	private static long textToNumber(String s, int base) {
 		try {
 			return Long.parseLong(s, base);
-		} catch (NumberFormatException e) { throw new DataException(); }
+		} catch (NumberFormatException e) { throw new DataException(e); }
 	}
 }
