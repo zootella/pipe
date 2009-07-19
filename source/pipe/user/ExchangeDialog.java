@@ -5,9 +5,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import pipe.main.Main;
 import pipe.main.Program;
@@ -19,10 +19,7 @@ import base.process.Mistake;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.widget.Button;
-import base.user.widget.Label;
 import base.user.widget.TextArea;
-import base.user.widget.TextMenu;
 
 public class ExchangeDialog {
 	
@@ -50,12 +47,12 @@ public class ExchangeDialog {
 		row.add(Cell.wrap(new JButton(new CancelAction())));
 		
 		Panel panel = (new Panel()).border();
-		panel.place(0, 0, 1, 1, 0, 0, 0, 1, Cell.wrap(new Label("Give this code to your friend:").label));
-		panel.place(1, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new Label("Enter your friend's code here:").label));
+		panel.place(0, 0, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("Give this code to your friend:")));
+		panel.place(1, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("Enter your friend's code here:")));
 		panel.place(0, 1, 1, 1, 1, 0, 0, 1, Cell.wrap(homeScroll).fill());
 		panel.place(1, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(awayScroll).fill());
-		panel.place(0, 2, 1, 1, 1, 0, 0, 1, Cell.wrap(new Button(new CopyAction()).button));
-		panel.place(1, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new Button(new PasteAction()).button));
+		panel.place(0, 2, 1, 1, 1, 0, 0, 1, Cell.wrap(new JButton(new CopyAction())));
+		panel.place(1, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JButton(new PasteAction())));
 		panel.place(0, 3, 2, 1, 1, 0, 0, 0, Cell.wrap(row.panel).lowerRight());
 		
 		home.area.setText(homeOutline.toString());

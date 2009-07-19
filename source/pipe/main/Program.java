@@ -12,7 +12,7 @@ public class Program extends Close {
 	
 	public Program() {
 		
-		// Tell Java Swing to try to look native
+		// Have Java Swing try to look native
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) { throw new PlatformException(e); }

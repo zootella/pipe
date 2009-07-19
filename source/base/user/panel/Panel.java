@@ -6,11 +6,7 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import pipe.user.Skin;
-
-
 import base.user.Dialog;
-
 
 public class Panel {
 	

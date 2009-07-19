@@ -8,7 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 import base.process.Mistake;
-import base.user.widget.Button;
+import base.user.skin.SkinButton;
 
 import pipe.core.museum.Pipe;
 import pipe.main.Program;
@@ -38,8 +38,8 @@ public class PipePanel {
 		infoAction = new InfoAction();
 		killAction = new KillAction();
 		
-		Button info = new Button(new InfoAction(), new Rectangle(320, 165, 80, 25));
-		Button kill = new Button(new KillAction(), new Rectangle(410, 165, 80, 25));
+		SkinButton info = new SkinButton(new InfoAction(), new Rectangle(320, 165, 80, 25));
+		SkinButton kill = new SkinButton(new KillAction(), new Rectangle(410, 165, 80, 25));
 		
 		panel.add(info.button);
 		panel.add(kill.button);

@@ -22,7 +22,7 @@ import base.user.Refresh;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.widget.SelectTextArea;
+import base.user.widget.TextValue;
 import base.user.widget.TextMenu;
 
 /** A Hash dialog on the screen that views a HashMachine below. */
@@ -50,9 +50,9 @@ public class HashDialog extends Close {
 		// Make dialog contents
 		path = new JTextField(); // Path box
 		new TextMenu(path);
-		status = new SelectTextArea(); // Status text
-		size = new SelectTextArea();
-		value = new SelectTextArea();
+		status = new TextValue(); // Status text
+		size = new TextValue();
+		value = new TextValue();
 		browse = new BrowseAction(); // Actions behind buttons
 		start = new StartAction();
 		stop = new StopAction();
@@ -75,9 +75,9 @@ public class HashDialog extends Close {
 		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Size")));
 		panel.place(0, 3, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Value")));
 		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(bar1.panel).fillWide());
-		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(status).fillWide());
-		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(size).fillWide());
-		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(value).fillWide());
+		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(status.area).fillWide());
+		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(size.area).fillWide());
+		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(value.area).fillWide());
 		panel.place(1, 4, 1, 1, 1, 1, 0, 0, Cell.wrap(bar2.panel).lowerLeft().grow());
 
 		// Make our Hash object that will do what this dialog shows
@@ -101,7 +101,7 @@ public class HashDialog extends Close {
 
 	private final JDialog dialog;
 	private final JTextField path;
-	private final SelectTextArea status, size, value;
+	private final TextValue status, size, value;
 	private final Action browse, start, stop, reset, close;
 
 	/** Make this object put away resources and not change or work again. */
@@ -174,9 +174,9 @@ public class HashDialog extends Close {
 
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
-			Refresh.text(status, hash.model.status());
-			Refresh.text(size, hash.model.size());
-			Refresh.text(value, hash.model.value());
+			Refresh.text(status.area, hash.model.status());
+			Refresh.text(size.area, hash.model.size());
+			Refresh.text(value.area, hash.model.value());
 			
 			Refresh.edit(path, hash.model.canStart());
 			Refresh.can(browse, hash.model.canStart());

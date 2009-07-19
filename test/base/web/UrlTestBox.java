@@ -17,7 +17,7 @@ import base.user.Dialog;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.widget.SelectTextArea;
+import base.user.widget.TextValue;
 import base.user.widget.TextMenu;
 import base.web.Url;
 
@@ -33,11 +33,11 @@ public class UrlTestBox {
 
 	private JDialog dialog;
 	private JTextField in;
-	private SelectTextArea address, get, protocol, user, pass, site, port, path;
-	private SelectTextArea uriToString;
-	private SelectTextArea uriScheme, uriHost, uriPort;
-	private SelectTextArea uriSchemeSpecificPart, uriAuthority, uriUserInfo, uriPath, uriQuery, uriFragment;
-	private SelectTextArea rawSchemeSpecificPart, rawAuthority, rawUserInfo, rawPath, rawQuery, rawFragment;
+	private TextValue address, get, protocol, user, pass, site, port, path;
+	private TextValue uriToString;
+	private TextValue uriScheme, uriHost, uriPort;
+	private TextValue uriSchemeSpecificPart, uriAuthority, uriUserInfo, uriPath, uriQuery, uriFragment;
+	private TextValue rawSchemeSpecificPart, rawAuthority, rawUserInfo, rawPath, rawQuery, rawFragment;
 
 	public UrlTestBox() {
 
@@ -46,34 +46,34 @@ public class UrlTestBox {
 		in.getDocument().addDocumentListener(new MyDocumentListener());
 		new TextMenu(in);
 		
-		address  = new SelectTextArea();
-		get      = new SelectTextArea();
-		protocol = new SelectTextArea();
-		user     = new SelectTextArea();
-		pass     = new SelectTextArea();
-		site     = new SelectTextArea();
-		port     = new SelectTextArea();
-		path     = new SelectTextArea();
+		address  = new TextValue();
+		get      = new TextValue();
+		protocol = new TextValue();
+		user     = new TextValue();
+		pass     = new TextValue();
+		site     = new TextValue();
+		port     = new TextValue();
+		path     = new TextValue();
 		
-		uriToString = new SelectTextArea();
+		uriToString = new TextValue();
 		
-		uriScheme = new SelectTextArea();
-		uriHost   = new SelectTextArea();
-		uriPort   = new SelectTextArea();
+		uriScheme = new TextValue();
+		uriHost   = new TextValue();
+		uriPort   = new TextValue();
 		
-		uriSchemeSpecificPart = new SelectTextArea();
-		uriAuthority          = new SelectTextArea();
-		uriUserInfo           = new SelectTextArea();
-		uriPath               = new SelectTextArea();
-		uriQuery              = new SelectTextArea();
-		uriFragment           = new SelectTextArea();
+		uriSchemeSpecificPart = new TextValue();
+		uriAuthority          = new TextValue();
+		uriUserInfo           = new TextValue();
+		uriPath               = new TextValue();
+		uriQuery              = new TextValue();
+		uriFragment           = new TextValue();
 		
-		rawSchemeSpecificPart = new SelectTextArea();
-		rawAuthority          = new SelectTextArea();
-		rawUserInfo           = new SelectTextArea();
-		rawPath               = new SelectTextArea();
-		rawQuery              = new SelectTextArea();
-		rawFragment           = new SelectTextArea();
+		rawSchemeSpecificPart = new TextValue();
+		rawAuthority          = new TextValue();
+		rawUserInfo           = new TextValue();
+		rawPath               = new TextValue();
+		rawQuery              = new TextValue();
+		rawFragment           = new TextValue();
 
 		// Lay out controls
 		Panel panel = new Panel();
@@ -109,34 +109,34 @@ public class UrlTestBox {
 		panel.place(0, 23, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("raw query")));
 		panel.place(0, 24, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("raw fragment")));
 
-		panel.place(1,  1, 1, 1, 2, 1, 0, 0, Cell.wrap(address).fillWide());
-		panel.place(1,  2, 1, 1, 0, 1, 0, 0, Cell.wrap(get).fillWide());
-		panel.place(1,  3, 1, 1, 0, 1, 0, 0, Cell.wrap(protocol).fillWide());
-		panel.place(1,  4, 1, 1, 0, 1, 0, 0, Cell.wrap(user).fillWide());
-		panel.place(1,  5, 1, 1, 0, 1, 0, 0, Cell.wrap(pass).fillWide());
-		panel.place(1,  6, 1, 1, 0, 1, 0, 0, Cell.wrap(site).fillWide());
-		panel.place(1,  7, 1, 1, 0, 1, 0, 0, Cell.wrap(port).fillWide());
-		panel.place(1,  8, 1, 1, 0, 1, 0, 0, Cell.wrap(path).fillWide());
+		panel.place(1,  1, 1, 1, 2, 1, 0, 0, Cell.wrap(address.area).fillWide());
+		panel.place(1,  2, 1, 1, 0, 1, 0, 0, Cell.wrap(get.area).fillWide());
+		panel.place(1,  3, 1, 1, 0, 1, 0, 0, Cell.wrap(protocol.area).fillWide());
+		panel.place(1,  4, 1, 1, 0, 1, 0, 0, Cell.wrap(user.area).fillWide());
+		panel.place(1,  5, 1, 1, 0, 1, 0, 0, Cell.wrap(pass.area).fillWide());
+		panel.place(1,  6, 1, 1, 0, 1, 0, 0, Cell.wrap(site.area).fillWide());
+		panel.place(1,  7, 1, 1, 0, 1, 0, 0, Cell.wrap(port.area).fillWide());
+		panel.place(1,  8, 1, 1, 0, 1, 0, 0, Cell.wrap(path.area).fillWide());
 		
-		panel.place(1,  9, 1, 1, 2, 1, 0, 0, Cell.wrap(uriToString).fillWide());
+		panel.place(1,  9, 1, 1, 2, 1, 0, 0, Cell.wrap(uriToString.area).fillWide());
 		
-		panel.place(1, 10, 1, 1, 2, 1, 0, 0, Cell.wrap(uriScheme).fillWide());
-		panel.place(1, 11, 1, 1, 0, 1, 0, 0, Cell.wrap(uriHost).fillWide());
-		panel.place(1, 12, 1, 1, 0, 1, 0, 0, Cell.wrap(uriPort).fillWide());
+		panel.place(1, 10, 1, 1, 2, 1, 0, 0, Cell.wrap(uriScheme.area).fillWide());
+		panel.place(1, 11, 1, 1, 0, 1, 0, 0, Cell.wrap(uriHost.area).fillWide());
+		panel.place(1, 12, 1, 1, 0, 1, 0, 0, Cell.wrap(uriPort.area).fillWide());
 
-		panel.place(1, 13, 1, 1, 2, 1, 0, 0, Cell.wrap(uriSchemeSpecificPart).fillWide());
-		panel.place(1, 14, 1, 1, 0, 1, 0, 0, Cell.wrap(uriAuthority).fillWide());
-		panel.place(1, 15, 1, 1, 0, 1, 0, 0, Cell.wrap(uriUserInfo).fillWide());
-		panel.place(1, 16, 1, 1, 0, 1, 0, 0, Cell.wrap(uriPath).fillWide());
-		panel.place(1, 17, 1, 1, 0, 1, 0, 0, Cell.wrap(uriQuery).fillWide());
-		panel.place(1, 18, 1, 1, 0, 1, 0, 0, Cell.wrap(uriFragment).fillWide());
+		panel.place(1, 13, 1, 1, 2, 1, 0, 0, Cell.wrap(uriSchemeSpecificPart.area).fillWide());
+		panel.place(1, 14, 1, 1, 0, 1, 0, 0, Cell.wrap(uriAuthority.area).fillWide());
+		panel.place(1, 15, 1, 1, 0, 1, 0, 0, Cell.wrap(uriUserInfo.area).fillWide());
+		panel.place(1, 16, 1, 1, 0, 1, 0, 0, Cell.wrap(uriPath.area).fillWide());
+		panel.place(1, 17, 1, 1, 0, 1, 0, 0, Cell.wrap(uriQuery.area).fillWide());
+		panel.place(1, 18, 1, 1, 0, 1, 0, 0, Cell.wrap(uriFragment.area).fillWide());
 		
-		panel.place(1, 19, 1, 1, 2, 1, 0, 0, Cell.wrap(rawSchemeSpecificPart).fillWide());
-		panel.place(1, 20, 1, 1, 0, 1, 0, 0, Cell.wrap(rawAuthority).fillWide());
-		panel.place(1, 21, 1, 1, 0, 1, 0, 0, Cell.wrap(rawUserInfo).fillWide());
-		panel.place(1, 22, 1, 1, 0, 1, 0, 0, Cell.wrap(rawPath).fillWide());
-		panel.place(1, 23, 1, 1, 0, 1, 0, 0, Cell.wrap(rawQuery).fillWide());
-		panel.place(1, 24, 1, 1, 0, 1, 0, 0, Cell.wrap(rawFragment).fillWide());
+		panel.place(1, 19, 1, 1, 2, 1, 0, 0, Cell.wrap(rawSchemeSpecificPart.area).fillWide());
+		panel.place(1, 20, 1, 1, 0, 1, 0, 0, Cell.wrap(rawAuthority.area).fillWide());
+		panel.place(1, 21, 1, 1, 0, 1, 0, 0, Cell.wrap(rawUserInfo.area).fillWide());
+		panel.place(1, 22, 1, 1, 0, 1, 0, 0, Cell.wrap(rawPath.area).fillWide());
+		panel.place(1, 23, 1, 1, 0, 1, 0, 0, Cell.wrap(rawQuery.area).fillWide());
+		panel.place(1, 24, 1, 1, 0, 1, 0, 0, Cell.wrap(rawFragment.area).fillWide());
 
 		// Make the dialog box and show it on the screen
 		dialog = Dialog.make("Url Test");
@@ -161,72 +161,72 @@ public class UrlTestBox {
 		try {
 			url = new Url(s);
 			
-			address.setText(url.address);
-			get.setText(url.get);
-			protocol.setText(url.protocol);
-			user.setText(url.user);
-			pass.setText(url.pass);
-			site.setText(url.site);
-			port.setText(url.port + "");
-			path.setText(url.path.toString());
+			address.area.setText(url.address);
+			get.area.setText(url.get);
+			protocol.area.setText(url.protocol);
+			user.area.setText(url.user);
+			pass.area.setText(url.pass);
+			site.area.setText(url.site);
+			port.area.setText(url.port + "");
+			path.area.setText(url.path.toString());
 			
 		} catch (DataException e) {
 
-			address.setText("(message exception)");
-			get.setText("");
-			protocol.setText("");
-			user.setText("");
-			pass.setText("");
-			site.setText("");
-			port.setText("");
-			path.setText("");
+			address.area.setText("(message exception)");
+			get.area.setText("");
+			protocol.area.setText("");
+			user.area.setText("");
+			pass.area.setText("");
+			site.area.setText("");
+			port.area.setText("");
+			path.area.setText("");
 		}
 		
 		URI uri;
 		try {
 			uri = new URI(s);
 			
-			uriToString.setText(say(uri.toString()));
+			uriToString.area.setText(say(uri.toString()));
 			
-			uriScheme.setText(say(uri.getScheme()));
-			uriHost.setText(say(uri.getHost()));
-			uriPort.setText(uri.getPort() + "");
+			uriScheme.area.setText(say(uri.getScheme()));
+			uriHost.area.setText(say(uri.getHost()));
+			uriPort.area.setText(uri.getPort() + "");
 			
-			uriSchemeSpecificPart.setText(say(uri.getSchemeSpecificPart()));
-			uriAuthority.setText(say(uri.getAuthority()));
-			uriUserInfo.setText(say(uri.getUserInfo()));
-			uriPath.setText(say(uri.getPath()));
-			uriQuery.setText(say(uri.getQuery()));
-			uriFragment.setText(say(uri.getFragment()));
+			uriSchemeSpecificPart.area.setText(say(uri.getSchemeSpecificPart()));
+			uriAuthority.area.setText(say(uri.getAuthority()));
+			uriUserInfo.area.setText(say(uri.getUserInfo()));
+			uriPath.area.setText(say(uri.getPath()));
+			uriQuery.area.setText(say(uri.getQuery()));
+			uriFragment.area.setText(say(uri.getFragment()));
 			
-			rawSchemeSpecificPart.setText(say(uri.getRawSchemeSpecificPart()));
-			rawAuthority.setText(say(uri.getRawAuthority()));
-			rawUserInfo.setText(say(uri.getRawUserInfo()));
-			rawPath.setText(say(uri.getRawPath()));
-			rawQuery.setText(say(uri.getRawQuery()));
-			rawFragment.setText(say(uri.getRawFragment()));
+			rawSchemeSpecificPart.area.setText(say(uri.getRawSchemeSpecificPart()));
+			rawAuthority.area.setText(say(uri.getRawAuthority()));
+			rawUserInfo.area.setText(say(uri.getRawUserInfo()));
+			rawPath.area.setText(say(uri.getRawPath()));
+			rawQuery.area.setText(say(uri.getRawQuery()));
+			rawFragment.area.setText(say(uri.getRawFragment()));
 
 		} catch (URISyntaxException e) {
 			
-			uriToString.setText("(uri syntax exception)");
+			uriToString.area.setText("(uri syntax exception)");
 			
-			uriScheme.setText("");
-			uriHost.setText("");
-			uriPort.setText("");
+			uriScheme.area.setText("");
+			uriHost.area.setText("");
+			uriPort.area.setText("");
 			
-			uriSchemeSpecificPart.setText("");
-			uriAuthority.setText("");
-			uriUserInfo.setText("");
-			uriPath.setText("");
-			uriQuery.setText("");
-			uriFragment.setText("");
+			uriSchemeSpecificPart.area.setText("");
+			uriAuthority.area.setText("");
+			uriUserInfo.area.setText("");
+			uriPath.area.setText("");
+			uriQuery.area.setText("");
+			uriFragment.area.setText("");
 			
-			rawSchemeSpecificPart.setText("");
-			rawAuthority.setText("");
-			rawUserInfo.setText("");
-			rawPath.setText("");
-			rawQuery.setText("");
-			rawFragment.setText("");
+			rawSchemeSpecificPart.area.setText("");
+			rawAuthority.area.setText("");
+			rawUserInfo.area.setText("");
+			rawPath.area.setText("");
+			rawQuery.area.setText("");
+			rawFragment.area.setText("");
 		}
 	}
 

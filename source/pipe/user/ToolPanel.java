@@ -12,7 +12,7 @@ import pipe.main.Program;
 import pipe.main.Snippet;
 import base.process.Mistake;
 import base.state.Close;
-import base.user.widget.Button;
+import base.user.skin.SkinButton;
 import base.user.widget.Grip;
 
 /** The toolbar at the top of the main window. */
@@ -40,11 +40,22 @@ public class ToolPanel {
 		exitAction = new ExitAction();
 
 		Grip grip = new Grip(main.frame, new Rectangle(10, 10, 445, 25));
-		Button close = new Button(closeAction, new Rectangle(465, 10, 25, 25));
-		Button make = new Button(makeAction, new Rectangle(10, 45, 80, 25));
-		Button info = new Button(infoAction, new Rectangle(100, 45, 80, 25));
-		Button snippet = new Button(snippetAction, new Rectangle(190, 45, 80, 25));
-		Button exit = new Button(exitAction, new Rectangle(280, 45, 80, 25));
+		SkinButton close = new SkinButton(closeAction, new Rectangle(465, 10, 25, 25));
+		SkinButton make = new SkinButton(makeAction, new Rectangle(10, 45, 80, 25));
+		SkinButton info = new SkinButton(infoAction, new Rectangle(100, 45, 80, 25));
+		SkinButton snippet = new SkinButton(snippetAction, new Rectangle(190, 45, 80, 25));
+		SkinButton exit = new SkinButton(exitAction, new Rectangle(280, 45, 80, 25));
+		
+		/*
+		 * TODO menu: arrow on windows, default on mac
+		 * 
+		 * Preferences
+		 * Information
+		 * About
+		 * -
+		 * Exit
+		 * Snippet
+		 */
 		
 		panel.add(grip.label);
 		panel.add(close.button);

@@ -1,11 +1,12 @@
 package pipe.user;
 
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import pipe.main.Program;
 import base.process.Mistake;
@@ -15,9 +16,7 @@ import base.user.Refresh;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.widget.Button;
-import base.user.widget.Label;
-import base.user.widget.SelectTextArea;
+import base.user.widget.TextValue;
 
 /** The Info window that shows advanced statistics and diagnostic information. */
 public class InfoFrame extends Close {
@@ -27,22 +26,22 @@ public class InfoFrame extends Close {
 		
 		refreshAction = new RefreshAction();
 		
-		lan = new SelectTextArea();
-		net = new SelectTextArea();
-		age = new SelectTextArea();
+		lan = new TextValue();
+		net = new TextValue();
+		age = new TextValue();
 
 		panel = new Panel();
 		panel.border();
 		
-		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap((new Label("LAN IP address")).label));
-		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap((new Label("Internet IP address")).label));
-		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap((new Label("Age of information")).label));
+		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("LAN IP address")));
+		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Internet IP address")));
+		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Age of information")));
 		
-		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(lan).fillWide());
-		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(net).fillWide());
-		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(age).fillWide());
+		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(lan.area).fillWide());
+		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(net.area).fillWide());
+		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(age.area).fillWide());
 		
-		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap((new Button(refreshAction)).button).grow());
+		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(new JButton(refreshAction)).grow());
 		
 		
 
@@ -66,9 +65,9 @@ public class InfoFrame extends Close {
 	public final JFrame frame;
 	public final Panel panel;
 	
-	private final SelectTextArea lan;
-	private final SelectTextArea net;
-	private final SelectTextArea age;
+	private final TextValue lan;
+	private final TextValue net;
+	private final TextValue age;
 	
 	
 
@@ -106,9 +105,9 @@ public class InfoFrame extends Close {
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
 			Refresh.can(refreshAction, program.core.model.canRefresh());
-			Refresh.text(lan, program.core.model.lan());
-			Refresh.text(net, program.core.model.net());
-			Refresh.text(age, program.core.model.age());
+			Refresh.text(lan.area, program.core.model.lan());
+			Refresh.text(net.area, program.core.model.net());
+			Refresh.text(age.area, program.core.model.age());
 		}
 
 		// The Model beneath closed, take this View off the screen

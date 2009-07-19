@@ -1,6 +1,5 @@
 package base.user.widget;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -10,7 +9,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.text.JTextComponent;
 
-import pipe.user.Skin;
 
 
 
@@ -36,13 +34,6 @@ public class TextMenu {
 		pasteItem = new JMenuItem("Paste");
 		deleteItem = new JMenuItem("Delete");
 		selectAllItem = new JMenuItem("Select All");
-		/*
-		cutItem.setFont(Skin.font());
-		copyItem.setFont(Skin.font());
-		pasteItem.setFont(Skin.font());
-		deleteItem.setFont(Skin.font());
-		selectAllItem.setFont(Skin.font());
-		*/
 		menu = new JPopupMenu(); // Make the menu
 		menu.add(cutItem); // Add the menu items to the menu
 		menu.add(copyItem);
@@ -70,13 +61,13 @@ public class TextMenu {
 
 	// When the user clicks the mouse in the text component, Java will call these methods
 	private class MyMouseListener extends MouseAdapter {
-		public void mousePressed(MouseEvent e) { show(e); }
-		public void mouseReleased(MouseEvent e) { show(e); }
+		public void mousePressed(MouseEvent m) { show(m); }
+		public void mouseReleased(MouseEvent m) { show(m); }
 		
 		// When we get the trigger event, if some rows are selected, show the menu
-		private void show(MouseEvent e) {
+		private void show(MouseEvent m) {
 			try {
-				if (e.isPopupTrigger()) { // Only do something if this is the correct event
+				if (m.isPopupTrigger()) { // Only do something if this is the correct event
 					
 					// Disable all the menu items, we'll enable those that can work next
 					cutItem.setEnabled(false);
@@ -105,9 +96,9 @@ public class TextMenu {
 					if (Text.hasText(component.getText())) selectAllItem.setEnabled(true);
 					
 					// Show the menu to the user
-					menu.show(e.getComponent(), e.getX(), e.getY());
+					menu.show(m.getComponent(), m.getX(), m.getY());
 				}
-			} catch (Exception x) { Mistake.stop(x); }
+			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}
 

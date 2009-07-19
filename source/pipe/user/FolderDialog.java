@@ -3,7 +3,9 @@ package pipe.user;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import pipe.main.Main;
@@ -16,8 +18,6 @@ import base.user.Dialog;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.widget.Button;
-import base.user.widget.Label;
 import base.user.widget.TextField;
 
 public class FolderDialog {
@@ -43,14 +43,14 @@ public class FolderDialog {
 		
 		Panel input = Panel.row();
 		input.add(Cell.wrap(folder.field).fillWide());
-		input.add(Cell.wrap(new Button(browseAction).button).upperRight());
+		input.add(Cell.wrap(new JButton(browseAction)).upperRight());
 
 		Panel buttons = Panel.row();
-		buttons.add(Cell.wrap(new Button(okAction).button));
-		buttons.add(Cell.wrap(new Button(cancelAction).button));
+		buttons.add(Cell.wrap(new JButton(okAction)));
+		buttons.add(Cell.wrap(new JButton(cancelAction)));
 
 		Panel panel = Panel.column().border();
-		panel.add(Cell.wrap(new Label(instruction).label));
+		panel.add(Cell.wrap(new JLabel(instruction)));
 		panel.add(Cell.wrap(input.panel).fillWide().growTall());
 		panel.add(Cell.wrap(buttons.panel).lowerRight());
 		

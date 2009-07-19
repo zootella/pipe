@@ -3,6 +3,7 @@ package pipe.user;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import pipe.core.museum.Pipe;
@@ -13,7 +14,7 @@ import base.process.Mistake;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.widget.Button;
+import base.user.skin.SkinButton;
 
 public class MuseumDialog {
 	
@@ -29,8 +30,8 @@ public class MuseumDialog {
 		this.program = program;
 		
 		Panel panel = Panel.row();
-		panel.add(Cell.wrap(new Button(new SendAction()).button));
-		panel.add(Cell.wrap(new Button(new ReceiveAction()).button));
+		panel.add(Cell.wrap(new JButton(new SendAction())));
+		panel.add(Cell.wrap(new JButton(new ReceiveAction())));
 
 		dialog = new JDialog(program.user.main.frame, "What kind of pipe do you want? (Science Museum Music)", true); // true to make a modal dialog
 		dialog.setResizable(false);
