@@ -2,10 +2,10 @@ package base.desktop;
 
 import java.awt.Desktop;
 import java.io.IOException;
-
+import java.net.URI;
 
 import base.file.Path;
-import base.web.Url;
+import base.process.Mistake;
 
 public class Open {
 
@@ -15,13 +15,13 @@ public class Open {
 	public static void file(Path path) {
 		try {
 			Desktop.getDesktop().open(path.file);
-		} catch (IOException e) {} // Don't do anything if it doesn't work
+		} catch (IOException e) { Mistake.ignore(e); } // Don't do anything if it doesn't work
 	}
 
 	/** Open the given Web address in the user's default Web browser. */
-	public static void url(Url url) {
+	public static void url(URI url) {
 		try {
-			Desktop.getDesktop().browse(url.uri);
-		} catch (IOException e) {} // Don't do anything if it doesn't work
+			Desktop.getDesktop().browse(url);
+		} catch (IOException e) { Mistake.ignore(e); } // Don't do anything if it doesn't work
 	}
 }

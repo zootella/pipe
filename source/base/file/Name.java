@@ -4,7 +4,6 @@ import pipe.main.Main;
 import base.data.Data;
 import base.data.Text;
 import base.data.TextSplit;
-import base.web.Url;
 
 /** A file name and extension, like "name.ext". */
 public class Name {
@@ -50,23 +49,6 @@ public class Name {
 	public boolean hasText() { return Text.hasText(toString()); }
 	
 	// -------- Make a new Name based on this one --------
-	
-	/**
-	 * Return a new Name that is this one, ready to save it to the disk.
-	 * Turns codes like "%20" into the characters they represent.
-	 * Replaces characters that can't appear in file names like \ / : * ? < > | " with - and '.
-	 * If number is 2 or more, adds it like "name (2).ext".
-	 * Makes the extension lower case.
-	 * Never returns a blank Name, returns the Name "Index" instead.
-	 */
-	public Name save(int number) {
-		return decode().safe().number(number).lower();
-	}
-	
-	/** Return a new Name that is this one URL-decoded, turn "File%20Name.ext" into "File Name.ext". */
-	public Name decode() {
-		return new Name(Url.decode(name), Url.decode(extension)); // Name() removes "%20" at the edges with trim()
-	}
 	
 	/** Return a new Name that is this one with safe characters, and turn blank into "Index". */
 	public Name safe() {

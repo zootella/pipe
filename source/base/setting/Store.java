@@ -5,7 +5,6 @@ import base.data.Outline;
 import base.exception.DataException;
 import base.exception.DiskException;
 import base.file.File;
-import base.file.Here;
 import base.file.Path;
 import base.state.Close;
 
@@ -15,7 +14,7 @@ public class Store extends Close {
 
 	/** Open Store.txt next to where this program is running. */
 	public Store() {
-		this(Here.folder().add("Store.txt")); // Give the next constructor the complete Path
+//		this(Here.folder().add("Store.txt")); // Give the next constructor the complete Path
 	}
 
 	/** Open the program's store file at the given path. */
