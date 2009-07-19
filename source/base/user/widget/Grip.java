@@ -47,9 +47,10 @@ public class Grip {
 			try {
 
 				// Nudge the frame the distance and direction of the drag
-				frame.setLocation(
-					frame.getLocation().x + m.getPoint().x - press.x,
-					frame.getLocation().y + m.getPoint().y - press.y);
+				if (press != null)
+					frame.setLocation(
+						frame.getLocation().x + m.getPoint().x - press.x,
+						frame.getLocation().y + m.getPoint().y - press.y);
 
 			} catch (Exception e) { Mistake.stop(e); }
 		}

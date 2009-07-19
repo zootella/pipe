@@ -38,6 +38,21 @@ public class Snippet {
 		//have Packets take a Site
 		
 		
+		
+		/*
+		//Timeout
+		//what if you had a timeout object, an egg timer
+		
+		egg = new Egg(receive, 4 * Time.second);
+		
+		close(egg); // you have to close it
+		
+		// and then in receive
+		
+		egg.check(); // this throws TimeException
+		*/
+		
+		
 
 	}
 }

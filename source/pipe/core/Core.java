@@ -5,8 +5,6 @@ import java.util.Map;
 import pipe.main.Program;
 import base.internet.name.Port;
 import base.internet.packet.Packets;
-import base.internet.socket.Sockets;
-import base.process.Mistake;
 import base.state.Close;
 import base.state.Model;
 import base.state.Pulse;
@@ -26,7 +24,7 @@ public class Core extends Close {
 		pipes = new Pipes(program);
 		
 		packets = new Packets(port);
-		sockets = new Sockets(port);
+//		sockets = new Sockets(port);
 		
 		
 		
@@ -45,7 +43,7 @@ public class Core extends Close {
 	private final Program program;
 	public final Pipes pipes;
 	public final Packets packets;
-	public final Sockets sockets;
+//	public final Sockets sockets;
 
 	private Here here;
 	public Here.Result hereResult;
