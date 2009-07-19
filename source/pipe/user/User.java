@@ -22,9 +22,6 @@ public class User extends Close {
 	public User(Program program) {
 		
 		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) { throw new PlatformException(e); }
 
 		
 		/*
