@@ -6,8 +6,11 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
+import pipe.main.Main;
 import pipe.main.Program;
 import pipe.main.Snippet;
 import base.process.Mistake;
@@ -27,52 +30,50 @@ public class ToolPanel {
 	public ToolPanel(MainFrame main) {
 		this.program = main.program;
 
+		closeAction = new CloseAction();
+		makeAction = new MakeAction();
+		menuAction = new MenuAction();
+		snippetAction = new SnippetAction();
+		preferencesAction = new PreferencesAction();
+		informationAction = new InformationAction();
+		aboutAction = new AboutAction();
+		exitAction = new ExitAction();
+		
+		menu = new JPopupMenu();
+		if (!Main.release)
+			menu.add(new JMenuItem(snippetAction));
+		menu.add(new JMenuItem(preferencesAction));
+		menu.add(new JMenuItem(informationAction));
+		menu.add(new JMenuItem(aboutAction));
+		menu.addSeparator();
+		menu.add(new JMenuItem(exitAction));
+
+		Grip grip = new Grip(main.frame, new Rectangle(10, 10, 445, 25));
+		SkinButton closeButton = new SkinButton(closeAction, new Rectangle(465, 10, 25, 25));
+		SkinButton makeButton = new SkinButton(makeAction, new Rectangle(10, 45, 80, 25));
+		SkinButton menuButton = new SkinButton(menuAction, new Rectangle(100, 45, 25, 25));
+		
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setSize(new Dimension(PipePanel.width, height));
-		
 		panel.setBackground(new Color(0xebebeb));
 		
-		closeAction = new CloseAction();
-		makeAction = new MakeAction();
-		infoAction = new InfoAction();
-		snippetAction = new SnippetAction();
-		exitAction = new ExitAction();
-
-		Grip grip = new Grip(main.frame, new Rectangle(10, 10, 445, 25));
-		SkinButton close = new SkinButton(closeAction, new Rectangle(465, 10, 25, 25));
-		SkinButton make = new SkinButton(makeAction, new Rectangle(10, 45, 80, 25));
-		SkinButton info = new SkinButton(infoAction, new Rectangle(100, 45, 80, 25));
-		SkinButton snippet = new SkinButton(snippetAction, new Rectangle(190, 45, 80, 25));
-		SkinButton exit = new SkinButton(exitAction, new Rectangle(280, 45, 80, 25));
-		
-		/*
-		 * TODO menu: arrow on windows, default on mac
-		 * 
-		 * Preferences
-		 * Information
-		 * About
-		 * -
-		 * Exit
-		 * Snippet
-		 */
-		
 		panel.add(grip.label);
-		panel.add(close.button);
-		panel.add(make.button);
-		panel.add(info.button);
-		panel.add(snippet.button);
-		panel.add(exit.button);
+		panel.add(closeButton.button);
+		panel.add(makeButton.button);
+		panel.add(menuButton.button);
 	}
+	
+	private final Program program;
+	private final JPopupMenu menu;
 
 	public final JPanel panel;
-	private final Program program;
 
 	// Action
 
 	private final CloseAction closeAction;
 	private class CloseAction extends AbstractAction {
-		public CloseAction() { super(); } // No button text
+		public CloseAction() { super("x"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
 
@@ -84,7 +85,7 @@ public class ToolPanel {
 
 	private final MakeAction makeAction;
 	private class MakeAction extends AbstractAction {
-		public MakeAction() { super("New"); } // Text for the button
+		public MakeAction() { super("New"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
 
@@ -94,13 +95,13 @@ public class ToolPanel {
 		}
 	}
 
-	private final InfoAction infoAction;
-	private class InfoAction extends AbstractAction {
-		public InfoAction() { super("Info"); } // Text for the button
+	private final MenuAction menuAction;
+	private class MenuAction extends AbstractAction {
+		public MenuAction() { super("v"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				program.user.info.frame.setVisible(true);
+				menu.show(panel, 100, 70);
 				
 			} catch (Exception e) { Mistake.stop(e); }
 		}
@@ -108,7 +109,7 @@ public class ToolPanel {
 
 	private final SnippetAction snippetAction;
 	private class SnippetAction extends AbstractAction {
-		public SnippetAction() { super("Snippet"); } // Text for the button
+		public SnippetAction() { super("Snippet"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
@@ -118,9 +119,45 @@ public class ToolPanel {
 		}
 	}
 
+	private final PreferencesAction preferencesAction;
+	private class PreferencesAction extends AbstractAction {
+		public PreferencesAction() { super("Preferences"); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				System.out.println("preferences action");
+
+			} catch (Exception e) { Mistake.stop(e); }
+		}
+	}
+
+	private final InformationAction informationAction;
+	private class InformationAction extends AbstractAction {
+		public InformationAction() { super("Information"); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+
+				program.user.info.frame.setVisible(true);
+				
+			} catch (Exception e) { Mistake.stop(e); }
+		}
+	}
+
+	private final AboutAction aboutAction;
+	private class AboutAction extends AbstractAction {
+		public AboutAction() { super("About"); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+				
+				System.out.println("about action");
+				
+			} catch (Exception e) { Mistake.stop(e); }
+		}
+	}
+
 	private final ExitAction exitAction;
 	private class ExitAction extends AbstractAction {
-		public ExitAction() { super("Exit"); } // Text for the button
+		public ExitAction() { super("Exit"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
