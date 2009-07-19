@@ -6,7 +6,7 @@ public class TextField {
 	
 	public TextField() {
 		field = new JTextField();
-		new ActionMenu(field);
+		new TextMenu(field);
 	}
 	
 	public final JTextField field;
