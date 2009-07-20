@@ -29,6 +29,7 @@ public class Here extends Close {
 		refresh();
 		
 		model = new MyModel();
+		model.pulse();
 		model.changed();
 		
 		
@@ -102,30 +103,22 @@ public class Here extends Close {
 
 	public final MyModel model;
 	public class MyModel extends Model {
-		@Override public Map<String, String> view() { return null; }
 		
 		public boolean canRefresh() { return me().canRefresh(); }
-		public String lan() { return describe(me().lan()); }
-		public String internet() { return describe(me().internet()); }
+		
+		public String lan()      { return Describe.object((me().lan())); }
+		public String internet() { return Describe.object((me().internet())); }
+		
 		public String age() {
 			if (me().age() == null) return "";
 			return Describe.timeCoarse(me().age().age()) + " ago";
 		}
-		public String exception() { return describe(me().exception()); }
-		@Override public Object out() { return me(); } // The outer object that made and contains this Model
+		
+		public String exception() { return Describe.object((me().exception())); }
 	}
 	private Here me() { return this; } // Give the inner class a link to this outer object
 	
 	
-	public static String describe(Object o) {
-		if (o == null) return "";
-		return o.toString();
-	}
-	
-	public static String describe(Object o1, Object o2) {
-		if (o1 == null || o2 == null) return "";
-		return o2.toString();
-	}
 	
 	
 	

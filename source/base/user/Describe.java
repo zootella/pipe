@@ -72,4 +72,12 @@ public class Describe {
 		else if (i < 10000) return Text.start(Number.toString(i), 2) + "." + Text.clip(Number.toString(i), 2, 1) + " KB/s"; // 4 digits  "99.9 KB/s"
 		else                return commas(Text.chop(Number.toString(i), 2)) + " KB/s";                                      // 5 or more "999 KB/s" or "1,234 KB/s"
 	}
+	
+	// Text
+	
+	/** Turn o into a String, "" if null. */
+	public static String object(Object o) {
+		if (o == null) return "";
+		return o.toString();
+	}
 }

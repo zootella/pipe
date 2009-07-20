@@ -1,20 +1,10 @@
 package base.state;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /** An object has a Model that extends this class to keep View objects above up to date. */
 public abstract class Model extends Close {
-
-	// Required
-
-	//TODO get rid of both of these
-	/** View gets current text to show the user from Model. */
-	public abstract Map<String, String> view();
-
-	/** The outer object that made and contains this Model. */
-	public abstract Object out();
 
 	// Core
 
@@ -33,6 +23,7 @@ public abstract class Model extends Close {
 	public void close() {
 		if (already()) return;
 		close(delay);
+		close(pulse);
 		Set<View> copy = new HashSet<View>(); // Copy the Set so we can change the original
 		copy.addAll(views);
 		for (View view : copy)
@@ -58,12 +49,13 @@ public abstract class Model extends Close {
 				view.refresh(); // This Model has changed, tell all our views above
 		}
 	}
-	
-	// Help
-	
-	/** Turn o into a String, "" if null. */
-	public static String toString(Object o) {
-		if (o == null) return "";
-		else return o.toString();
+
+	// Pulse
+
+	/** If this Model has something that changes in time, like an age, have it pulse views above. */
+	public void pulse() {
+		if (pulse == null)
+			pulse = new Pulse(new MyReceive(), Delay.time);
 	}
+	private Pulse pulse;
 }
