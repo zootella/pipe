@@ -9,6 +9,7 @@ public abstract class Model extends Close {
 
 	// Required
 
+	//TODO get rid of both of these
 	/** View gets current text to show the user from Model. */
 	public abstract Map<String, String> view();
 

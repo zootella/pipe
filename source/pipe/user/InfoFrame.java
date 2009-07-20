@@ -37,6 +37,7 @@ public class InfoFrame extends Close {
 		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("LAN IP address")));
 		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Internet IP address")));
 		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Age of information")));
+		panel.place(0, 3, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Error")));
 		
 		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(lan.area).fillWide());
 		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(internet.area).fillWide());
@@ -51,7 +52,7 @@ public class InfoFrame extends Close {
 
 		// Make our inner View object and connect the Model below to it
 		view = new MyView();
-		program.core.model.add(view); // When the Model below changes, it will call our view.refresh() method
+		program.core.here.model.add(view); // When the Model below changes, it will call our view.refresh() method
 		view.refresh();
 		
 		
@@ -107,11 +108,11 @@ public class InfoFrame extends Close {
 
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
-			Refresh.can(refreshAction, program.core.model.canRefresh());
-			Refresh.text(lan.area, program.core.model.lan());
-			Refresh.text(internet.area, program.core.model.internet());
-			Refresh.text(age.area, program.core.model.age());
-			Refresh.text(exception.area, program.core.model.exception());
+			Refresh.can(refreshAction, program.core.here.model.canRefresh());
+			Refresh.text(lan.area, program.core.here.model.lan());
+			Refresh.text(internet.area, program.core.here.model.internet());
+			Refresh.text(age.area, program.core.here.model.age());
+			Refresh.text(exception.area, program.core.here.model.exception());
 		}
 
 		// The Model beneath closed, take this View off the screen

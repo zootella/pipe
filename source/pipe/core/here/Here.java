@@ -2,6 +2,7 @@ package pipe.core.here;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Map;
 
 import base.exception.PlatformException;
 import base.exception.ProgramException;
@@ -10,26 +11,31 @@ import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.packet.Packets;
 import base.state.Close;
+import base.state.Model;
 import base.state.Receive;
 import base.state.Update;
 import base.time.Now;
 import base.time.Time;
+import base.user.Describe;
 
 public class Here extends Close {
 	
 	// Make
 	
-	public Here(Update up, Port port, Packets packets) {
-		this.up = up;
+	public Here(Port port, Packets packets) {
 		this.port = port;
 		this.packets = packets;
 		update = new Update(new MyReceive());
 		refresh();
+		
+		model = new MyModel();
+		model.changed();
+		
+		
 	}
 	
 	private final Port port;
 	private final Packets packets;
-	private final Update up;
 	private final Update update;
 	
 	private HereTask task; // The HereTask we used most recently to find internet at age
@@ -40,6 +46,7 @@ public class Here extends Close {
 	@Override public void close() {
 		if (already()) return;
 		close(task);
+		close(model);
 	}
 
 	private class MyReceive implements Receive {
@@ -50,28 +57,12 @@ public class Here extends Close {
 				if (done(task) && task.result.once()) {
 					internet = task.internet();
 					age = task.age();
-					up.send();
+					model.changed();
 				}
 
 			} catch (ProgramException e) { exception = e; }
 		}
 	}
-
-	// Look
-
-	/** Our internal IP address and listening port number on the LAN right now. */
-	public IpPort lan() {
-		try {
-			return new IpPort(new Ip(InetAddress.getLocalHost()), port);
-		} catch (UnknownHostException e) { throw new PlatformException(e); }
-	}
-
-	/** The most recent ProgramException that prevented us from finding out our Internet IP address. */
-	public ProgramException exception() { return exception; }
-	/** The most recent valid Internet IP address we've determined we have, null if we don't know yet. */
-	public IpPort internet() { return internet; }
-	/** When we found internet(). */
-	public Now age() { return age; }
 	
 	// Do
 	
@@ -90,4 +81,65 @@ public class Here extends Close {
 		task = new HereTask(update, port, packets);
 		
 	}
+
+	// Look
+
+	/** Our internal IP address and listening port number on the LAN right now. */
+	public IpPort lan() {
+		try {
+			return new IpPort(new Ip(InetAddress.getLocalHost()), port);
+		} catch (UnknownHostException e) { throw new PlatformException(e); }
+	}
+
+	/** The most recent ProgramException that prevented us from finding out our Internet IP address. */
+	public ProgramException exception() { return exception; }
+	/** The most recent valid Internet IP address we've determined we have, null if we don't know yet. */
+	public IpPort internet() { return internet; }
+	/** When we found internet(). */
+	public Now age() { return age; }
+	
+	// Model
+
+	public final MyModel model;
+	public class MyModel extends Model {
+		@Override public Map<String, String> view() { return null; }
+		
+		public boolean canRefresh() { return me().canRefresh(); }
+		public String lan() { return describe(me().lan()); }
+		public String internet() { return describe(me().internet()); }
+		public String age() {
+			if (me().age() == null) return "";
+			return Describe.timeCoarse(me().age().age()) + " ago";
+		}
+		public String exception() { return describe(me().exception()); }
+		@Override public Object out() { return me(); } // The outer object that made and contains this Model
+	}
+	private Here me() { return this; } // Give the inner class a link to this outer object
+	
+	
+	public static String describe(Object o) {
+		if (o == null) return "";
+		return o.toString();
+	}
+	
+	public static String describe(Object o1, Object o2) {
+		if (o1 == null || o2 == null) return "";
+		return o2.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
