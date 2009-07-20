@@ -1,4 +1,4 @@
-package pipe.core;
+package pipe.core.here;
 
 import java.net.InetAddress;
 
@@ -24,11 +24,11 @@ import base.state.Update;
 import base.time.Now;
 
 /** A Here figures out what our IP address is once and right now. */
-public class Here extends Close {
+public class HereTask extends Close {
 	
 	// Make
 	
-	public Here(Update up, Port port, Packets packets) {
+	public HereTask(Update up, Port port, Packets packets) {
 		
 		this.port = port;
 
@@ -70,21 +70,8 @@ public class Here extends Close {
 
 	// Result
 	
-	public Result result() {
-		return new Result(lan, net, exception);
-	}
-	
-	public class Result {
-		public Result(IpPort lan, IpPort internet, ProgramException exception) {
-			this.age = new Now();
-			this.lan = lan;
-			this.net = internet;
-			this.exception = exception;
-		}
-		public final Now age;
-		public final IpPort lan;
-		public final IpPort net;
-		public final ProgramException exception;
+	public HereResult result() {
+		return new HereResult(lan, net, exception);
 	}
 
 	// Do
@@ -136,5 +123,5 @@ public class Here extends Close {
 			catch (ProgramException e) { exception = e; close(me()); up.send(); }
 		}
 	}
-	private Here me() { return this; }
+	private HereTask me() { return this; }
 }

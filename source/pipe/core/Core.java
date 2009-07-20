@@ -2,6 +2,7 @@ package pipe.core;
 
 import java.util.Map;
 
+import pipe.core.here.HereTask;
 import pipe.main.Program;
 import base.internet.name.Port;
 import base.internet.packet.Packets;
@@ -46,8 +47,8 @@ public class Core extends Close {
 	public final Packets packets;
 //	public final Sockets sockets;
 
-	private Here here;
-	public Here.Result hereResult;
+	private HereTask here;
+	public HereResult hereResult;
 	
 	private final Pulse pulse;
 	
@@ -61,7 +62,7 @@ public class Core extends Close {
 	public void refreshHere() {
 		if (!canRefreshHere()) return;
 		
-		here = new Here(update, port, packets);
+		here = new HereTask(update, port, packets);
 		model.changed();
 		
 		
