@@ -35,4 +35,11 @@ public class Port {
 	@Override public String toString() {
 		return port + "";
 	}
+	
+	// Random
+
+	/** Pick a random port number to listen on. */
+	public static Port random() {
+		return new Port(Number.random().nextInt(50000) + 2000); // 2000 through 51999
+	}
 }

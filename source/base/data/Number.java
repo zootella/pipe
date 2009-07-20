@@ -1,5 +1,7 @@
 package base.data;
 
+import java.util.Random;
+
 import base.exception.DataException;
 
 public class Number {
@@ -150,4 +152,14 @@ public class Number {
 			return Long.parseLong(s, base);
 		} catch (NumberFormatException e) { throw new DataException(e); }
 	}
+	
+	// Random
+	
+	/** The program's random number generator. */
+	public static Random random() {
+		if (random == null)
+			random = new Random(); // Make it the first time we need it
+		return random;
+	}
+	private static Random random;
 }

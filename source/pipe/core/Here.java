@@ -136,6 +136,5 @@ public class Here extends Close {
 			catch (ProgramException e) { exception = e; close(me()); up.send(); }
 		}
 	}
-	
 	private Here me() { return this; }
 }

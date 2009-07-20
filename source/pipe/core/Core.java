@@ -19,7 +19,8 @@ public class Core extends Close {
 	public Core(Program program) {
 		this.program = program;
 		
-		port = new Port(1234);
+		
+		port = Port.random();
 
 		pipes = new Pipes(program);
 		
