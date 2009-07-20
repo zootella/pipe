@@ -33,7 +33,7 @@ public class SendTask extends Close {
 	// Result
 	
 	/** The empty Bin you can reuse, or throws the exception that made us give up. */
-	public Bin result() { taskCheck(exception, bin); return bin; }
+	public Bin result() { check(exception, bin); return bin; }
 	private ProgramException exception;
 	private Bin bin;
 

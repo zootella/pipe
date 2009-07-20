@@ -1,14 +1,11 @@
 package pipe.core.here;
 
-import java.net.InetAddress;
-
 import pipe.center.Center;
 import base.data.Number;
 import base.data.Outline;
 import base.data.Text;
 import base.exception.DataException;
 import base.exception.ProgramException;
-import base.internet.name.Ip;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.internet.packet.Packet;
@@ -29,8 +26,6 @@ public class HereTask extends Close {
 	// Make
 	
 	public HereTask(Update up, Port port, Packets packets) {
-		
-		this.port = port;
 
 		// Save and connect the given object that sends UDP packets
 		this.packets = packets;
@@ -42,23 +37,21 @@ public class HereTask extends Close {
 		receive = new MyReceive();
 		egg = new Egg(receive);
 		sent = new Once();
+		result = new Once();
 		update = new Update(receive);
 		update.send();
 	}
 
-	private final Port port;
 	private final Update up;
 	private final Update update;
 	private final Packets packets;
 	private final Egg egg;
 	private final Once sent;
+	public final Once result;
 	
 	private DomainTask domain;
 	private IpPort center;
 	
-	private IpPort lan;
-	private IpPort net;
-	private ProgramException exception;
 
 	@Override public void close() {
 		if (already()) return;
@@ -70,10 +63,12 @@ public class HereTask extends Close {
 
 	// Result
 	
-	public HereResult result() {
-		return new HereResult(lan, net, exception);
-	}
-
+	public IpPort internet() { check(exception, internet); return internet; }
+	public Now age() { check(exception, egg.start); return egg.start; }
+	private ProgramException exception;
+	private IpPort internet;
+	
+	
 	// Do
 
 	private final MyReceive receive;
@@ -84,10 +79,6 @@ public class HereTask extends Close {
 
 				// Throw a TimeException if we've been trying to finish for more than 4 seconds
 				egg.check();
-				
-				// Get our fake internal LAN IP address
-				if (lan == null)
-					lan = new IpPort(new Ip(InetAddress.getLocalHost()), port); // Our internal IP address on the LAN
 
 				// Look up the IP address of the central server
 				if (no(domain))
@@ -96,7 +87,7 @@ public class HereTask extends Close {
 					center = new IpPort(domain.result(), new Port(Number.toInt(Text.after(Center.site, ":"))));
 
 				// Send the central server a UDP packet to find out what our IP address is
-				if (center != null && net == null && sent.once())
+				if (center != null && internet == null && sent.once())
 					packets.send((new Outline("aq")).toData(), center);
 
 			} catch (ProgramException e) { exception = e; close(me()); up.send(); }
@@ -114,7 +105,7 @@ public class HereTask extends Close {
 				if (o.name.equals("ap")) { // Address response
 					if (o.has("hash") && !o.o("hash").getData().equals(o.getData().hash())) // Hash check
 						throw new DataException("received corrupted ap");
-					net = new IpPort(o.getData()); // Read
+					internet = new IpPort(o.getData()); // Read
 					close(me()); // It worked, we're done
 					up.send();
 				}

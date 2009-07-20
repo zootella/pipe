@@ -27,8 +27,9 @@ public class InfoFrame extends Close {
 		refreshAction = new RefreshAction();
 		
 		lan = new TextValue();
-		net = new TextValue();
+		internet = new TextValue();
 		age = new TextValue();
+		exception = new TextValue();
 
 		panel = new Panel();
 		panel.border();
@@ -38,10 +39,11 @@ public class InfoFrame extends Close {
 		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Age of information")));
 		
 		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(lan.area).fillWide());
-		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(net.area).fillWide());
+		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(internet.area).fillWide());
 		panel.place(1, 2, 1, 1, 1, 1, 0, 0, Cell.wrap(age.area).fillWide());
+		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(exception.area).fillWide());
 		
-		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(new JButton(refreshAction)).grow());
+		panel.place(1, 4, 1, 1, 1, 1, 0, 0, Cell.wrap(new JButton(refreshAction)).grow());
 		
 		
 
@@ -66,8 +68,9 @@ public class InfoFrame extends Close {
 	public final Panel panel;
 	
 	private final TextValue lan;
-	private final TextValue net;
+	private final TextValue internet;
 	private final TextValue age;
+	private final TextValue exception;
 	
 	
 
@@ -88,7 +91,7 @@ public class InfoFrame extends Close {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				program.core.refreshHere();
+				program.core.here.refresh();
 
 			} catch (Exception e) { Mistake.stop(e); }
 		}
@@ -106,8 +109,9 @@ public class InfoFrame extends Close {
 		public void refresh() {
 			Refresh.can(refreshAction, program.core.model.canRefresh());
 			Refresh.text(lan.area, program.core.model.lan());
-			Refresh.text(net.area, program.core.model.net());
+			Refresh.text(internet.area, program.core.model.internet());
 			Refresh.text(age.area, program.core.model.age());
+			Refresh.text(exception.area, program.core.model.exception());
 		}
 
 		// The Model beneath closed, take this View off the screen

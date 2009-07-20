@@ -38,7 +38,7 @@ public class HashTask extends Close {
 	// Result
 	
 	/** How much we hashed when we're done, or throws the exception that made us give up. */
-	public Move result() { taskCheck(exception, move); return move; }
+	public Move result() { check(exception, move); return move; }
 	private ProgramException exception;
 	private Move move;
 	

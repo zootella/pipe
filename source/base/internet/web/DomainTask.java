@@ -33,7 +33,7 @@ public class DomainTask extends Close {
 	// Result
 	
 	/** The IP address our DNS lookup found, or throws the exception that made this give up. */
-	public Ip result() { taskCheck(exception, ip); return ip; }
+	public Ip result() { check(exception, ip); return ip; }
 	private ProgramException exception;
 	private Ip ip;
 	

@@ -40,7 +40,7 @@ public class ReadTask extends Close {
 	// Result
 	
 	/** How much of stripe we read and how long it took, or throws the exception that made us give up. */
-	public Move result() { taskCheck(exception, move); return move; }
+	public Move result() { check(exception, move); return move; }
 	private ProgramException exception;
 	private Move move;
 	

@@ -30,7 +30,7 @@ public class AcceptTask extends Close {
 	// Result
 	
 	/** The socket that connected to server, it's yours to use and then close, or throws the exception that made us give up. */
-	public Socket result() { taskCheck(exception, socket); return socket; }
+	public Socket result() { check(exception, socket); return socket; }
 	private ProgramException exception;
 	private Socket socket;
 	

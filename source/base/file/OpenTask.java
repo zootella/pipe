@@ -30,7 +30,7 @@ public class OpenTask extends Close {
 	// Result
 	
 	/** The File we opened, or throws the exception that made us give up. */
-	public File result() { taskCheck(exception, file); return file; }
+	public File result() { check(exception, file); return file; }
 	private ProgramException exception;
 	private File file;
 	

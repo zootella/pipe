@@ -31,7 +31,7 @@ public class ConnectTask extends Close {
 	// Result
 	
 	/** The socket we connected, its yours to use and then close, or throws the exception that made us give up. */
-	public Socket result() { taskCheck(exception, socket); return socket; }
+	public Socket result() { check(exception, socket); return socket; }
 	private ProgramException exception;
 	private Socket socket;
 	

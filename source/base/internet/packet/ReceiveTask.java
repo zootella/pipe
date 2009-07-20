@@ -34,7 +34,7 @@ public class ReceiveTask extends Close {
 	// Result
 	
 	/** The Packet we received, or throws the exception that made us give up. */
-	public Packet result() { taskCheck(exception, packet); return packet; }
+	public Packet result() { check(exception, packet); return packet; }
 	private ProgramException exception;
 	private Packet packet;
 

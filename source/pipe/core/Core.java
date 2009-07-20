@@ -2,7 +2,7 @@ package pipe.core;
 
 import java.util.Map;
 
-import pipe.core.here.HereTask;
+import pipe.core.here.Here;
 import pipe.main.Program;
 import base.internet.name.Port;
 import base.internet.packet.Packets;
@@ -26,7 +26,6 @@ public class Core extends Close {
 		pipes = new Pipes(program);
 		
 		packets = new Packets(port);
-//		sockets = new Sockets(port);
 		
 		
 		
@@ -34,10 +33,11 @@ public class Core extends Close {
 		
 		
 		receive = new MyReceive();
-		pulse = new Pulse(receive, Time.second);
+		pulse = new Pulse(receive, Time.second / 5); //shouldn't here call model.changed when it 
 		update = new Update(receive);
 		
-		refreshHere();
+		here = new Here(update, port, packets);
+		model.changed();
 	}
 
 	private final Port port;
@@ -45,31 +45,11 @@ public class Core extends Close {
 	private final Program program;
 	public final Pipes pipes;
 	public final Packets packets;
-//	public final Sockets sockets;
 
-	private HereTask here;
-	public HereResult hereResult;
+	public final Here here;
 	
 	private final Pulse pulse;
 	
-	
-	public boolean canRefreshHere() {
-		if (here != null) return false; // Can't refresh because we've got a Here working right now
-		if (hereResult == null) return true; // No Here result at all yet, so yes, we can refresh
-		return hereResult.age.expired(5 * Time.second); // Allow refresh if our result is more than 5 seconds old
-	}
-
-	public void refreshHere() {
-		if (!canRefreshHere()) return;
-		
-		here = new HereTask(update, port, packets);
-		model.changed();
-		
-		
-		
-	}
-	
-
 	@Override public void close() {
 		if (already()) return;
 		
@@ -84,12 +64,6 @@ public class Core extends Close {
 	private class MyReceive implements Receive {
 		public void receive() {
 			if (closed()) return;
-				
-			if (done(here)) {
-				hereResult = here.result();
-				here = null;
-				model.changed();
-			}
 			
 			model.changed();
 		}
@@ -105,23 +79,23 @@ public class Core extends Close {
 		@Override public Map<String, String> view() { return null; }
 		
 		public boolean canRefresh() {
-			return canRefreshHere();
+			return here.canRefresh();
 		}
 		
 		public String lan() {
-			if (hereResult == null || hereResult.lan == null)
-				return "";
-			return hereResult.lan.toString();
+			return here.lan().toString();
 		}
-		public String net() {
-			if (hereResult == null || hereResult.net == null)
-				return "";
-			return hereResult.net.toString();
+		public String internet() {
+			if (here.internet() == null) return "";
+			return here.internet().toString();
 		}
 		public String age() {
-			if (hereResult == null || hereResult.age == null)
-				return "";
-			return Describe.timeCoarse(hereResult.age.age()) + " ago";
+			if (here.age() == null) return "";
+			return Describe.timeCoarse(here.age().age()) + " ago";
+		}
+		public String exception() {
+			if (here.exception() == null) return "";
+			return here.exception().toString();
 		}
 	}
 	
