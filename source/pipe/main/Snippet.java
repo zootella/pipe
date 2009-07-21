@@ -1,8 +1,16 @@
 package pipe.main;
 
+import base.file.Path;
+
 public class Snippet {
 
 	public static void snippet(Program program) {
+		
+		
+		
+		Path path = Path.here();
+		System.out.println(path.toString());
+	
 		
 
 		// what should the api be for sockets?

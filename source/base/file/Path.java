@@ -144,4 +144,11 @@ public class Path {
 		if (!exists()) return; // Nothing to delete, delete() below would return false
 		if (!file.delete()) throw new DiskException(); // Turn returning false into an exception
 	}
+	
+	// Help
+
+	/** The Path to the working folder the program launched with. */
+	public static Path here() {
+		return new Path(new File("").getAbsoluteFile());
+	}
 }

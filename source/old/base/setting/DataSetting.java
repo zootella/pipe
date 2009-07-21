@@ -1,16 +1,17 @@
-package base.setting;
+package old.base.setting;
 
 
+import base.data.Data;
 import base.data.Outline;
 import base.exception.DataException;
 
 
-public class StringSetting {
+public class DataSetting {
 	
-	// -------- Make a StringSetting --------
-
-	/** Make a StringSetting saved in store at path, with the given default value. */
-	public StringSetting(Store store, String path, String value) {
+	// -------- Make a DataSetting --------
+	
+	/** Make a DataSetting saved in store at path, with the given default value. */
+	public DataSetting(Store store, String path, Data value) {
 		
 		// Save the given objects in this new one
 		this.store = store;
@@ -31,18 +32,18 @@ public class StringSetting {
 	private Outline outline;
 	
 	/** This setting's default value the program set when it made this object. */
-	private String value;
+	private Data value;
 
 	// -------- Get and set the value --------
 	
 	/** Get this setting's value in Store.txt, or the program's default value if not found. */
-	public String value() {
+	public Data value() {
 		if (outline == null) return value; // Not found in Store.txt, return our default
-		return outline.getString();
+		return outline.getData();
 	}
-	
+
 	/** Give this setting a new value, and save it in Store.txt for the next time the program runs. */
-	public void set(String value) {
+	public void set(boolean value) {
 		if (outline == null) outline = store.outline.make(path); // Make our object in store's Outline
 		outline.set(value);
 	}

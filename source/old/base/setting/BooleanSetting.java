@@ -1,17 +1,16 @@
-package base.setting;
+package old.base.setting;
 
 
 import base.data.Outline;
 import base.exception.DataException;
-import base.file.Path;
 
 
-public class PathSetting {
+public class BooleanSetting {
 	
-	// -------- Make a PathSetting --------
-
-	/** Make a PathSetting saved in store at path, with the given default value. */
-	public PathSetting(Store store, String path, Path value) {
+	// -------- Make a BooleanSetting --------
+	
+	/** Make a BooleanSetting saved in store at path, with the given default value. */
+	public BooleanSetting(Store store, String path, boolean value) {
 		
 		// Save the given objects in this new one
 		this.store = store;
@@ -21,7 +20,7 @@ public class PathSetting {
 		// If store's Outline has path, get the Outline object there
 		try {
 			this.outline = store.outline.path(path);
-		} catch (DataException e) {} // path not found, leave outline null
+		} catch (DataException e) {} // Leave outline null 
 	}
 	
 	/** The Store this setting will save itself in, the file Store.txt. */
@@ -32,35 +31,21 @@ public class PathSetting {
 	private Outline outline;
 	
 	/** This setting's default value the program set when it made this object. */
-	private Path value;
+	private boolean value;
 
 	// -------- Get and set the value --------
 	
 	/** Get this setting's value in Store.txt, or the program's default value if not found. */
-	public Path value() {
+	public boolean value() {
 		if (outline == null) return value; // Not found in Store.txt, return our default
 		try {
-			return new Path(outline.getString());
-		} catch (DataException e) { return value; } // The outline value isn't a Path
+			return outline.getBoolean();
+		} catch (DataException e) { return value; } // The outline value isn't a boolean
 	}
 	
 	/** Give this setting a new value, and save it in Store.txt for the next time the program runs. */
-	public void set(Path value) {
+	public void set(boolean value) {
 		if (outline == null) outline = store.outline.make(path); // Make our object in store's Outline
-		outline.set(value.toString());
-	}
-	
-	// -------- Convert to and from a String --------
-	
-	/** Get this setting's value in Store.txt, or the program's default value if not found, as a String. */
-	public String toString() {
-		return value().toString(); // Get our value and convert it into a String
-	}
-	
-	/** Give this setting a new value, and save it in Store.txt for the next time the program runs. */
-	public void set(String value) {
-		try {
-			set(new Path(value));
-		} catch (DataException e) {} // Couldn't turn the given String into a number
+		outline.set(value);
 	}
 }

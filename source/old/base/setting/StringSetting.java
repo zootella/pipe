@@ -1,16 +1,16 @@
-package base.setting;
+package old.base.setting;
 
 
 import base.data.Outline;
 import base.exception.DataException;
 
 
-public class BooleanSetting {
+public class StringSetting {
 	
-	// -------- Make a BooleanSetting --------
-	
-	/** Make a BooleanSetting saved in store at path, with the given default value. */
-	public BooleanSetting(Store store, String path, boolean value) {
+	// -------- Make a StringSetting --------
+
+	/** Make a StringSetting saved in store at path, with the given default value. */
+	public StringSetting(Store store, String path, String value) {
 		
 		// Save the given objects in this new one
 		this.store = store;
@@ -20,7 +20,7 @@ public class BooleanSetting {
 		// If store's Outline has path, get the Outline object there
 		try {
 			this.outline = store.outline.path(path);
-		} catch (DataException e) {} // Leave outline null 
+		} catch (DataException e) {} // path not found, leave outline null
 	}
 	
 	/** The Store this setting will save itself in, the file Store.txt. */
@@ -31,20 +31,18 @@ public class BooleanSetting {
 	private Outline outline;
 	
 	/** This setting's default value the program set when it made this object. */
-	private boolean value;
+	private String value;
 
 	// -------- Get and set the value --------
 	
 	/** Get this setting's value in Store.txt, or the program's default value if not found. */
-	public boolean value() {
+	public String value() {
 		if (outline == null) return value; // Not found in Store.txt, return our default
-		try {
-			return outline.getBoolean();
-		} catch (DataException e) { return value; } // The outline value isn't a boolean
+		return outline.getString();
 	}
 	
 	/** Give this setting a new value, and save it in Store.txt for the next time the program runs. */
-	public void set(boolean value) {
+	public void set(String value) {
 		if (outline == null) outline = store.outline.make(path); // Make our object in store's Outline
 		outline.set(value);
 	}
