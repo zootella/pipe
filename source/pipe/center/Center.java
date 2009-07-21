@@ -19,7 +19,7 @@ import base.state.Close;
 public class Center extends Close {
 
 	/** Domain name and port number of the central server. */
-	public static final String site = "bootcloud.infoo:9193";
+	public static final String site = "bootcloud.info:9193";
 
 	public static void main(String[] arguments) {
 		SwingUtilities.invokeLater(new Runnable() { // Have the normal Swing thread call this run() method
