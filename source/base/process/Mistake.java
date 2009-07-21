@@ -8,19 +8,22 @@ import javax.swing.JOptionPane;
 import base.state.Close;
 
 public class Mistake {
+
+	/** Ignore e. */
+	public static void ignore(Exception e) {} // Actually ignore it
 	
-	/** Notice an exception that we can ignore, and let the program keep going. */
-	public static void ignore(Exception e) {
-		String title = "Mistake.ignore() caught an exception"; // Compose
+	/** Log e, but let the program keep running. */
+	public static void log(Exception e) {
+		String title = "MISTAKE LOG --V--"; // Compose
 		String body = describe(e);
 		
 		log(title, body); // Report
 		send(title + "\n" + body);
 	}
 	
-	/** Show and report an exception code didn't catch, and terminate the Java process. */
+	/** Log e and stop the program. */
 	public static void stop(Exception e) {
-		String title = "Mistake.stop() caught an exception"; // Compose
+		String title = "MISTAKE STOP --V--"; // Compose
 		String body = describe(e);
 		
 		log(title, body); // Report
@@ -32,7 +35,7 @@ public class Mistake {
 	/** Make sure the program closed all the objects that needed to be closed. */
 	public static void closeCheck() {
 		if (Close.checkAll() == 0) return; // Check
-		String title = "Mistake.close() found open objects"; // Compose
+		String title = "MISTAKE CLOSE --V--"; // Compose
 		String body = Close.checkAll() + " objects still open\n";
 
 		log(title, body); // Report
@@ -64,13 +67,13 @@ public class Mistake {
 	private static void send(String body) {
 		try {
 			//TODO
-		} catch (Exception e) {} // Ignore an exception and keep going
+		} catch (Exception e) { Mistake.ignore(e); } // Ignore an exception and keep going
 	}
 	
 	/** Show the error to the user. */
 	private static void show(String title, String body) {
 		try {
 			JOptionPane.showMessageDialog(null, body, title, JOptionPane.ERROR_MESSAGE);
-		} catch (Exception e) {} // Ignore an exception and keep going
+		} catch (Exception e) { Mistake.ignore(e); } // Ignore an exception and keep going
 	}
 }

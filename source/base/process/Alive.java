@@ -13,7 +13,7 @@ public class Alive {
                     synchronized (o) {
                         o.wait();
                     }
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException e) { Mistake.ignore(e); }
             }
         };
         

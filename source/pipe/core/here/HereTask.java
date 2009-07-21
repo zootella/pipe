@@ -109,7 +109,7 @@ public class HereTask extends Close {
 					up.send();
 				}
 			}
-			catch (DataException e) { Mistake.ignore(e); }
+			catch (DataException e) { Mistake.log(e); }
 			catch (ProgramException e) { exception = e; close(me()); up.send(); }
 		}
 	}

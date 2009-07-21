@@ -65,7 +65,7 @@ public class Center extends Close {
 					packetMachine.send(bin, packet.move.ipPort);
 				}
 
-			} catch (Exception e) { Mistake.ignore(e); } // Log and drop unknown packets
+			} catch (Exception e) { Mistake.log(e); } // Log and drop unknown packets
 		}
 	}
 }
