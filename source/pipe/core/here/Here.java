@@ -71,7 +71,12 @@ public class Here extends Close {
 	public boolean canRefresh() {
 		if (task == null) return true;
 		if (!done(task)) return false;
+		
+		
 		return task.age().expired(4 * Time.second);
+		
+		
+		
 	}
 	
 	/** Send a UDP packet to the central server to find out what our Internet IP address is. */

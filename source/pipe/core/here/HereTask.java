@@ -64,11 +64,10 @@ public class HereTask extends Close {
 	// Result
 	
 	public IpPort internet() { check(exception, internet); return internet; }
-	public Now age() { check(exception, egg.start); return egg.start; }
+	public Now age() { return egg.start; }
 	private ProgramException exception;
 	private IpPort internet;
-	
-	
+
 	// Do
 
 	private final MyReceive receive;

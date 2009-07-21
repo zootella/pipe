@@ -1,7 +1,9 @@
 package base.internet.web;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
+import base.exception.NetException;
 import base.exception.ProgramException;
 import base.internet.name.Ip;
 import base.state.Close;
@@ -47,7 +49,9 @@ public class DomainTask extends Close {
 		public void thread() throws Exception {
 
 			// Look up the domain name in DNS to get its IP address
-			taskIp = new Ip(InetAddress.getByName(site));
+			try {
+				taskIp = new Ip(InetAddress.getByName(site));
+			} catch (UnknownHostException e) { throw new NetException(e); }
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
