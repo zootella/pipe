@@ -8,10 +8,12 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 import base.process.Mistake;
+import base.user.skin.Skin;
 import base.user.skin.SkinButton;
 
 import pipe.core.museum.Pipe;
 import pipe.main.Program;
+import pipe.user.skin.Guide;
 
 /** A Status panel shows a pipe to the user. */
 public class PipePanel {
@@ -38,8 +40,10 @@ public class PipePanel {
 		infoAction = new InfoAction();
 		killAction = new KillAction();
 		
-		SkinButton info = new SkinButton(new InfoAction(), new Rectangle(320, 165, 80, 25));
-		SkinButton kill = new SkinButton(new KillAction(), new Rectangle(410, 165, 80, 25));
+		Skin skin = new Skin("skin.png");
+		
+		SkinButton info = new SkinButton(new InfoAction(), skin, Guide.info, new Rectangle(320, 165, Guide.buttonWidth, Guide.buttonHeight));
+		SkinButton kill = new SkinButton(new KillAction(), skin, Guide.kill, new Rectangle(410, 165, Guide.buttonWidth, Guide.buttonHeight));
 		
 		panel.add(info.button);
 		panel.add(kill.button);

@@ -14,8 +14,6 @@ public class User extends Close {
 		icon = new MainIcon(program);
 
 		show(true);
-		
-		info.frame.setVisible(true);
 	}
 	
 	public final MainFrame main;

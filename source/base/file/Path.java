@@ -147,8 +147,8 @@ public class Path {
 	
 	// Help
 
-	/** The Path to the working folder the program launched with. */
+	/** The Path to the working folder the launcher gave the program. */
 	public static Path here() {
-		return new Path(new File("").getAbsoluteFile());
+		return new Path(new File("").getAbsoluteFile()); // A blank File points to the present working directory
 	}
 }

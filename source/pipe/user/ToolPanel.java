@@ -16,6 +16,7 @@ import pipe.main.Snippet;
 import base.process.Mistake;
 import base.state.Close;
 import base.user.skin.SkinButton;
+import base.user.skin.SkinPanel;
 import base.user.widget.Grip;
 
 /** The toolbar at the top of the main window. */
@@ -23,7 +24,7 @@ public class ToolPanel {
 	
 	// Define
 	
-	public static final int height = 80;
+	public static final int height = 180;
 	
 	// Object
 	
@@ -62,6 +63,16 @@ public class ToolPanel {
 		panel.add(closeButton.button);
 		panel.add(makeButton.button);
 		panel.add(menuButton.button);
+		
+		
+		SkinPanel skin = new SkinPanel();
+		skin.setBounds(10, 100, 80, 25);
+		skin.setBackground(Color.red);
+		panel.add(skin);
+		
+		
+		
+		
 	}
 	
 	private final Program program;
