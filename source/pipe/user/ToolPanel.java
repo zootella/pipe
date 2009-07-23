@@ -22,10 +22,6 @@ import base.user.widget.Grip;
 /** The toolbar at the top of the main window. */
 public class ToolPanel {
 	
-	// Define
-	
-	public static final int height = 180;
-	
 	// Object
 	
 	public ToolPanel(MainFrame main) {

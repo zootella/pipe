@@ -20,9 +20,6 @@ public class PipePanel {
 	
 	// Define
 	
-	public static final int width = 500;
-	public static final int height = 200;
-	
 	public PipePanel(Program program, Pipe pipe) {
 		this.program = program;
 		this.pipe = pipe;
