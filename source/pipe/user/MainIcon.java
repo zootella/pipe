@@ -22,6 +22,8 @@ import base.user.Fonts;
 
 public class MainIcon extends Close {
 	
+	//TODO make this TrayIcon and move it to base
+	
 	private final Program program;
 	
 	public MainIcon(User user) {

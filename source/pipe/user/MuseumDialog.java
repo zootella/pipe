@@ -10,11 +10,11 @@ import pipe.core.museum.Pipe;
 import pipe.core.museum.ReceivePipe;
 import pipe.core.museum.SendPipe;
 import pipe.main.Program;
+import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.user.Screen;
 import base.user.panel.Cell;
 import base.user.panel.Panel;
-import base.user.skin.SkinButton;
 
 public class MuseumDialog {
 	
@@ -36,7 +36,7 @@ public class MuseumDialog {
 		dialog = new JDialog(program.user.main.frame, "What kind of pipe do you want? (Science Museum Music)", true); // true to make a modal dialog
 		dialog.setResizable(false);
 		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
-		dialog.setBounds(Screen.positionSize(600, 300)); // Set the dialog size and pick a random location
+		dialog.setBounds(Screen.positionSize(Guide.sizeMuseumDialog)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 	

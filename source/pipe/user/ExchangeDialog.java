@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 
 import pipe.main.Main;
 import pipe.main.Program;
+import pipe.user.skin.Guide;
 import base.data.Data;
 import base.data.Outline;
 import base.desktop.Clipboard;
@@ -59,7 +60,7 @@ public class ExchangeDialog {
 
 		dialog = new JDialog(program.user.main.frame, "Code Exchange", true); // true to make a modal dialog
 		dialog.setContentPane(panel.panel);
-		dialog.setBounds(Screen.positionSize(800, 400)); // Set the dialog size and pick a random location
+		dialog.setBounds(Screen.positionSize(Guide.sizeExchangeDialog)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 	
@@ -125,7 +126,6 @@ public class ExchangeDialog {
 	private Outline check(String s) {
 		try {
 			return Outline.fromText(new Data(s));
-		}
-		catch (DataException e) { return null; }
+		} catch (DataException e) { return null; }
 	}
 }

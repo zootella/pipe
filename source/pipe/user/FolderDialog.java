@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import pipe.main.Main;
 import pipe.main.Program;
+import pipe.user.skin.Guide;
 import base.exception.DataException;
 import base.exception.DiskException;
 import base.file.Path;
@@ -56,7 +57,7 @@ public class FolderDialog {
 		
 		dialog.setContentPane(panel.panel); // Put everything we layed out in the dialog box
 
-		dialog.setBounds(Screen.positionSize(600, 180)); // Set the dialog size and pick a random location
+		dialog.setBounds(Screen.positionSize(Guide.sizeFolderDialog)); // Set the dialog size and pick a random location
 		dialog.setVisible(true); // Show the dialog box on the screen
 	}
 

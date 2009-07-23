@@ -1,21 +1,16 @@
 package pipe.user;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.JPanel;
-
-import base.process.Mistake;
-import base.user.skin.ButtonGuide;
-import base.user.skin.Skin;
-import base.user.skin.SkinButton;
 
 import pipe.core.museum.Pipe;
 import pipe.main.Program;
 import pipe.user.skin.Guide;
+import base.process.Mistake;
+import base.user.skin.SkinButton;
 
 /** A Status panel shows a pipe to the user. */
 public class PipePanel {
@@ -30,8 +25,8 @@ public class PipePanel {
 		
 		panel = new JPanel();
 		panel.setLayout(null);
-		panel.setSize(Guide.pipeSize);
-		panel.setBackground(new Color(250, 250, 250));
+		panel.setSize(Guide.sizePipe);
+		panel.setBackground(new Color(0xfafafa));
 
 		
 		// buttons, info and terminate
@@ -39,8 +34,8 @@ public class PipePanel {
 		infoAction = new InfoAction();
 		killAction = new KillAction();
 		
-		SkinButton info = new SkinButton(new InfoAction(), program.user.skin, Guide.skinPipeInfo, Guide.pipeInfo);
-		SkinButton kill = new SkinButton(new KillAction(), program.user.skin, Guide.skinPipeKill, Guide.pipeKill);
+		SkinButton info = new SkinButton(infoAction, program.user.skin, Guide.skinPipeInfo, Guide.pipeInfo);
+		SkinButton kill = new SkinButton(killAction, program.user.skin, Guide.skinPipeKill, Guide.pipeKill);
 		
 		panel.add(info.button);
 		panel.add(kill.button);

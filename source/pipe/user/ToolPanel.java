@@ -1,7 +1,6 @@
 package pipe.user;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -39,21 +38,19 @@ public class ToolPanel {
 		if (!Main.release)
 			menu.add(new JMenuItem(snippetAction));
 		menu.add(new JMenuItem(preferencesAction));
-		menu.add(new JMenuItem(informationAction));;
+		menu.add(new JMenuItem(informationAction));
 		menu.add(new JMenuItem(aboutAction));
 		menu.addSeparator();
 		menu.add(new JMenuItem(exitAction));
 		
-		//	public SkinButton(Action action, Skin skin, ButtonGuide guide, Rectangle place) {
-
-		Grip grip = new Grip(main.frame, new Rectangle(10, 10, 445, 25));
+		Grip grip = new Grip(main.frame, Guide.toolGrip);
 		SkinButton closeButton = new SkinButton(closeAction, user.skin, Guide.skinToolClose, Guide.toolClose);
 		SkinButton makeButton = new SkinButton(makeAction, user.skin, Guide.skinToolMake, Guide.toolMake);
 		SkinButton menuButton = new SkinButton(menuAction, user.skin, Guide.skinToolMenu, Guide.toolMenu);
 		
 		panel = new JPanel();
 		panel.setLayout(null);
-		panel.setSize(Guide.pipeSize);
+		panel.setSize(Guide.sizeTool);
 		panel.setBackground(new Color(0xebebeb));
 		
 		panel.add(grip.label);
@@ -110,7 +107,7 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				menu.show(panel, 100, 70);
+				menu.show(panel, Guide.toolMenu.x, Guide.toolMenu.y + Guide.toolMenu.height);
 				
 			} catch (Exception e) { Mistake.stop(e); }
 		}

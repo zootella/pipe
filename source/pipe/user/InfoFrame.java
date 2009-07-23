@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import pipe.main.Program;
+import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.View;
@@ -60,7 +61,7 @@ public class InfoFrame extends Close {
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
 		frame.setTitle("Information");
-		frame.setBounds(Screen.positionSize(600, 200));
+		frame.setBounds(Screen.positionSize(Guide.sizeInfoFrame));
 		frame.setContentPane(panel.panel);
 	}
 	

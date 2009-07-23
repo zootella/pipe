@@ -17,6 +17,8 @@ public class Screen {
 	}
 	
 	/** Given a width and height like 500 and 300 pixels, choose a random position on the screen. */
+	public static Rectangle positionSize(Dimension d) { return positionSize(d.width, d.height); }
+	/** Given a width and height like 500 and 300 pixels, choose a random position on the screen. */ //TODO anybody using this one?
 	public static Rectangle positionSize(int w, int h) {
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Rectangle(position(screen.width, w), position(screen.height, h), w, h);

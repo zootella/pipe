@@ -20,16 +20,21 @@ public class Guide {
 	
 	// Size
 	
-	public static final Dimension toolSize = new Dimension(pipeWidth, toolHeight);
-	public static final Dimension pipeSize = new Dimension(pipeWidth, pipeHeight);
-	public static final Dimension skinSize = new Dimension(424, 667); //TODO set this for real
+	public static final Dimension sizeTool = new Dimension(pipeWidth, toolHeight);
+	public static final Dimension sizePipe = new Dimension(pipeWidth, pipeHeight);
+	public static final Dimension sizeSkin = new Dimension(424, 667); //TODO set this for real
+	
+	public static final Dimension sizeFolderDialog = new Dimension(600, 180);
+	public static final Dimension sizeExchangeDialog = new Dimension(800, 400);
+	public static final Dimension sizeInfoFrame = new Dimension(600, 200);
+	public static final Dimension sizeMuseumDialog = new Dimension(600, 300);
 	
 	// Skin
 
 	public static final Point skinInk = new Point(16, 16);
 	
-	public static final Rectangle skinTool = new Rectangle(0, 0, toolSize.width, toolSize.height);
-	public static final Rectangle skinPipe = new Rectangle(0, 0, pipeSize.width, pipeSize.height);
+	public static final Rectangle skinTool = new Rectangle(0, 0, sizeTool.width, sizeTool.height);
+	public static final Rectangle skinPipe = new Rectangle(0, 0, sizePipe.width, sizePipe.height);
 	
 	public static final ButtonGuide skinToolClose = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
 	public static final ButtonGuide skinToolMake = new ButtonGuide(0, 0, buttonWidth, buttonHeight);

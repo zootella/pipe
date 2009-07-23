@@ -1,5 +1,6 @@
 package pipe.user;
 
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,24 +24,19 @@ public class MainFrame extends Close {
 	/** Make the program's main window on the screen. */
 	public MainFrame(User user) {
 		program = user.program;
-		
+
 		frame = new JFrame();
-		panel = new JPanel();
-		pipes = new JPanel();
-		
 		frame.setUndecorated(true);
 		frame.setResizable(false);
 		frame.setLayout(null);
+		
+		panel = new JPanel();
 		panel.setLayout(null);
-		pipes.setLayout(null);
 
 		tool = new ToolPanel(user, this);
 		tool.panel.setLocation(0, 0);
-		panel.add(tool.panel);
 
-		pipes.setLocation(0, Guide.toolHeight);
 		fill();
-		panel.add(pipes);
 		
 		frame.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
@@ -51,20 +47,18 @@ public class MainFrame extends Close {
 
 	public void fill() {
 
-		int w = Guide.pipeWidth;
-		int h = program.core.pipes.pipes.size() * Guide.pipeHeight;
-		pipes.setSize(w, h);
+		Dimension d = new Dimension(Guide.pipeWidth, Guide.toolHeight + (program.core.pipes.pipes.size() * Guide.pipeHeight));
 		
-		h += Guide.toolHeight;
-		panel.setSize(w, h);
-		frame.setSize(w, h);
-		
-		pipes.removeAll();
-		int y = 0;
+		panel.setSize(d);
+		frame.setSize(d);
+
+		panel.removeAll();
+		panel.add(tool.panel);
+		int y = Guide.toolHeight;
 		for (Pipe pipe : program.core.pipes.pipes) {
-			JPanel panel = pipe.panel().panel;
-			panel.setLocation(0, y);
-			pipes.add(panel);
+			JPanel p = pipe.panel().panel;
+			p.setLocation(0, y);
+			panel.add(p);
 			y += Guide.pipeHeight;
 		}
 	}
@@ -73,7 +67,6 @@ public class MainFrame extends Close {
 
 	public final JFrame frame;
 	public final JPanel panel;
-	private final JPanel pipes;
 	
 	public final ToolPanel tool;
 
