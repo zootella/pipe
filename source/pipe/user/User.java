@@ -13,9 +13,9 @@ public class User extends Close {
 		
 		skin = new Skin("skin.png");
 
-		main = new MainFrame(program);
-		info = new InfoFrame(program);
-		icon = new MainIcon(program);
+		main = new MainFrame(this);
+		info = new InfoFrame(this);
+		icon = new MainIcon(this);
 
 		show(true);
 	}

@@ -14,7 +14,7 @@ public class Mistake {
 	
 	/** Log e, but let the program keep running. */
 	public static void log(Exception e) {
-		String title = "MISTAKE LOG --V--"; // Compose
+		String title = "Mistake log:"; // Compose
 		String body = describe(e);
 		
 		log(title, body); // Report
@@ -23,7 +23,7 @@ public class Mistake {
 	
 	/** Log e and stop the program. */
 	public static void stop(Exception e) {
-		String title = "MISTAKE STOP --V--"; // Compose
+		String title = "Mistake stop:"; // Compose
 		String body = describe(e);
 		
 		log(title, body); // Report
@@ -35,7 +35,7 @@ public class Mistake {
 	/** Make sure the program closed all the objects that needed to be closed. */
 	public static void closeCheck() {
 		if (Close.checkAll() == 0) return; // Check
-		String title = "MISTAKE CLOSE --V--"; // Compose
+		String title = "Mistake close:"; // Compose
 		String body = Close.checkAll() + " objects still open\n";
 
 		log(title, body); // Report
@@ -58,9 +58,8 @@ public class Mistake {
 	
 	/** Make a note in the local debugging log. */
 	private static void log(String title, String body) {
-		System.out.print(title + " --v--\n");
+		System.out.print(title + "\n");
 		System.out.print(body);
-		System.out.print(title + " --^--\n");
 	}
 	
 	/** Send the error in a packet to the programmer. */

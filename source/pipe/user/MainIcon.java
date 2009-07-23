@@ -24,8 +24,8 @@ public class MainIcon extends Close {
 	
 	private final Program program;
 	
-	public MainIcon(final Program program) {
-		this.program = program;
+	public MainIcon(User user) {
+		program = user.program;
 		
 		listen = new MyActionListener();
 		mouse = new MyMouseListener();

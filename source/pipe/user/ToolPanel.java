@@ -1,7 +1,6 @@
 package pipe.user;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
@@ -16,9 +15,7 @@ import pipe.main.Snippet;
 import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.state.Close;
-import base.user.skin.Skin;
 import base.user.skin.SkinButton;
-import base.user.skin.SkinPanel;
 import base.user.widget.Grip;
 
 /** The toolbar at the top of the main window. */
@@ -26,7 +23,7 @@ public class ToolPanel {
 	
 	// Object
 	
-	public ToolPanel(MainFrame main) {
+	public ToolPanel(MainFrame main, User user) {
 		this.program = main.program;
 
 		closeAction = new CloseAction();
@@ -50,9 +47,9 @@ public class ToolPanel {
 		//	public SkinButton(Action action, Skin skin, ButtonGuide guide, Rectangle place) {
 
 		Grip grip = new Grip(main.frame, new Rectangle(10, 10, 445, 25));
-		SkinButton closeButton = new SkinButton(closeAction, skin, Guide.skinToolClose, Guide.toolClose);
-		SkinButton makeButton = new SkinButton(makeAction, skin, Guide.skinToolMake, Guide.toolMake);
-		SkinButton menuButton = new SkinButton(menuAction, skin, Guide.skinToolMenu, Guide.toolMenu);
+		SkinButton closeButton = new SkinButton(closeAction, user.skin, Guide.skinToolClose, Guide.toolClose);
+		SkinButton makeButton = new SkinButton(makeAction, user.skin, Guide.skinToolMake, Guide.toolMake);
+		SkinButton menuButton = new SkinButton(menuAction, user.skin, Guide.skinToolMenu, Guide.toolMenu);
 		
 		panel = new JPanel();
 		panel.setLayout(null);

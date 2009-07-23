@@ -21,8 +21,8 @@ public class MainFrame extends Close {
 	// Object
 
 	/** Make the program's main window on the screen. */
-	public MainFrame(Program program) {
-		this.program = program;
+	public MainFrame(User user) {
+		program = user.program;
 		
 		frame = new JFrame();
 		panel = new JPanel();
@@ -34,7 +34,7 @@ public class MainFrame extends Close {
 		panel.setLayout(null);
 		pipes.setLayout(null);
 
-		tool = new ToolPanel(this);
+		tool = new ToolPanel(this, user);
 		tool.panel.setLocation(0, 0);
 		panel.add(tool.panel);
 

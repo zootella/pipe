@@ -18,8 +18,8 @@ public class Skin {
 	
 	public Skin(String name) {
 		try {
-			image = ImageIO.read(new File("name"));
-			if (!Guide.skinSize.equals(new Dimension(image.getHeight(), image.getWidth())))
+			image = ImageIO.read(new File(name));
+			if (!Guide.skinSize.equals(new Dimension(image.getWidth(), image.getHeight())))
 				throw new DiskException("wrong size");
 		} catch (IOException e) { throw new DiskException(e); }
 	}

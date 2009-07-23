@@ -21,8 +21,8 @@ import base.user.widget.TextValue;
 /** The Info window that shows advanced statistics and diagnostic information. */
 public class InfoFrame extends Close {
 
-	public InfoFrame(Program program) {
-		this.program = program;
+	public InfoFrame(User user) {
+		program = user.program;
 		
 		refreshAction = new RefreshAction();
 		

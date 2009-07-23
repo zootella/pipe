@@ -39,8 +39,8 @@ public class PipePanel {
 		infoAction = new InfoAction();
 		killAction = new KillAction();
 		
-		SkinButton info = new SkinButton(new InfoAction(), skin, Guide.skinPipeInfo, Guide.pipeInfo);
-		SkinButton kill = new SkinButton(new KillAction(), skin, Guide.skinPipeKill, Guide.pipeKill);
+		SkinButton info = new SkinButton(new InfoAction(), program.user.skin, Guide.skinPipeInfo, Guide.pipeInfo);
+		SkinButton kill = new SkinButton(new KillAction(), program.user.skin, Guide.skinPipeKill, Guide.pipeKill);
 		
 		panel.add(info.button);
 		panel.add(kill.button);
