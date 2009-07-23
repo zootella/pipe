@@ -2,6 +2,7 @@ package pipe.user.skin;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import base.user.skin.ButtonGuide;
 
@@ -10,6 +11,7 @@ public class Guide {
 	// Define
 
 	public static final int pipeWidth = 500;
+	
 	public static final int toolHeight = 180;
 	public static final int pipeHeight = 200;
 
@@ -23,42 +25,32 @@ public class Guide {
 	public static final Dimension skinSize = new Dimension(424, 667); //TODO set this for real
 	
 	// Skin
-	
-	//
-	
+
 	public static final Point skinInk = new Point(16, 16);
 	
-	public static final ButtonGuide skinButtonskinMakeButton = new ButtonGuide(16, 48, buttonWidth, buttonHeight);
+	public static final Rectangle skinTool = new Rectangle(0, 0, toolSize.width, toolSize.height);
+	public static final Rectangle skinPipe = new Rectangle(0, 0, pipeSize.width, pipeSize.height);
 	
-	public static final ButtonGuide skinButtonToolInfo = new ButtonGuide(16, 48, buttonWidth, buttonHeight);
-	public static final ButtonGuide skinButtonPipeKill = new ButtonGuide(16, 48, buttonWidth, buttonHeight);
+	public static final ButtonGuide skinToolClose = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
+	public static final ButtonGuide skinToolMake = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
+	public static final ButtonGuide skinToolMenu = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
 	
-	//skin, the whole image
-	//skinTool, the whole background
-	//skinPipe
-	//skinInk
-	//skinToolClose
-	//skinToolMake
-	//skinToolMenu
-	
-	public static final Dimension skin = new Dimension(x, y);
+	public static final ButtonGuide skinPipeInfo = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
+	public static final ButtonGuide skinPipeKill = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
 
 	// Tool
 
-	//tool
-	//toolGrip
-	//toolClose
-	//toolMake
-	//toolMenu
+	public static final Rectangle toolGrip = new Rectangle(10, 10, 445, buttonHeight);
+	
+	public static final Rectangle toolClose = new Rectangle(465, 10, buttonHeight, buttonHeight);
+	public static final Rectangle toolMake = new Rectangle(10, 45, buttonWidth, buttonHeight);
+	public static final Rectangle toolMenu = new Rectangle(100, 45, buttonHeight, buttonHeight);
 
 	// Pipe
+
+	public static final Rectangle pipeInfo = new Rectangle(320, 165, buttonWidth, buttonHeight);
+	public static final Rectangle pipeKill = new Rectangle(410, 165, buttonWidth, buttonHeight);
 	
-	//pipe
-	//pipeInfo
-	//pipeKill
-	
-	//skinPipeInfo
-	//skinPipeKill
 	
 	
 	

@@ -5,9 +5,11 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JPanel;
 
 import base.process.Mistake;
+import base.user.skin.ButtonGuide;
 import base.user.skin.Skin;
 import base.user.skin.SkinButton;
 
@@ -28,7 +30,7 @@ public class PipePanel {
 		
 		panel = new JPanel();
 		panel.setLayout(null);
-		panel.setSize(width, height);
+		panel.setSize(Guide.pipeSize);
 		panel.setBackground(new Color(250, 250, 250));
 
 		
@@ -37,10 +39,8 @@ public class PipePanel {
 		infoAction = new InfoAction();
 		killAction = new KillAction();
 		
-		Skin skin = new Skin("skin.png");
-		
-		SkinButton info = new SkinButton(new InfoAction(), skin, Guide.info, new Rectangle(320, 165, Guide.buttonWidth, Guide.buttonHeight));
-		SkinButton kill = new SkinButton(new KillAction(), skin, Guide.kill, new Rectangle(410, 165, Guide.buttonWidth, Guide.buttonHeight));
+		SkinButton info = new SkinButton(new InfoAction(), skin, Guide.skinPipeInfo, Guide.pipeInfo);
+		SkinButton kill = new SkinButton(new KillAction(), skin, Guide.skinPipeKill, Guide.pipeKill);
 		
 		panel.add(info.button);
 		panel.add(kill.button);

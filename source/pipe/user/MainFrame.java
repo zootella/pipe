@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import pipe.core.museum.Pipe;
 import pipe.main.Main;
 import pipe.main.Program;
+import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.state.Close;
 import base.user.Screen;
@@ -37,7 +38,7 @@ public class MainFrame extends Close {
 		tool.panel.setLocation(0, 0);
 		panel.add(tool.panel);
 
-		pipes.setLocation(0, ToolPanel.height);
+		pipes.setLocation(0, Guide.toolHeight);
 		fill();
 		panel.add(pipes);
 		
@@ -53,11 +54,11 @@ public class MainFrame extends Close {
 		final int border = 0;
 		final int title = 0;
 		
-		int x = PipePanel.width;
-		int y = program.core.pipes.pipes.size() * PipePanel.height;
+		int x = Guide.pipeWidth;
+		int y = program.core.pipes.pipes.size() * Guide.pipeHeight;
 		pipes.setSize(x, y);
 		
-		y += ToolPanel.height;
+		y += Guide.toolHeight;
 		panel.setSize(x, y);
 		
 		x += border + border;
@@ -70,7 +71,7 @@ public class MainFrame extends Close {
 			JPanel panel = pipe.panel().panel;
 			panel.setLocation(0, i);
 			pipes.add(panel);
-			i += PipePanel.height;
+			i += Guide.pipeHeight;
 		}
 	}
 

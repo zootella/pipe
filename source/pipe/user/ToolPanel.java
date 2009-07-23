@@ -13,8 +13,10 @@ import javax.swing.JPopupMenu;
 import pipe.main.Main;
 import pipe.main.Program;
 import pipe.main.Snippet;
+import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.state.Close;
+import base.user.skin.Skin;
 import base.user.skin.SkinButton;
 import base.user.skin.SkinPanel;
 import base.user.widget.Grip;
@@ -40,19 +42,21 @@ public class ToolPanel {
 		if (!Main.release)
 			menu.add(new JMenuItem(snippetAction));
 		menu.add(new JMenuItem(preferencesAction));
-		menu.add(new JMenuItem(informationAction));
+		menu.add(new JMenuItem(informationAction));;
 		menu.add(new JMenuItem(aboutAction));
 		menu.addSeparator();
 		menu.add(new JMenuItem(exitAction));
+		
+		//	public SkinButton(Action action, Skin skin, ButtonGuide guide, Rectangle place) {
 
 		Grip grip = new Grip(main.frame, new Rectangle(10, 10, 445, 25));
-		SkinButton closeButton = new SkinButton(closeAction, new Rectangle(465, 10, 25, 25));
-		SkinButton makeButton = new SkinButton(makeAction, new Rectangle(10, 45, 80, 25));
-		SkinButton menuButton = new SkinButton(menuAction, new Rectangle(100, 45, 25, 25));
+		SkinButton closeButton = new SkinButton(closeAction, skin, Guide.skinToolClose, Guide.toolClose);
+		SkinButton makeButton = new SkinButton(makeAction, skin, Guide.skinToolMake, Guide.toolMake);
+		SkinButton menuButton = new SkinButton(menuAction, skin, Guide.skinToolMenu, Guide.toolMenu);
 		
 		panel = new JPanel();
 		panel.setLayout(null);
-		panel.setSize(new Dimension(PipePanel.width, height));
+		panel.setSize(Guide.pipeSize);
 		panel.setBackground(new Color(0xebebeb));
 		
 		panel.add(grip.label);
@@ -60,11 +64,12 @@ public class ToolPanel {
 		panel.add(makeButton.button);
 		panel.add(menuButton.button);
 		
-		
+		/*
 		SkinPanel skin = new SkinPanel();
 		skin.setBounds(10, 100, 80, 25);
 		skin.setBackground(Color.red);
 		panel.add(skin);
+		*/
 		
 		
 		

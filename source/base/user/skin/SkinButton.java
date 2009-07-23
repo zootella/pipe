@@ -18,7 +18,7 @@ public class SkinButton {
 		button.setBounds(place);
 		button.setFont(Fonts.program());
 		
-		button.setForeground(skin.color(Guide.ink));
+		button.setForeground(skin.color(Guide.skinInk));
 		
 		//TODO pngs for ghost, normal, float, and press
 	}
