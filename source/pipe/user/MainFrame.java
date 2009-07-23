@@ -34,7 +34,7 @@ public class MainFrame extends Close {
 		panel.setLayout(null);
 		pipes.setLayout(null);
 
-		tool = new ToolPanel(this, user);
+		tool = new ToolPanel(user, this);
 		tool.panel.setLocation(0, 0);
 		panel.add(tool.panel);
 
@@ -50,28 +50,22 @@ public class MainFrame extends Close {
 	}
 
 	public void fill() {
+
+		int w = Guide.pipeWidth;
+		int h = program.core.pipes.pipes.size() * Guide.pipeHeight;
+		pipes.setSize(w, h);
 		
-		final int border = 0;
-		final int title = 0;
-		
-		int x = Guide.pipeWidth;
-		int y = program.core.pipes.pipes.size() * Guide.pipeHeight;
-		pipes.setSize(x, y);
-		
-		y += Guide.toolHeight;
-		panel.setSize(x, y);
-		
-		x += border + border;
-		y += border + title + border;
-		frame.setSize(x, y);
+		h += Guide.toolHeight;
+		panel.setSize(w, h);
+		frame.setSize(w, h);
 		
 		pipes.removeAll();
-		int i = 0;
+		int y = 0;
 		for (Pipe pipe : program.core.pipes.pipes) {
 			JPanel panel = pipe.panel().panel;
-			panel.setLocation(0, i);
+			panel.setLocation(0, y);
 			pipes.add(panel);
-			i += Guide.pipeHeight;
+			y += Guide.pipeHeight;
 		}
 	}
 

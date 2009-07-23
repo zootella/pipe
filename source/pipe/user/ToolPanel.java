@@ -23,7 +23,7 @@ public class ToolPanel {
 	
 	// Object
 	
-	public ToolPanel(MainFrame main, User user) {
+	public ToolPanel(User user, MainFrame main) {
 		this.program = main.program;
 
 		closeAction = new CloseAction();

@@ -12,7 +12,7 @@ public class Guide {
 
 	public static final int pipeWidth = 500;
 	
-	public static final int toolHeight = 180;
+	public static final int toolHeight = 80;
 	public static final int pipeHeight = 200;
 
 	public static final int buttonWidth = 80;
