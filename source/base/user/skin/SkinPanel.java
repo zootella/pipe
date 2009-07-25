@@ -10,13 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import base.process.Mistake;
-import base.user.Fonts;
+import base.user.Face;
 
 public class SkinPanel extends JPanel {
 	
 	public SkinPanel() {
 		label = new JLabel();
-		label.setFont(Fonts.program());
+		label.setFont(Face.skin());
 		
 		
 		try {                

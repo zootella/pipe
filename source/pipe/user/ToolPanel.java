@@ -13,7 +13,6 @@ import pipe.main.Program;
 import pipe.main.Snippet;
 import pipe.user.skin.Guide;
 import base.process.Mistake;
-import base.state.Close;
 import base.user.skin.SkinButton;
 import base.user.widget.Grip;
 
@@ -32,7 +31,6 @@ public class ToolPanel {
 		preferencesAction = new PreferencesAction();
 		informationAction = new InformationAction();
 		aboutAction = new AboutAction();
-		exitAction = new ExitAction();
 		
 		menu = new JPopupMenu();
 		if (!Main.release)
@@ -41,7 +39,7 @@ public class ToolPanel {
 		menu.add(new JMenuItem(informationAction));
 		menu.add(new JMenuItem(aboutAction));
 		menu.addSeparator();
-		menu.add(new JMenuItem(exitAction));
+		menu.add(new JMenuItem(user.exitAction));
 		
 		Grip grip = new Grip(main.frame, Guide.toolGrip);
 		SkinButton closeButton = new SkinButton(closeAction, user.skin, Guide.skinToolClose, Guide.toolClose);
@@ -157,18 +155,6 @@ public class ToolPanel {
 				
 				System.out.println("about action");
 				
-			} catch (Exception e) { Mistake.stop(e); }
-		}
-	}
-
-	private final ExitAction exitAction;
-	private class ExitAction extends AbstractAction {
-		public ExitAction() { super("Exit"); }
-		public void actionPerformed(ActionEvent a) {
-			try {
-				
-				Close.close(program);
-
 			} catch (Exception e) { Mistake.stop(e); }
 		}
 	}

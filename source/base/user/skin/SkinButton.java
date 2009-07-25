@@ -7,7 +7,7 @@ import javax.swing.JButton;
 
 import pipe.user.skin.Guide;
 
-import base.user.Fonts;
+import base.user.Face;
 
 // A button that always stays in the same place to be skinned
 public class SkinButton {
@@ -16,7 +16,7 @@ public class SkinButton {
 		button = new JButton(action);
 		button.setLayout(null);
 		button.setBounds(place);
-		button.setFont(Fonts.program());
+		button.setFont(Face.skin());
 		
 		button.setForeground(skin.color(Guide.skinInk));
 		

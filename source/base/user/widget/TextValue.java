@@ -2,7 +2,7 @@ package base.user.widget;
 
 import javax.swing.JTextArea;
 
-import base.user.Fonts;
+import base.user.Face;
 
 /** A wrapping, read-only text area that lets the user select and copy. */
 public class TextValue {
@@ -17,7 +17,7 @@ public class TextValue {
 		area.setOpaque(false);
 		area.setBorder(null);
 		area.setEditable(false);
-		area.setFont(Fonts.platform());
+		area.setFont(Face.font());
 		new TextMenu(area);
 	}
 	

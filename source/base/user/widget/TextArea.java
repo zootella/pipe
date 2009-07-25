@@ -2,13 +2,13 @@ package base.user.widget;
 
 import javax.swing.JTextArea;
 
-import base.user.Fonts;
+import base.user.Face;
 
 public class TextArea {
 	
 	public TextArea() {
 		area = new JTextArea();
-		area.setFont(Fonts.platform());
+		area.setFont(Face.font());
 		new TextMenu(area);
 	}
 	
