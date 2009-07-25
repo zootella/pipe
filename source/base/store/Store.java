@@ -1,53 +1,34 @@
 package base.store;
 
+import base.data.Data;
 import base.data.Outline;
+import base.exception.DataException;
+import base.exception.DiskException;
 import base.file.File;
 import base.file.Path;
+import base.process.Mistake;
 
 public class Store {
-	/*
-	private static final String name = "store.txt";
-	
-	public void Store() {
-		
-		this(Here.folder().add("Store.txt")); // Give the next constructor the complete Path
-	}
-	
-	
-	public void save() {
-		
-		
-		
-	}
-	
-	// Open
-	
-	/** Open the program's store file at the given path. *
+
 	public Store() {
+		path = Path.here().add(name);
 		
-		// Make a blank Outline object so outline is never null
-		o = new Outline("");
+		o = new Outline(""); // Make a blank Outline object so o is never null
 		
 		try {
-			
-			// Open the store file, and parse the Outline inside
-			outline = Outline.fromText(File.data(new Path(name)));
-			
-			// That didn't work, outline will be the blank empty Outline
+			o = Outline.fromText(File.data(path)); // Open the store file and parse the text outline inside
 		}
-		catch (DataException e) {}
-		catch (DiskException e) {}
+		catch (DataException e) { Mistake.log(e); } // That didn't work, o will be the blank empty Outline
+		catch (DiskException e) { Mistake.log(e); }
 	}
 	
-	/** The Path where the store file is on the disk. *
-	private Path path;
-	
+	private static final String name = "store.txt";
+	private final Path path;
 	public Outline o;
 	
-	
-	
-
-
-	*/
-
+	public void save() {
+		try {
+			File.save(path, new Data(o.toString()));
+		} catch (DiskException e) { Mistake.log(e); }
+	}
 }

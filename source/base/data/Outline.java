@@ -32,6 +32,9 @@ public class Outline {
 
 	// Value
 	
+	//TODO wasn't there a getData(name) that would jump down and return it
+	// maybe put this back when you don't have a method for each type
+	
 	/** Get this Outline object's data value. */
 	public Data getData() { return value; }
 	/** Get this Outline object's value as a String. */
@@ -152,6 +155,7 @@ public class Outline {
 		return o(name);
 	}
 
+	//TODO do you need path and make anymore?
 	/** Move down into path like "name.name.name", throw DataException if name is not found. */
 	public Outline path(String path) {
 		List<String> names = Text.words(path, ".");
