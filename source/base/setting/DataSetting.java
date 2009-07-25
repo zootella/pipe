@@ -1,4 +1,4 @@
-package base.store.setting;
+package base.setting;
 
 import base.data.Data;
 import base.data.Outline;
@@ -11,7 +11,7 @@ public class DataSetting {
 		this.name = name;
 		this.preset = preset;
 		
-		if (outline.has(name) && outline.o(name).getData().equals(preset))
+		if (outline.has(name) && outline.o(name).value().equals(preset))
 			outline.remove(name); // Clear preset from outline
 	}
 	
@@ -27,7 +27,7 @@ public class DataSetting {
 	
 	public Data value() {
 		if (outline.has(name))
-			return outline.o(name).getData();
+			return outline.o(name).value();
 		return preset;
 	}
 }

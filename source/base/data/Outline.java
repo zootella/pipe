@@ -29,50 +29,31 @@ public class Outline {
 	private Data value; // Copy data into this Outline object so value doesn't view a buffer that might change or close
 	/** The contents of this Outline object, a List of more Outline objects beneath it in the outline. */
 	private List<Outline> contents;
+	
+	// Navigate
+
+	/** Move down from this Outline object to name within it, throw DataException if name is not found. */
+	public Outline o(String name) {
+		for (Outline o : contents)
+			if (o.name.equals(name)) return o; // Return the first Outline in our contents that has a matching name
+		throw new DataException();
+	}
 
 	// Value
 	
-	//TODO wasn't there a getData(name) that would jump down and return it
-	// maybe put this back when you don't have a method for each type
-	
 	/** Get this Outline object's data value. */
-	public Data getData() { return value; }
-	/** Get this Outline object's value as a String. */
-	public String getString() { return value.toString(); }
-	/** Get this Outline object's value as a number, throw DataException if it's not a number. */
-	public long getNumber() { return Number.toLong(getString()); }
-	/** Get this Outline object's value as a boolean, throw DataException if it's not a boolean. */
-	public boolean getBoolean() {
-		String s = getString();
-		if      (s.equals("t")) return true;
-		else if (s.equals("f")) return false;
-		else throw new DataException();
-	}
+	public Data value() { return value; }
+	/** Get the data value of the Outline object of the given name in this one. */
+	public Data value(String name) { return o(name).value(); }
 
 	/** Set the value of this Outline object to the given Data. */
 	public void set(Data d) {
 		this.value = d.copyData(); // Copy the value data into this new Outline object
 	}
 	
-	/** Set the value of this Outline object to the given String. */
-	public void set(String s) {
-		this.value = new Data(s); // Wrap the given String into a new Data object
-	}
-	
-	/** Set the value of this Outline object to the given number. */
-	public void set(long n) {
-		this.value = new Data(Number.toString(n)); // An Outline holds a number as a string of numerals like "786"
-	}
-	
-	/** Set the value of this Outline object to the given boolean. */
-	public void set(boolean b) {
-		if (b) set("t");
-		else   set("f");
-	}
-	
 	/** Clear the value and contents of this Outline object. */
 	public void clear() {
-		set(""); // No value
+		set(Data.empty()); // No value
 		contents.clear(); // Remove all the Outline objects in our contents list
 	}
 
@@ -89,12 +70,6 @@ public class Outline {
 	
 	/** Make a new Outline object with the given name and Data value. */
 	public Outline(String name, Data d) { this(name); set(d); }
-	/** Make a new Outline object with the given name and String value. */
-	public Outline(String name, String s) { this(name); set(s); }
-	/** Make a new Outline object with the given name and number value. */
-	public Outline(String name, long n) { this(name); set(n); }
-	/** Make a new Outline object with the given name and boolean value. */
-	public Outline(String name, boolean b) { this(name); set(b); }
 	
 	// Contents
 
@@ -102,12 +77,6 @@ public class Outline {
 	public void add(String name) { add(new Outline(name)); }
 	/** Add a new Outline to this one, with the given name and Data value. */
 	public void add(String name, Data d) { add(new Outline(name, d)); }
-	/** Add a new Outline to this one, with the given name and String value. */
-	public void add(String name, String s) { add(new Outline(name, s)); }
-	/** Add a new Outline to this one, with the given name and number value. */
-	public void add(String name, long n) { add(new Outline(name, n)); }
-	/** Add a new Outline to this one, with the given name and boolean value. */
-	public void add(String name, boolean b) { add(new Outline(name, b)); }
 
 	/** Add o to this Outline object's contents. */
 	public void add(Outline o) {
@@ -139,39 +108,7 @@ public class Outline {
 			if (o.name.equals(name)) list.add(o); // We found one with a matching name, add it to the list we'll return
 		return list;
 	}
-	
-	// Navigate
 
-	/** Move down from this Outline object to name within it, throw DataException if name is not found. */
-	public Outline o(String name) {
-		for (Outline o : contents)
-			if (o.name.equals(name)) return o; // Return the first Outline in our contents that has a matching name
-		throw new DataException();
-	}
-
-	/** Move down from this Outline object to name within it, make name if it doesn't exist yet. */
-	public Outline m(String name) {
-		if (!has(name)) add(new Outline(name)); // If name isn't there, make it
-		return o(name);
-	}
-
-	//TODO do you need path and make anymore?
-	/** Move down into path like "name.name.name", throw DataException if name is not found. */
-	public Outline path(String path) {
-		List<String> names = Text.words(path, ".");
-		Outline o = this;
-		for (String name : names) o = o.o(name); // Move down, throw DataException if name is not found
-		return o; // Return the Outline object at the end of the path
-	}
-
-	/** Move down into path like "name.name.name", making Outline objects that don't exist yet. */
-	public Outline make(String path) {
-		List<String> names = Text.words(path, "."); // Trims names and doesn't include blank names
-		Outline o = this;
-		for (String name : names) o = o.m(name); // Move down, making each one
-		return o; // Return the Outline object at the end of the path
-	}
-	
 	// Convert to text
 	
 	/** Turn this Outline into a text outline. */

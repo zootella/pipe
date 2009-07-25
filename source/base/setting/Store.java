@@ -1,4 +1,4 @@
-package base.store;
+package base.setting;
 
 import base.data.Data;
 import base.data.Outline;

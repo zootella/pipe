@@ -1,4 +1,4 @@
-package base.store.setting;
+package base.setting;
 
 import base.data.Outline;
 import base.exception.DataException;

@@ -17,6 +17,8 @@ public class Data implements Comparable<Data> {
 	public Data(byte[] a) { this(Convert.toByteBuffer(a)); }
 	/** Make a new Data object that views the data of the given String. */
 	public Data(String s) { this(Convert.toByteBuffer(s)); }
+	/** Make a new Data object that holds n as text like "786". */
+	public Data(long n) { this(Number.toString(n)); }
 	/** Make a new Data object that views the data between b's position and limit, doesn't change b. */
 	public Data(ByteBuffer b) {
 		buffer = b.asReadOnlyBuffer(); // Save a copy of b so if b's position moves, buffer's position won't
@@ -37,13 +39,15 @@ public class Data implements Comparable<Data> {
 	public Data copyData() {
 		return (new Bay(this)).data(); // Make a new Bay that will copy the data we view into it
 	}
-	
+
 	// Convert
 
 	/** Copy the data this Data object views into a new byte array, and return it. */
 	public byte[] toByteArray() { return Convert.toByteArray(toByteBuffer()); }
 	/** Convert this Data into a String. */
 	public String toString() { return Convert.toString(toByteBuffer()); }
+	/** Get the number in this Data, throw DataException if this Data doesn't view text numerals like "786". */
+	public long toNumber() { return Number.toLong(toString()); }
 	
 	/**
 	 * Make a read-only ByteBuffer with position and limit clipped around the data this Data object views.
