@@ -10,7 +10,7 @@ import base.exception.ChopException;
 public class Data implements Comparable<Data> {
 
 	// Make
-
+	
 	/** Make a new Data object that views the single byte y. */
 	public Data(byte y) { this(Convert.toByteBuffer(y)); }
 	/** Make a new Data object that views the given byte array. */
