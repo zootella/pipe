@@ -42,7 +42,13 @@ public class File extends Close {
 			}
 			this.pattern = pattern;
 			
-		} catch (IOException e) { throw new DiskException(e); }
+		} catch (IOException e) {
+			close(this);
+			throw new DiskException(e);
+		} catch (RuntimeException e) {
+			close(this);
+			throw e;
+		}
 	}
 
 	// Look
