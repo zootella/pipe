@@ -21,7 +21,7 @@ public class DataSetting {
 	
 	public void set(Data value) {
 		outline.remove(name); // Clear outline of name
-		if (!program.equals(value)) // Keep the default out of outline
+		if (!program.equals(value)) // Keep default out of outline
 			outline.add(name, value);
 	}
 	

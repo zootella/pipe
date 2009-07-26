@@ -1,6 +1,5 @@
 package base.data;
 
-
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
@@ -8,7 +7,7 @@ import base.exception.PlatformException;
 
 public class Convert {
 
-	// -------- Convert a byte into a byte[], String, or ByteBuffer --------
+	// Byte
 
 	/** Convert a single byte into a new byte array. */
 	public static byte[] toByteArray(byte y) {
@@ -27,7 +26,7 @@ public class Convert {
 		return toByteBuffer(toByteArray(y)); // Go through byte array
 	}
 	
-	// -------- Convert a byte[] into a String or ByteBuffer --------
+	// Byte array
 	
 	/**
 	 * Convert a byte array to a String using UTF-8 encoding.
@@ -44,7 +43,7 @@ public class Convert {
 		return ByteBuffer.wrap(a); // This doesn't copy any data
 	}
 	
-	// -------- Convert a String into a byte[] or ByteBuffer --------
+	// String
 
 	/** Convert a String into a byte array using UTF-8 encoding. */
 	public static byte[] toByteArray(String s) {
@@ -58,7 +57,7 @@ public class Convert {
 		return toByteBuffer(toByteArray(s)); // Go through byte array
 	}
 	
-	// -------- Convert a ByteBuffer into a byte[] or String --------
+	// ByteBuffer
 
 	/** Copy the data in a ByteBuffer into a new byte array. */
 	public static byte[] toByteArray(ByteBuffer b) {
@@ -72,8 +71,8 @@ public class Convert {
 		return toString(toByteArray(b)); // Go through byte array
 	}
 
-	// -------- By default, use UTF-8 encoding --------
+	// Define
 	
-	/** "UTF-8", ASCII with Unicode characters mixed in. */
+	/** ASCII with Unicode characters mixed in. */
 	public static final String encoding = "UTF-8";
 }
