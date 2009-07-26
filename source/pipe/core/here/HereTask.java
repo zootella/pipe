@@ -102,7 +102,7 @@ public class HereTask extends Close {
 				// Look for the packet response
 				Outline o = new Outline(packet.bin.data()); // Parse the UDP payload into an Outline
 				if (o.name.equals("ap")) { // Address response
-					if (o.has("hash") && !o.o("hash").value().equals(o.value().hash())) // Hash check
+					if (o.has("hash") && !o.value("hash").equals(o.value().hash())) // Hash check
 						throw new DataException("received corrupted ap");
 					internet = new IpPort(o.value()); // Read
 					close(me()); // It worked, we're done

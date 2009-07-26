@@ -20,7 +20,7 @@ public class User extends Close {
 		restoreAction = new RestoreAction();
 		exitAction = new ExitAction();
 		
-		skin = new Skin("skin.png");
+		skin = new Skin(program.store.folder.add("skin.png"));
 
 		main = new MainFrame(this);
 		info = new InfoFrame(this);

@@ -117,9 +117,9 @@ public class Path {
 		if (!file.mkdirs()) throw new DiskException(); // Turn returning false into an exception
 	}
 
-	/** Confirm this Path is to a folder on the disk we can write to, throw a DiskException if it's not. */
+	/** Confirm this Path is to a folder on the disk we can write to, making folders as needed, or throw a DiskException. */
 	public void folderWrite() {
-		if (!existsFolder()) throw new DiskException();
+		folder();
 		
 		// Try to make and delete a subfolder with a unique name
 		Path temporary = add(Name.unique());
@@ -145,10 +145,12 @@ public class Path {
 		if (!file.delete()) throw new DiskException(); // Turn returning false into an exception
 	}
 	
-	// Help
+	// Work
 
-	/** The Path to the working folder the launcher gave the program. */
-	public static Path here() {
+	/** The Path to s in or relative from the working folder the launcher gave the program when it ran. */
+	public static Path work(String s) { return work().add(s); }
+	/** The Path to the working folder the launcher gave the program when it ran. */
+	public static Path work() {
 		return new Path(new File("").getAbsoluteFile()); // A blank File points to the present working directory
 	}
 }

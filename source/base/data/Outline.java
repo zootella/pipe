@@ -43,7 +43,7 @@ public class Outline {
 	
 	/** Get this Outline object's data value. */
 	public Data value() { return value; }
-	/** Get the data value of the Outline object of the given name in this one. */
+	/** Get the data value of the Outline object of the given name in this one, same as o(name).value(). */
 	public Data value(String name) { return o(name).value(); }
 
 	/** Set the value of this Outline object to the given Data. */
