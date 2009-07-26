@@ -13,12 +13,17 @@ public class ButtonGuide {
 	}
 	private final Rectangle r;
 
-	public Rectangle ghost()  { return shift(0); }
-	public Rectangle normal() { return shift(1); }
-	public Rectangle light()  { return shift(2); }
-	public Rectangle press()  { return shift(3); }
+	public static final int ghost  = 0;
+	public static final int normal = 1;
+	public static final int hot    = 2;
+	public static final int press  = 3;
+
+	public Rectangle get(int state) { return shift(state); }
 
 	private Rectangle shift(int i) {
+		if (i < ghost || i > press) throw new IllegalArgumentException();
 		return new Rectangle(r.x, r.y + (i * r.height), r.width, r.height);
 	}
+	
+	//TODO maybe move this all into SkinButton?
 }

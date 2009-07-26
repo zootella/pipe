@@ -10,7 +10,6 @@ import pipe.core.museum.Pipe;
 import pipe.core.museum.ReceivePipe;
 import pipe.core.museum.SendPipe;
 import pipe.main.Program;
-import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.user.Screen;
 import base.user.panel.Cell;

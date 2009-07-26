@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import pipe.user.skin.Guide;
+import pipe.user.Guide;
 import base.exception.DiskException;
 import base.file.Path;
 

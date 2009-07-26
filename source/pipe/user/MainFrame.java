@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import pipe.core.museum.Pipe;
 import pipe.main.Main;
 import pipe.main.Program;
-import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.state.Close;
 import base.user.Screen;

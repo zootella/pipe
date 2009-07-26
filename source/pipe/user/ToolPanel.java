@@ -11,9 +11,8 @@ import javax.swing.JPopupMenu;
 import pipe.main.Main;
 import pipe.main.Program;
 import pipe.main.Snippet;
-import pipe.user.skin.Guide;
 import base.process.Mistake;
-import base.user.skin.SkinButton;
+import base.user.skin.PlainButton;
 import base.user.widget.Grip;
 
 /** The toolbar at the top of the main window. */
@@ -42,9 +41,9 @@ public class ToolPanel {
 		menu.add(new JMenuItem(user.exitAction));
 		
 		Grip grip = new Grip(main.frame, Guide.toolGrip);
-		SkinButton closeButton = new SkinButton(closeAction, user.skin, Guide.skinToolClose, Guide.toolClose);
-		SkinButton makeButton = new SkinButton(makeAction, user.skin, Guide.skinToolMake, Guide.toolMake);
-		SkinButton menuButton = new SkinButton(menuAction, user.skin, Guide.skinToolMenu, Guide.toolMenu);
+		PlainButton closeButton = new PlainButton(closeAction, user.skin, Guide.skinToolClose, Guide.toolClose);
+		PlainButton makeButton = new PlainButton(makeAction, user.skin, Guide.skinToolMake, Guide.toolMake);
+		PlainButton menuButton = new PlainButton(menuAction, user.skin, Guide.skinToolMenu, Guide.toolMenu);
 		
 		panel = new JPanel();
 		panel.setLayout(null);

@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 
 import pipe.main.Main;
 import pipe.main.Program;
-import pipe.user.skin.Guide;
 import base.exception.DataException;
 import base.exception.DiskException;
 import base.file.Path;

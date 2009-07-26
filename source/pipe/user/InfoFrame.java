@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import pipe.main.Program;
-import pipe.user.skin.Guide;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.View;

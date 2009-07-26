@@ -1,4 +1,4 @@
-package pipe.user.skin;
+package pipe.user;
 
 import java.awt.Dimension;
 import java.awt.Point;

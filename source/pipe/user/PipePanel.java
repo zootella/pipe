@@ -8,9 +8,8 @@ import javax.swing.JPanel;
 
 import pipe.core.museum.Pipe;
 import pipe.main.Program;
-import pipe.user.skin.Guide;
 import base.process.Mistake;
-import base.user.skin.SkinButton;
+import base.user.skin.PlainButton;
 
 /** A Status panel shows a pipe to the user. */
 public class PipePanel {
@@ -34,8 +33,8 @@ public class PipePanel {
 		infoAction = new InfoAction();
 		killAction = new KillAction();
 		
-		SkinButton info = new SkinButton(infoAction, program.user.skin, Guide.skinPipeInfo, Guide.pipeInfo);
-		SkinButton kill = new SkinButton(killAction, program.user.skin, Guide.skinPipeKill, Guide.pipeKill);
+		PlainButton info = new PlainButton(infoAction, program.user.skin, Guide.skinPipeInfo, Guide.pipeInfo);
+		PlainButton kill = new PlainButton(killAction, program.user.skin, Guide.skinPipeKill, Guide.pipeKill);
 		
 		panel.add(info.button);
 		panel.add(kill.button);

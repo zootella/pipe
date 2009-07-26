@@ -11,7 +11,6 @@ import javax.swing.JScrollPane;
 
 import pipe.main.Main;
 import pipe.main.Program;
-import pipe.user.skin.Guide;
 import base.data.Data;
 import base.data.Outline;
 import base.desktop.Clipboard;
