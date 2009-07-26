@@ -16,7 +16,7 @@ import base.user.Face;
 
 public class SkinButton {
 	
-	public SkinButton(Action action, Skin skin, ButtonGuide guide, Rectangle place) {
+	public SkinButton(Action action, Skin skin, Rectangle guide, Rectangle place) {
 		this.action = action;
 		this.skin = skin;
 		this.guide = guide;
@@ -30,17 +30,17 @@ public class SkinButton {
 	    
 	    action.addPropertyChangeListener(new MyPropertyChangeListener());
 	    
-	    state = ButtonGuide.normal;
+	    state = normal;
 	}
 	
 	private final Action action;
 	private final Skin skin;
-	private final ButtonGuide guide;
+	private final Rectangle guide;
 	public final MyLabel label;
 
 	private class MyLabel extends JLabel {
 		@Override public void paintComponent(Graphics g) {
-			g.drawImage(skin.image(guide.get(state)), 0, 0, null);
+			g.drawImage(skin.image(shift(guide, state)), 0, 0, null);
 			g.drawString("hello", 0, 0);
 		}
 	}
@@ -50,19 +50,19 @@ public class SkinButton {
     private class MyMouseListener extends MouseAdapter {
     	@Override public void mouseEntered(MouseEvent m) {
     		try {
-    			state = ButtonGuide.hot;
+    			state = hot;
     			label.repaint();
     		} catch (Exception e) { Mistake.stop(e); }
     	}
     	@Override public void mouseExited(MouseEvent m) {
     		try {
-    			state = ButtonGuide.normal;
+    			state = normal;
     			label.repaint();
     		} catch (Exception e) { Mistake.stop(e); }
     	}
     	@Override public void mousePressed(MouseEvent m) {
     		try {
-    			state = ButtonGuide.press;
+    			state = press;
     			label.repaint();
     		} catch (Exception e) { Mistake.stop(e); }
     	}

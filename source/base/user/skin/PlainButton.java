@@ -12,7 +12,7 @@ import base.user.Face;
 // A button that always stays in the same place to be skinned
 public class PlainButton {
 
-	public PlainButton(Action action, Skin skin, ButtonGuide guide, Rectangle place) {
+	public PlainButton(Action action, Skin skin, Rectangle guide, Rectangle place) {
 		button = new JButton(action);
 		button.setLayout(null);
 		button.setBounds(place);

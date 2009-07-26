@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import base.user.skin.ButtonGuide;
-
 public class Guide {
 	
 	// Define
@@ -36,12 +34,12 @@ public class Guide {
 	public static final Rectangle skinTool = new Rectangle(0, 0, sizeTool.width, sizeTool.height);
 	public static final Rectangle skinPipe = new Rectangle(0, 0, sizePipe.width, sizePipe.height);
 	
-	public static final ButtonGuide skinToolClose = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
-	public static final ButtonGuide skinToolMake = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
-	public static final ButtonGuide skinToolMenu = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
+	public static final Rectangle skinToolClose = new Rectangle(0, 0, buttonWidth, buttonHeight);
+	public static final Rectangle skinToolMake = new Rectangle(0, 0, buttonWidth, buttonHeight);
+	public static final Rectangle skinToolMenu = new Rectangle(0, 0, buttonWidth, buttonHeight);
 	
-	public static final ButtonGuide skinPipeInfo = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
-	public static final ButtonGuide skinPipeKill = new ButtonGuide(0, 0, buttonWidth, buttonHeight);
+	public static final Rectangle skinPipeInfo = new Rectangle(0, 0, buttonWidth, buttonHeight);
+	public static final Rectangle skinPipeKill = new Rectangle(0, 0, buttonWidth, buttonHeight);
 
 	// Tool
 
