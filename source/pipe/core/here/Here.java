@@ -2,7 +2,6 @@ package pipe.core.here;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Map;
 
 import base.exception.PlatformException;
 import base.exception.ProgramException;
@@ -25,14 +24,13 @@ public class Here extends Close {
 	public Here(Port port, Packets packets) {
 		this.port = port;
 		this.packets = packets;
+
 		update = new Update(new MyReceive());
 		refresh();
 		
 		model = new MyModel();
 		model.pulse();
 		model.changed();
-		
-		
 	}
 	
 	private final Port port;

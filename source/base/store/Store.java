@@ -35,7 +35,7 @@ public class Store {
 	/** Path to the program's folder for application data and settings files. */
 	public final Path folder;
 	
-	/** The program's Outline of settings and data it saves between the times it runs. */
+	/** The program's Outline of settings and data saved to disk between the times it runs. */
 	public Outline o;
 
 	/** Save the store Outline for the next time the program starts. */

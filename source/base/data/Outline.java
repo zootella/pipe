@@ -29,15 +29,6 @@ public class Outline {
 	private Data value; // Copy data into this Outline object so value doesn't view a buffer that might change or close
 	/** The contents of this Outline object, a List of more Outline objects beneath it in the outline. */
 	private List<Outline> contents;
-	
-	// Navigate
-
-	/** Move down from this Outline object to name within it, throw DataException if name is not found. */
-	public Outline o(String name) {
-		for (Outline o : contents)
-			if (o.name.equals(name)) return o; // Return the first Outline in our contents that has a matching name
-		throw new DataException();
-	}
 
 	// Value
 	
@@ -107,6 +98,22 @@ public class Outline {
 		for (Outline o : contents)
 			if (o.name.equals(name)) list.add(o); // We found one with a matching name, add it to the list we'll return
 		return list;
+	}
+	
+	// Navigate
+
+	/** Move down from this Outline object to name within it, throw DataException if name is not found. */
+	public Outline o(String name) {
+		for (Outline o : contents)
+			if (o.name.equals(name)) return o; // Return the first Outline in our contents that has a matching name
+		throw new DataException();
+	}
+
+	/** Move down from this Outline object to name within it, make name if it doesn't exist yet. */
+	public Outline m(String name) {
+		if (!has(name))
+			add(name); // If name isn't there, make it
+		return o(name);
 	}
 
 	// Convert to text
