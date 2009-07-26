@@ -41,14 +41,9 @@ public class File extends Close {
 				if (size > 0) pattern = pattern.add(new Stripe(0, size)); // Mark the whole file as full
 			}
 			this.pattern = pattern;
-			
-		} catch (IOException e) {
-			close(this);
-			throw new DiskException(e);
-		} catch (RuntimeException e) {
-			close(this);
-			throw e;
 		}
+		catch (IOException e)      { close(this); throw new DiskException(e); }
+		catch (RuntimeException e) { close(this); throw e; }
 	}
 
 	// Look
