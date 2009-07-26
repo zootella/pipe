@@ -5,7 +5,7 @@ import pipe.user.PipePanel;
 import base.data.Outline;
 import base.file.Path;
 
-/** An object that extends Pipe represents our end of a pipe that transfers files with another computer. */
+/** An object that implements Pipe represents our end of a pipe that transfers files with another computer. */
 public interface Pipe {
 	
 	// Close
