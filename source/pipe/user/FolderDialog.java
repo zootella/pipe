@@ -113,22 +113,9 @@ public class FolderDialog {
 	private static Path check(String s) {
 		try {
 			
-			// Parse s into a Path
-			Path path = new Path(s);
-			if (path == null)
-				return null; // Given text is not a valid Path
-			
-			// See if a folder is there
-			if (path.existsFolder())
-				return path;
-			
-			// Try to make the folder
-			path.folder();
-			
-			// See if the folder is there now
-			if (path.existsFolder())
-				return path;
-			return null;
+			Path path = new Path(s); // Parse s into a Path
+			path.folder(); // Check or make and check the folder
+			return path;
 		}
 		catch (DataException e) { return null; }
 		catch (DiskException e) { return null; }

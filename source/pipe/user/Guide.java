@@ -54,6 +54,11 @@ public class Guide {
 	public static final Rectangle pipeInfo = new Rectangle(320, 165, buttonWidth, buttonHeight);
 	public static final Rectangle pipeKill = new Rectangle(410, 165, buttonWidth, buttonHeight);
 	
+	// Museum
+	
+	public static final Rectangle museumSend = new Rectangle(10, 10, 200, 200);
+	public static final Rectangle museumReceive = new Rectangle(220, 10, 200, 200);
+	
 	
 	
 	
