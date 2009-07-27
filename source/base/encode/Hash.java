@@ -43,6 +43,6 @@ public class Hash {
 
 	// Define
 	
-	/** 20 bytes, a SHA1 hash value is 20 bytes, which is 160 bits. */
+	/** A SHA1 hash value is 20 bytes, which is 160 bits. */
 	public static final int size = 20;
 }

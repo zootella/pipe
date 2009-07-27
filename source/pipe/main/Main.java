@@ -8,12 +8,15 @@ public class Main {
 	
 	// Define
 	
+	/** true to build to release to users, false to include debugging information. */
+	public static final boolean release = false;
+	
 	/** The name of this program. */
 	public static final String name = "Pipe";
 	/** Text that describes the version of this program. */
 	public static final String version = "2009 May 19";
-	/** true to build to release to users, false to include debugging information. */
-	public static final boolean release = false;
+	/** Text prefix for exchange codes. */
+	public static final String flag = "PIPE";
 	
 	// Main
 

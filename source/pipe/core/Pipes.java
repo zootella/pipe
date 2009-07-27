@@ -3,15 +3,12 @@ package pipe.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import base.data.Outline;
-import base.file.Path;
-import base.state.Close;
-
 import pipe.core.museum.Pipe;
 import pipe.main.Program;
 import pipe.user.ExchangeDialog;
 import pipe.user.FolderDialog;
 import pipe.user.MuseumDialog;
+import base.state.Close;
 
 public class Pipes extends Close {
 	
@@ -37,14 +34,10 @@ public class Pipes extends Close {
 		if (pipe != null) {
 
 			// Folder dialog
-			Path folder = FolderDialog.show(program, pipe.title(), pipe.instruction());
-			folder = pipe.folder(folder);
-			if (folder != null) {
+			if (pipe.folder(FolderDialog.show(program, pipe.title(), pipe.instruction()))) {
 
 				// Exchange Dialog
-				Outline away = ExchangeDialog.show(program, pipe.home());
-				away = pipe.away(away);
-				if (away != null) {
+				if (pipe.away(ExchangeDialog.show(program, pipe.home()))) {
 					
 					// List, show, and start the new pipe
 					pipes.add(pipe);

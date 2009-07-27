@@ -25,7 +25,7 @@ public class PipePanel {
 		panel = new JPanel();
 		panel.setLayout(null);
 		panel.setSize(Guide.sizePipe);
-		panel.setBackground(new Color(0xfafafa));
+		panel.setBackground(new Color(0xdedede));
 
 		
 		// buttons, info and terminate

@@ -68,6 +68,8 @@ public class Outline {
 	public void add(String name) { add(new Outline(name)); }
 	/** Add a new Outline to this one, with the given name and Data value. */
 	public void add(String name, Data d) { add(new Outline(name, d)); }
+	/** Add a new Outline to this one, with the given name and String value. */
+	public void add(String name, String value) { add(name, new Data(value)); }
 
 	/** Add o to this Outline object's contents. */
 	public void add(Outline o) {

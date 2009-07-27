@@ -26,26 +26,20 @@ public class ReceivePipe extends Close implements Pipe {
 		return false;
 	}
 
-	@Override public Path folder(Path p) {
+	@Override public boolean folder(Path p) {
 		this.folder = p;
-		return folder;
+		return false;
 	}
 	private Path folder;
-	@Override public Path folder() {
-		return folder;
-	}
 
-	@Override public Outline away(Outline away) {
-		this.away = away;
-		return away;
+	@Override public boolean away(String away) {
+//		this.away = away;
+		return false;
 	}
 	private Outline away;
-	@Override public Outline away() {
-		return away;
-	}
 
-	@Override public Outline home() {
-		return new Outline();
+	@Override public String home() {
+		return "yeah";
 	}
 	
 	@Override public String title() { return "Receive Pipe"; }
