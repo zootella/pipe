@@ -26,7 +26,7 @@ public class Pipes extends Close {
 
 	public void make() {
 
-		Pipe pipe = (new MuseumDialog(program)).pipe;
+		Pipe pipe = (new MuseumDialog(program)).result();
 		if (pipe == null) return;
 
 		new FolderDialog(program, pipe);

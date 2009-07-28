@@ -26,7 +26,6 @@ public class PipePanel {
 		panel.setLayout(null);
 		panel.setSize(Guide.sizePipe);
 		panel.setBackground(new Color(0xdedede));
-
 		
 		// buttons, info and terminate
 		
@@ -54,7 +53,7 @@ public class PipePanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				pipe.info().frame.setVisible(true);
+				pipe.userInfo().frame.setVisible(true);
 
 			} catch (Exception e) { Mistake.stop(e); }
 		}

@@ -80,7 +80,7 @@ public class FolderDialog {
 
 				String s = pipe.folder(folder.field.getText());
 				if (s != null)
-					JOptionPane.showMessageDialog(program.user.main.frame, s, Main.name, JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(program.user.main.frame, s, Main.name, JOptionPane.WARNING_MESSAGE);
 				else
 					dialog.dispose();
 

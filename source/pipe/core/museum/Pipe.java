@@ -21,6 +21,6 @@ public interface Pipe {
 	public void awayCode(String s);
 	public boolean hasAwayCode();
 
-	// Command
+	// Go
 	public void go();
 }

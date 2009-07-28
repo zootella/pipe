@@ -55,7 +55,7 @@ public class MainFrame extends Close {
 		panel.add(tool.panel);
 		int y = Guide.toolHeight;
 		for (Pipe pipe : program.core.pipes.pipes) {
-			JPanel p = pipe.panel().panel;
+			JPanel p = pipe.userPanel().panel;
 			p.setLocation(0, y);
 			panel.add(p);
 			y += Guide.pipeHeight;

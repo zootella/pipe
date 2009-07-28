@@ -97,7 +97,7 @@ public class ExchangeDialog {
 						program.user.main.frame,
 						"Unable to parse code. Make sure you pasted it correctly, and try again.",
 						Main.name,
-						JOptionPane.PLAIN_MESSAGE);
+						JOptionPane.WARNING_MESSAGE);
 				else
 					dialog.dispose();
 
