@@ -25,15 +25,15 @@ public class Pipes extends Close {
 	public final List<Pipe> pipes;
 
 	public void make() {
-		
-		Pipe pipe = MuseumDialog.show(program);
+
+		Pipe pipe = (new MuseumDialog(program)).pipe;
 		if (pipe == null) return;
-		
-		FolderDialog.show(program, pipe);
+
+		new FolderDialog(program, pipe);
 		if (!pipe.hasFolder()) { close((Close)pipe); return; }
-		
-		ExchangeDialog.show(program, pipe);
-		if (!pipe.hasAway()) { close((Close)pipe); return; }
+
+		new ExchangeDialog(program, pipe);
+		if (!pipe.hasAwayCode()) { close((Close)pipe); return; }
 		
 		pipes.add(pipe);
 		program.user.main.fill();

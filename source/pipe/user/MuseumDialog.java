@@ -19,15 +19,9 @@ import base.user.skin.PlainButton;
 
 public class MuseumDialog {
 	
-	// Library
-	
-	public static Pipe show(Program program) {
-		return (new MuseumDialog(program)).pipe;
-	}
-	
 	// Object
 	
-	private MuseumDialog(Program program) {
+	public MuseumDialog(Program program) {
 		this.program = program;
 		
 		JPanel panel = new JPanel();

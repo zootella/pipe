@@ -2,27 +2,24 @@ package pipe.core.museum;
 
 import pipe.user.PipeInfoFrame;
 import pipe.user.PipePanel;
-import base.file.Path;
 
 /** An object that implements Pipe represents our end of a pipe that transfers files with another computer. */
 public interface Pipe {
 
 	// User
-	public PipePanel panel();
-	public PipeInfoFrame info();
+	public PipePanel userPanel();
+	public PipeInfoFrame userInfo();
 	
-	// Look
-	public String title();
-	public String instruction();
-	public String home();
-	
-	// Enter
-	public String folder(Path p);
-	public String away(String s);
-
-	// Ready
+	// Folder
+	public String folderTitle();
+	public String folderInstruction();
+	public String folder(String s);
 	public boolean hasFolder();
-	public boolean hasAway();
+	
+	// Code
+	public String homeCode();
+	public void awayCode(String s);
+	public boolean hasAwayCode();
 
 	// Command
 	public void go();

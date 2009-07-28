@@ -89,10 +89,15 @@ public class Path {
 	/** true if there is a folder on the disk at this Path. */
 	public boolean existsFolder() { return file.isDirectory(); }
 
+	/** true if there is a folder on the disk at this Path that is not empty. */
+	public boolean existsFolderFull() {
+		if (!existsFolder()) return false;
+		return !list().isEmpty();
+	}
 	/** true if there is an empty folder on the disk at this Path. */
 	public boolean existsFolderEmpty() {
 		if (!existsFolder()) return false;
-		return list().size() == 0;
+		return list().isEmpty();
 	}
 
 	/** Get a list of the contents of this folder, throws DiskException if this Path isn't to a folder on the disk. */

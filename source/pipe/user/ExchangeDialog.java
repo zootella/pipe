@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
+import pipe.core.museum.Pipe;
 import pipe.main.Main;
 import pipe.main.Program;
 import base.desktop.Clipboard;
@@ -20,16 +21,11 @@ import base.user.widget.TextArea;
 
 public class ExchangeDialog {
 	
-	// Library
-
-	public static String show(Program program, String home) {
-		return (new ExchangeDialog(program, home)).result;
-	}
-	
 	// Object
 
-	private ExchangeDialog(Program program, String homeCode) {
+	public ExchangeDialog(Program program, Pipe pipe) {
 		this.program = program;
+		this.pipe = pipe;
 
 		home = new TextArea();
 		away = new TextArea();
@@ -52,7 +48,7 @@ public class ExchangeDialog {
 		panel.place(1, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JButton(new PasteAction())));
 		panel.place(0, 3, 2, 1, 1, 0, 0, 0, Cell.wrap(row.panel).lowerRight());
 		
-		home.area.setText(homeCode);
+		home.area.setText(pipe.homeCode());
 
 		dialog = new JDialog(program.user.main.frame, "Code Exchange", true); // true to make a modal dialog
 		dialog.setContentPane(panel.panel);
@@ -61,10 +57,10 @@ public class ExchangeDialog {
 	}
 	
 	private final Program program;
+	private final Pipe pipe;
 	private final JDialog dialog;
 	private final TextArea home;
 	private final TextArea away;
-	private String result;
 	
 	// Action
 
@@ -95,9 +91,13 @@ public class ExchangeDialog {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				result = away.area.getText();
-				if (result == null)
-					JOptionPane.showMessageDialog(program.user.main.frame, "Unable to parse code. Make sure you pasted it correctly, and try again.", Main.name, JOptionPane.PLAIN_MESSAGE);
+				pipe.awayCode(away.area.getText());
+				if (!pipe.hasAwayCode())
+					JOptionPane.showMessageDialog(
+						program.user.main.frame,
+						"Unable to parse code. Make sure you pasted it correctly, and try again.",
+						Main.name,
+						JOptionPane.PLAIN_MESSAGE);
 				else
 					dialog.dispose();
 

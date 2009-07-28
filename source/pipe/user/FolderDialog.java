@@ -8,11 +8,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import pipe.core.museum.Pipe;
 import pipe.main.Main;
 import pipe.main.Program;
-import base.exception.DataException;
-import base.exception.DiskException;
-import base.file.Path;
 import base.process.Mistake;
 import base.user.Dialog;
 import base.user.Screen;
@@ -21,17 +19,12 @@ import base.user.panel.Panel;
 import base.user.widget.TextField;
 
 public class FolderDialog {
-	
-	// Library
-
-	public static Path show(Program program, String title, String instruction) {
-		return (new FolderDialog(program, title, instruction)).path;
-	}
 
 	// Object
 	
-	private FolderDialog(Program program, String title, String instruction) {
+	public FolderDialog(Program program, Pipe pipe) {
 		this.program = program;
+		this.pipe = pipe;
 		
 		browseAction = new BrowseAction();
 		okAction = new OkAction();
@@ -39,7 +32,7 @@ public class FolderDialog {
 		
 		folder = new TextField();
 
-		dialog = new JDialog(program.user.main.frame, title, true); // true to make a modal dialog
+		dialog = new JDialog(program.user.main.frame, pipe.folderTitle(), true); // true to make a modal dialog
 		
 		Panel input = Panel.row();
 		input.add(Cell.wrap(folder.field).fillWide());
@@ -50,7 +43,7 @@ public class FolderDialog {
 		buttons.add(Cell.wrap(new JButton(cancelAction)));
 
 		Panel panel = Panel.column().border();
-		panel.add(Cell.wrap(new JLabel(instruction)));
+		panel.add(Cell.wrap(new JLabel(pipe.folderInstruction())));
 		panel.add(Cell.wrap(input.panel).fillWide().growTall());
 		panel.add(Cell.wrap(buttons.panel).lowerRight());
 		
@@ -61,9 +54,9 @@ public class FolderDialog {
 	}
 
 	private final Program program;
+	private final Pipe pipe;
 	private final JDialog dialog;
 	private final TextField folder;
-	private Path path;
 	
 	// Action
 
@@ -84,10 +77,10 @@ public class FolderDialog {
 		public OkAction() { super("OK"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
-				
-				path = check(folder.field.getText());
-				if (path == null)
-					JOptionPane.showMessageDialog(program.user.main.frame, "That's not a path to a folder", Main.name, JOptionPane.PLAIN_MESSAGE);
+
+				String s = pipe.folder(folder.field.getText());
+				if (s != null)
+					JOptionPane.showMessageDialog(program.user.main.frame, s, Main.name, JOptionPane.PLAIN_MESSAGE);
 				else
 					dialog.dispose();
 
@@ -105,19 +98,5 @@ public class FolderDialog {
 				
 			} catch (Exception e) { Mistake.stop(e); }
 		}
-	}
-	
-	// Help
-
-	/** Make sure s is a Path to a folder on the disk, or return null. */
-	private static Path check(String s) {
-		try {
-			
-			Path path = new Path(s); // Parse s into a Path
-			path.folder(); // Check or make and check the folder
-			return path;
-		}
-		catch (DataException e) { return null; }
-		catch (DiskException e) { return null; }
 	}
 }

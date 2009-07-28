@@ -61,6 +61,8 @@ public class Outline {
 	
 	/** Make a new Outline object with the given name and Data value. */
 	public Outline(String name, Data d) { this(name); set(d); }
+	/** Make a new Outline object with the given name and String value. */
+	public Outline(String name, String value) { this(name, new Data(value)); }
 	
 	// Contents
 
