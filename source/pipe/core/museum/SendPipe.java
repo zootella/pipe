@@ -34,7 +34,7 @@ public class SendPipe extends Close implements Pipe {
 	
 	private final Program program;
 	
-	@Override public PipePanel panel() { return panel; }
+	@Override public PipePanel panel()    { return panel; }
 	@Override public PipeInfoFrame info() { return info; }
 
 	@Override public String title()       { return "Send Pipe"; }

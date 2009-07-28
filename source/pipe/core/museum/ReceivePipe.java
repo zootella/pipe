@@ -8,8 +8,63 @@ import base.state.Close;
 
 public class ReceivePipe extends Close implements Pipe {
 
+	
+	
+	
+
+	// User
+	
+	@Override public PipePanel panel() {
+		
+	}
+	@Override public PipeInfoFrame info() {
+		
+	}
+	
+	// Look
+	
+	@Override public String title() {
+		
+	}
+	@Override public String instruction() {
+		
+	}
+	@Override public String home() {
+		
+	}
+	
+	// Enter
+	
+	@Override public String folder(Path p) {
+		
+	}
+	@Override public String away(String s) {
+		
+	}
+	
+	@Override public boolean hasFolder() {
+		
+	}
+	@Override public boolean hasAway() {
+		
+	}
+
+	// Command
+	
+	@Override public void go() {
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	@Override
 	public void close() {
+		if (already()) return;
 		// TODO Auto-generated method stub
 		
 	}

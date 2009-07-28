@@ -23,33 +23,21 @@ public class Pipes extends Close {
 	public final Program program;
 	
 	public final List<Pipe> pipes;
-	
-	
-	
 
 	public void make() {
 		
-		// Museum dialog
 		Pipe pipe = MuseumDialog.show(program);
-		if (pipe != null) {
-
-			// Folder dialog
-			if (pipe.folder(FolderDialog.show(program, pipe.title(), pipe.instruction()))) {
-
-				// Exchange Dialog
-				if (pipe.away(ExchangeDialog.show(program, pipe.home()))) {
-					
-					// List, show, and start the new pipe
-					pipes.add(pipe);
-					program.user.main.fill();
-					pipe.go();
-				}
-			}
-		}
-
-		// Close a pipe we made but then didn't add
-		if (pipe != null && !pipes.contains(pipe))
-			close((Close)pipe);
+		if (pipe == null) return;
+		
+		FolderDialog.show(program, pipe);
+		if (!pipe.hasFolder()) { close((Close)pipe); return; }
+		
+		ExchangeDialog.show(program, pipe);
+		if (!pipe.hasAway()) { close((Close)pipe); return; }
+		
+		pipes.add(pipe);
+		program.user.main.fill();
+		pipe.go();
 	}
 	
 	public void kill(Pipe pipe) {
