@@ -14,10 +14,10 @@ import base.net.packet.Packets;
 import base.net.web.DomainTask;
 import base.process.Mistake;
 import base.state.Close;
-import base.state.Egg;
 import base.state.Once;
 import base.state.Receive;
 import base.state.Update;
+import base.time.Egg;
 import base.time.Now;
 
 /** A Here figures out what our IP address is once and right now. */

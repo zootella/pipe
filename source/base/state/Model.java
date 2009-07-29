@@ -3,6 +3,9 @@ package base.state;
 import java.util.HashSet;
 import java.util.Set;
 
+import base.time.Delay;
+import base.time.Pulse;
+
 /** An object has a Model that extends this class to keep View objects above up to date. */
 public abstract class Model extends Close {
 

@@ -1,8 +1,8 @@
-package base.state;
+package base.time;
 
 import base.exception.TimeException;
-import base.time.Now;
-import base.time.Time;
+import base.state.Close;
+import base.state.Receive;
 
 /** Make and check an Egg timer to close with a TimeException when the disk or network made you wait for 4 seconds. */
 public class Egg extends Close {

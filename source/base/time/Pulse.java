@@ -1,4 +1,4 @@
-package base.state;
+package base.time;
 
 import java.awt.event.ActionEvent;
 
@@ -6,7 +6,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Timer;
 
 import base.process.Mistake;
-import base.time.Time;
+import base.state.Close;
+import base.state.Receive;
 
 public class Pulse extends Close {
 
