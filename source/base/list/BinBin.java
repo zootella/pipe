@@ -1,7 +1,9 @@
-package base.data;
+package base.list;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.data.Bin;
 
 /** A recycling bin of Bin objects ready for quick reuse without memory allocation. */
 public class BinBin {

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.data.Bin;
-import base.data.BinBin;
 import base.data.Data;
+import base.list.BinBin;
 import base.net.name.IpPort;
 import base.net.name.Port;
 import base.state.Close;
