@@ -24,11 +24,9 @@ public abstract class Model extends Close {
 		if (already()) return;
 		close(delay);
 		close(pulse);
-		Set<View> copy = new HashSet<View>(); // Copy the Set so we can change the original
-		copy.addAll(views);
-		for (View view : copy)
-			view.vanish(); // This will remove the view from views
-		views.clear();     // It should be empty now, but clear it just to be sure
+		for (View view : new HashSet<View>(views)) // Copy the list so we can change the original
+			view.vanish();                         // This removes the view from views
+		views.clear();                             // It should be empty now, but clear it just to be sure
 	}
 
 	// Add and remove
