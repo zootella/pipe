@@ -6,7 +6,6 @@ import java.util.List;
 import base.data.Bin;
 import base.data.BinBin;
 import base.data.Data;
-import base.exception.ProgramException;
 import base.internet.name.IpPort;
 import base.internet.name.Port;
 import base.state.Close;
@@ -46,10 +45,6 @@ public class Packets extends Close {
 	/** A ReceiveTask that waits for a UDP packet to arrive, and then receives it. */
 	private ReceiveTask receive;
 
-	/** The ProgramException that closed this Packets object, null if there isn't one. */
-	public ProgramException exception() { return exception; }
-	private ProgramException exception;
-
 	@Override public void close() {
 		if (already()) return;
 		close(listen);
@@ -61,32 +56,28 @@ public class Packets extends Close {
 	private class MyReceive implements Receive {
 		public void receive() throws Exception {
 			if (closed()) return;
-			try {
 
-				// Send
-				if (done(send)) { // Our SendTask finished sending a packet
-					Bin bin = send.result();
-					send = null;
-					bins.add(bin); // Recycle the Bin it used
-				}
-				if (no(send) && !packets.isEmpty()) // We're not sending a packet right now and we've got one to send
-					send = new SendTask(update, listen, packets.remove(0)); // Send it
-
-				// Receive
-				if (done(receive)) { // Our ReceiveTask finished waiting for and getting a packet
-					Packet packet = receive.result(); // Get the packet
-					receive = null;
-					for (PacketReceive o : new ArrayList<PacketReceive>(receivers)) // Show it to each interested object above
-						o.receive(packet);
-					bins.add(packet.bin); // That's it for packet, recycle its Bin
-				}
-				if (no(receive)) // Wait for the next packet to arrive
-					receive = new ReceiveTask(update, listen, bins.get());
-
-			} catch (ProgramException e) { exception = e; close(me()); }
+			// Send
+			if (done(send)) { // Our SendTask finished sending a packet
+				Bin bin = send.result();
+				send = null;
+				bins.add(bin); // Recycle the Bin it used
+			}
+			if (no(send) && !packets.isEmpty()) // We're not sending a packet right now and we've got one to send
+				send = new SendTask(update, listen, packets.remove(0)); // Send it
+			
+			// Receive
+			if (done(receive)) { // Our ReceiveTask finished waiting for and getting a packet
+				Packet packet = receive.result(); // Get the packet
+				receive = null;
+				for (PacketReceive o : new ArrayList<PacketReceive>(receivers)) // Show it to each interested object above
+					o.receive(packet);
+				bins.add(packet.bin); // That's it for packet, recycle its Bin
+			}
+			if (no(receive)) // Wait for the next packet to arrive
+				receive = new ReceiveTask(update, listen, bins.get());
 		}
 	}
-	private Packets me() { return this; }
 	
 	// Send
 

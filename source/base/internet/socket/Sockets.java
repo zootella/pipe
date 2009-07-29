@@ -1,12 +1,14 @@
 package base.internet.socket;
 
-import base.exception.ProgramException;
+import java.util.List;
+
 import base.internet.name.Port;
+import base.internet.packet.PacketReceive;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
 
-/** The program's Sockets object listens on a port to make new outgoing and accept new incoming TCP socket connections. */
+/** The program's Sockets object listens on a port to accept new incoming TCP socket connections. */
 public class Sockets extends Close {
 	
 	public Sockets(Update up, Port port) {
@@ -22,10 +24,7 @@ public class Sockets extends Close {
 	private final Update update;
 	
 	private final ListenSocket listen;
-
-	/** The ProgramException that closed this Packets object, null if there isn't one. */
-	public ProgramException exception() { return exception; }
-	private ProgramException exception;
+	private final List<AcceptReceive> receivers;
 
 	@Override public void close() {
 		if (already()) return;
@@ -35,13 +34,24 @@ public class Sockets extends Close {
 	private class MyReceive implements Receive {
 		public void receive() throws Exception {
 			if (closed()) return;
-			try {
 
-			} catch (ProgramException e) { exception = e; close(me()); }
 		}
 	}
-	private Sockets me() { return this; }
 	
 	// Accept
+
+	/** Add o to the list of objects this Packets object shows the packets it receives. */
+	public void add(AcceptReceive o) {
+		open();
+		if (!receivers.contains(o))
+			receivers.add(o);
+	}
+	
+	/** Remove o from the list of objects this Packets object bothers with arrived packets. */
+	public void remove(AcceptReceive o) {
+		open();
+		receivers.remove(o);
+	}
+	
 
 }
