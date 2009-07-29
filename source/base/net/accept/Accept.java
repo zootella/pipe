@@ -16,6 +16,7 @@ public class Accept extends Close {
 		listen = new ListenSocket(port);
 		receivers = new ArrayList<AcceptReceive>();
 		
+		
 		this.up = up;
 		update = new Update(new MyReceive());
 		update.send();

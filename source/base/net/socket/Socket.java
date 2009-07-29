@@ -27,6 +27,7 @@ public class Socket extends Close {
 			this.ipPort = ipPort;
 			size();
 			connect = new Duration(start);
+			accept = null;
 		} catch (IOException e) { throw new NetException(e); }
 	}
 	
@@ -39,6 +40,7 @@ public class Socket extends Close {
 			ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress());
 			size();
 			connect = null;
+			accept = new Now();
 		} catch (IOException e) { throw new NetException(e); }
 	}
 	
@@ -60,6 +62,8 @@ public class Socket extends Close {
 	public final boolean outgoing;
 	/** How long we took to connect, null if the peer connected in to us. */
 	public final Duration connect;
+	/** When the peer connected in to us, null if we made the outgoing connection. */
+	public final Now accept;
 	
 	// Close
 
