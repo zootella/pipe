@@ -6,18 +6,17 @@ import javax.swing.AbstractAction;
 import javax.swing.Timer;
 
 import base.process.Mistake;
+import base.time.Time;
 
 public class Delay extends Close {
-	
-	// Make
-	
+
 	/** Make a Delay that will call receive() once shortly after the first of a bunch of send() calls. */
-	public Delay(Receive receive) { this(receive, time); }
+	public Delay(Receive receive) { this(receive, Time.delay); }
 	/** Make a Delay that will call receive() once delay milliseconds after the first of a bunch of send() calls. */
-	public Delay(Receive receive, int delay) {
+	public Delay(Receive receive, long delay) {
 		this.receive = receive;
-		if (delay < time) delay = time; // Make sure delay isn't too fast
-		timer = new Timer(delay, new MyActionListener());
+		if (delay < Time.delay) delay = Time.delay; // Make sure delay isn't too fast
+		timer = new Timer((int)delay, new MyActionListener());
 		timer.setRepeats(false);
 	}
 
@@ -32,8 +31,6 @@ public class Delay extends Close {
 		timer.stop(); // Stop and discard timer, keeping it might prevent the program from closing
 		timer = null;
 	}
-	
-	// Send and receive
 
 	/**
 	 * Have this Update call the receive() method you gave it in a separate event after a short delay.
@@ -59,9 +56,4 @@ public class Delay extends Close {
 			} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
 		}
 	}
-
-	// Preset
-
-	/** 200 milliseconds, 1/5th of a second, the minimum and default delay time. */
-	public static final int time = 200;
 }

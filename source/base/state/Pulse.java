@@ -6,15 +6,16 @@ import javax.swing.AbstractAction;
 import javax.swing.Timer;
 
 import base.process.Mistake;
+import base.time.Time;
 
 public class Pulse extends Close {
-	
-	// Make
 
+	/** Make a Pulse that will call the given receive() method 5 times a second. */
+	public Pulse(Receive receive) { this(receive, Time.delay); }
 	/** Make a Pulse that will call the given receive() method every delay milliseconds. */
 	public Pulse(Receive receive, long delay) {
 		this.receive = receive;
-		if (delay < Delay.time) delay = Delay.time; // Make sure delay isn't too fast
+		if (delay < Time.delay) delay = Time.delay; // Make sure delay isn't too fast
 		timer = new Timer((int)delay, new MyActionListener());
 		timer.setRepeats(true);
 		timer.start();
@@ -31,8 +32,6 @@ public class Pulse extends Close {
 		timer.stop(); // Stop and discard timer, keeping it might prevent the program from closing
 		timer = null;
 	}
-	
-	// Receive
 
 	// When timer goes off, Java calls this method
 	private class MyActionListener extends AbstractAction {

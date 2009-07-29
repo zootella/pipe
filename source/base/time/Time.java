@@ -26,8 +26,8 @@ public class Time {
 
 	// Define
 	
-	/** Pulse 5 times a second. */
-	public static final long pulse = second / 5;
+	/** Delay for a fifth of a second and pulse 5 times a second. */
+	public static final long delay = second / 5;
 	/** After 4 seconds, give up or try again. */
-	public static final long egg = 4 * second;
+	public static final long out = 4 * second;
 }

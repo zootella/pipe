@@ -4,12 +4,12 @@ import base.exception.TimeException;
 import base.time.Now;
 import base.time.Time;
 
-/** Make and check an Egg timer to close with a TimeException when the disk or Internet made you wait for 4 seconds. */
+/** Make and check an Egg timer to close with a TimeException when the disk or network made you wait for 4 seconds. */
 public class Egg extends Close {
 	
 	public Egg(Receive receive) {
 		start = new Now();
-		pulse = new Pulse(receive, Time.second);
+		pulse = new Pulse(receive);
 	}
 	
 	public final Now start;
@@ -21,6 +21,6 @@ public class Egg extends Close {
 	}
 
 	public void check() {
-		if (start.expired(4 * Time.second)) throw new TimeException();
+		if (start.expired(Time.out)) throw new TimeException();
 	}
 }

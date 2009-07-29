@@ -55,7 +55,7 @@ public abstract class Model extends Close {
 	/** If this Model has something that changes in time, like an age, have it pulse views above. */
 	public void pulse() {
 		if (pulse == null)
-			pulse = new Pulse(new MyReceive(), Delay.time);
+			pulse = new Pulse(new MyReceive());
 	}
 	private Pulse pulse;
 }
