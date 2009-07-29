@@ -4,8 +4,8 @@ import pipe.core.here.Here;
 import pipe.main.Program;
 import base.data.Data;
 import base.exception.DataException;
-import base.internet.name.Port;
-import base.internet.packet.Packets;
+import base.net.name.Port;
+import base.net.packet.Packets;
 import base.process.Mistake;
 import base.state.Close;
 

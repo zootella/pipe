@@ -1,4 +1,4 @@
-package base.internet.packet;
+package base.net.packet;
 
 /** Make a PacketReceive in your object to have a Packets object show you UDP packets that arrive. */
 public interface PacketReceive {

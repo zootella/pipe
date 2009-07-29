@@ -1,7 +1,7 @@
-package base.internet.packet;
+package base.net.packet;
 
 import base.data.Bin;
-import base.internet.name.IpPort;
+import base.net.name.IpPort;
 import base.size.PacketMove;
 
 public class Packet {

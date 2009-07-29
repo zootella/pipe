@@ -1,8 +1,9 @@
-package base.internet.socket;
+package base.net.connect;
 
 import base.exception.ProgramException;
-import base.internet.name.IpPort;
-import base.internet.packet.Packets;
+import base.net.name.IpPort;
+import base.net.packet.Packets;
+import base.net.socket.Socket;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;

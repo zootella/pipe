@@ -5,10 +5,10 @@ import java.net.UnknownHostException;
 
 import base.exception.PlatformException;
 import base.exception.ProgramException;
-import base.internet.name.Ip;
-import base.internet.name.IpPort;
-import base.internet.name.Port;
-import base.internet.packet.Packets;
+import base.net.name.Ip;
+import base.net.name.IpPort;
+import base.net.name.Port;
+import base.net.packet.Packets;
 import base.state.Close;
 import base.state.Model;
 import base.state.Receive;

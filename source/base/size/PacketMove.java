@@ -1,7 +1,7 @@
 package base.size;
 
 
-import base.internet.name.IpPort;
+import base.net.name.IpPort;
 import base.time.Duration;
 import base.time.Now;
 

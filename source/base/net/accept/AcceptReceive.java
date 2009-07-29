@@ -1,6 +1,5 @@
-package base.internet.socket;
+package base.net.accept;
 
-import base.internet.socket.accept.AcceptSocket;
 
 /** Make an AcceptReceive in your object to have a Packets object show you UDP packets that arrive. */
 public interface AcceptReceive {

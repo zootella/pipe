@@ -1,4 +1,4 @@
-package base.internet.name;
+package base.net.name;
 
 import base.data.Number;
 import base.exception.DataException;

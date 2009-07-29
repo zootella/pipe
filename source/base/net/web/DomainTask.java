@@ -1,25 +1,29 @@
-package base.internet.socket;
+package base.net.web;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import base.exception.NetException;
 import base.exception.ProgramException;
-import base.internet.name.IpPort;
+import base.net.name.Ip;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.Update;
 
-public class ConnectTask extends Close {
+public class DomainTask extends Close {
 	
 	// Make
 
-	/** Make a new outgoing TCP socket connection to ipPort. */
-	public ConnectTask(Update up, IpPort ipPort) {
+	/** Use DNS to resolve site like "www.site.com" to an IP address. */
+	public DomainTask(Update up, String site) {
 		this.up = up; // We'll tell above when we're done
-		this.ipPort = ipPort;
+		this.site = site;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
-	public final IpPort ipPort;
+	public final String site;
 	private final Task task;
 
 	@Override public void close() {
@@ -30,31 +34,33 @@ public class ConnectTask extends Close {
 
 	// Result
 	
-	/** The socket we connected, its yours to use and then close, or throws the exception that made us give up. */
-	public Socket result() { check(exception, socket); return socket; }
+	/** The IP address our DNS lookup found, or throws the exception that made this give up. */
+	public Ip result() { check(exception, ip); return ip; }
 	private ProgramException exception;
-	private Socket socket;
+	private Ip ip;
 	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private Socket taskSocket; // References thread() can safely set
+		private Ip taskIp; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() throws Exception {
-				
-			// Make and connect a new socket to the given IP address and port number
-			taskSocket = new Socket(ipPort);
+
+			// Look up the domain name in DNS to get its IP address
+			try {
+				taskIp = new Ip(InetAddress.getByName(site));
+			} catch (UnknownHostException e) { throw new NetException(e); }
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
 		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			socket = taskSocket;
+			ip = taskIp;
 			close(me());          // We're done
 		}
 	}
-	private ConnectTask me() { return this; } // Give inner code a link to the outer object
+	private DomainTask me() { return this; } // Give inner code a link to the outer object
 }

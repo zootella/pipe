@@ -1,28 +1,25 @@
-package base.internet.packet;
+package base.net.accept;
 
-import base.data.Bin;
 import base.exception.ProgramException;
-import base.size.PacketMove;
+import base.net.socket.Socket;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.Update;
 
-public class ReceiveTask extends Close {
+public class AcceptTask extends Close {
 
 	// Make
 
-	/** Wait on listen until a new Packet arrives, given the empty bin or null to have us make one. */
-	public ReceiveTask(Update up, ListenPacket listen, Bin bin) {
+	/** Wait for a peer to make a TCP socket connection to listen. */
+	public AcceptTask(Update up, ListenSocket listen) {
 		this.up = up; // We'll tell above when we're done
 		this.listen = listen;
-		this.bin = bin;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
-	private final ListenPacket listen;
-	private final Bin bin;
+	private final ListenSocket listen;
 	private final Task task;
 
 	@Override public void close() {
@@ -30,34 +27,34 @@ public class ReceiveTask extends Close {
 		close(task);
 		up.send();
 	}
-
+	
 	// Result
 	
-	/** The Packet we received, or throws the exception that made us give up. */
-	public Packet result() { check(exception, packet); return packet; }
+	/** The socket that connected to server, it's yours to use and then close, or throws the exception that made us give up. */
+	public Socket result() { check(exception, socket); return socket; }
 	private ProgramException exception;
-	private Packet packet;
-
+	private Socket socket;
+	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private PacketMove taskMove; // References thread() can safely set
+		private Socket taskSocket; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() throws Exception {
 
-			// Wait on listen until a new UDP packet arrives
-			taskMove = bin.receive(listen);
+			// Wait here until a peer connects to us
+			taskSocket = new Socket(listen.channel.accept());
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
 		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			packet = new Packet(bin, taskMove);
+			socket = taskSocket;
 			close(me());          // We're done
 		}
 	}
-	private ReceiveTask me() { return this; } // Give inner code a link to the outer object
+	private AcceptTask me() { return this; } // Give inner code a link to the outer object
 }

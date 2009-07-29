@@ -1,7 +1,8 @@
-package base.internet.socket;
+package base.net.flow;
 
 
 import base.data.Bin;
+import base.net.socket.Socket;
 import base.size.Meter;
 import base.size.Range;
 import base.state.Close;

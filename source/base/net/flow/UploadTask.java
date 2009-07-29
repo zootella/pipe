@@ -1,7 +1,8 @@
-package base.internet.socket;
+package base.net.flow;
 
 import base.data.Bin;
 import base.exception.ProgramException;
+import base.net.socket.Socket;
 import base.size.Move;
 import base.size.Range;
 import base.state.Close;

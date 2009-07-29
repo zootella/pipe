@@ -1,4 +1,4 @@
-package base.internet.packet;
+package base.net.packet;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -7,7 +7,7 @@ import java.nio.channels.DatagramChannel;
 
 import base.data.Bin;
 import base.exception.NetException;
-import base.internet.name.Port;
+import base.net.name.Port;
 import base.process.Mistake;
 import base.state.Close;
 

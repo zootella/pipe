@@ -1,4 +1,4 @@
-package base.internet.packet;
+package base.net.packet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import base.data.Bin;
 import base.data.BinBin;
 import base.data.Data;
-import base.internet.name.IpPort;
-import base.internet.name.Port;
+import base.net.name.IpPort;
+import base.net.name.Port;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;

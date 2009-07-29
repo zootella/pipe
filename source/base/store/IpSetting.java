@@ -2,7 +2,7 @@ package base.store;
 
 import base.data.Outline;
 import base.exception.DataException;
-import base.internet.name.Ip;
+import base.net.name.Ip;
 
 public class IpSetting {
 

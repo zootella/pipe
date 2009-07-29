@@ -1,11 +1,11 @@
-package base.internet.socket;
+package base.net.accept;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 
 import base.exception.NetException;
-import base.internet.name.Port;
+import base.net.name.Port;
 import base.process.Mistake;
 import base.state.Close;
 

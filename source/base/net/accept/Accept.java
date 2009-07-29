@@ -1,17 +1,17 @@
-package base.internet.socket;
+package base.net.accept;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import base.internet.name.Port;
+import base.net.name.Port;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
 
-/** The program's Sockets object listens on a port to accept new incoming TCP socket connections. */
-public class Sockets extends Close {
+/** The program's Accept object listens on a port to accept new incoming TCP socket connections. */
+public class Accept extends Close {
 	
-	public Sockets(Update up, Port port) {
+	public Accept(Update up, Port port) {
 
 		listen = new ListenSocket(port);
 		receivers = new ArrayList<AcceptReceive>();
@@ -26,6 +26,8 @@ public class Sockets extends Close {
 	
 	private final ListenSocket listen;
 	private final List<AcceptReceive> receivers;
+	
+//	private final List<>
 
 	@Override public void close() {
 		if (already()) return;
@@ -39,8 +41,6 @@ public class Sockets extends Close {
 		}
 	}
 	
-	// Accept
-
 	/** Add o to the list of objects this Packets object shows the packets it receives. */
 	public void add(AcceptReceive o) {
 		open();

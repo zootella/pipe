@@ -1,4 +1,4 @@
-package base.internet.socket;
+package base.net.socket;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -6,7 +6,7 @@ import java.nio.channels.SocketChannel;
 
 import base.data.Bin;
 import base.exception.NetException;
-import base.internet.name.IpPort;
+import base.net.name.IpPort;
 import base.process.Mistake;
 import base.state.Close;
 import base.time.Duration;
