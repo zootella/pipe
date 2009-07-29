@@ -1,9 +1,9 @@
 package base.internet.socket;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import base.internet.name.Port;
-import base.internet.packet.PacketReceive;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
@@ -14,6 +14,7 @@ public class Sockets extends Close {
 	public Sockets(Update up, Port port) {
 
 		listen = new ListenSocket(port);
+		receivers = new ArrayList<AcceptReceive>();
 		
 		this.up = up;
 		update = new Update(new MyReceive());
