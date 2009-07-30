@@ -6,58 +6,77 @@ import java.util.Set;
 import base.state.Close;
 import base.time.Now;
 
-public class TwoBoots {
+public class TwoBoots<T> extends Close {
+	
+	// Make
 
-	/** Make a TwoBoots that will hold Close objects for at least delay milliseconds but not twice that long. */
+	/**
+	 * Make a new TwoBoots<T>() to hold objects of type T.
+	 * It will keep each for at least delay milliseconds but none for twice that long.
+	 * If they extend Close, it will call close() on them before throwing them out.
+	 */
 	public TwoBoots(long delay) {
 		this.delay = delay;
-		current = new HashSet<Close>();
-		previous = new HashSet<Close>();
 		age = new Now();
+		current = new HashSet<T>();
+		previous = new HashSet<T>();
 	}
 	
-	/** The current boot we add new Close objects to. */
-	private Set<Close> current;
-	/** The previous boot from before. */
-	private Set<Close> previous;
+	private final long delay; // Every delay milliseconds, we cycle the boots
+	private Now age;          // When we last cycled the boots
+	private Set<T> current;   // The current boot we add objects to
+	private Set<T> previous;  // The previous boot we just keep around
 
-	/** The number of milliseconds between times we cycle the boots. */
-	private final long delay;
-	/** When we last cycled the boots. */
-	private Now age;
+	@Override public void close() {
+		if (already()) return;
+		closeContents(current);
+		closeContents(previous);
+	}
+	
+	// Keep
 
-	/** Add c to this TwoBoots, we'll keep it for awhile, then close and discard it. */
-	public void add(Close c) {
+	/** Add t to this TwoBoots, we'll keep it for awhile, then close and discard it. */
+	public void add(T t) {
+		open();
 		cycle();
-		if (!current.contains(c) && !previous.contains(c))
-			current.add(c);
+		if (!current.contains(t) && !previous.contains(t))
+			current.add(t);
 	}
 
-	/** Remove c from this TwoBoots if we still have it, close it either way. */
-	public void remove(Close c) {
+	/** Remove t from this TwoBoots, does not close it. */
+	public void remove(T t) {
+		open();
 		cycle();
-		Close.close(c);
-		current.remove(c);
-		previous.remove(c);
+		current.remove(t);
+		previous.remove(t);
 	}
 
-	/** Get all the Close objects currently in this TwoBoots. */
-	public Set<Close> get() {
+	/** Get all the objects currently in this TwoBoots. */
+	public Set<T> get() {
+		open();
 		cycle();
-		Set<Close> s = new HashSet<Close>();
-		s.addAll(current);
-		s.addAll(previous);
-		return s;
+		Set<T> set = new HashSet<T>();
+		set.addAll(current);
+		set.addAll(previous);
+		return set;
 	}
+	
+	// Help
 
 	/** If it's been long enough since the last time, close and remove the oldest objects we carry. */
 	private void cycle() {
 		if (age.expired(delay)) {
 			age = new Now();
-			for (Close c : previous)
-				Close.close(c);
+			closeContents(previous);
 			previous = current;
-			current = new HashSet<Close>();
+			current = new HashSet<T>();
 		}
+	}
+	
+	/** If we're holding objects that extend Close, call close() on all of them in set. */
+	private void closeContents(Set<T> set) {
+		for (T t : set)
+			if (t instanceof Close)
+				close((Close)t);
 	}
 }
