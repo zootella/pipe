@@ -2,11 +2,11 @@ package base.size;
 
 /** A Range starts at i and can impose a size limit, and can't change. */
 public class Range {
-	
+
 	// Make
 
 	/** Make a Range that starts at 0 and has no limit. */
-	public Range() { this(0, -1); }
+	public static Range unlimited() { return new Range(0, -1); }
 	/** Make a Range at i with size limit, -1 no limit, 0 at limit. */
 	public Range(long i, long size) {
 		if (i < 0 || size < -1) throw new IndexOutOfBoundsException();

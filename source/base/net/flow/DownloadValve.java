@@ -1,6 +1,5 @@
 package base.net.flow;
 
-
 import base.data.Bin;
 import base.net.socket.Socket;
 import base.size.Meter;
@@ -25,16 +24,14 @@ public class DownloadValve extends Close implements Valve {
 	private final Update update;
 	/** The socket we download from. */
 	private final Socket socket;
-	/** Our current DownloadLater that downloads data from socket to out, null if we don't have one right now. */
-	private DownloadTask later;
+	/** Our current DownloadTask that downloads data from socket to out, null if we don't have one right now. */
+	private DownloadTask task;
 
 	/** Close this Valve so it gives up all resources and won't start again. */
 	public void close() {
 		if (already()) return;
-		if (later != null) {
-			close(later);
-			later = null; // Discard the closed later so in() and out() work
-		}
+		close(task);
+		task = null; // Discard the closed later so in() and out() work
 	}
 	
 	// Use
@@ -42,7 +39,7 @@ public class DownloadValve extends Close implements Valve {
 	public Bin in() { return null; }
 	
 	public Bin out() {
-		if (later != null) return null; // later's worker thread is using our bin, keep it private
+		if (is(task)) return null; // later's worker thread is using our bin, keep it private
 		return out;
 	}
 	private Bin out;
@@ -52,22 +49,22 @@ public class DownloadValve extends Close implements Valve {
 	
 	public void start() {
 		if (closed()) return;
-		if (!meter.isDone() && later == null && out.hasSpace())
-			later = new DownloadTask(update, socket, meter.remain(), out);
+		if (!meter.isDone() && no(task) && out.hasSpace())
+			task = new DownloadTask(update, socket, meter.remain(), out);
 	}
 	
 	public void stop() throws Exception {
 		if (closed()) return;
-		if (later != null && later.closed()) { // Our later finished
-			meter.add(later.result().stripe.size); // If an exception closed later, throw it
-			later = null; // Discard the closed later, now in() and out() will work
+		if (done(task)) {
+			meter.add(task.result().stripe.size); // If an exception closed later, throw it
+			task = null; // Discard the closed later, now in() and out() will work
 		}
 		if (meter.isDone()) close(this); // All done
 	}
 	
 	public boolean isEmpty() {
 		return
-			later == null && // No later using our bins
+			no(task)     && // No later using our bins
 			out.isEmpty() && // No data
 			meter.isEmpty(); // No responsibility to do more
 	}

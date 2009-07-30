@@ -3,10 +3,13 @@ package base.net.accept;
 import java.util.ArrayList;
 import java.util.List;
 
+import base.list.TwoBoots;
+import base.net.flow.SocketBay;
 import base.net.name.Port;
 import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
+import base.time.Time;
 
 /** The program's Accept object listens on a port to accept new incoming TCP socket connections. */
 public class Accept extends Close {
@@ -14,6 +17,7 @@ public class Accept extends Close {
 	public Accept(Update up, Port port) {
 
 		listen = new ListenSocket(port);
+		sockets = new TwoBoots<SocketBay>(Time.out);
 		receivers = new ArrayList<AcceptReceive>();
 		
 		
@@ -26,9 +30,8 @@ public class Accept extends Close {
 	private final Update update;
 	
 	private final ListenSocket listen;
+	private final TwoBoots<SocketBay> sockets;
 	private final List<AcceptReceive> receivers;
-	
-//	private final List<>
 
 	@Override public void close() {
 		if (already()) return;

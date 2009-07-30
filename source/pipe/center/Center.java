@@ -32,17 +32,17 @@ public class Center extends Close {
 	}
 	
 	public Center() {
-		packetMachine = new Packets(new Port(Number.toInt(Text.after(site, ":"))));
-		packetMachine.add(new MyPacketReceive());
+		packets = new Packets(new Port(Number.toInt(Text.after(site, ":"))));
+		packets.add(new MyPacketReceive());
 		Alive.still();
 	}
 
-	public final Packets packetMachine;
+	public final Packets packets;
 
 	@Override public void close() {
 		if (already()) return;
 
-		close(packetMachine);
+		close(packets);
 		
 		Mistake.closeCheck();
 	}
@@ -60,9 +60,9 @@ public class Center extends Close {
 					Outline p = new Outline("ap", data); // Address response
 					p.add("hash", Hash.hash(data)); // Optional integrity check
 
-					Bin bin = packetMachine.bin();
+					Bin bin = packets.bin();
 					bin.add(p.toData());
-					packetMachine.send(bin, packet.move.ipPort);
+					packets.send(bin, packet.move.ipPort);
 				}
 
 			} catch (Exception e) { Mistake.log(e); } // Log and drop unknown packets

@@ -2,39 +2,20 @@ package base.size;
 
 import base.time.Speed;
 
-/** A Meter has done that grows in range. */
+/** A Meter has done that grows in a Range. */
 public class Meter {
 	
-	
+	// Make
+
 	/** Make a Meter with a Range that starts at 0 and imposes no Limit. */
-	public Meter() { this(new Range()); }
+	public Meter() { this(Range.unlimited()); }
 
 	/** Make a Meter with the given Range. */
 	public Meter(Range range) {
 		this.range = range;
 		speed = new Speed();
 	}
-	
-	
-	
-	
 
-	/*
-	public void limit(Limit limit) {
-		if (done != 0) throw new IllegalStateException(); // Can't set limit after something is done
-		
-		// this gets called when http headers tell us how big a file is
-		// have this only do something when we don't have a range with a limit, and the given range has one
-		
-		
-		
-	}
-	*/
-	
-	
-	
-	
-	
 	// Look
 
 	/** The whole Range this Meter is going over. */
@@ -56,15 +37,10 @@ public class Meter {
 	
 	// Add
 	
-	
+	/** Record that we've done the given distance more. */
 	public void add(long more) {
 		if (more < 1) throw new IndexOutOfBoundsException();
 		range.check(done + more);
 		done += more;
 	}
-	
-	
-	
-	
-	
 }
