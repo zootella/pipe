@@ -12,8 +12,8 @@ public class TwoBoots<T> extends Close {
 
 	/**
 	 * Make a new TwoBoots<T>() to hold objects of type T.
-	 * It will keep each for at least delay milliseconds but none for twice that long.
-	 * If they extend Close, it will call close() on them before throwing them out.
+	 * It will keep an object you add for at least delay milliseconds but not twice that long.
+	 * If the objects inside extend Close, we'll call close() on them before throwing them out.
 	 */
 	public TwoBoots(long delay) {
 		this.delay = delay;
