@@ -27,9 +27,10 @@ public class SocketBay extends Close {
 	
 	private final Update up;
 	private final Update update;
-	private final UploadValve uploadValve;
-	private final DownloadValve downloadValve;
-	public final Socket socket;
+	
+	public UploadValve uploadValve;
+	public DownloadValve downloadValve;
+	public Socket socket;
 	
 	/** Add data to upload to this Bay. */
 	public final Bay upload;
@@ -38,8 +39,8 @@ public class SocketBay extends Close {
 
 	@Override public void close() {
 		if (already()) return;
-		close(downloadValve);
 		close(uploadValve);
+		close(downloadValve);
 		close(socket);
 	}
 	
@@ -69,6 +70,14 @@ public class SocketBay extends Close {
 	}
 	private SocketBay me() { return this; }
 	
+	/** The ProgramException that closed us, or null. */
 	public ProgramException exception() { return exception; }
 	private ProgramException exception;
+
+	/** After taking our socket and valves, call take() before close(). */ 
+	public void take() {
+		uploadValve = null; // Forget we had these so close() doesn't close them
+		downloadValve = null;
+		socket = null;
+	}
 }

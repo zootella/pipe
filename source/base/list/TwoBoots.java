@@ -51,8 +51,8 @@ public class TwoBoots<T> extends Close {
 		previous.remove(t);
 	}
 
-	/** Get all the objects currently in this TwoBoots. */
-	public Set<T> get() {
+	/** All the objects currently in this TwoBoots. */
+	public Set<T> list() {
 		open();
 		cycle();
 		Set<T> set = new HashSet<T>();

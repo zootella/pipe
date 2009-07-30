@@ -14,34 +14,47 @@ import base.time.Time;
 /** The program's Accept object listens on a port to accept new incoming TCP socket connections. */
 public class Accept extends Close {
 	
-	public Accept(Update up, Port port) {
-
-		listen = new ListenSocket(port);
+	public Accept(Port port) {
+		
+		listenSocket = new ListenSocket(port);
 		sockets = new TwoBoots<SocketBay>(Time.out);
 		receivers = new ArrayList<AcceptReceive>();
-		
-		
-		this.up = up;
+
 		update = new Update(new MyReceive());
 		update.send();
 	}
 	
-	private final Update up;
 	private final Update update;
 	
-	private final ListenSocket listen;
+	private final ListenSocket listenSocket;
+	private AcceptTask acceptTask;
+	
 	private final TwoBoots<SocketBay> sockets;
 	private final List<AcceptReceive> receivers;
 
 	@Override public void close() {
 		if (already()) return;
-		close(listen);
+		close(listenSocket);
+		close(sockets);
 	}
 
 	private class MyReceive implements Receive {
 		public void receive() throws Exception {
 			if (closed()) return;
+			
+			// Wait for new sockets to connect
+			if (done(acceptTask)) {
+				sockets.add(new SocketBay(update, acceptTask.result()));
+				acceptTask = null;
+			}
+			if (no(acceptTask))
+				acceptTask = new AcceptTask(update, listenSocket);
 
+			// Show each AcceptReceive object above each socket that has connected in
+			for (AcceptReceive r : receivers)
+				for (SocketBay s : sockets.list())
+					if (r.receive(s))
+						sockets.remove(s); // r took s, remove s from our list
 		}
 	}
 	
@@ -57,6 +70,4 @@ public class Accept extends Close {
 		open();
 		receivers.remove(o);
 	}
-	
-
 }

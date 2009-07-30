@@ -4,6 +4,7 @@ import pipe.core.here.Here;
 import pipe.main.Program;
 import base.data.Data;
 import base.exception.DataException;
+import base.net.accept.Accept;
 import base.net.name.Port;
 import base.net.packet.Packets;
 import base.process.Mistake;
@@ -26,12 +27,14 @@ public class Core extends Close {
 		port = p;
 
 		pipes = new Pipes(program);
+		accept = new Accept(port);
 		packets = new Packets(port);
 		here = new Here(port, packets);
 	}
 
 	private final Program program;
 	public final Pipes pipes;
+	public final Accept accept;
 	public final Packets packets;
 
 	private final Port port;
@@ -42,6 +45,7 @@ public class Core extends Close {
 		if (already()) return;
 		
 		close(pipes);
+		close(accept);
 		close(packets);
 		close(here);
 	}
