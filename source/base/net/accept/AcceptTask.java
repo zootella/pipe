@@ -1,5 +1,8 @@
 package base.net.accept;
 
+import java.io.IOException;
+
+import base.exception.NetException;
 import base.exception.ProgramException;
 import base.net.socket.Socket;
 import base.state.Close;
@@ -45,7 +48,9 @@ public class AcceptTask extends Close {
 		public void thread() throws Exception {
 
 			// Wait here until a peer connects to us
-			taskSocket = new Socket(listen.channel.accept());
+			try {
+				taskSocket = new Socket(listen.channel.accept());
+			} catch (IOException e) { throw new NetException(e); }
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method

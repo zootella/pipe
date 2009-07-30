@@ -35,6 +35,7 @@ public class Accept extends Close {
 	@Override public void close() {
 		if (already()) return;
 		close(listenSocket);
+		close(acceptTask);
 		close(sockets);
 	}
 
