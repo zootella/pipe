@@ -95,8 +95,8 @@ public class HereTask extends Close {
 	
 	private final MyPacketReceive packetReceive;
 	private class MyPacketReceive implements PacketReceive {
-		public void receive(Packet packet) {
-			if (closed()) return;
+		public boolean receive(Packet packet) {
+			if (closed()) return false;
 			try {
 				
 				// Look for the packet response
@@ -107,10 +107,12 @@ public class HereTask extends Close {
 					internet = new IpPort(o.value()); // Read
 					close(me()); // It worked, we're done
 					up.send();
+					return true;
 				}
 			}
 			catch (DataException e) { Mistake.log(e); }
 			catch (ProgramException e) { exception = e; close(me()); up.send(); }
+			return false;
 		}
 	}
 	private HereTask me() { return this; }

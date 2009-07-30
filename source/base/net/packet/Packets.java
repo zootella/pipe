@@ -70,8 +70,9 @@ public class Packets extends Close {
 			if (done(receive)) { // Our ReceiveTask finished waiting for and getting a packet
 				Packet packet = receive.result(); // Get the packet
 				receive = null;
-				for (PacketReceive o : new ArrayList<PacketReceive>(receivers)) // Show it to each interested object above
-					o.receive(packet);
+				for (PacketReceive r : new ArrayList<PacketReceive>(receivers)) // Show it to each interested object above
+					if (r.receive(packet))
+						break; // r recognized it, don't show it to the other PacketReceive objects above
 				bins.add(packet.bin); // That's it for packet, recycle its Bin
 			}
 			if (no(receive)) // Wait for the next packet to arrive

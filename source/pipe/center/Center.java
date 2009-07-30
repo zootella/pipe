@@ -48,8 +48,8 @@ public class Center extends Close {
 	}
 	
 	private class MyPacketReceive implements PacketReceive {
-		public void receive(Packet packet) {
-			if (closed()) return;
+		public boolean receive(Packet packet) {
+			if (closed()) return false;
 			try {
 				
 				// Receive packets and send responses
@@ -63,9 +63,11 @@ public class Center extends Close {
 					Bin bin = packets.bin();
 					bin.add(p.toData());
 					packets.send(bin, packet.move.ipPort);
+					return true;
 				}
 
 			} catch (Exception e) { Mistake.log(e); } // Log and drop unknown packets
+			return false;
 		}
 	}
 }
