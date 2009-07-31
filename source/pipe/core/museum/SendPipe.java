@@ -11,9 +11,14 @@ import base.data.TextSplit;
 import base.encode.Encode;
 import base.exception.DataException;
 import base.file.Path;
+import base.net.connect.ConnectTask;
+import base.net.name.IpPort;
 import base.net.socket.Socket;
 import base.process.Mistake;
 import base.state.Close;
+import base.state.Receive;
+import base.state.TaskBody;
+import base.state.Update;
 
 public class SendPipe extends Close implements Pipe {
 
@@ -33,7 +38,11 @@ public class SendPipe extends Close implements Pipe {
 		hereHi.add("i", program.core.here.internet().data());
 		hereHi.add("l", program.core.here.lan().data());
 		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
+		
+		update = new Update(new MyReceive());
 	}
+	
+	private final Update update;
 	
 	private final Program program;
 	
@@ -50,6 +59,7 @@ public class SendPipe extends Close implements Pipe {
 	@Override public void close() {
 		if (already()) return;
 		close(info);
+		close(connect);
 	}
 	
 	// User
@@ -89,20 +99,23 @@ public class SendPipe extends Close implements Pipe {
 		
 		try {
 			awayHi = new Outline(Encode.fromBase62(split.after));
+			
+			IpPort lan = new IpPort(awayHi.value("l"));
+			System.out.println("lan is: " + lan.toString());
 		} catch (DataException e) { Mistake.ignore(e); }
 	}
 
 	@Override public boolean hasAwayCode() { return awayHi != null; }
 
 	// Go
+	
+	private IpPort lan;
 
 	@Override public void go() {
 
-		/*
-		IpPort other = 
+		IpPort awayLan = new IpPort(awayHi.value("l"));
 		
-		socket = new ConnectTask(update, ipPort);
-		*/
+		connect = new ConnectTask(update, awayLan);
 		
 		
 		
@@ -111,4 +124,34 @@ public class SendPipe extends Close implements Pipe {
 	}
 	
 	private Socket socket;
+	
+	
+	private ConnectTask connect;
+	
+	
+	
+	
+	private class MyReceive implements Receive {
+		public void receive() throws Exception {
+			if (closed()) return;
+			
+			if (done(connect))
+				System.out.println("connected");
+			
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
