@@ -16,8 +16,8 @@ public class SocketBay extends Close {
 		this.up = up;
 		this.socket = socket;
 		
-		upload = new Bay();
-		download = new Bay();
+		uploadBay = new Bay();
+		downloadBay = new Bay();
 		
 		update = new Update(new MyReceive());
 		uploadValve = new UploadValve(update, socket, Range.unlimited());
@@ -28,14 +28,12 @@ public class SocketBay extends Close {
 	private final Update up;
 	private final Update update;
 	
+	private final Bay uploadBay;
+	private final Bay downloadBay;
+	
 	public UploadValve uploadValve;
 	public DownloadValve downloadValve;
 	public Socket socket;
-	
-	/** Add data to upload to this Bay. */
-	public final Bay upload;
-	/** Get the data we've downloaded here. */
-	public final Bay download;
 
 	@Override public void close() {
 		if (already()) return;
@@ -52,13 +50,13 @@ public class SocketBay extends Close {
 				uploadValve.stop();
 				downloadValve.stop();
 				
-				if (upload.hasData() && uploadValve.in() != null && uploadValve.in().hasSpace()) {
-					uploadValve.in().add(upload);
+				if (uploadBay.hasData() && uploadValve.in() != null && uploadValve.in().hasSpace()) {
+					uploadValve.in().add(uploadBay);
 					up.send();
 				}
 
-				if (download.size() < Bin.big && downloadValve.out() != null && downloadValve.out().hasData()) {
-					download.add(downloadValve.out());
+				if (downloadBay.size() < Bin.big && downloadValve.out() != null && downloadValve.out().hasData()) {
+					downloadBay.add(downloadValve.out());
 					up.send();
 				}
 				
@@ -69,6 +67,11 @@ public class SocketBay extends Close {
 		}
 	}
 	private SocketBay me() { return this; }
+	
+	/** Add data to upload to this Bay. */
+	public Bay upload() { update.send(); return uploadBay; } // Send update to notice what the caller adds to upload
+	/** Get the data we've downloaded here. */
+	public Bay download() { update.send(); return downloadBay; }
 	
 	/** The ProgramException that closed us, or null. */
 	public ProgramException exception() { return exception; }
