@@ -11,6 +11,7 @@ import base.data.TextSplit;
 import base.encode.Encode;
 import base.exception.DataException;
 import base.file.Path;
+import base.net.socket.Socket;
 import base.process.Mistake;
 import base.state.Close;
 
@@ -23,15 +24,15 @@ public class SendPipe extends Close implements Pipe {
 		panel = new PipePanel(program, this);
 		info = new PipeInfoFrame(program, this);
 
-		hereHand = new Outline("hand", "send");
-		hereHand.add("unique", Data.unique());
-		hereHand.add("i", program.core.here.internet().data());
-		hereHand.add("l", program.core.here.lan().data());
+		hereHello = new Outline("hand", "send");
+		hereHello.add("unique", Data.unique());
+		hereHello.add("i", program.core.here.internet().data());
+		hereHello.add("l", program.core.here.lan().data());
 		
 		hereHi = new Outline("h");
 		hereHi.add("i", program.core.here.internet().data());
 		hereHi.add("l", program.core.here.lan().data());
-		hereHi.add("h", hereHand.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
+		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
 	}
 	
 	private final Program program;
@@ -42,9 +43,9 @@ public class SendPipe extends Close implements Pipe {
 	private Path folder;
 	
 	private Outline hereHi;
-	private Outline hereHand;
+	private Outline hereHello;
 	private Outline awayHi;
-	private Outline awayHand;
+	private Outline awayHello;
 
 	@Override public void close() {
 		if (already()) return;
@@ -95,5 +96,19 @@ public class SendPipe extends Close implements Pipe {
 
 	// Go
 
-	@Override public void go() {}
+	@Override public void go() {
+
+		/*
+		IpPort other = 
+		
+		socket = new ConnectTask(update, ipPort);
+		*/
+		
+		
+		
+		
+		
+	}
+	
+	private Socket socket;
 }
