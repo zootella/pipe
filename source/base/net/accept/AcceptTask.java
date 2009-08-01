@@ -50,9 +50,6 @@ public class AcceptTask extends Close {
 			// Wait here until a peer connects to us
 			try {
 				taskSocket = new Socket(listen.channel.accept());
-				
-				System.out.println("accepted something!");
-				
 			} catch (IOException e) { throw new NetException(e); }
 		}
 

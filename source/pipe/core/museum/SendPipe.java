@@ -10,14 +10,15 @@ import base.data.Text;
 import base.data.TextSplit;
 import base.encode.Encode;
 import base.exception.DataException;
+import base.exception.ProgramException;
 import base.file.Path;
 import base.net.connect.ConnectTask;
+import base.net.flow.SocketBay;
 import base.net.name.IpPort;
 import base.net.socket.Socket;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.Receive;
-import base.state.TaskBody;
 import base.state.Update;
 
 public class SendPipe extends Close implements Pipe {
@@ -29,44 +30,47 @@ public class SendPipe extends Close implements Pipe {
 		panel = new PipePanel(program, this);
 		info = new PipeInfoFrame(program, this);
 
-		hereHello = new Outline("hand", "send");
+		hereHello = new Outline("hello", "send");
 		hereHello.add("unique", Data.unique());
 		hereHello.add("i", program.core.here.internet().data());
 		hereHello.add("l", program.core.here.lan().data());
 		
 		hereHi = new Outline("h");
+		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
 		hereHi.add("i", program.core.here.internet().data());
 		hereHi.add("l", program.core.here.lan().data());
-		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
 		
 		update = new Update(new MyReceive());
 	}
 	
-	private final Update update;
-	
 	private final Program program;
+	private final Update update;
 	
 	private final PipePanel panel;
 	private final PipeInfoFrame info;
 	
 	private Path folder;
-	
+
 	private Outline hereHi;
 	private Outline hereHello;
 	private Outline awayHi;
 	private Outline awayHello;
+	
+	private ConnectTask connect;
+	private SocketBay socket;
 
 	@Override public void close() {
 		if (already()) return;
 		close(info);
 		close(connect);
+		close(socket);
 	}
 	
 	// User
 	
 	@Override public PipePanel userPanel() { return panel; }
 	@Override public PipeInfoFrame userInfo() { return info; }
-	
+
 	// Folder
 
 	@Override public String folderTitle() { return "Send Pipe"; }
@@ -99,9 +103,6 @@ public class SendPipe extends Close implements Pipe {
 		
 		try {
 			awayHi = new Outline(Encode.fromBase62(split.after));
-			
-			IpPort lan = new IpPort(awayHi.value("l"));
-			System.out.println("lan is: " + lan.toString());
 		} catch (DataException e) { Mistake.ignore(e); }
 	}
 
@@ -109,13 +110,8 @@ public class SendPipe extends Close implements Pipe {
 
 	// Go
 	
-	private IpPort lan;
-
 	@Override public void go() {
-
-		IpPort awayLan = new IpPort(awayHi.value("l"));
-		
-		connect = new ConnectTask(update, awayLan);
+		update.send();
 		
 		
 		
@@ -123,23 +119,29 @@ public class SendPipe extends Close implements Pipe {
 		
 	}
 	
-	private Socket socket;
-	
-	
-	private ConnectTask connect;
-	
-	
-	
-	
+
 	private class MyReceive implements Receive {
 		public void receive() throws Exception {
 			if (closed()) return;
-			
-			if (done(connect))
-				System.out.println("connected");
-			
+			try {
+				
+				if (awayHi != null && no(connect))
+					connect = new ConnectTask(update, new IpPort(awayHi.value("l")));
+
+				if (done(connect) && no(socket)) {
+					socket = new SocketBay(update, connect.result());
+					socket.upload().add(hereHello.toData());
+				}
+
+			} catch (ProgramException e) { exception = e; close(me()); }
 		}
 	}
+	private SendPipe me() { return this; }
+	
+	public ProgramException exception() { return exception; }
+	private ProgramException exception;
+
+		
 	
 	
 	
