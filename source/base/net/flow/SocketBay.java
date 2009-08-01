@@ -69,9 +69,9 @@ public class SocketBay extends Close {
 	private SocketBay me() { return this; }
 	
 	/** Add data to upload to this Bay. */
-	public Bay upload() { update.send(); return uploadBay; } // Send update to notice what the caller adds to upload
+	public Bay upload() { if (exception != null) throw exception; update.send(); return uploadBay; } // Send update to notice what the caller adds to upload
 	/** Get the data we've downloaded here. */
-	public Bay download() { update.send(); return downloadBay; }
+	public Bay download() { if (exception != null) throw exception; update.send(); return downloadBay; }
 	
 	/** The ProgramException that closed us, or null. */
 	public ProgramException exception() { return exception; }
