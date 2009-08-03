@@ -56,7 +56,7 @@ public class SendPipe extends Close implements Pipe {
 	private Outline awayHi;
 	private Outline awayHello;
 	
-	private ConnectTask connect;
+	private Connect connect;
 	private SocketBay socket;
 
 	@Override public void close() {
@@ -125,13 +125,22 @@ public class SendPipe extends Close implements Pipe {
 			if (closed()) return;
 			try {
 				
-				if (awayHi != null && no(connect))
-					connect = new ConnectTask(update, new IpPort(awayHi.value("l")));
+				/*
+				if (no(socket) && no(connect) && awayHi != null)
+					connect = new Connect(
+						program,
+						update,
+						new IpPort(awayHi.value("l")),
+						new IpPort(awayHi.value("i")),
+						hereHello.toData(),
+						awayHi.value("h"));
 
-				if (done(connect) && no(socket)) {
+				if (no(socket) && done(connect)) {
 					socket = new SocketBay(update, connect.result());
 					socket.upload().add(hereHello.toData());
 				}
+				 */
+			
 
 			} catch (ProgramException e) { exception = e; close(me()); }
 		}
