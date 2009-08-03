@@ -19,19 +19,19 @@ import base.state.Update;
 // the goal of this object is to get whatever it needs, and then do whatever it needs, to open and keep open a single two way stream
 public class Connection extends Close {
 	
-	public Connection(Program program, Update up, IpPort lan, IpPort internet, Data signature) {
+	public Connection(Program program, Update up, IpPort lan, IpPort internet, Data hello, Data hash) {
 		this.program = program;
 		this.up = up;
 		this.lan = lan;
 		this.internet = internet;
-		this.signature = signature;
+		this.hello = hello;
+		this.hash = hash;
 		
 		acceptReceive = new MyAcceptReceive();
 		program.core.accept.add(acceptReceive);
 
 		update = new Update(new MyReceive());
 		update.send();
-		
 	}
 	
 	private final Program program;
@@ -40,66 +40,90 @@ public class Connection extends Close {
 	
 	private final IpPort lan; // remote peer's lan ip address
 	private final IpPort internet; // remote peer's internet ip address
-	private final Data signature; // hash of what the remote peer will tell us
+	private final Data hello;
+	private final Data hash; // hash of the remote peer's hello outline
 	
 	private ConnectTask connectLan;
 	private ConnectTask connectInternet;
-	private SocketBay socketConnectLan;
-	private SocketBay socketConnectInternet;
-	private SocketBay socketAccept;
+	
+	private SocketBay socketLan;
+	private SocketBay socketInternet;
+	private SocketBay socket; // what connected to us, or, what we connected and it took
 	
 	@Override public void close() {
 		if (already()) return;
 		
 		close(connectLan);
 		close(connectInternet);
-		close(socketConnectLan);
-		close(socketConnectInternet);
-		close(socketAccept);
+		close(socketLan);
+		close(socketInternet);
+		close(socket);
 		
 		try { program.core.accept.remove(acceptReceive); } catch (Exception e) { Mistake.log(e); }
 	}
+	
+	public SocketBay socket() { return socket; }
 
 	private class MyReceive implements Receive {
 		public void receive() throws Exception {
 			if (closed()) return;
-			try {
-				
-				/*
-				if (no(connect))
-					connect = new ConnectTask(update, lan);
-
-				if (done(connect) && no(socket)) {
-					socket = new SocketBay(update, connect.result());
-					socket.upload().add("hai");
+			clear();
+			if (open(socket)) return;
+			
+			if (no(socketLan)) {
+				if (no(connectLan))
+					connectLan = new ConnectTask(update, lan);
+				if (done(connectLan)) {
+					try {
+						socketLan = new SocketBay(update, connectLan.result());
+						up.send();
+					} catch (ProgramException e) { Mistake.ignore(e); }
+					connectLan = null;
 				}
-				*/
+			}
+			
 
-			} catch (ProgramException e) { exception = e; close(me()); }
+			
+			
 		}
 	}
-	private Connection me() { return this; }
 	
 	private final MyAcceptReceive acceptReceive;
 	private class MyAcceptReceive implements AcceptReceive {
-		public boolean receive(SocketBay socket) {
-
+		public boolean receive(SocketBay s) {
+			if (closed()) return false;
+			clear();
+			if (open(socket)) return false;
 			try {
-				Data d = socket.download().data();
-				Outline o = new Outline(d);
-				
-				
-				
-				
-				socket.download().keep(d.size());
-				return true;
-			} catch (DataException e) { Mistake.ignore(e); }
-			
-			
-			
+				if ((new Outline(s.download().data())).toData().hash().start(6).same(hash)) {
+					socket = s;
+					up.send();
+					return true;
+				}
+			} catch (ProgramException e) { Mistake.ignore(e); }
 			return false;
 		}
 	}
+	
+	
+	
+	private void clear() {
+		if (done(socket))
+			socket = null;
+		if (done(socketLan))
+			socketLan = null;
+		if (done(socketInternet))
+			socketInternet = null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public ProgramException exception() { return exception; }
 	private ProgramException exception;

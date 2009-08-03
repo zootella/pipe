@@ -70,4 +70,6 @@ public abstract class Close {
 	public static boolean is(Close c) { return c != null; }
 	/** true if c exists and is closed. */
 	public static boolean done(Close c) { return c != null && c.closed(); }
+	/** true if c exists and isn't closed yet. */
+	public static boolean open(Close c) { return c != null && !c.closed(); }
 }

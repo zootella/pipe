@@ -1,6 +1,7 @@
 package base.net.flow;
 
 import base.data.Bin;
+import base.exception.ProgramException;
 import base.net.socket.Socket;
 import base.size.Meter;
 import base.size.Range;
@@ -53,7 +54,7 @@ public class DownloadValve extends Close implements Valve {
 			task = new DownloadTask(update, socket, meter.remain(), out);
 	}
 	
-	public void stop() throws Exception {
+	public void stop() throws ProgramException {
 		if (closed()) return;
 		if (done(task)) {
 			meter.add(task.result().stripe.size); // If an exception closed later, throw it
