@@ -59,6 +59,8 @@ public class ReceivePipe extends Close implements Pipe {
 	@Override public void close() {
 		if (already()) return;
 		close(info);
+		close(connect);
+		close(socket);
 	}
 
 	// User

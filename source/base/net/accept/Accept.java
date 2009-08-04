@@ -1,7 +1,7 @@
 package base.net.accept;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import base.list.TwoBoots;
 import base.net.flow.SocketBay;
@@ -17,8 +17,8 @@ public class Accept extends Close {
 	public Accept(Port port) {
 		
 		listenSocket = new ListenSocket(port);
-		sockets = new TwoBoots<SocketBay>(Time.out);
-		receivers = new ArrayList<AcceptReceive>();
+		sockets = new TwoBoots<SocketBay>(Time.out * 100); //TODO dont keep forever
+		receivers = new HashSet<AcceptReceive>();
 
 		update = new Update(new MyReceive());
 		update.send();
@@ -30,7 +30,7 @@ public class Accept extends Close {
 	private AcceptTask acceptTask;
 	
 	private final TwoBoots<SocketBay> sockets;
-	private final List<AcceptReceive> receivers;
+	private final Set<AcceptReceive> receivers;
 
 	@Override public void close() {
 		if (already()) return;
@@ -52,7 +52,7 @@ public class Accept extends Close {
 				acceptTask = new AcceptTask(update, listenSocket);
 
 			// Show each AcceptReceive object above each socket that has connected in
-			for (AcceptReceive r : receivers)
+			for (AcceptReceive r : new HashSet<AcceptReceive>(receivers))
 				for (SocketBay s : sockets.list())
 					if (r.receive(s))
 						sockets.remove(s); // r took s, remove s from our list
@@ -64,6 +64,7 @@ public class Accept extends Close {
 		open();
 		if (!receivers.contains(o))
 			receivers.add(o);
+		update.send();
 	}
 	
 	/** Remove o from the list of objects this Packets object bothers with arrived packets. */

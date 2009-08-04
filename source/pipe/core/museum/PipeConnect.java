@@ -14,6 +14,7 @@ import base.state.Receive;
 import base.state.Update;
 import base.time.Ago;
 import base.time.Pulse;
+import base.time.Time;
 
 public class PipeConnect extends Close {
 	
@@ -33,8 +34,8 @@ public class PipeConnect extends Close {
 		update = new Update(receive);
 		update.send();
 		
-		lanAgo = new Ago();
-		netAgo = new Ago();
+		lanAgo = new Ago(Time.day); //TODO slow down
+		netAgo = new Ago(Time.day);
 		pulse = new Pulse(receive);
 	}
 	
@@ -105,6 +106,7 @@ public class PipeConnect extends Close {
 				// See if the peer has connected to us
 				if ((new Outline(s.download().data())).toData().hash().start(6).same(hash)) {
 					socket = s;
+					socket.upload().add(hello);
 					close(me());
 					return true;
 				}
