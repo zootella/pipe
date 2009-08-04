@@ -17,7 +17,7 @@ public class Accept extends Close {
 	public Accept(Port port) {
 		
 		listenSocket = new ListenSocket(port);
-		sockets = new TwoBoots<SocketBay>(Time.out * 100); //TODO dont keep forever
+		sockets = new TwoBoots<SocketBay>(Time.out);
 		receivers = new HashSet<AcceptReceive>();
 
 		update = new Update(new MyReceive());

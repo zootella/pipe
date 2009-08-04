@@ -14,7 +14,6 @@ import base.state.Receive;
 import base.state.Update;
 import base.time.Ago;
 import base.time.Pulse;
-import base.time.Time;
 
 public class PipeConnect extends Close {
 	
@@ -34,8 +33,8 @@ public class PipeConnect extends Close {
 		update = new Update(receive);
 		update.send();
 		
-		lanAgo = new Ago(Time.day); //TODO slow down
-		netAgo = new Ago(Time.day);
+		lanAgo = new Ago();
+		netAgo = new Ago();
 		pulse = new Pulse(receive);
 	}
 	
