@@ -11,9 +11,14 @@ import base.data.TextSplit;
 import base.encode.Encode;
 import base.exception.DataException;
 import base.exception.DiskException;
+import base.exception.ProgramException;
 import base.file.Path;
+import base.net.flow.SocketBay;
+import base.net.name.IpPort;
 import base.process.Mistake;
 import base.state.Close;
+import base.state.Receive;
+import base.state.Update;
 
 public class ReceivePipe extends Close implements Pipe {
 
@@ -24,18 +29,19 @@ public class ReceivePipe extends Close implements Pipe {
 		panel = new PipePanel(program, this);
 		info = new PipeInfoFrame(program, this);
 
-		hereHand = new Outline("hand", "receive");
-		hereHand.add("unique", Data.unique());
-		hereHand.add("i", program.core.here.internet().data());
-		hereHand.add("l", program.core.here.lan().data());
+		hereHello = new Outline("hello", "receive");
+		hereHello.add("unique", Data.unique());
 		
 		hereHi = new Outline("h");
 		hereHi.add("i", program.core.here.internet().data());
 		hereHi.add("l", program.core.here.lan().data());
-		hereHi.add("h", hereHand.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
+		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
+		
+		update = new Update(new MyReceive());
 	}
 	
 	private final Program program;
+	private final Update update;
 	
 	private final PipePanel panel;
 	private final PipeInfoFrame info;
@@ -43,9 +49,12 @@ public class ReceivePipe extends Close implements Pipe {
 	private Path folder;
 	
 	private Outline hereHi;
-	private Outline hereHand;
+	private Outline hereHello;
 	private Outline awayHi;
-	private Outline awayHand;
+	private Outline awayHello;
+	
+	private PipeConnect connect;
+	private SocketBay socket;
 	
 	@Override public void close() {
 		if (already()) return;
@@ -97,5 +106,36 @@ public class ReceivePipe extends Close implements Pipe {
 
 	// Go
 	
-	@Override public void go() {}
+	@Override public void go() {
+		update.send();
+	}
+
+	private class MyReceive implements Receive {
+		public void receive() throws Exception {
+			if (closed()) return;
+			try {
+				
+				if (no(socket) && no(connect) && awayHi != null)
+					connect = new PipeConnect(
+						program,
+						update,
+						new IpPort(awayHi.value("l")),
+						new IpPort(awayHi.value("i")),
+						hereHello.toData(),
+						awayHi.value("h"));
+
+				if (no(socket) && done(connect)) {
+					socket = connect.result();
+					socket.up = update;
+					
+					System.out.println("receive pipe has socket");
+				}
+
+			} catch (ProgramException e) { exception = e; close(me()); }
+		}
+	}
+	private ReceivePipe me() { return this; }
+	
+	public ProgramException exception() { return exception; }
+	private ProgramException exception;
 }

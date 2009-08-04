@@ -11,7 +11,7 @@ import base.state.Update;
 
 public class SocketBay extends Close {
 
-	/** Put Bay objects around socket so you can upload and download. */
+	/** Put Valve and Bay objects around socket to upload and download. */
 	public SocketBay(Update up, Socket socket) {
 		this.up = up;
 		this.socket = socket;
@@ -25,9 +25,10 @@ public class SocketBay extends Close {
 		update.send();
 	}
 	
-	public Update up;
-	public Update update;
+	private final Update update;
 	
+	// pull them out and change 'em later, null those you don't want close() to close
+	public Update up;
 	public Socket socket;
 	public UploadValve uploadValve;
 	public DownloadValve downloadValve;
@@ -75,11 +76,4 @@ public class SocketBay extends Close {
 	/** The ProgramException that closed us, or null. */
 	public ProgramException exception() { return exception; }
 	private ProgramException exception;
-
-	/** After taking our socket and valves, call take() before close(). */ 
-	public void take() {
-		uploadValve = null; // Forget we had these so close() doesn't close them
-		downloadValve = null;
-		socket = null;
-	}
 }

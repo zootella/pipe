@@ -12,10 +12,8 @@ import base.encode.Encode;
 import base.exception.DataException;
 import base.exception.ProgramException;
 import base.file.Path;
-import base.net.connect.ConnectTask;
 import base.net.flow.SocketBay;
 import base.net.name.IpPort;
-import base.net.socket.Socket;
 import base.process.Mistake;
 import base.state.Close;
 import base.state.Receive;
@@ -32,8 +30,6 @@ public class SendPipe extends Close implements Pipe {
 
 		hereHello = new Outline("hello", "send");
 		hereHello.add("unique", Data.unique());
-		hereHello.add("i", program.core.here.internet().data());
-		hereHello.add("l", program.core.here.lan().data());
 		
 		hereHi = new Outline("h");
 		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
@@ -112,13 +108,7 @@ public class SendPipe extends Close implements Pipe {
 	
 	@Override public void go() {
 		update.send();
-		
-		
-		
-		
-		
 	}
-	
 
 	private class MyReceive implements Receive {
 		public void receive() throws Exception {
@@ -137,6 +127,8 @@ public class SendPipe extends Close implements Pipe {
 				if (no(socket) && done(connect)) {
 					socket = connect.result();
 					socket.up = update;
+					
+					System.out.println("send pipe has socket");
 				}
 
 			} catch (ProgramException e) { exception = e; close(me()); }
@@ -146,20 +138,4 @@ public class SendPipe extends Close implements Pipe {
 	
 	public ProgramException exception() { return exception; }
 	private ProgramException exception;
-
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
