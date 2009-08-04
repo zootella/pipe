@@ -1,47 +1,41 @@
-package base.net.flow;
+package base.net.connect;
 
 import base.data.Data;
 import base.data.Outline;
 import base.exception.ChopException;
 import base.exception.DataException;
 import base.exception.ProgramException;
-import base.net.connect.ConnectTask;
+import base.net.flow.SocketBay;
 import base.net.name.IpPort;
 import base.process.Mistake;
 import base.state.Close;
-import base.state.Once;
 import base.state.Receive;
 import base.state.Update;
 import base.time.Egg;
 
-public class ConnectAndSend extends Close {
-
-	/** Make a new socket connection to ipPort, send it uploadHello, and receive an Outline that hashes to downloadHash, all in 4 seconds. */
-	public ConnectAndSend(Update up, IpPort ipPort, Data uploadHello, Data downloadHash) {
+public class Connect extends Close {
+	
+	/** Make a new TCP socket connection to ipPort, say hello and get hash response, in 4 seconds or less. */
+	public Connect(Update up, IpPort ipPort, Data hello, Data hash) {
 		this.up = up;
 		this.ipPort = ipPort;
-		this.uploadHello = uploadHello;
-		this.downloadHash = downloadHash;
+		this.hello = hello;
+		this.hash = hash;
 		
 		receive = new MyReceive();
+		egg = new Egg(receive);
 		update = new Update(receive);
 		update.send();
-		
-		egg = new Egg(receive);
-		uploadOnce = new Once();
 	}
-	
-	private final IpPort ipPort;
-	private final Data uploadHello;
-	private final Data downloadHash;
 	
 	private final Update up;
 	private final Update update;
+	private final IpPort ipPort;
+	private final Data hello;
+	private final Data hash;
 	private final Egg egg;
-	private final Once uploadOnce;
-	
 	private ConnectTask connect;
-	
+
 	@Override public void close() {
 		if (already()) return;
 		close(egg);
@@ -62,27 +56,27 @@ public class ConnectAndSend extends Close {
 			try {
 				egg.check();
 				
-				// Connect and send
+				// Connect and upload hello
 				if (no(connect))
 					connect = new ConnectTask(update, ipPort);
-				if (done(connect) && no(socket))
+				if (done(connect) && no(socket)) {
 					socket = new SocketBay(update, connect.result());
-				if (is(socket) && uploadOnce.once())
-					socket.upload().add(uploadHello);
+					socket.upload().add(hello);
+				}
 
-				// Download and check
+				// Download and check the peer's response
 				if (is(socket)) {
 					try {
 						Outline o = new Outline(socket.download().data());
-						if (o.toData().hash().start(6).equals(downloadHash))
+						if (o.toData().hash().start(6).equals(hash))
 							close(me());
 						else
-							throw new DataException("downloaded outline with different hash");
+							throw new DataException("bad response");
 					} catch (ChopException e) { Mistake.ignore(e); }
 				}
 
 			} catch (ProgramException e) { exception = e; close(me()); }
 		}
 	}
-	private ConnectAndSend me() { return this; }
+	private Connect me() { return this; }
 }

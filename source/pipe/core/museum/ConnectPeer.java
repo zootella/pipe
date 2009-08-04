@@ -5,7 +5,7 @@ import base.data.Data;
 import base.data.Outline;
 import base.exception.ProgramException;
 import base.net.accept.AcceptReceive;
-import base.net.flow.ConnectAndSend;
+import base.net.connect.Connect;
 import base.net.flow.SocketBay;
 import base.net.name.IpPort;
 import base.process.Mistake;
@@ -20,10 +20,10 @@ import base.time.Pulse;
 // listens for an incoming connection
 // says hello and makes sure the peer says an outline that hashes to hash
 // doesn't time out
-public class Connect extends Close {
+public class ConnectPeer extends Close {
 	
 	/** Upload hello to the peer at lan and internet, and check that it says hash back, or let it connect to us. */
-	public Connect(Program program, Update up, IpPort lan, IpPort internet, Data hello, Data hash) {
+	public ConnectPeer(Program program, Update up, IpPort lan, IpPort internet, Data hello, Data hash) {
 		this.program = program;
 		this.up = up;
 		this.lanIp = lan;
@@ -52,8 +52,8 @@ public class Connect extends Close {
 	private final Data hello; // our greeting we'll send the remote peer
 	private final Data hash; // the first outline the remote peer send us must hash to this value
 	
-	private ConnectAndSend lan;
-	private ConnectAndSend net;
+	private Connect lan;
+	private Connect net;
 	
 	private final Ago lanAgo;
 	private final Ago netAgo;
@@ -89,7 +89,7 @@ public class Connect extends Close {
 
 			// Connect to peer's LAN address
 			if (no(socket) && no(lan) && lanAgo.enough())
-				lan = new ConnectAndSend(update, lanIp, hello, hash);
+				lan = new Connect(update, lanIp, hello, hash);
 			if (done(lan)) {
 				try {
 					if (no(socket)) {
@@ -104,7 +104,7 @@ public class Connect extends Close {
 
 			// Connect to peer's Internet address
 			if (no(net) && no(socket) && netAgo.enough())
-				net = new ConnectAndSend(update, netIp, hello, hash);
+				net = new Connect(update, netIp, hello, hash);
 			if (done(net)) {
 				try {
 					if (no(socket)) {

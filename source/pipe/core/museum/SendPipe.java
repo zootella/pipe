@@ -56,7 +56,7 @@ public class SendPipe extends Close implements Pipe {
 	private Outline awayHi;
 	private Outline awayHello;
 	
-	private Connect connect;
+	private ConnectPeer connect;
 	private SocketBay socket;
 
 	@Override public void close() {
