@@ -25,15 +25,14 @@ public class SocketBay extends Close {
 		update.send();
 	}
 	
-	private final Update up;
-	private final Update update;
+	public Update up;
+	public Update update;
 	
-	private final Bay uploadBay;
-	private final Bay downloadBay;
-	
+	public Socket socket;
 	public UploadValve uploadValve;
 	public DownloadValve downloadValve;
-	public Socket socket;
+	public Bay uploadBay;
+	public Bay downloadBay;
 
 	@Override public void close() {
 		if (already()) return;

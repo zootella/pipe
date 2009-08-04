@@ -13,6 +13,7 @@ public class AdvancedUpdate {
 		list = new HashSet<AdvancedReceive>();
 		list.add(receive);
 		spin = new Spin();
+		send();
 	}
 	
 	public void add(AdvancedReceive receive) {

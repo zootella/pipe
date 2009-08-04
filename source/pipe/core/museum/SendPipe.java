@@ -125,7 +125,6 @@ public class SendPipe extends Close implements Pipe {
 			if (closed()) return;
 			try {
 				
-				/*
 				if (no(socket) && no(connect) && awayHi != null)
 					connect = new PipeConnect(
 						program,
@@ -136,11 +135,9 @@ public class SendPipe extends Close implements Pipe {
 						awayHi.value("h"));
 
 				if (no(socket) && done(connect)) {
-					socket = new SocketBay(update, connect.result());
-					socket.upload().add(hereHello.toData());
+					socket = connect.result();
+					socket.up = update;
 				}
-				*/
-			
 
 			} catch (ProgramException e) { exception = e; close(me()); }
 		}
