@@ -15,15 +15,10 @@ import base.state.Update;
 import base.time.Ago;
 import base.time.Pulse;
 
-// make a p2p connection that can connect either way
-// tries to connect to lan and internet every 4 seconds
-// listens for an incoming connection
-// says hello and makes sure the peer says an outline that hashes to hash
-// doesn't time out
-public class ConnectPeer extends Close {
+public class PipeConnect extends Close {
 	
-	/** Upload hello to the peer at lan and internet, and check that it says hash back, or let it connect to us. */
-	public ConnectPeer(Program program, Update up, IpPort lan, IpPort internet, Data hello, Data hash) {
+	/** Keep trying to upload hello to the peer at lan and internet, or let it connect to us, until it says hash back. */
+	public PipeConnect(Program program, Update up, IpPort lan, IpPort internet, Data hello, Data hash) {
 		this.program = program;
 		this.up = up;
 		this.lanIp = lan;
@@ -58,61 +53,43 @@ public class ConnectPeer extends Close {
 	private final Ago lanAgo;
 	private final Ago netAgo;
 	private final Pulse pulse;
-	
-	
+
 	@Override public void close() {
 		if (already()) return;
-		
 		close(lan);
 		close(net);
-		close(socket);
 		close(pulse);
-		
 		try { program.core.accept.remove(acceptReceive); } catch (Exception e) { Mistake.log(e); }
-		
 		up.send();
 	}
 	
-	public SocketBay socket() { return socket; }
-	private SocketBay socket;
-	
-	//TODO write this like a task, sure it doesn't time out, but it ends in victory or exception with result()
+	/** When done() call result() to get the SocketBay with the peer's valid greeting sitting in download(). */
+	public SocketBay result() { return socket; }
+	private SocketBay socket; // as soon as you get socket, you close
 
 	private final MyReceive receive;
 	private class MyReceive implements Receive {
 		public void receive() throws Exception {
 			if (closed()) return;
-			
-			// Check
-			if (done(socket))
-				socket = null;
 
 			// Connect to peer's LAN address
-			if (no(socket) && no(lan) && lanAgo.enough())
+			if (no(lan) && lanAgo.enough())
 				lan = new Connect(update, lanIp, hello, hash);
 			if (done(lan)) {
 				try {
-					if (no(socket)) {
-						socket = lan.result();
-						up.send();
-					} else {
-						close(lan.result());
-					}
+					socket = lan.result();
+					close(me());
 				} catch (ProgramException e) { Mistake.ignore(e); }
 				lan = null;
 			}
 
 			// Connect to peer's Internet address
-			if (no(net) && no(socket) && netAgo.enough())
+			if (no(net) && netAgo.enough())
 				net = new Connect(update, netIp, hello, hash);
 			if (done(net)) {
 				try {
-					if (no(socket)) {
-						socket = net.result();
-						up.send();
-					} else {
-						close(net.result());
-					}
+					socket = net.result();
+					close(me());
 				} catch (ProgramException e) { Mistake.ignore(e); }
 				net = null;
 			}
@@ -126,9 +103,9 @@ public class ConnectPeer extends Close {
 			try {
 				
 				// See if the peer has connected to us
-				if (no(socket) && (new Outline(s.download().data())).toData().hash().start(6).same(hash)) {
+				if ((new Outline(s.download().data())).toData().hash().start(6).same(hash)) {
 					socket = s;
-					up.send();
+					close(me());
 					return true;
 				}
 				
@@ -136,4 +113,5 @@ public class ConnectPeer extends Close {
 			return false;
 		}
 	}
+	private PipeConnect me() { return this; }
 }
