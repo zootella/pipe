@@ -5,7 +5,7 @@ import base.time.Time;
 /** A Spin object detects when an Update is sending events so quickly it must be broken. */
 public class Spin {
 
-	/** Count another event this second, and throw a SpinException if there are too many. */
+	/** Count another event this second, and throw an IllegalStateException if there are too many. */
 	public void count() {
 
 		// Find out what second this is

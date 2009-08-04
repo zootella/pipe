@@ -127,7 +127,7 @@ public class SendPipe extends Close implements Pipe {
 				
 				/*
 				if (no(socket) && no(connect) && awayHi != null)
-					connect = new Connect(
+					connect = new PipeConnect(
 						program,
 						update,
 						new IpPort(awayHi.value("l")),
@@ -139,7 +139,7 @@ public class SendPipe extends Close implements Pipe {
 					socket = new SocketBay(update, connect.result());
 					socket.upload().add(hereHello.toData());
 				}
-				 */
+				*/
 			
 
 			} catch (ProgramException e) { exception = e; close(me()); }
