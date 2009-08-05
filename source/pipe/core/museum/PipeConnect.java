@@ -79,6 +79,7 @@ public class PipeConnect extends Close {
 				try {
 					socket = lan.result();
 					close(me());
+					return;
 				} catch (ProgramException e) { Mistake.ignore(e); }
 				lan = null;
 			}
@@ -90,6 +91,7 @@ public class PipeConnect extends Close {
 				try {
 					socket = net.result();
 					close(me());
+					return;
 				} catch (ProgramException e) { Mistake.ignore(e); }
 				net = null;
 			}

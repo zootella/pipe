@@ -20,28 +20,32 @@ public class Socket extends Close {
 	/** Open a new TCP socket connection to the given IP address and port number or throw a NetException. */
 	public Socket(IpPort ipPort) {
 		try {
-			Now start = new Now();
-			outgoing = true;
-			channel = SocketChannel.open();
-			if (!channel.connect(ipPort.toInetSocketAddress())) throw new NetException("connect false");
-			this.ipPort = ipPort;
-			size();
-			connect = new Duration(start);
-			accept = null;
-		} catch (IOException e) { throw new NetException(e); }
+			try {
+				Now start = new Now();
+				outgoing = true;
+				channel = SocketChannel.open();
+				if (!channel.connect(ipPort.toInetSocketAddress())) throw new NetException("connect false");
+				this.ipPort = ipPort;
+				size();
+				connect = new Duration(start);
+				accept = null;
+			} catch (IOException e) { throw new NetException(e); }
+		} catch (RuntimeException e) { close(); throw e; }
 	}
 	
 	/** Make a new Socket for the given SocketChannel that just connected in to us. */
 	public Socket(SocketChannel channel) {
 		try {
-			if (!channel.isConnected()) throw new NetException("not connected"); // Make sure the given channel is connected
-			outgoing = false;
-			this.channel = channel;
-			ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress());
-			size();
-			connect = null;
-			accept = new Now();
-		} catch (IOException e) { throw new NetException(e); }
+			try {
+				if (!channel.isConnected()) throw new NetException("not connected"); // Make sure the given channel is connected
+				outgoing = false;
+				this.channel = channel;
+				ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress());
+				size();
+				connect = null;
+				accept = new Now();
+			} catch (IOException e) { throw new NetException(e); }
+		} catch (RuntimeException e) { close(); throw e; }
 	}
 	
 	/** Increase the socket buffer size if necessary. */
