@@ -37,6 +37,8 @@ public class Mistake {
 		if (Close.checkAll() == 0) return; // Check
 		String title = "Mistake close:"; // Compose
 		String body = Close.checkAll() + " objects still open\n";
+		
+		Close.print();
 
 		log(title, body); // Report
 		send(title + "\n" + body);

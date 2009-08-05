@@ -38,6 +38,7 @@ public class Connect extends Close {
 
 	@Override public void close() {
 		if (already()) return;
+		System.out.println(this.toString() + " closed");
 		close(egg);
 		close(connect);
 		if (exception != null)
@@ -61,6 +62,7 @@ public class Connect extends Close {
 					connect = new ConnectTask(update, ipPort);
 				if (done(connect) && no(socket)) {
 					socket = new SocketBay(update, connect.result());
+					System.out.println(me().toString() + " has socket");
 					socket.upload().add(hello);
 				}
 

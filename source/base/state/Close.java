@@ -1,5 +1,8 @@
 package base.state;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import base.exception.ProgramException;
 import base.process.Mistake;
 
@@ -14,6 +17,7 @@ public abstract class Close {
 	 */
 	public Close() {
 		programOpen++; // Count the program has one more object open, this new one that extends Close
+		add(this);
 	}
 	
 	/** true once this object that extends Close has been closed, and promises to not change again. */
@@ -33,6 +37,7 @@ public abstract class Close {
 		if (objectClosed) return true; // We're already closed, return true to return from the close() method
 		objectClosed = true;           // Mark this object that extends Close as now permanently closed
 		programOpen--;                 // Count the program has one fewer object it needs to close
+		remove(this);
 		return false;                  // Return false to run the contents of the close() method this first and only time
 	}
 
@@ -70,6 +75,19 @@ public abstract class Close {
 	public static boolean is(Close c) { return c != null; }
 	/** true if c exists and is closed. */
 	public static boolean done(Close c) { return c != null && c.closed(); }
-	/** true if c exists and isn't closed yet. */
-//	public static boolean open(Close c) { return c != null && !c.closed(); }
+	
+	// See
+	
+	private static final Set<Close> list = new HashSet<Close>();
+	private static synchronized void add(Close c) {
+		list.add(c);
+	}
+	private static synchronized void remove(Close c) {
+		list.remove(c);
+	}
+	public static synchronized void print() {
+		System.out.println(list.size() + " objects open:");
+		for (Close c : list)
+			System.out.println(c.toString());
+	}
 }
