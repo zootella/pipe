@@ -34,11 +34,10 @@ public class Mistake {
 
 	/** Make sure the program closed all the objects that needed to be closed. */
 	public static void closeCheck() {
-		if (Close.checkAll() == 0) return; // Check
+		int open = Close.checkAll();
+		if (open == 0) return; // Check
 		String title = "Mistake close:"; // Compose
-		String body = Close.checkAll() + " objects still open\n";
-		
-		Close.print();
+		String body = open + " objects still open\n";
 
 		log(title, body); // Report
 		send(title + "\n" + body);

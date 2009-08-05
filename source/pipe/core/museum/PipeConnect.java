@@ -77,7 +77,7 @@ public class PipeConnect extends Close {
 				lan = new Connect(update, lanIp, hello, hash);
 			if (done(lan)) {
 				try {
-					socket = lan.result();
+					socket = lan.result(); // As soon as we have socket, close and return
 					close(me());
 					return;
 				} catch (ProgramException e) { Mistake.ignore(e); }
