@@ -24,24 +24,26 @@ public class Socket extends Close {
 				Now start = new Now();
 				outgoing = true;
 				channel = SocketChannel.open();
-				if (!channel.connect(ipPort.toInetSocketAddress())) throw new NetException("connect false");
+				if (!channel.connect(ipPort.toInetSocketAddress())) throw new NetException("connect false");//TODO move to task
 				this.ipPort = ipPort;
-				size();
+				size();//TODO move to task
 				connect = new Duration(start);
 				accept = null;
 			} catch (IOException e) { throw new NetException(e); }
 		} catch (RuntimeException e) { close(); throw e; }
 	}
+	//TODO block on connect not here, but in the task
+	//TODO add the catch RuntimeException e close() throw e to every constructor that extends Close
 	
 	/** Make a new Socket for the given SocketChannel that just connected in to us. */
 	public Socket(SocketChannel channel) {
 		try {
 			try {
-				if (!channel.isConnected()) throw new NetException("not connected"); // Make sure the given channel is connected
+				if (!channel.isConnected()) throw new NetException("not connected"); // Make sure the given channel is connected TODO move to task
 				outgoing = false;
 				this.channel = channel;
-				ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress());
-				size();
+				ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress()); // TODO move to task
+				size(); // TODO move to task
 				connect = null;
 				accept = new Now();
 			} catch (IOException e) { throw new NetException(e); }
