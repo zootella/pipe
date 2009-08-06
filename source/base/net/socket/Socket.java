@@ -1,11 +1,9 @@
 package base.net.socket;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
 import base.data.Bin;
-import base.exception.NetException;
 import base.net.name.IpPort;
 import base.process.Mistake;
 import base.state.Close;
@@ -15,50 +13,13 @@ import base.time.Now;
 /** An open TCP socket connection. */
 public class Socket extends Close {
 
-	// Open
-
-	/** Open a new TCP socket connection to the given IP address and port number or throw a NetException. */
-	public Socket(IpPort ipPort) {
-		try {
-			try {
-				Now start = new Now();
-				outgoing = true;
-				channel = SocketChannel.open();
-				if (!channel.connect(ipPort.toInetSocketAddress())) throw new NetException("connect false");//TODO move to task
-				this.ipPort = ipPort;
-				size();//TODO move to task
-				connect = new Duration(start);
-				accept = null;
-			} catch (IOException e) { throw new NetException(e); }
-		} catch (RuntimeException e) { close(); throw e; }
+	/** Make a Socket object to hold a TCP socket connection and information about how it connected. */
+	public Socket(SocketChannel channel, IpPort ipPort, boolean outgoing, Now start) {
+		this.channel = channel;
+		this.ipPort = ipPort;
+		this.outgoing = outgoing;
+		connect = new Duration(start);
 	}
-	//TODO block on connect not here, but in the task
-	//TODO add the catch RuntimeException e close() throw e to every constructor that extends Close
-	
-	/** Make a new Socket for the given SocketChannel that just connected in to us. */
-	public Socket(SocketChannel channel) {
-		try {
-			try {
-				if (!channel.isConnected()) throw new NetException("not connected"); // Make sure the given channel is connected TODO move to task
-				outgoing = false;
-				this.channel = channel;
-				ipPort = new IpPort((InetSocketAddress)channel.socket().getRemoteSocketAddress()); // TODO move to task
-				size(); // TODO move to task
-				connect = null;
-				accept = new Now();
-			} catch (IOException e) { throw new NetException(e); }
-		} catch (RuntimeException e) { close(); throw e; }
-	}
-	
-	/** Increase the socket buffer size if necessary. */
-	private void size() throws IOException {
-		if (channel.socket().getSendBufferSize() < Bin.medium)
-			channel.socket().setSendBufferSize(Bin.medium);
-		if (channel.socket().getReceiveBufferSize() < Bin.medium)
-			channel.socket().setReceiveBufferSize(Bin.medium);
-	}
-	
-	// Look
 
 	/** The Java SocketChannel object that is this TCP socket connection. */
 	public final SocketChannel channel;
@@ -66,16 +27,20 @@ public class Socket extends Close {
 	public final IpPort ipPort;
 	/** true if we connected out to the peer, false if the peer connected in to us. */
 	public final boolean outgoing;
-	/** How long we took to connect, null if the peer connected in to us. */
+	/** How long we took to connect, or connect.stop is when we accepted the connection. */
 	public final Duration connect;
-	/** When the peer connected in to us, null if we made the outgoing connection. */
-	public final Now accept;
-	
-	// Close
 
 	/** Disconnect this TCP socket connection. */
 	@Override public void close() {
 		if (already()) return;
-		try { channel.close(); } catch (IOException e) { Mistake.log(e); }
+		try { channel.close(); } catch (Exception e) { Mistake.log(e); }
+	}
+
+	/** Increase the socket buffer size if necessary. */
+	public static void size(SocketChannel channel) throws IOException {
+		if (channel.socket().getSendBufferSize() < Bin.medium) // Probably already 8137 bytes by default
+			channel.socket().setSendBufferSize(Bin.medium);
+		if (channel.socket().getReceiveBufferSize() < Bin.medium)
+			channel.socket().setReceiveBufferSize(Bin.medium);
 	}
 }

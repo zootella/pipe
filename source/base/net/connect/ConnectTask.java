@@ -1,5 +1,9 @@
 package base.net.connect;
 
+import java.io.IOException;
+import java.nio.channels.SocketChannel;
+
+import base.exception.NetException;
 import base.exception.ProgramException;
 import base.net.name.IpPort;
 import base.net.socket.Socket;
@@ -7,6 +11,7 @@ import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.Update;
+import base.time.Now;
 
 public class ConnectTask extends Close {
 	
@@ -46,7 +51,13 @@ public class ConnectTask extends Close {
 		public void thread() throws Exception {
 				
 			// Make and connect a new socket to the given IP address and port number
-			taskSocket = new Socket(ipPort);
+			try {
+				Now s = new Now();
+				SocketChannel c = SocketChannel.open();
+				if (!c.connect(ipPort.toInetSocketAddress())) throw new NetException("false");
+				Socket.size(c);
+				taskSocket = new Socket(c, ipPort, true, s);
+			} catch (IOException e) { throw new NetException(e); }
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method

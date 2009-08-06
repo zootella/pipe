@@ -1,14 +1,18 @@
 package base.net.accept;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
 
 import base.exception.NetException;
 import base.exception.ProgramException;
+import base.net.name.IpPort;
 import base.net.socket.Socket;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.Update;
+import base.time.Now;
 
 public class AcceptTask extends Close {
 
@@ -49,7 +53,12 @@ public class AcceptTask extends Close {
 
 			// Wait here until a peer connects to us
 			try {
-				taskSocket = new Socket(listen.channel.accept());
+				Now s = new Now();
+				SocketChannel c = listen.channel.accept();
+				if (!c.isConnected()) throw new NetException("false"); // Make sure the given channel is connected
+				Socket.size(c);
+				IpPort i = new IpPort((InetSocketAddress)c.socket().getRemoteSocketAddress());
+				taskSocket = new Socket(c, i, false, s);
 			} catch (IOException e) { throw new NetException(e); }
 		}
 
