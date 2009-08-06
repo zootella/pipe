@@ -1,5 +1,7 @@
 package base.time;
 
+import base.user.Describe;
+
 /** A Now remembers the moment when it was made. */
 public class Now {
 	
@@ -17,6 +19,10 @@ public class Now {
 	public long age() { return Time.now() - time; }
 	
 	
+	
+	// Describe
+	
+	public String day() { return Describe.day(time); }
 	
 	
 	// Compare
