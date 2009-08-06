@@ -1,5 +1,7 @@
 package base.user;
 
+import java.util.Calendar;
+import java.util.Date;
 
 import base.data.Number;
 import base.data.Text;
@@ -73,6 +75,51 @@ public class Describe {
 		else                return commas(Text.chop(Number.toString(i), 2)) + " KB/s";                                      // 5 or more "999 KB/s" or "1,234 KB/s"
 	}
 	
+	// Day
+
+	/** Given a number of milliseconds since January 1970, compose the local day and time like "Thu 1:39:12.077 PM". */
+	public static String day(long milliseconds) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date(milliseconds));
+
+		// Day of week
+		String s = "";
+		int d = c.get(Calendar.DAY_OF_WEEK);
+		switch (d) {
+		case Calendar.MONDAY:    s = "Mon "; break;
+		case Calendar.TUESDAY:   s = "Tue "; break;
+		case Calendar.WEDNESDAY: s = "Wed "; break;
+		case Calendar.THURSDAY:  s = "Thu "; break;
+		case Calendar.FRIDAY:    s = "Fri "; break;
+		case Calendar.SATURDAY:  s = "Sat "; break;
+		case Calendar.SUNDAY:    s = "Sun "; break;
+		}
+
+		// Hours, minutes, and seconds
+		s +=
+			numerals(c.get(Calendar.HOUR),        1) + ":" +
+			numerals(c.get(Calendar.MINUTE),      2) + ":" +
+			numerals(c.get(Calendar.SECOND),      2) + "." +
+			numerals(c.get(Calendar.MILLISECOND), 3);
+
+		// AM or PM
+		if (c.get(Calendar.AM_PM) == Calendar.AM)
+			s += " AM";
+		else
+			s += " PM";
+		
+		return s;
+	}
+
+	/** Turn n like 5 into 3 digits like "005". */
+	public static String numerals(long n, int digits) {
+		if (digits < 1) throw new IllegalArgumentException();
+		String s = n + "";
+		while (s.length() < digits)
+			s = "0" + s; // Add enough leading 0s
+		return s;
+	}
+
 	// Text
 	
 	/** Turn o into a String, "" if null. */
