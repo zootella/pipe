@@ -10,9 +10,11 @@ public class Snippet {
 
 	public static void snippet(Program program) {
 
+		/*
 		try {
 			AES.go();
 		} catch (Exception e) { Mistake.stop(e); }
+		*/
 		
 		
 
@@ -24,6 +26,8 @@ public class Snippet {
 
 		String mySecondEncryptedText = mySecondEncryptor.encrypt(myText);		
 		*/
+		
+		
 
 	}
 }

@@ -31,15 +31,15 @@ public class AES {
 		System.out.println("raw " + new Data(raw).base16());
 		
 		
-		SecretKeySpec key2 = new SecretKeySpec(raw, "AES");
+//		SecretKeySpec key2 = new SecretKeySpec(raw, "AES");
 
 		Cipher cipher = Cipher.getInstance("AES", "BC");
-		cipher.init(Cipher.ENCRYPT_MODE, key2);
+		cipher.init(Cipher.ENCRYPT_MODE, key);
 
 		byte[] encrypted = cipher.doFinal("This is just an example".getBytes());
 		System.out.println("encrypted string: " + new Data(encrypted).base16());
 
-		cipher.init(Cipher.DECRYPT_MODE, key2);
+		cipher.init(Cipher.DECRYPT_MODE, key);
 		byte[] original = cipher.doFinal(encrypted);
 		String originalString = new String(original);
 		System.out.println("Original string: " + originalString + " " + new Data(original).base16());
