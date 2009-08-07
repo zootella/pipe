@@ -3,8 +3,8 @@ package base.data;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import base.encode.Encode;
-import base.encode.Hash;
+import base.data.encode.Encode;
+import base.data.hash.Hash;
 import base.exception.ChopException;
 import base.exception.DataException;
 

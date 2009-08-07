@@ -38,5 +38,18 @@ public class AES {
 		byte[] original = cipher.doFinal(encrypted);
 		String originalString = new String(original);
 		System.out.println("Original string: " + originalString + " " + new Data(original).base16());
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 }

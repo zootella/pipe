@@ -1,4 +1,4 @@
-package base.encode;
+package base.data.hash;
 
 import base.data.Bin;
 import base.exception.ProgramException;

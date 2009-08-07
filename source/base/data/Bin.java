@@ -6,6 +6,11 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import base.exception.DiskException;
 import base.exception.NetException;
 import base.file.File;
@@ -242,7 +247,7 @@ public class Bin {
 			return new Move(start, range.i, did);
 		} catch (IOException e) { throw new DiskException(e); }
 	}
-	
+
 	/** Write 1 byte or more from this Bin to file. */
 	public Move write(File file, Range range) {
 		try {
@@ -327,4 +332,115 @@ public class Bin {
 		if (did < 1 || did > ask) throw new IOException("did " + did); // Wrote nothing or too much
 		return new Move(start, range.i, did);
 	}
+	
+	// Encrypt
+	
+	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
+		
+		/*
+		int block = cipher.getBlockSize();
+		System.out.println("block size might be 16 bytes: " + block);
+		
+		if (source.size()      < cipher.getBlockSize()) throw new IllegalArgumentException("not enough data");
+		if (destination.size() < cipher.getBlockSize()) throw new IllegalArgumentException("not enough space");
+			
+		Now now = new Now();
+			
+		
+
+		// confirm that this thing does all the blocks available to it, and write it with that knowledge in hand
+
+		ByteBuffer s = source.buffer.duplicate();
+		ByteBuffer d = destination.buffer.duplicate();
+		
+		cipher.update(s, d);
+		
+
+		/*
+		int did = cipher.update(destination.data().toByteBuffer(), source.output);
+		
+		byte[] encrypted = cipher.update(source.data().toByteArray());
+		
+
+		
+		
+		
+		ByteBuffer space = destination.in(destination.space());
+		Now start = new Now();
+		int did = cipher.update(source.data().toByteBuffer(), space); // Read from the file at i and move space.position forward
+		inCheck(did, space);
+		inDone(space);
+		
+		*/
+		
+		
+		
+		
+		
+		return null;
+	}
+	
+	public static void decrypt(Cipher cipher, Bin source, Bin destination) {
+		byte[] original = cipher.update(source.data().toByteArray());
+	}
+	
+	
+	
+	
+	
+	public static void snippet() throws Exception {
+		int i;
+
+		//make
+		KeyGenerator g = KeyGenerator.getInstance("AES");
+		g.init(128);
+		SecretKey k = g.generateKey();
+		Data key = new Data(k.getEncoded());
+		i = key.size(); // 16
+
+		
+		
+		Cipher cipher = Cipher.getInstance("AES");
+		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.toByteArray(), "AES"));
+		int block = cipher.getBlockSize(); // 16
+		
+		Bin source = Bin.medium();
+		Bin destination = Bin.medium();
+		
+		source.add(Data.random(8191));
+		i = source.size(); // 37
+		
+		ByteBuffer s = source.buffer.duplicate();
+		s.flip();
+		ByteBuffer d = destination.buffer.duplicate();
+		
+		System.out.println("before " + s.position() + ":" + s.limit() + " source, " + d.position() + ":" + d.limit() + " destination ");
+		int did = cipher.update(s, d);
+		System.out.println("did " + did);
+		System.out.println("after " + s.position() + ":" + s.limit() + " source, " + d.position() + ":" + d.limit() + " destination ");
+		
+		
+		
+
+		
+		
+		/*
+		ByteBuffer s = source.
+		
+		cipher.update(input, output);
+		
+		if (source.size()      < cipher.getBlockSize()) throw new IllegalArgumentException("not enough data");
+		if (destination.size() < cipher.getBlockSize()) throw new IllegalArgumentException("not enough space");
+			
+		*/
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

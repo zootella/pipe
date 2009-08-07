@@ -8,7 +8,7 @@ import base.data.Data;
 import base.data.Outline;
 import base.data.Text;
 import base.data.TextSplit;
-import base.encode.Encode;
+import base.data.encode.Encode;
 import base.exception.DataException;
 import base.exception.ProgramException;
 import base.file.Path;

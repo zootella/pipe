@@ -1,4 +1,4 @@
-package base.encode;
+package base.data.encode;
 
 import base.data.Bay;
 import base.data.Data;

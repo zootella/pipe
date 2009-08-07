@@ -1,4 +1,4 @@
-package base.encode;
+package base.data.hash;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

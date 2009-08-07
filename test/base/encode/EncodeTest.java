@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import base.data.Data;
-import base.encode.Encode;
+import base.data.encode.Encode;
 
 public class EncodeTest {
 	

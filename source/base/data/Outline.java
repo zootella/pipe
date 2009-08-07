@@ -3,7 +3,7 @@ package base.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import base.encode.Encode;
+import base.data.encode.Encode;
 import base.exception.DataException;
 
 // rules for designing your outline

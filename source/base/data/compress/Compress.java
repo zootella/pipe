@@ -1,4 +1,4 @@
-package base.encode;
+package base.data.compress;
 
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
