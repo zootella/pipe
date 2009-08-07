@@ -9,6 +9,9 @@ import base.process.Mistake;
 public class Snippet {
 
 	public static void snippet(Program program) {
+		
+		
+//		Stack.encryptAES256(input, key);
 
 		/*
 		try {
