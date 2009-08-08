@@ -1,8 +1,6 @@
 package base.data;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
@@ -81,8 +79,6 @@ public class Bin {
 	public boolean isEmpty() { return size() == 0; }
 	/** true if this Bin has at least 1 byte of space. */
 	public boolean hasSpace() { return size() != capacity(); }
-	/** true if this Bin is half space or more. */
-	public boolean halfSpace() { return size() <= capacity() / 2; }
 	/** true if this Bin is completely full of data, with no space for even 1 more byte. */
 	public boolean isFull() { return size() == capacity(); }
 	
@@ -152,15 +148,6 @@ public class Bin {
 	 */
 	private ByteBuffer buffer;
 
-	/** Access this Bin's byte array for temporary use within a method. */
-	private byte[] array() {
-		if (array == null) // Make it on first request
-			array = new byte[capacity()];
-		return array;
-	}
-	/** A byte array for temporary use within a method, same capacity as buffer, null before we need it. */
-	private byte[] array;
-
 	// Help
 
 	/** Copy our buffer clipped around space bytes of space for moving data in. */
@@ -203,33 +190,6 @@ public class Bin {
 		data.limit(buffer.position());
 		data.compact(); // Slide the data to the start and clip position and limit around the space after it
 		buffer = data;
-	}
-	
-	// Stream
-
-	/** Move 1 byte or more from stream in to this Bin. */
-	public Move in(InputStream stream, Range range) throws IOException {
-		int ask = range.ask(space()); // Don't try to bring in more bytes than buffer has space to hold
-		Now start = new Now();
-		int did = stream.read(array(), 0, ask); // Move from stream to array
-		if (did < 1 || did > ask) throw new IOException("did " + did);
-		ByteBuffer space = in(did); // Move from array to buffer
-		space.put(array(), 0, did);
-		inCheck(did, space);
-		inDone(space);
-		return new Move(start, did);
-	}
-
-	/** Move 1 byte or more from this Bin out to stream. */
-	public Move out(OutputStream stream, Range range) throws IOException {
-		int ask = range.ask(size()); // Don't try to give out more data than buffer has
-		Now start = new Now();
-		ByteBuffer data = out(ask); // Move from buffer to array
-		data.get(array(), 0, ask);		
-		stream.write(array(), 0, ask); // Move from array to stream
-		outCheck(ask, data);
-		outDone(data);
-		return new Move(start, ask);
 	}
 
 	// File
@@ -311,26 +271,6 @@ public class Bin {
 			outDone(data);
 			return new PacketMove(start, did, p);
 		} catch (IOException e) { throw new NetException(e); }
-	}
-
-	// Direct
-
-	/** Download 1 byte or more directly from socket to file. */
-	public static Move down(Socket socket, File file, Range range) throws IOException {
-		int ask = range.ask((int)Size.gigabyte);
-		Now start = new Now();
-		long did = file.file.getChannel().transferFrom(socket.channel, range.i, ask); // Download up to size bytes to the file at i
-		if (did < 1 || did > ask) throw new IOException("did " + did); // Wrote nothing or too much
-		return new Move(start, range.i, did);
-	}
-
-	/** Upload 1 byte or more from the file directly to socket. */
-	public static Move up(Socket socket, File file, Range range) throws IOException {
-		int ask = range.ask((int)Size.gigabyte);
-		Now start = new Now();
-		long did = file.file.getChannel().transferTo(range.i, ask, socket.channel); // Upload up to size bytes from the file at i
-		if (did < 1 || did > ask) throw new IOException("did " + did); // Wrote nothing or too much
-		return new Move(start, range.i, did);
 	}
 	
 	// Encrypt
@@ -420,7 +360,11 @@ public class Bin {
 		System.out.println("after " + s.position() + ":" + s.limit() + " source, " + d.position() + ":" + d.limit() + " destination ");
 		
 		
+		//solution to trailing end problem
+		// if you've got less than block do final, otherwise update
 		
+		//solution to overflow problem
+		// ask it to decrypt at most destination space minus block
 
 		
 		
