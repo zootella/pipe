@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
 
+import base.exception.DataException;
 import base.exception.DiskException;
 import base.exception.NetException;
 import base.file.File;
@@ -25,7 +29,7 @@ import base.time.Now;
 
 public class Bin {
 	
-	// Static
+	// Define
 	
 	/** 8 KB in bytes, the capacity of a normal Bin, our buffer size for TCP sockets. */
 	public static final int medium = 8 * (int)Size.kilobyte;
@@ -275,53 +279,71 @@ public class Bin {
 	
 	// Encrypt
 	
-	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
-		
-		/*
+	public static boolean canEncrypt(Cipher cipher, Bin source, Bin destination) {
+		return askEncrypt(cipher, source, destination) >= 1;
+	}
+	private static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
-		System.out.println("block size might be 16 bytes: " + block);
-		
-		if (source.size()      < cipher.getBlockSize()) throw new IllegalArgumentException("not enough data");
-		if (destination.size() < cipher.getBlockSize()) throw new IllegalArgumentException("not enough space");
+		System.out.println("encrypt " + source.size() + "source " + (destination.space() - block) + "destination");
+		return Math.min(source.size(), destination.space() - block);
+	}
+	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
+		try {
+
+			int ask = askEncrypt(cipher, source, destination);
+			if (ask < 1) throw new IndexOutOfBoundsException("ask");
+
+			ByteBuffer s = source.buffer.duplicate();
+			s.position(0);
+			s.limit(ask);
 			
-		Now now = new Now();
+			Now start = new Now();
+			int did;
+			if (ask < cipher.getBlockSize())
+				did = cipher.doFinal(s, destination.buffer);
+			else
+				did = cipher.update(s, destination.buffer);
+			System.out.println("encrypt " + ask + "ask " + did + "did");
 			
-		
-
-		// confirm that this thing does all the blocks available to it, and write it with that knowledge in hand
-
-		ByteBuffer s = source.buffer.duplicate();
-		ByteBuffer d = destination.buffer.duplicate();
-		
-		cipher.update(s, d);
-		
-
-		/*
-		int did = cipher.update(destination.data().toByteBuffer(), source.output);
-		
-		byte[] encrypted = cipher.update(source.data().toByteArray());
-		
-
-		
-		
-		
-		ByteBuffer space = destination.in(destination.space());
-		Now start = new Now();
-		int did = cipher.update(source.data().toByteBuffer(), space); // Read from the file at i and move space.position forward
-		inCheck(did, space);
-		inDone(space);
-		
-		*/
-		
-		
-		
-		
-		
-		return null;
+			source.remove(ask);
+			return new Move(start, ask);
+		}
+		catch (IllegalBlockSizeException e) { throw new DataException(e); }
+		catch (BadPaddingException e)       { throw new DataException(e); }
+		catch (ShortBufferException e)      { throw new DataException(e); }
 	}
 	
-	public static void decrypt(Cipher cipher, Bin source, Bin destination) {
-		byte[] original = cipher.update(source.data().toByteArray());
+	//true but you need to confirm: encrypt always produces data in units of the block size
+	
+	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
+		return askDecrypt(cipher, source, destination) >= 1;
+	}
+	private static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
+		int block = cipher.getBlockSize();
+		System.out.println("decrypt " + (source.size() - (source.size() % block)) + "source " + (destination.space() - block) + "destination");
+		return Math.min(source.size() - (source.size() % block), destination.space() - block);
+	}	
+	public static Move decrypt(Cipher cipher, Bin source, Bin destination) {
+		try {
+			
+			int block = cipher.getBlockSize();
+			int ask = askDecrypt(cipher, source, destination);
+			if (ask < block || ask % block != 0) throw new IndexOutOfBoundsException("ask");
+			
+			ByteBuffer s = source.buffer.duplicate();
+			s.position(0);
+			s.limit(ask);
+			
+			Now start = new Now();
+			int did = cipher.doFinal(s, destination.buffer);
+			System.out.println("decrypt " + ask + "ask " + did + "did");
+			
+			source.remove(ask);
+			return new Move(start, ask);
+		}
+		catch (IllegalBlockSizeException e) { throw new DataException(e); }
+		catch (BadPaddingException e)       { throw new DataException(e); }
+		catch (ShortBufferException e)      { throw new DataException(e); }
 	}
 	
 	
@@ -329,25 +351,43 @@ public class Bin {
 	
 	
 	public static void snippet() throws Exception {
-		int i;
+		
+		final String algorithm = "AES";
+		final int size = 128;
 
-		//make
-		KeyGenerator g = KeyGenerator.getInstance("AES");
-		g.init(128);
+		KeyGenerator g = KeyGenerator.getInstance(algorithm);
+		g.init(size);
 		SecretKey k = g.generateKey();
-		Data key = new Data(k.getEncoded());
-		i = key.size(); // 16
+		Data d = new Data(k.getEncoded());
 
+		Cipher encrypt = Cipher.getInstance(algorithm);
+		Cipher decrypt = Cipher.getInstance(algorithm);
+		encrypt.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
+		decrypt.init(Cipher.DECRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
+		
+		Bin a = Bin.medium();
+		Bin b = Bin.medium();
+		Bin c = Bin.medium();
+		
+		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
+		a.add(new Data("hello"));
+		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
+		encrypt(encrypt, a, b);
+		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
+		decrypt(decrypt, b, c);
+		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
+		
+		System.out.println(c.data().strike());
+		System.out.println(c.data().base16());
 		
 		
-		Cipher cipher = Cipher.getInstance("AES");
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.toByteArray(), "AES"));
-		int block = cipher.getBlockSize(); // 16
+		// all you have to do is feed it different amounts of data, and show that it never chokes
+		// encrypt must be able to take 1 byte or more, and must always generate 16 bytes or more
+		// decrypt must be able to take 16 bytes or more
+		// confirm it acts this way
 		
-		Bin source = Bin.medium();
-		Bin destination = Bin.medium();
-		
-		source.add(Data.random(8191));
+		/*
+
 		i = source.size(); // 37
 		
 		ByteBuffer s = source.buffer.duplicate();
@@ -366,8 +406,6 @@ public class Bin {
 		//solution to overflow problem
 		// ask it to decrypt at most destination space minus block
 
-		
-		
 		/*
 		ByteBuffer s = source.
 		
