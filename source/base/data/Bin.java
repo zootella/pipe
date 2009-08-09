@@ -279,7 +279,7 @@ public class Bin {
 	
 	// Encrypt
 	
-	/** Throw a padding Outline into the stream at the end to force everything before through. */
+	/** Throw a padding Outline in at the end to force everything before through. */
 	public static Outline padding(Cipher cipher) {
 		final String name = "padding";
 		int block = cipher.getBlockSize();
@@ -369,7 +369,7 @@ public class Bin {
 		final int size = 128;
 
 		Stopwatch stopwatch = new Stopwatch();
-		KeyGenerator g = KeyGenerator.getInstance(algorithm);
+		KeyGenerator g = KeyGenerator.getInstance(algorithm); // Slow the first time it runs
 		g.init(size);
 		SecretKey k = g.generateKey();
 		Data d = new Data(k.getEncoded());
