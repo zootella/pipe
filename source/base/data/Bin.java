@@ -4,15 +4,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
 
-import base.exception.DataException;
 import base.exception.DiskException;
 import base.exception.NetException;
 import base.file.File;
@@ -23,11 +20,12 @@ import base.size.Range;
 import base.size.Size;
 import base.size.Stripe;
 import base.size.StripePattern;
-import base.size.move.MorphMove;
 import base.size.move.Move;
 import base.size.move.PacketMove;
 import base.size.move.StripeMove;
+import base.time.Ago;
 import base.time.Now;
+import base.time.Stopwatch;
 
 public class Bin {
 	
@@ -294,22 +292,18 @@ public class Bin {
 
 	/** true if source has enough data and destination has enough space to encrypt. */
 	public static boolean canEncrypt(Cipher cipher, Bin source, Bin destination) {
-		try {
-			askEncrypt(cipher, source, destination);
-			return true;
-		} catch (IndexOutOfBoundsException e) { return false; }
+		try { askEncrypt(cipher, source, destination); return true; }
+		catch (IndexOutOfBoundsException e) { return false; }
 	}
 
 	/** true if source has enough data and destination has enough space to decrypt. */
 	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
-		try {
-			askDecrypt(cipher, source, destination);
-			return true;
-		} catch (IndexOutOfBoundsException e) { return false; }
+		try { askDecrypt(cipher, source, destination); return true; }
+		catch (IndexOutOfBoundsException e) { return false; }
 	}
 
 	/** How many bytes we expect the next call to encrypt, 1 or more, or IndexOutOfBoundsException. */
-	public static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
+	private static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
 		int s = whole(block, source.size());
 		int d = whole(block, destination.space()) - block; // Encrypt needs an extra block of space
@@ -330,11 +324,11 @@ public class Bin {
 			if (did != ask) throw new IndexOutOfBoundsException("did");
 			source.remove(did); // Remove what we encrypted from the given source Bin
 			return new Move(start, did);
-		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
+		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); } // If this happens, askEncrypt() is broken
 	}
 
 	/** How many bytes we expect the next call to decrypt, 1 or more, or IndexOutOfBoundsException. */
-	public static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
+	private static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
 		int s = whole(block, source.size()) - block; // Decrypt will do one less block than we ask it to
 		int d = whole(block, destination.space()) - block; // Decrypt needs an extra block of space
@@ -374,10 +368,13 @@ public class Bin {
 		final String algorithm = "AES";
 		final int size = 128;
 
+		Stopwatch stopwatch = new Stopwatch();
 		KeyGenerator g = KeyGenerator.getInstance(algorithm);
 		g.init(size);
 		SecretKey k = g.generateKey();
 		Data d = new Data(k.getEncoded());
+		stopwatch.stop();
+		System.out.println("made key in " + stopwatch.toString());
 
 		Cipher encrypt = Cipher.getInstance(algorithm);
 		Cipher decrypt = Cipher.getInstance(algorithm);
