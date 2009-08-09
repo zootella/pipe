@@ -289,21 +289,16 @@ public class Bin {
 			return true;
 		} catch (IndexOutOfBoundsException e) { return false; }
 	}
-	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
-		try {
-			askDecrypt(cipher, source, destination);
-			return true;
-		} catch (IndexOutOfBoundsException e) { return false; }
-	}
-	
-	
-	
+
 	public static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
-		int ask = Math.min(whole(block, source.size()), whole(block, destination.space()));
+		int s = whole(block, source.size());
+		int d = whole(block, destination.space()) - block;
+		int ask = Math.min(s, d);
 		if (ask < 1) throw new IndexOutOfBoundsException();
 		return ask;
 	}
+	
 	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
 		try {
 			
@@ -313,59 +308,63 @@ public class Bin {
 			s.limit(ask);
 			
 			Now start = new Now();
-			int mov = destination.buffer.position();
 			int did = cipher.update(s, destination.buffer);
-			mov = destination.buffer.position() - mov;
+			System.out.println(ask + "ask " + did + "did");
 			
-			if (ask == did && did == mov && ask == mov) {
-				//make sure all three are equal
-			} else {
-				System.out.println(ask + "ask " + did + "did " + mov + "mov");
-				throw new IndexOutOfBoundsException("moved incorrectly");
-			}
-			
-			source.remove(ask);
-			return new Move(start, ask);
+			source.remove(did);
+//			return new Move(start, did);
+			return null;
 			
 		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
+	}
+	
+	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
+		try {
+			askDecrypt(cipher, source, destination);
+			return true;
+		} catch (IndexOutOfBoundsException e) { return false; }
 	}
 
 	public static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
-		if (source.size() < block) throw new IndexOutOfBoundsException("chop");
-		int s = whole(block, source.size());
-		int d = whole(block, destination.space()) - (2 * block); //TODO can you make it generate 2 blocks?
-		return Math.min(s, d);
+		int s = whole(block, source.size()) - block;
+		int d = whole(block, destination.space()) - block;
+		int ask = Math.min(s, d);
+		if (ask < 1) throw new IndexOutOfBoundsException();
+		return ask;
 	}
-	public static MorphMove decrypt(Cipher cipher, Bin source, Bin destination) {
+	
+	public static Move decrypt(Cipher cipher, Bin source, Bin destination) {
 		try {
 			
 			int ask = askDecrypt(cipher, source, destination);
 			ByteBuffer s = source.buffer.duplicate();
 			s.position(0);
-			s.limit(ask);
+			s.limit(ask + cipher.getBlockSize());
 			
 			Now start = new Now();
-			int did;
+			int did = cipher.update(s, destination.buffer);
+			System.out.println(ask + "ask " + did + "did");
 			
-			did = cipher.update(s, destination.buffer);
-			System.out.println("decrypt " + ask + "ask " + did + "did");
-			
-			source.remove(ask);
-			return new MorphMove(start, ask, did);
+			source.remove(did);
+//			return new Move(start, did);
+			return null;
 			
 		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
 	}
 	
-	
-	
-	
-	
-	
+
 	public static void snippet() throws Exception {
+
+//		for (int i = 1; i <= 4; i++)
+		test(8192);
 		
 		
-		
+	}
+	
+	
+	public static void test(int z) throws Exception {
+
 		final String algorithm = "AES";
 		final int size = 128;
 
@@ -382,17 +381,15 @@ public class Bin {
 		Bin a = Bin.medium();
 		Bin b = Bin.medium();
 		Bin c = Bin.medium();
+
+		a.add(Data.random(z));
+		System.out.println("start     " + a.size() + "a " + b.size() + "b " + c.size() + "c");
+		encrypt(encrypt, a, b);
+		System.out.println("encrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
+		decrypt(decrypt, b, c);
+		System.out.println("decrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
+		System.out.println("");
 		
-		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
-		a.add(new Data("hello"));
-		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
-//		encrypt(encrypt, a, b, null);
-		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
-//		decrypt(decrypt, b, c);
-		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
-		
-		System.out.println(c.data().strike());
-		System.out.println(c.data().base16());
 		
 		
 		// all you have to do is feed it different amounts of data, and show that it never chokes
