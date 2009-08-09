@@ -281,8 +281,18 @@ public class Bin {
 	
 	// Encrypt
 	
-	private static int whole(int block, int i) { return i - (i % block); }
+	/** Throw a padding Outline into the stream at the end to force everything before through. */
+	public static Outline padding(Cipher cipher) {
+		final String name = "padding";
+		int block = cipher.getBlockSize();
+		int carry = (new Outline(name)).toData().size();
+		return new Outline(name, Data.random((2 * block) - carry)); // 2 blocks will both get encrypted, and 1 decrypted on the far side
+	}
 	
+	/** The part of i that is whole multiples of block, any remainder removed. */
+	private static int whole(int block, int i) { return i - (i % block); }
+
+	/** true if source has enough data and destination has enough space to encrypt. */
 	public static boolean canEncrypt(Cipher cipher, Bin source, Bin destination) {
 		try {
 			askEncrypt(cipher, source, destination);
@@ -290,34 +300,7 @@ public class Bin {
 		} catch (IndexOutOfBoundsException e) { return false; }
 	}
 
-	public static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
-		int block = cipher.getBlockSize();
-		int s = whole(block, source.size());
-		int d = whole(block, destination.space()) - block;
-		int ask = Math.min(s, d);
-		if (ask < 1) throw new IndexOutOfBoundsException();
-		return ask;
-	}
-	
-	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
-		try {
-			
-			int ask = askEncrypt(cipher, source, destination);
-			ByteBuffer s = source.buffer.duplicate();
-			s.position(0);
-			s.limit(ask);
-			
-			Now start = new Now();
-			int did = cipher.update(s, destination.buffer);
-			System.out.println(ask + "ask " + did + "did");
-			
-			source.remove(did);
-//			return new Move(start, did);
-			return null;
-			
-		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
-	}
-	
+	/** true if source has enough data and destination has enough space to decrypt. */
 	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
 		try {
 			askDecrypt(cipher, source, destination);
@@ -325,39 +308,62 @@ public class Bin {
 		} catch (IndexOutOfBoundsException e) { return false; }
 	}
 
-	public static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
+	/** How many bytes we expect the next call to encrypt, 1 or more, or IndexOutOfBoundsException. */
+	public static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
-		int s = whole(block, source.size()) - block;
-		int d = whole(block, destination.space()) - block;
+		int s = whole(block, source.size());
+		int d = whole(block, destination.space()) - block; // Encrypt needs an extra block of space
 		int ask = Math.min(s, d);
 		if (ask < 1) throw new IndexOutOfBoundsException();
 		return ask;
 	}
 	
+	/** Encrypt 16 bytes or more blocks of source data into destination. */
+	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
+		try {
+			int ask = askEncrypt(cipher, source, destination);
+			ByteBuffer s = source.buffer.duplicate();
+			s.position(0); // Clip s position and limit around the source data we ask to encrypt
+			s.limit(ask);
+			Now start = new Now();
+			int did = cipher.update(s, destination.buffer); // Moves destination position forward
+			if (did != ask) throw new IndexOutOfBoundsException("did");
+			source.remove(did); // Remove what we encrypted from the given source Bin
+			return new Move(start, did);
+		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
+	}
+
+	/** How many bytes we expect the next call to decrypt, 1 or more, or IndexOutOfBoundsException. */
+	public static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
+		int block = cipher.getBlockSize();
+		int s = whole(block, source.size()) - block; // Decrypt will do one less block than we ask it to
+		int d = whole(block, destination.space()) - block; // Decrypt needs an extra block of space
+		int ask = Math.min(s, d);
+		if (ask < 1) throw new IndexOutOfBoundsException();
+		return ask;
+	}
+
+	/** Decrypt 32 bytes or more of source data into destination, always leaves the last 16 byte block behind. */
 	public static Move decrypt(Cipher cipher, Bin source, Bin destination) {
 		try {
-			
 			int ask = askDecrypt(cipher, source, destination);
 			ByteBuffer s = source.buffer.duplicate();
 			s.position(0);
-			s.limit(ask + cipher.getBlockSize());
-			
+			s.limit(ask + cipher.getBlockSize()); // Ask for an extra block, decrypt will do one less
 			Now start = new Now();
 			int did = cipher.update(s, destination.buffer);
-			System.out.println(ask + "ask " + did + "did");
-			
+			if (did != ask) throw new IndexOutOfBoundsException("did");
 			source.remove(did);
-//			return new Move(start, did);
-			return null;
-			
+			return new Move(start, did);
 		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
 	}
 	
 
 	public static void snippet() throws Exception {
+		
 
-//		for (int i = 1; i <= 4; i++)
-		test(8192);
+		test(0);
+		
 		
 		
 	}
@@ -377,17 +383,29 @@ public class Bin {
 		Cipher decrypt = Cipher.getInstance(algorithm);
 		encrypt.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
 		decrypt.init(Cipher.DECRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
-		
+
 		Bin a = Bin.medium();
 		Bin b = Bin.medium();
 		Bin c = Bin.medium();
 
-		a.add(Data.random(z));
+		a.add(new Data("[^^all my secret information is safe now thanks to this awesome computer program and the good people who made it^^]"));
+		a.add(padding(encrypt).toData());
 		System.out.println("start     " + a.size() + "a " + b.size() + "b " + c.size() + "c");
-		encrypt(encrypt, a, b);
-		System.out.println("encrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
-		decrypt(decrypt, b, c);
-		System.out.println("decrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
+		
+		if (canEncrypt(encrypt, a, b)) {
+			encrypt(encrypt, a, b);
+			System.out.println("encrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
+			System.out.println(b.data().strike());
+			System.out.println(b.data().base16());
+			
+			if (canDecrypt(decrypt, b, c)) {
+				decrypt(decrypt, b, c);
+				System.out.println("decrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
+				System.out.println(c.data().strike());
+				System.out.println(c.data().base16());
+			}
+		}
+		
 		System.out.println("");
 		
 		
