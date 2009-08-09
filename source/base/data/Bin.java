@@ -278,6 +278,7 @@ public class Bin {
 	}
 	
 	// Encrypt
+	//TODO get this all out of here
 	
 	/** Throw a padding Outline in at the end to force everything before through. */
 	public static Outline padding(Cipher cipher) {
@@ -325,6 +326,22 @@ public class Bin {
 			source.remove(did); // Remove what we encrypted from the given source Bin
 			return new Move(start, did);
 		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); } // If this happens, askEncrypt() is broken
+	}
+	
+	public static Move encrypt2(Cipher cipher, Bin source, Bin destination) {
+		try {
+			int ask = askEncrypt(cipher, source, destination);
+			ByteBuffer data = source.out(ask);
+			ByteBuffer space = destination.in(ask);
+			Now start = new Now();
+			int did = cipher.update(data, space);
+			if (did != ask) throw new IndexOutOfBoundsException("did");
+			source.outCheck(did, data);
+			destination.outCheck(did, space);
+			return new Move(start, did);
+		}
+		catch (IOException e) { throw new IndexOutOfBoundsException(e.toString()); }
+		catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
 	}
 
 	/** How many bytes we expect the next call to decrypt, 1 or more, or IndexOutOfBoundsException. */
@@ -381,66 +398,6 @@ public class Bin {
 		encrypt.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
 		decrypt.init(Cipher.DECRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
 
-		Bin a = Bin.medium();
-		Bin b = Bin.medium();
-		Bin c = Bin.medium();
-
-		a.add(new Data("[^^all my secret information is safe now thanks to this awesome computer program and the good people who made it^^]"));
-		a.add(padding(encrypt).toData());
-		System.out.println("start     " + a.size() + "a " + b.size() + "b " + c.size() + "c");
-		
-		if (canEncrypt(encrypt, a, b)) {
-			encrypt(encrypt, a, b);
-			System.out.println("encrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
-			System.out.println(b.data().strike());
-			System.out.println(b.data().base16());
-			
-			if (canDecrypt(decrypt, b, c)) {
-				decrypt(decrypt, b, c);
-				System.out.println("decrypted " + a.size() + "a " + b.size() + "b " + c.size() + "c");
-				System.out.println(c.data().strike());
-				System.out.println(c.data().base16());
-			}
-		}
-		
-		System.out.println("");
-		
-		
-		
-		// all you have to do is feed it different amounts of data, and show that it never chokes
-		// encrypt must be able to take 1 byte or more, and must always generate 16 bytes or more
-		// decrypt must be able to take 16 bytes or more
-		// confirm it acts this way
-		
-		/*
-
-		i = source.size(); // 37
-		
-		ByteBuffer s = source.buffer.duplicate();
-		s.flip();
-		ByteBuffer d = destination.buffer.duplicate();
-		
-		System.out.println("before " + s.position() + ":" + s.limit() + " source, " + d.position() + ":" + d.limit() + " destination ");
-		int did = cipher.update(s, d);
-		System.out.println("did " + did);
-		System.out.println("after " + s.position() + ":" + s.limit() + " source, " + d.position() + ":" + d.limit() + " destination ");
-		
-		
-		//solution to trailing end problem
-		// if you've got less than block do final, otherwise update
-		
-		//solution to overflow problem
-		// ask it to decrypt at most destination space minus block
-
-		/*
-		ByteBuffer s = source.
-		
-		cipher.update(input, output);
-		
-		if (source.size()      < cipher.getBlockSize()) throw new IllegalArgumentException("not enough data");
-		if (destination.size() < cipher.getBlockSize()) throw new IllegalArgumentException("not enough space");
-			
-		*/
 		
 	}
 	
