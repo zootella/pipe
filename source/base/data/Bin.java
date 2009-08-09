@@ -281,66 +281,66 @@ public class Bin {
 	
 	// Encrypt
 	
-	public static boolean canEncrypt(Cipher cipher, Range range, Bin source, Bin destination) {
-		try {
-			askEncrypt(cipher, range, source, destination);
-			return true;
-		} catch (IndexOutOfBoundsException e) { return false; }
-	}
-	
-	public static boolean canDecrypt(Cipher cipher, Range range, Bin source, Bin destination) {
-		try {
-			askDecrypt(cipher, range, source, destination);
-			return true;
-		} catch (IndexOutOfBoundsException e) { return false; }
-	}
-	
 	private static int whole(int block, int i) { return i - (i % block); }
 	
-	
-	public static int askEncrypt(Cipher cipher, Range range, Bin source, Bin destination) {
-		int block = cipher.getBlockSize();
-		if (source.size() < block && !range.after(source.size()).isDone()) throw new IndexOutOfBoundsException("chop");
-		int s = source.size();
-		if (s > block)
-			s = whole(block, s);
-		int d = whole(block, destination.space()) - (2 * block); //TODO can you make it generate 2 blocks?
-		return range.ask(Math.min(s, d));
-	}
-	public static MorphMove encrypt(Cipher cipher, Range range, Bin source, Bin destination) {
+	public static boolean canEncrypt(Cipher cipher, Bin source, Bin destination) {
 		try {
-			int ask = askEncrypt(cipher, range, source, destination);
+			askEncrypt(cipher, source, destination);
+			return true;
+		} catch (IndexOutOfBoundsException e) { return false; }
+	}
+	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
+		try {
+			askDecrypt(cipher, source, destination);
+			return true;
+		} catch (IndexOutOfBoundsException e) { return false; }
+	}
+	
+	
+	
+	public static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
+		int block = cipher.getBlockSize();
+		int ask = Math.min(whole(block, source.size()), whole(block, destination.space()));
+		if (ask < 1) throw new IndexOutOfBoundsException();
+		return ask;
+	}
+	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
+		try {
+			
+			int ask = askEncrypt(cipher, source, destination);
 			ByteBuffer s = source.buffer.duplicate();
 			s.position(0);
 			s.limit(ask);
 			
 			Now start = new Now();
-			int did;
+			int mov = destination.buffer.position();
+			int did = cipher.update(s, destination.buffer);
+			mov = destination.buffer.position() - mov;
 			
-			if (range.after(ask).isDone())
-				did = cipher.doFinal(s, destination.buffer);
-			else
-				did = cipher.update(s, destination.buffer);
-			System.out.println("encrypt " + ask + "ask " + did + "did");
+			if (ask == did && did == mov && ask == mov) {
+				//make sure all three are equal
+			} else {
+				System.out.println(ask + "ask " + did + "did " + mov + "mov");
+				throw new IndexOutOfBoundsException("moved incorrectly");
+			}
 			
 			source.remove(ask);
-			return new MorphMove(start, ask, did);
-		}
-		catch (IllegalBlockSizeException e) { throw new DataException(e); }
-		catch (BadPaddingException e)       { throw new DataException(e); }
-		catch (ShortBufferException e)      { throw new DataException(e); }
+			return new Move(start, ask);
+			
+		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
 	}
 
-	public static int askDecrypt(Cipher cipher, Range range, Bin source, Bin destination) {
+	public static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
 		if (source.size() < block) throw new IndexOutOfBoundsException("chop");
 		int s = whole(block, source.size());
 		int d = whole(block, destination.space()) - (2 * block); //TODO can you make it generate 2 blocks?
-		return range.ask(Math.min(s, d));
+		return Math.min(s, d);
 	}
-	public static MorphMove decrypt(Cipher cipher, Range range, Bin source, Bin destination) {
+	public static MorphMove decrypt(Cipher cipher, Bin source, Bin destination) {
 		try {
-			int ask = askDecrypt(cipher, range, source, destination);
+			
+			int ask = askDecrypt(cipher, source, destination);
 			ByteBuffer s = source.buffer.duplicate();
 			s.position(0);
 			s.limit(ask);
@@ -348,21 +348,15 @@ public class Bin {
 			Now start = new Now();
 			int did;
 			
-			if (range.after(ask).isDone())
-				did = cipher.doFinal(s, destination.buffer);
-			else
-				did = cipher.update(s, destination.buffer);
+			did = cipher.update(s, destination.buffer);
 			System.out.println("decrypt " + ask + "ask " + did + "did");
 			
 			source.remove(ask);
 			return new MorphMove(start, ask, did);
-		}
-		catch (IllegalBlockSizeException e) { throw new DataException(e); }
-		catch (BadPaddingException e)       { throw new DataException(e); }
-		catch (ShortBufferException e)      { throw new DataException(e); }
+			
+		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
 	}
 	
-	//TODO combine encrypt() and decrypt(), you've factored all the differences into ask()
 	
 	
 	
