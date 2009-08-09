@@ -57,7 +57,7 @@ public class UploadValve extends Close implements Valve {
 	public void stop() throws ProgramException {
 		if (closed()) return;
 		if (done(task)) {
-			meter.add(task.result().stripe.size); // If an exception closed later, throw it
+			meter.add(task.result().size); // If an exception closed later, throw it
 			task = null; // Discard the closed later, now in() and out() will work
 		}
 		if (meter.isDone()) close(this); // All done

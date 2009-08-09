@@ -19,12 +19,13 @@ import base.file.File;
 import base.net.name.IpPort;
 import base.net.packet.ListenPacket;
 import base.net.socket.Socket;
-import base.size.Move;
-import base.size.PacketMove;
 import base.size.Range;
 import base.size.Size;
 import base.size.Stripe;
 import base.size.StripePattern;
+import base.size.move.Move;
+import base.size.move.PacketMove;
+import base.size.move.StripeMove;
 import base.time.Now;
 
 public class Bin {
@@ -199,7 +200,7 @@ public class Bin {
 	// File
 	
 	/** Read 1 byte or more from file to this Bin. */
-	public Move read(File file, StripePattern pattern, Range range) {
+	public StripeMove read(File file, StripePattern pattern, Range range) {
 		try {
 			int ask = range.ask(space()); // Don't try to read more bytes than we have space for
 			ByteBuffer space = in(ask);
@@ -208,19 +209,19 @@ public class Bin {
 			int did = file.file.getChannel().read(space, range.i); // Read from the file at i and move space.position forward
 			inCheck(did, space);
 			inDone(space);
-			return new Move(start, range.i, did);
+			return new StripeMove(start, range.i, did);
 		} catch (IOException e) { throw new DiskException(e); }
 	}
 
 	/** Write 1 byte or more from this Bin to file. */
-	public Move write(File file, Range range) {
+	public StripeMove write(File file, Range range) {
 		try {
 			ByteBuffer data = out(range.ask(size())); // Don't try to write more bytes than we have
 			Now start = new Now();
 			int did = file.file.getChannel().write(data, range.i); // Write to the file at trip.at and move data.position forward
 			outCheck(did, data);
 			outDone(data);
-			return new Move(start, range.i, did);
+			return new StripeMove(start, range.i, did);
 		} catch (IOException e) { throw new DiskException(e); }
 	}
 
@@ -287,7 +288,7 @@ public class Bin {
 		System.out.println("encrypt " + source.size() + "source " + (destination.space() - block) + "destination");
 		return Math.min(source.size(), destination.space() - block);
 	}
-	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
+	public static Move encrypt(Cipher cipher, Bin source, Bin destination, Range range) {
 		try {
 
 			int ask = askEncrypt(cipher, source, destination);
@@ -372,7 +373,7 @@ public class Bin {
 		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
 		a.add(new Data("hello"));
 		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
-		encrypt(encrypt, a, b);
+		encrypt(encrypt, a, b, null);
 		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");
 		decrypt(decrypt, b, c);
 		System.out.println(a.size() + "a " + b.size() + "b " + c.size() + "c");

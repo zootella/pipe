@@ -2,9 +2,9 @@ package base.file;
 
 import base.data.Bin;
 import base.exception.ProgramException;
-import base.size.Move;
 import base.size.Range;
 import base.size.StripePattern;
+import base.size.move.StripeMove;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
@@ -40,15 +40,15 @@ public class ReadTask extends Close {
 	// Result
 	
 	/** How much of stripe we read and how long it took, or throws the exception that made us give up. */
-	public Move result() { check(exception, move); return move; }
+	public StripeMove result() { check(exception, move); return move; }
 	private ProgramException exception;
-	private Move move;
+	private StripeMove move;
 	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private Move taskMove; // References thread() can safely set
+		private StripeMove taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() throws Exception {

@@ -2,7 +2,7 @@ package base.net.packet;
 
 import base.data.Bin;
 import base.net.name.IpPort;
-import base.size.PacketMove;
+import base.size.move.PacketMove;
 
 public class Packet {
 

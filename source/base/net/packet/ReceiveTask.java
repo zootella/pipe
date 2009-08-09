@@ -2,7 +2,7 @@ package base.net.packet;
 
 import base.data.Bin;
 import base.exception.ProgramException;
-import base.size.PacketMove;
+import base.size.move.PacketMove;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;

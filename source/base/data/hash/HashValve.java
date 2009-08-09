@@ -58,7 +58,7 @@ public class HashValve extends Close implements Valve {
 	public void stop() throws Exception {
 		if (closed()) return;
 		if (task != null && task.closed()) { // Our later finished
-			meter.add(task.result().stripe.size); // If an exception closed later, result() will throw it
+			meter.add(task.result().size); // If an exception closed later, result() will throw it
 			task = null; // Discard the closed later, now in() and out() will work
 		}
 		if (meter.isDone()) close(this); // All done

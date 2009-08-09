@@ -2,8 +2,8 @@ package base.data.hash;
 
 import base.data.Bin;
 import base.exception.ProgramException;
-import base.size.Move;
 import base.size.Range;
+import base.size.move.Move;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
