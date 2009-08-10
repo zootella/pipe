@@ -55,7 +55,7 @@ public class Encrypt {
 		catch (InvalidKeyException e)       { throw new DataException(e); }     // Unable to turn the key data into a working key
 	}
 
-	// Padding
+	// Stream
 
 	/** Throw a 2 block, 32 byte, Outline of padding in at the end to force data before through. */
 	public static Outline padding(Cipher cipher) {
@@ -64,99 +64,47 @@ public class Encrypt {
 		int carry = (new Outline(name)).toData().size();
 		return new Outline(name, Data.random((2 * block) - carry)); // 2 blocks will both get encrypted, and 1 decrypted on the far side
 	}
-	
-	// Help
-	
+
 	/** The part of i that is whole multiples of block, any remainder removed. */
 	private static int whole(int block, int i) { return i - (i % block); }
-	
-	// Can
 
-	/** true if source has enough data and destination has enough space to encrypt. */
-	public static boolean canEncrypt(Cipher cipher, Bin source, Bin destination) {
+	/** true if source has enough data and destination has enough space to encrypt or decrypt. */
+	public static boolean can(Cipher cipher, int mode, Bin source, Bin destination) {
 		try {
-			askEncrypt(cipher, source, destination);
+			expect(cipher, mode, source, destination);
 			return true;
 		} catch (IndexOutOfBoundsException e) { return false; }
 	}
 
-	/** true if source has enough data and destination has enough space to decrypt. */
-	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
-		try {
-			askDecrypt(cipher, Cipher.ENCRYPT_MODE, source, destination);
-			return true;
-		} catch (IndexOutOfBoundsException e) { return false; }
-	}
-	
-	// Encrypt
-
-	/** How many bytes we expect the next call to encrypt, 1 or more, or IndexOutOfBoundsException. */
-	private static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
+	/** How many bytes we expect the next call to encrypt or decrypt, 1 or more, or IndexOutOfBoundsException. */
+	private static int expect(Cipher cipher, int mode, Bin source, Bin destination) {
 		int block = cipher.getBlockSize();
 		
 		int s = whole(block, source.size());
-		int d = whole(block, destination.space()) - block; // Encrypt needs an extra block of space
+		if (mode == Cipher.DECRYPT_MODE) s -= block; // Decrypt will do one less block than we ask it to
+		int d = whole(block, destination.space()) - block; // Both encrypt and decrypt need an extra block of destination space
 		
 		int ask = Math.min(s, d);
 		if (ask < 1) throw new IndexOutOfBoundsException();
-		
 		return ask;
 	}
 
-	/** Encrypt 1 or more 16 byte block of source data into destination. */
-	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
+	/** Encrypt or decrypt 1 or more 16 byte blocks of data, decrypt needs 32 bytes in source because it always leaves a block behind. */
+	public static Move process(Cipher cipher, int mode, Bin source, Bin destination) {
 		try {
-			int ask = askEncrypt(cipher, source, destination);
+			int block = cipher.getBlockSize();
+			int expect = expect(cipher, mode, source, destination);
+
+			int ask = expect;
+			if (mode == Cipher.DECRYPT_MODE) ask += block; // Ask for an extra block because decrypt always does one less
 			
 			ByteBuffer data = source.out(ask);
-			ByteBuffer space = destination.in(ask);
+			ByteBuffer space = destination.in(expect + block);
 			
 			Now start = new Now();
 			int did = cipher.update(data, space);
-			if (did != ask) throw new IndexOutOfBoundsException("did"); // Make sure it did what we asked
-			
-			source.outCheck(did, data);
-			destination.inCheck(did, space);
-			source.outDone(data);
-			destination.inDone(space);
-			return new Move(start, did);
-		}
-		catch (ShortBufferException e)      { throw new DataException(e); } // If this happens, askEncrypt() is broken
-		catch (IndexOutOfBoundsException e) { throw new DataException(e); }
-	}
-	
-	// Decrypt
-
-	/** How many bytes we expect the next call to decrypt, 1 or more, or IndexOutOfBoundsException. */
-	private static int askDecrypt(Cipher cipher, int mode, Bin source, Bin destination) {
-		int block = cipher.getBlockSize();
-		
-		int s = whole(block, source.size());
-		
-		if (mode == Cipher.DECRYPT_MODE) s -= block; // Decrypt will do one less block than we ask it to
-		
-		int d = whole(block, destination.space()) - block; // Decrypt needs an extra block of space
-		
-		int ask = Math.min(s, d);
-		if (ask < 1) throw new IndexOutOfBoundsException();
-		
-		return ask;
-	}
-	
-	/** Decrypt 1 or more 16 byte blocks of data, source needs at least 32 bytes because decrypt() always leaves the last block behind. */
-	public static Move decrypt(Cipher cipher, int mode, Bin source, Bin destination) {
-		try {
-			int ask = askDecrypt(cipher, Cipher.DECRYPT_MODE, source, destination);
-
-			int request = ask;
-			if (mode == Cipher.DECRYPT_MODE) request += cipher.getBlockSize(); // Ask for an extra block because decrypt always does one less
-			
-			ByteBuffer data = source.out(request);
-			ByteBuffer space = destination.in(ask);
-			
-			Now start = new Now();
-			int did = cipher.update(data, space);
-			if (did != ask) throw new IndexOutOfBoundsException("did");
+			if (did != expect) throw new IndexOutOfBoundsException("did");
+			if (mode == Cipher.DECRYPT_MODE) data.position(data.position() - block);
 			
 			source.outCheck(did, data);
 			destination.inCheck(did, space);
