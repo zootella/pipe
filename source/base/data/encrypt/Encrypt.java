@@ -104,7 +104,7 @@ public class Encrypt {
 			Now start = new Now();
 			int did = cipher.update(data, space);
 			if (did != expect) throw new IndexOutOfBoundsException("did");
-			if (mode == Cipher.DECRYPT_MODE) data.position(data.position() - block);
+			if (mode == Cipher.DECRYPT_MODE) data.position(data.position() - block); // Decrypt says it does the last block it leaves behind
 			
 			source.outCheck(did, data);
 			destination.inCheck(did, space);
