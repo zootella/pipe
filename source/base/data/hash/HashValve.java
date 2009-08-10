@@ -1,6 +1,5 @@
 package base.data.hash;
 
-
 import base.data.Bin;
 import base.size.Meter;
 import base.size.Range;

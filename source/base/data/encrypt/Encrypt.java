@@ -50,9 +50,9 @@ public class Encrypt {
 			cipher.init(mode, new SecretKeySpec(key.toByteArray(), algorithm));
 			return cipher;
 		}
-		catch (NoSuchAlgorithmException e)  { throw new PlatformException(e); } // Java doesn't have algorithm
-		catch (NoSuchPaddingException e)    { throw new PlatformException(e); } // Java doesn't have padding
-		catch (InvalidKeyException e)       { throw new DataException(e); }     // Unable to turn the key data into a working key
+		catch (NoSuchAlgorithmException e) { throw new PlatformException(e); } // Java doesn't have algorithm
+		catch (NoSuchPaddingException e)   { throw new PlatformException(e); } // Java doesn't have padding
+		catch (InvalidKeyException e)      { throw new DataException(e); }     // Unable to turn the key data into a working key
 	}
 
 	// Stream
