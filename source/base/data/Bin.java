@@ -4,12 +4,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.ShortBufferException;
-import javax.crypto.spec.SecretKeySpec;
-
 import base.exception.DiskException;
 import base.exception.NetException;
 import base.file.File;
@@ -23,9 +17,7 @@ import base.size.StripePattern;
 import base.size.move.Move;
 import base.size.move.PacketMove;
 import base.size.move.StripeMove;
-import base.time.Ago;
 import base.time.Now;
-import base.time.Stopwatch;
 
 public class Bin {
 	
@@ -143,7 +135,7 @@ public class Bin {
 		buffer.position(0); // Move position back to the start to clip out the whole thing as empty
 	}
 
-	// Hold
+	// Inside
 
 	/**
 	 * Our ByteBuffer object that holds the data.
@@ -152,10 +144,8 @@ public class Bin {
 	 */
 	private ByteBuffer buffer;
 
-	// Help
-
 	/** Copy our buffer clipped around space bytes of space for moving data in. */
-	private ByteBuffer in(int space) {
+	public ByteBuffer in(int space) {
 		if (space > space()) throw new IndexOutOfBoundsException();
 		ByteBuffer b = buffer.duplicate();
 		b.limit(b.position() + space);
@@ -163,19 +153,19 @@ public class Bin {
 	}
 	
 	/** Make sure we did at least 1 byte and position moved forward correctly. */
-	private void inCheck(int did, ByteBuffer space) throws IOException {
-		if (did < 1) throw new IOException("did " + did); // Hit the end got nothing
-		if (buffer.position() + did != space.position()) throw new IOException("position"); // Moved position forward incorrectly
+	public void inCheck(int did, ByteBuffer space) {
+		if (did < 1) throw new IndexOutOfBoundsException("did " + did); // Hit the end got nothing
+		if (buffer.position() + did != space.position()) throw new IndexOutOfBoundsException("position"); // Moved position forward incorrectly
 	}
 	
 	/** Save our buffer after moving data in. */
-	private void inDone(ByteBuffer space) {
+	public void inDone(ByteBuffer space) {
 		space.limit(space.capacity());
 		buffer = space;
 	}
 
 	/** Copy our buffer clipped around size bytes of data at the start for moving data out. */
-	private ByteBuffer out(int size) {
+	public ByteBuffer out(int size) {
 		if (size > size()) throw new IndexOutOfBoundsException();
 		ByteBuffer b = buffer.duplicate();
 		b.position(0);
@@ -184,13 +174,13 @@ public class Bin {
 	}
 	
 	/** Make sure we did at least 1 byte and position moved forward correctly. */
-	private void outCheck(int did, ByteBuffer data) throws IOException {
-		if (did < 1) throw new IOException("did " + did); // Error or wrote nothing
-		if (did != data.position()) throw new IOException("position"); // Moved position forward incorrectly
+	public void outCheck(int did, ByteBuffer data) {
+		if (did < 1) throw new IndexOutOfBoundsException("did " + did); // Error or wrote nothing
+		if (did != data.position()) throw new IndexOutOfBoundsException("position"); // Moved position forward incorrectly
 	}
 	
 	/** Save our buffer after moving data out. */
-	private void outDone(ByteBuffer data) {
+	public void outDone(ByteBuffer data) {
 		data.limit(buffer.position());
 		data.compact(); // Slide the data to the start and clip position and limit around the space after it
 		buffer = data;
@@ -209,7 +199,9 @@ public class Bin {
 			inCheck(did, space);
 			inDone(space);
 			return new StripeMove(start, range.i, did);
-		} catch (IOException e) { throw new DiskException(e); }
+		}
+		catch (IOException e)               { throw new DiskException(e); }
+		catch (IndexOutOfBoundsException e) { throw new DiskException(e); }
 	}
 
 	/** Write 1 byte or more from this Bin to file. */
@@ -221,7 +213,9 @@ public class Bin {
 			outCheck(did, data);
 			outDone(data);
 			return new StripeMove(start, range.i, did);
-		} catch (IOException e) { throw new DiskException(e); }
+		}
+		catch (IOException e)               { throw new DiskException(e); }
+		catch (IndexOutOfBoundsException e) { throw new DiskException(e); }
 	}
 
 	// Socket
@@ -235,7 +229,9 @@ public class Bin {
 			inCheck(did, space);
 			inDone(space);
 			return new Move(start, did);
-		} catch (IOException e) { throw new NetException(e); }
+		}
+		catch (IOException e)               { throw new NetException(e); }
+		catch (IndexOutOfBoundsException e) { throw new NetException(e); }
 	}
 
 	/** Upload 1 byte or more from this Bin into socket. */
@@ -247,7 +243,9 @@ public class Bin {
 			outCheck(did, data);
 			outDone(data);
 			return new Move(start, did);
-		} catch (IOException e) { throw new NetException(e); }
+		}
+		catch (IOException e)               { throw new NetException(e); }
+		catch (IndexOutOfBoundsException e) { throw new NetException(e); }
 	}
 
 	// Packet
@@ -261,7 +259,9 @@ public class Bin {
 			if (a == null) throw new NetException("null");
 			inDone(space);
 			return new PacketMove(start, size(), new IpPort(a));
-		} catch (IOException e) { throw new NetException(e); }
+		}
+		catch (IOException e)               { throw new NetException(e); }
+		catch (IndexOutOfBoundsException e) { throw new NetException(e); }
 	}
 	
 	/** Use listen to send the data in this Bin, 0 or more bytes, as a UDP packet to p. */
@@ -274,138 +274,8 @@ public class Bin {
 			if (data.remaining() != 0) throw new NetException("position");
 			outDone(data);
 			return new PacketMove(start, did, p);
-		} catch (IOException e) { throw new NetException(e); }
-	}
-	
-	// Encrypt
-	//TODO get this all out of here
-	
-	/** Throw a padding Outline in at the end to force everything before through. */
-	public static Outline padding(Cipher cipher) {
-		final String name = "padding";
-		int block = cipher.getBlockSize();
-		int carry = (new Outline(name)).toData().size();
-		return new Outline(name, Data.random((2 * block) - carry)); // 2 blocks will both get encrypted, and 1 decrypted on the far side
-	}
-	
-	/** The part of i that is whole multiples of block, any remainder removed. */
-	private static int whole(int block, int i) { return i - (i % block); }
-
-	/** true if source has enough data and destination has enough space to encrypt. */
-	public static boolean canEncrypt(Cipher cipher, Bin source, Bin destination) {
-		try { askEncrypt(cipher, source, destination); return true; }
-		catch (IndexOutOfBoundsException e) { return false; }
-	}
-
-	/** true if source has enough data and destination has enough space to decrypt. */
-	public static boolean canDecrypt(Cipher cipher, Bin source, Bin destination) {
-		try { askDecrypt(cipher, source, destination); return true; }
-		catch (IndexOutOfBoundsException e) { return false; }
-	}
-
-	/** How many bytes we expect the next call to encrypt, 1 or more, or IndexOutOfBoundsException. */
-	private static int askEncrypt(Cipher cipher, Bin source, Bin destination) {
-		int block = cipher.getBlockSize();
-		int s = whole(block, source.size());
-		int d = whole(block, destination.space()) - block; // Encrypt needs an extra block of space
-		int ask = Math.min(s, d);
-		if (ask < 1) throw new IndexOutOfBoundsException();
-		return ask;
-	}
-	
-	/** Encrypt 16 bytes or more blocks of source data into destination. */
-	public static Move encrypt(Cipher cipher, Bin source, Bin destination) {
-		try {
-			int ask = askEncrypt(cipher, source, destination);
-			ByteBuffer s = source.buffer.duplicate();
-			s.position(0); // Clip s position and limit around the source data we ask to encrypt
-			s.limit(ask);
-			Now start = new Now();
-			int did = cipher.update(s, destination.buffer); // Moves destination position forward
-			if (did != ask) throw new IndexOutOfBoundsException("did");
-			source.remove(did); // Remove what we encrypted from the given source Bin
-			return new Move(start, did);
-		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); } // If this happens, askEncrypt() is broken
-	}
-	
-	public static Move encrypt2(Cipher cipher, Bin source, Bin destination) {
-		try {
-			int ask = askEncrypt(cipher, source, destination);
-			ByteBuffer data = source.out(ask);
-			ByteBuffer space = destination.in(ask);
-			Now start = new Now();
-			int did = cipher.update(data, space);
-			if (did != ask) throw new IndexOutOfBoundsException("did");
-			source.outCheck(did, data);
-			destination.outCheck(did, space);
-			return new Move(start, did);
 		}
-		catch (IOException e) { throw new IndexOutOfBoundsException(e.toString()); }
-		catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
+		catch (IOException e)               { throw new NetException(e); }
+		catch (IndexOutOfBoundsException e) { throw new NetException(e); }
 	}
-
-	/** How many bytes we expect the next call to decrypt, 1 or more, or IndexOutOfBoundsException. */
-	private static int askDecrypt(Cipher cipher, Bin source, Bin destination) {
-		int block = cipher.getBlockSize();
-		int s = whole(block, source.size()) - block; // Decrypt will do one less block than we ask it to
-		int d = whole(block, destination.space()) - block; // Decrypt needs an extra block of space
-		int ask = Math.min(s, d);
-		if (ask < 1) throw new IndexOutOfBoundsException();
-		return ask;
-	}
-
-	/** Decrypt 32 bytes or more of source data into destination, always leaves the last 16 byte block behind. */
-	public static Move decrypt(Cipher cipher, Bin source, Bin destination) {
-		try {
-			int ask = askDecrypt(cipher, source, destination);
-			ByteBuffer s = source.buffer.duplicate();
-			s.position(0);
-			s.limit(ask + cipher.getBlockSize()); // Ask for an extra block, decrypt will do one less
-			Now start = new Now();
-			int did = cipher.update(s, destination.buffer);
-			if (did != ask) throw new IndexOutOfBoundsException("did");
-			source.remove(did);
-			return new Move(start, did);
-		} catch (ShortBufferException e) { throw new IndexOutOfBoundsException(e.toString()); }
-	}
-	
-
-	public static void snippet() throws Exception {
-		
-
-		test(0);
-		
-		
-		
-	}
-	
-	
-	public static void test(int z) throws Exception {
-
-		final String algorithm = "AES";
-		final int size = 128;
-
-		Stopwatch stopwatch = new Stopwatch();
-		KeyGenerator g = KeyGenerator.getInstance(algorithm); // Slow the first time it runs
-		g.init(size);
-		SecretKey k = g.generateKey();
-		Data d = new Data(k.getEncoded());
-		stopwatch.stop();
-		System.out.println("made key in " + stopwatch.toString());
-
-		Cipher encrypt = Cipher.getInstance(algorithm);
-		Cipher decrypt = Cipher.getInstance(algorithm);
-		encrypt.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
-		decrypt.init(Cipher.DECRYPT_MODE, new SecretKeySpec(d.toByteArray(), algorithm));
-
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
 }
