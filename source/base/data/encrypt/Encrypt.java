@@ -112,7 +112,7 @@ public class Encrypt {
 			destination.inDone(space);
 			return new Move(start, did);
 		}
-		catch (ShortBufferException e)      { throw new DataException(e); } // If this happens, askEncrypt() is broken
+		catch (ShortBufferException e)      { throw new DataException(e); } // If this happens, ask() is coded incorrectly
 		catch (IndexOutOfBoundsException e) { throw new DataException(e); }
 	}
 }

@@ -74,8 +74,10 @@ public class PipeConnect extends Close {
 			if (closed()) return;
 
 			// Connect to peer's LAN address
-			if (no(lan) && lanAgo.enough())
+			if (no(lan) && lanAgo.enough()) {
 				lan = new Connect(update, lanIp, hello, hash);
+				attempts++;
+			}
 			if (done(lan)) {
 				try {
 					socket = lan.result(); // As soon as we have socket, close and return
@@ -118,4 +120,13 @@ public class PipeConnect extends Close {
 		}
 	}
 	private PipeConnect me() { return this; }
+	
+	//tell the user about us
+	
+	private int attempts;
+	public int attempts() { return attempts; }
+	
+	
+	
+	
 }
