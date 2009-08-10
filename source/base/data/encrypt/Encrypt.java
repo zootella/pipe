@@ -99,7 +99,7 @@ public class Encrypt {
 			if (mode == Cipher.DECRYPT_MODE) ask += block; // Ask for an extra block because decrypt always does one less
 			
 			ByteBuffer data = source.out(ask);
-			ByteBuffer space = destination.in(expect + block);
+			ByteBuffer space = destination.in(expect + block); // Both encrypt and decrypt need an extra block of destination space
 			
 			Now start = new Now();
 			int did = cipher.update(data, space);
