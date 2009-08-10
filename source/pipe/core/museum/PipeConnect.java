@@ -13,6 +13,7 @@ import base.state.Close;
 import base.state.Receive;
 import base.state.Update;
 import base.time.Ago;
+import base.time.Now;
 import base.time.Pulse;
 
 public class PipeConnect extends Close {

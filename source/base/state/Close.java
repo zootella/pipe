@@ -5,6 +5,8 @@ import java.util.Set;
 
 import base.exception.ProgramException;
 import base.process.Mistake;
+import base.time.Duration;
+import base.time.Now;
 
 /** Have your object extend Close so the program will notice if you forget to later call its close() method. */
 public abstract class Close {
@@ -16,6 +18,7 @@ public abstract class Close {
 	 * This automatically runs before execution enters the constructor of an object that extends Close.
 	 */
 	public Close() {
+		whenMade = new Now();
 		programOpen++; // Count the program has one more object open, this new one that extends Close
 //		add(this);
 	}
@@ -36,6 +39,7 @@ public abstract class Close {
 	public boolean already() {
 		if (objectClosed) return true; // We're already closed, return true to return from the close() method
 		objectClosed = true;           // Mark this object that extends Close as now permanently closed
+		whenClosed = new Duration(whenMade);
 		programOpen--;                 // Count the program has one fewer object it needs to close
 //		remove(this);
 		return false;                  // Return false to run the contents of the close() method this first and only time
@@ -92,4 +96,10 @@ public abstract class Close {
 		}
 	}
 	*/
+	
+	// Time
+	public Now whenMade() { return whenMade; }
+	public Duration whenClosed() { open(); return whenClosed; }
+	private final Now whenMade;
+	private Duration whenClosed;
 }
