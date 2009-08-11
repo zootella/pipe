@@ -14,7 +14,18 @@ public class Snip {
 	/* A 1024-bit key will encrypt messages up to 117 bytes long. */
 	private static final int KEY_SIZE = 1024;
 
-	private static final String XFORM = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
+	private static final String XFORM = "RSA/ECB/PKCS1PADDING"; // from poeticcode, works
+	/*
+	private static final String XFORM = "RSA/ECB/NoPadding"; // from poeticcode, no exception but bad data
+	private static final String XFORM = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING"; //from stack overflow, works
+	private static final String XFORM = "RSA"; // made up, works
+	 */
+	/*
+	private static final String XFORM = "RSA/None/NoPadding"; // from javadoc, i think, throws exception
+	private static final String XFORM = "RSA/NONE/NOPADDING"; // from javadoc, i think, throws exception
+	private static final String XFORM = "RSA/NONE"; // from javadoc, i think, throws exception
+	 */
+	
 
 	public static KeyPair generateRSAKeyPair() throws GeneralSecurityException {
 		KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
