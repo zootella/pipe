@@ -1,4 +1,4 @@
-package base.data.hash;
+package base.encrypt.hash;
 
 import base.data.Bin;
 import base.size.Meter;

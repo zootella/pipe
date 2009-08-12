@@ -1,6 +1,6 @@
 package pipe.main;
 
-import base.data.encrypt.Snip;
+import base.encrypt.pair.Snip;
 import base.process.Mistake;
 
 public class Snippet {

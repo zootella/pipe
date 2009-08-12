@@ -1,4 +1,4 @@
-package base.data.encrypt;
+package base.encrypt.secret;
 
 import javax.crypto.Cipher;
 
@@ -8,9 +8,9 @@ import base.state.Close;
 import base.state.Update;
 import base.valve.Valve;
 
-public class EncryptValve extends Close implements Valve {
+public class SecretValve extends Close implements Valve {
 
-	public EncryptValve(Update update, Cipher cipher, int mode) {
+	public SecretValve(Update update, Cipher cipher, int mode) {
 		this.update = update;
 		this.cipher = cipher;
 		this.mode = mode;
@@ -25,7 +25,7 @@ public class EncryptValve extends Close implements Valve {
 	private final Bin in;
 	private final Bin out;
 	private final Meter meter;
-	private EncryptTask task;
+	private SecretTask task;
 
 	@Override public void close() {
 		if (already()) return;
@@ -39,8 +39,8 @@ public class EncryptValve extends Close implements Valve {
 	
 	public void start() {
 		if (closed()) return;
-		if (!meter.isDone() && no(task) && Encrypt.can(cipher, mode, in, out))
-			task = new EncryptTask(update, cipher, mode, in, out);
+		if (!meter.isDone() && no(task) && Secret.can(cipher, mode, in, out))
+			task = new SecretTask(update, cipher, mode, in, out);
 	}
 
 	public void stop() throws Exception {

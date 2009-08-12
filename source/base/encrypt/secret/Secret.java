@@ -1,4 +1,4 @@
-package base.data.encrypt;
+package base.encrypt.secret;
 
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -15,27 +15,40 @@ import javax.crypto.spec.SecretKeySpec;
 import base.data.Bin;
 import base.data.Data;
 import base.data.Outline;
+import base.encrypt.name.KeySecret;
 import base.exception.DataException;
 import base.exception.PlatformException;
 import base.size.move.Move;
 import base.time.Now;
 
-public class Encrypt {
+public class Secret {
 
 	// Define
 	
-	/** Advanced Encryption Standard. */
+	/** Advanced Encryption Standard, the kind of symmetric shared secret encryption we use. */
 	public static final String algorithm = "AES";
 	/** 128 bit key size, ships with Java, strong enough for US classified Secret, and http://bit.ly/J3VBt Bruce Schneier recommends it over 256. */
-	public static final int strength = 128;
+	public static final int size = 128;
 	
 	// Key
 
+	/** Make a new symmetric shared secret key for encrypting and decrypting data. */
+	public static KeySecret make() {
+		return parse(key());
+	}
+	
+	/** Parse the given data into a symmetric shared secret key for encrypting and decrypting data. */
+	public static KeySecret parse(Data key) {
+		Cipher encrypt = cipher(key, Cipher.ENCRYPT_MODE);
+		Cipher decrypt = cipher(key, Cipher.DECRYPT_MODE);
+		return new KeySecret(key, encrypt, decrypt);
+	}
+
 	/** Make a new key for encrypting and decrypting data. */
-	public static Data key() {
+	private static Data key() {
 		try {
 			KeyGenerator generator = KeyGenerator.getInstance(algorithm); // This blocks for a moment the first time the program calls it
-			generator.init(strength);
+			generator.init(size);
 			SecretKey key = generator.generateKey();
 			return new Data(key.getEncoded());
 		}
@@ -44,7 +57,7 @@ public class Encrypt {
 	}
 	
 	/** Turn the data of a key into a Cipher to Cipher.ENCRYPT_MODE or Cipher.DECRYPT_MODE. */
-	public static Cipher cipher(Data key, int mode) {
+	private static Cipher cipher(Data key, int mode) {
 		try {
 			Cipher cipher = Cipher.getInstance(algorithm);
 			cipher.init(mode, new SecretKeySpec(key.toByteArray(), algorithm));
@@ -55,7 +68,7 @@ public class Encrypt {
 		catch (InvalidKeyException e)      { throw new DataException(e); }     // Unable to turn the key data into a working key
 	}
 
-	// Stream
+	// Data
 
 	/** Throw a 2 block, 32 byte, Outline of padding in at the end to force data before through. */
 	public static Outline padding(Cipher cipher) {

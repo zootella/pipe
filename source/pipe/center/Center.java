@@ -7,7 +7,7 @@ import base.data.Data;
 import base.data.Number;
 import base.data.Outline;
 import base.data.Text;
-import base.data.hash.Hash;
+import base.encrypt.hash.Hash;
 import base.net.name.Port;
 import base.net.packet.Packet;
 import base.net.packet.PacketReceive;

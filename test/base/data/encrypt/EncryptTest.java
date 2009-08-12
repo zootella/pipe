@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import base.data.Bin;
 import base.data.Data;
+import base.encrypt.name.KeySecret;
+import base.encrypt.secret.Secret;
 
 public class EncryptTest {
 	
@@ -44,9 +46,7 @@ public class EncryptTest {
 	
 	public static void run(int size) {
 
-		Data key = Encrypt.key();
-		Cipher encrypt = Encrypt.cipher(key, Cipher.ENCRYPT_MODE);
-		Cipher decrypt = Encrypt.cipher(key, Cipher.DECRYPT_MODE);
+		KeySecret key = Secret.make();
 		
 		Bin a = Bin.medium();
 		Bin b = Bin.medium();
@@ -57,13 +57,13 @@ public class EncryptTest {
 
 		say(a, b, c);
 		
-		if (Encrypt.can(encrypt, Cipher.ENCRYPT_MODE, a, b)) {
-			Encrypt.process(encrypt, Cipher.ENCRYPT_MODE, a, b);
+		if (Secret.can(key.encrypt, Cipher.ENCRYPT_MODE, a, b)) {
+			Secret.process(key.encrypt, Cipher.ENCRYPT_MODE, a, b);
 			System.out.println("encrypted");
 			say(a, b, c);
 			
-			if (Encrypt.can(decrypt, Cipher.DECRYPT_MODE, b, c)) {
-				Encrypt.process(decrypt, Cipher.DECRYPT_MODE, b, c);
+			if (Secret.can(key.decrypt, Cipher.DECRYPT_MODE, b, c)) {
+				Secret.process(key.decrypt, Cipher.DECRYPT_MODE, b, c);
 				System.out.println("decrypted");
 				say(a, b, c);
 				

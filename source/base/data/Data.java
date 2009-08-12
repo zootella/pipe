@@ -3,7 +3,7 @@ package base.data;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
-import base.data.hash.Hash;
+import base.encrypt.hash.Hash;
 import base.exception.ChopException;
 import base.exception.DataException;
 
