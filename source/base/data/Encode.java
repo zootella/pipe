@@ -1,8 +1,5 @@
-package base.data.encode;
+package base.data;
 
-import base.data.Bay;
-import base.data.Data;
-import base.data.Text;
 import base.exception.DataException;
 
 // document which methods are reversible, and which are one way

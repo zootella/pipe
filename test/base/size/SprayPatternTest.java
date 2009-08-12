@@ -9,7 +9,7 @@ import pipe.main.Main;
 
 
 import base.data.Data;
-import base.data.encode.Encode;
+import base.data.Encode;
 import base.exception.ChopException;
 import base.exception.DataException;
 import base.size.SprayPattern;
