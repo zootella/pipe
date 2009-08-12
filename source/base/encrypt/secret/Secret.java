@@ -15,7 +15,6 @@ import javax.crypto.spec.SecretKeySpec;
 import base.data.Bin;
 import base.data.Data;
 import base.data.Outline;
-import base.encrypt.name.KeySecret;
 import base.exception.DataException;
 import base.exception.PlatformException;
 import base.size.move.Move;

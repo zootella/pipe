@@ -1,4 +1,4 @@
-package base.encrypt.name;
+package base.encrypt.secret;
 
 import javax.crypto.Cipher;
 

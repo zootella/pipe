@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import base.data.Bin;
 import base.data.Data;
-import base.encrypt.name.KeySecret;
+import base.encrypt.secret.KeySecret;
 import base.encrypt.secret.Secret;
 
 public class EncryptTest {

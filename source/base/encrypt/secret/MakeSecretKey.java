@@ -1,6 +1,5 @@
 package base.encrypt.secret;
 
-import base.encrypt.name.KeySecret;
 import base.exception.ProgramException;
 import base.state.Close;
 import base.state.Task;
