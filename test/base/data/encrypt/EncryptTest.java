@@ -1,17 +1,34 @@
 package base.data.encrypt;
 
+import static org.junit.Assert.*;
+
 import javax.crypto.Cipher;
 
 import org.junit.Test;
 
 import base.data.Bin;
 import base.data.Data;
+import base.encrypt.pair.KeyData;
+import base.encrypt.pair.Pair;
 import base.encrypt.secret.KeySecret;
 import base.encrypt.secret.Secret;
 
 public class EncryptTest {
 	
-	@Test public void test() {
+	// pair
+
+	@Test public void pair() {
+		KeyData key = Pair.make();
+		Data a = new Data("this is my short and very secret message");
+		Data b = Pair.encrypt(a, key.modulus, key.publicExponent);
+		Data c = Pair.decrypt(b, key.modulus, key.privateExponent);
+		System.out.println(c.strike());
+		assertEquals(a, c);
+	}
+
+	// secret
+
+	@Test public void secret() {
 		
 		run(0);
 		run(1);

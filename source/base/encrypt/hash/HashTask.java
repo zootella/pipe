@@ -11,8 +11,6 @@ import base.state.Update;
 import base.time.Now;
 
 public class HashTask extends Close {
-	
-	// Make
 
 	/** SHA1 hash and clear bin's data with the given Hash object, don't look at hash or bin until this is closed. */
 	public HashTask(Update up, Hash hash, Bin bin, Range range) {
@@ -35,14 +33,10 @@ public class HashTask extends Close {
 		up.send();
 	}
 
-	// Result
-	
 	/** How much we hashed when we're done, or throws the exception that made us give up. */
 	public Move result() { check(exception, move); return move; }
 	private ProgramException exception;
 	private Move move;
-	
-	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {

@@ -1,31 +1,19 @@
 package base.encrypt.secret;
 
-import javax.crypto.Cipher;
-
-import base.data.Bin;
 import base.exception.ProgramException;
-import base.size.move.Move;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.Update;
 
-public class SecretTask extends Close {
+public class MakeSecretKeyTask extends Close {
 
-	public SecretTask(Update up, Cipher cipher, int mode, Bin source, Bin destination) {
+	public MakeSecretKeyTask(Update up) {
 		this.up = up; // We'll tell update when we're done
-		this.cipher = cipher;
-		this.mode = mode;
-		this.source = source;
-		this.destination = destination;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
-	private final Cipher cipher;
-	private final int mode;
-	private final Bin source;
-	private final Bin destination;
 	private final Task task;
 
 	@Override public void close() {
@@ -34,27 +22,27 @@ public class SecretTask extends Close {
 		up.send();
 	}
 
-	public Move result() { check(exception, data); return data; }
+	public KeySecret result() { check(exception, key); return key; }
 	private ProgramException exception;
-	private Move data;
+	private KeySecret key;
 	
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private Move taskMove; // References thread() can safely set
+		private KeySecret taskKey; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() throws Exception {
-			
-			taskMove = Secret.process(cipher, mode, source, destination);
+
+			taskKey = Secret.make();
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
 		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			data = taskMove;
+			key = taskKey;
 			close(me());          // We're done
 		}
 	}
-	private SecretTask me() { return this; } // Give inner code a link to the outer object
+	private MakeSecretKeyTask me() { return this; } // Give inner code a link to the outer object
 }

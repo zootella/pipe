@@ -1,4 +1,4 @@
-package base.encrypt.secret;
+package base.encrypt.pair;
 
 import base.data.Data;
 import base.exception.ProgramException;
@@ -7,16 +7,20 @@ import base.state.Task;
 import base.state.TaskBody;
 import base.state.Update;
 
-public class ParseSecretKey extends Close {
+public class EncryptTask extends Close {
 
-	public ParseSecretKey(Update up, Data data) {
+	public EncryptTask(Update up, Data data, Data modulus, Data publicExponent) {
 		this.up = up; // We'll tell update when we're done
 		this.data = data;
+		this.modulus = modulus;
+		this.publicExponent = publicExponent;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
 	private final Data data;
+	private final Data modulus;
+	private final Data publicExponent;
 	private final Task task;
 
 	@Override public void close() {
@@ -25,28 +29,27 @@ public class ParseSecretKey extends Close {
 		up.send();
 	}
 
-	/** How much we hashed when we're done, or throws the exception that made us give up. */
-	public KeySecret result() { check(exception, key); return key; }
+	public Data result() { check(exception, encrypted); return encrypted; }
 	private ProgramException exception;
-	private KeySecret key;
+	private Data encrypted;
 	
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private KeySecret taskKey; // References thread() can safely set
+		private Data taskEncrypted; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() throws Exception {
-
-			taskKey = Secret.parse(data);
+			
+			taskEncrypted = Pair.encrypt(data, modulus, publicExponent);
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
 		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			key = taskKey;
+			encrypted = taskEncrypted;
 			close(me());          // We're done
 		}
 	}
-	private ParseSecretKey me() { return this; } // Give inner code a link to the outer object
+	private EncryptTask me() { return this; } // Give inner code a link to the outer object
 }

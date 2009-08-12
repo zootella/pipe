@@ -1,19 +1,22 @@
 package base.encrypt.secret;
 
+import base.data.Data;
 import base.exception.ProgramException;
 import base.state.Close;
 import base.state.Task;
 import base.state.TaskBody;
 import base.state.Update;
 
-public class MakeSecretKey extends Close {
+public class ParseSecretKeyTask extends Close {
 
-	public MakeSecretKey(Update up) {
+	public ParseSecretKeyTask(Update up, Data data) {
 		this.up = up; // We'll tell update when we're done
+		this.data = data;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
+	private final Data data;
 	private final Task task;
 
 	@Override public void close() {
@@ -22,7 +25,6 @@ public class MakeSecretKey extends Close {
 		up.send();
 	}
 
-	/** How much we hashed when we're done, or throws the exception that made us give up. */
 	public KeySecret result() { check(exception, key); return key; }
 	private ProgramException exception;
 	private KeySecret key;
@@ -34,7 +36,7 @@ public class MakeSecretKey extends Close {
 		// A separate thread will call this method
 		public void thread() throws Exception {
 
-			taskKey = Secret.make();
+			taskKey = Secret.parse(data);
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
@@ -45,5 +47,5 @@ public class MakeSecretKey extends Close {
 			close(me());          // We're done
 		}
 	}
-	private MakeSecretKey me() { return this; } // Give inner code a link to the outer object
+	private ParseSecretKeyTask me() { return this; } // Give inner code a link to the outer object
 }
