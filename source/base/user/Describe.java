@@ -82,7 +82,7 @@ public class Describe {
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date(milliseconds));
 
-		// Day of week
+		// "Fri "
 		String s = "";
 		int d = c.get(Calendar.DAY_OF_WEEK);
 		switch (d) {
@@ -94,20 +94,20 @@ public class Describe {
 		case Calendar.SATURDAY:  s = "Sat "; break;
 		case Calendar.SUNDAY:    s = "Sun "; break;
 		}
-
-		// Hours, minutes, and seconds
-		s +=
-			numerals(c.get(Calendar.HOUR),        1) + ":" +
-			numerals(c.get(Calendar.MINUTE),      2) + ":" +
-			numerals(c.get(Calendar.SECOND),      2) + "." +
-			numerals(c.get(Calendar.MILLISECOND), 3);
-
-		// AM or PM
-		if (c.get(Calendar.AM_PM) == Calendar.AM)
-			s += " AM";
-		else
-			s += " PM";
 		
+		// "12:52p "
+		int hour = c.get(Calendar.HOUR);
+		if (hour == 0)
+			hour = 12;
+		s += numerals(hour, 1) + ":" + numerals(c.get(Calendar.MINUTE), 2);
+		if (c.get(Calendar.AM_PM) == Calendar.AM)
+			s += "a ";
+		else
+			s += "p ";
+
+		// "12.345s"
+		s += numerals(c.get(Calendar.SECOND), 1) + "." + numerals(c.get(Calendar.MILLISECOND), 3) + "s";
+
 		return s;
 	}
 

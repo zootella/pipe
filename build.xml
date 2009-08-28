@@ -58,34 +58,4 @@
 		</jar>
 
 	</target>
-	<target name="cheat" description="Make cheat.jar">
-
-		<delete dir="ant"/>
-		<delete file="work/cheat.jar"/>
-
-		<copy todir="ant">
-			<fileset dir="source"/>
-		</copy>
-
-		<javac
-			debug="yes"
-			destdir="ant"
-			source="1.6"
-			target="1.6">
-
-			<!-- Compile the code in these folders, each has a tree of .java files in it -->
-			<src path="source"/>
-
-			<!-- Tell the Java compiler where .jar files are that the code above uses -->
-			<classpath>
-			</classpath>
-		</javac>
-
-		<jar
-			jarfile="work/cheat.jar"
-			basedir="ant"
-			filesonly="yes">
-		</jar>
-
-	</target>
 </project>
