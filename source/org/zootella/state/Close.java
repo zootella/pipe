@@ -73,7 +73,7 @@ public abstract class Close {
 	/** Close c ignoring null and exceptions. */
 	public static void close(Close c) {
 		if (c == null) return;
-		try { c.close(); } catch (Exception e) { Mistake.log(e); } // Keep going to close the next object
+		try { c.close(); } catch (Throwable t) { Mistake.log(t); } // Keep going to close the next object
 	}
 
 	/** true if c is null. */

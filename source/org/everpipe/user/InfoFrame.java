@@ -94,7 +94,7 @@ public class InfoFrame extends Close {
 				
 				program.core.here.refresh();
 
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 	

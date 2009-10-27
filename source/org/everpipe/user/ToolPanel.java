@@ -81,7 +81,7 @@ public class ToolPanel {
 
 				program.user.show(false);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -93,7 +93,7 @@ public class ToolPanel {
 
 				program.core.pipes.make();
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -105,7 +105,7 @@ public class ToolPanel {
 				
 				menu.show(panel, Guide.toolMenu.x, Guide.toolMenu.y + Guide.toolMenu.height);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -117,7 +117,7 @@ public class ToolPanel {
 				
 				Snippet.snippet(program);
 
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -129,7 +129,7 @@ public class ToolPanel {
 				
 				System.out.println("preferences action");
 
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -141,7 +141,7 @@ public class ToolPanel {
 
 				program.user.info.frame.setVisible(true);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -153,7 +153,7 @@ public class ToolPanel {
 				
 				System.out.println("about action");
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 }

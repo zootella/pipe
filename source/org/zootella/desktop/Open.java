@@ -14,13 +14,13 @@ public class Open {
 	public static void file(Path path) {
 		try {
 			Desktop.getDesktop().open(path.file);
-		} catch (Exception e) { Mistake.log(e); } // Don't do anything if it doesn't work
+		} catch (Throwable t) { Mistake.log(t); } // Don't do anything if it doesn't work
 	}
 
 	/** Open the given Web address in the user's default Web browser. */
 	public static void url(URI url) {
 		try {
 			Desktop.getDesktop().browse(url);
-		} catch (Exception e) { Mistake.log(e); } // Don't do anything if it doesn't work
+		} catch (Throwable t) { Mistake.log(t); } // Don't do anything if it doesn't work
 	}
 }

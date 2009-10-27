@@ -8,6 +8,7 @@ import org.zootella.data.Number;
 import org.zootella.data.Outline;
 import org.zootella.data.Text;
 import org.zootella.encrypt.hash.Hash;
+import org.zootella.exception.ProgramException;
 import org.zootella.net.name.Port;
 import org.zootella.net.packet.Packet;
 import org.zootella.net.packet.PacketReceive;
@@ -26,7 +27,7 @@ public class Center extends Close {
 			public void run() {
 				try {
 					new Center(); // Make and start the program
-				} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
+				} catch (Throwable t) { Mistake.stop(t); } // Stop the program for an exception we didn't expect
 			}
 		});
 	}
@@ -66,7 +67,7 @@ public class Center extends Close {
 					return true;
 				}
 
-			} catch (Exception e) { Mistake.log(e); } // Log and drop unknown packets
+			} catch (ProgramException e) { Mistake.log(e); } // Log and drop unknown packets
 			return false;
 		}
 	}

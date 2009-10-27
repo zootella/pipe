@@ -49,7 +49,7 @@ public class ClearButton {
     	@Override public void mouseClicked(MouseEvent m) {
     		try {
     			action.actionPerformed(new ActionEvent(m, 0, m.toString()));
-    		} catch (Exception e) { Mistake.stop(e); }
+    		} catch (Throwable t) { Mistake.stop(t); }
     	}
     }	
 }

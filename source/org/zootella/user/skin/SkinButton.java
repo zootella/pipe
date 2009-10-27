@@ -52,24 +52,24 @@ public class SkinButton {
     		try {
     			state = hot;
     			label.repaint();
-    		} catch (Exception e) { Mistake.stop(e); }
+    		} catch (Throwable t) { Mistake.stop(t); }
     	}
     	@Override public void mouseExited(MouseEvent m) {
     		try {
     			state = normal;
     			label.repaint();
-    		} catch (Exception e) { Mistake.stop(e); }
+    		} catch (Throwable t) { Mistake.stop(t); }
     	}
     	@Override public void mousePressed(MouseEvent m) {
     		try {
     			state = press;
     			label.repaint();
-    		} catch (Exception e) { Mistake.stop(e); }
+    		} catch (Throwable t) { Mistake.stop(t); }
     	}
     	@Override public void mouseClicked(MouseEvent m) {
     		try {
     			action.actionPerformed(null);
-    		} catch (Exception e) { Mistake.stop(e); }
+    		} catch (Throwable t) { Mistake.stop(t); }
     	}
     }
     

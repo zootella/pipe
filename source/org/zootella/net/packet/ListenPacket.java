@@ -37,6 +37,6 @@ public class ListenPacket extends Close {
 	/** Stop listening on port. */
 	@Override public void close() {
 		if (already()) return;
-		try { channel.close(); } catch (IOException e) { Mistake.log(e); }
+		try { channel.close(); } catch (Throwable t) { Mistake.log(t); } // May throw IOException, whatever it throws, keep going
 	}
 }

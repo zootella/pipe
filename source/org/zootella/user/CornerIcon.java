@@ -83,7 +83,7 @@ public class CornerIcon extends Close {
 				if (m.getButton() == MouseEvent.BUTTON1)
 					restoreAction.actionPerformed(null);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -98,7 +98,7 @@ public class CornerIcon extends Close {
 				else if (a.getActionCommand().equals((String)exitAction.getValue(Action.NAME)))
 					exitAction.actionPerformed(null);
 
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 }

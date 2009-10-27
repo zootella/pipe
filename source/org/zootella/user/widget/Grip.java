@@ -30,7 +30,7 @@ public class Grip {
     			// Remember where the drag started
     			press = m.getPoint();
     			
-    		} catch (Exception e) { Mistake.stop(e); }
+    		} catch (Throwable t) { Mistake.stop(t); }
     	}
     }
 
@@ -45,7 +45,7 @@ public class Grip {
 						frame.getLocation().x + m.getPoint().x - press.x,
 						frame.getLocation().y + m.getPoint().y - press.y);
 
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 }

@@ -17,7 +17,7 @@ public class Face {
 	public static void blend() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e) { throw new PlatformException(e); }
+		} catch (Throwable t) { throw new PlatformException(t); }
 	}
 
 	// Font

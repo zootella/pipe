@@ -43,7 +43,7 @@ public class Pulse extends Close {
 			try {
 				if (closed()) return;                  // Don't let a closed Pulse call receive()
 				receive.receive();                     // Call our given receive() method
-			} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
+			} catch (Throwable t) { Mistake.stop(t); } // Stop the program for an exception we didn't expect
 		}
 	}
 	

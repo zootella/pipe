@@ -60,7 +60,7 @@ public class PipeConnect extends Close {
 		close(lan);
 		close(net);
 		close(pulse);
-		try { program.core.accept.remove(acceptReceive); } catch (Exception e) { Mistake.log(e); }
+		try { program.core.accept.remove(acceptReceive); } catch (Throwable t) { Mistake.log(t); }
 		up.send();
 	}
 	

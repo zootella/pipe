@@ -68,7 +68,7 @@ public class FolderDialog {
 				
 				Dialog.chooseFolder(dialog, folder.field);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -84,7 +84,7 @@ public class FolderDialog {
 				else
 					dialog.dispose();
 
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 	
@@ -96,7 +96,7 @@ public class FolderDialog {
 				
 				dialog.dispose();
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 }

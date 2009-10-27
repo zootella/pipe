@@ -72,7 +72,7 @@ public class TextMenu {
 				// Show the menu to the user
 				menu.show(m.getComponent(), m.getX(), m.getY());
 			}
-		} catch (Exception e) { Mistake.stop(e); }
+		} catch (Throwable t) { Mistake.stop(t); }
 	}
 
 	private class Select {
@@ -107,7 +107,7 @@ public class TextMenu {
 				component.setText(s.before + s.after); // Remove the selected text
 				component.setCaretPosition(s.i);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -120,7 +120,7 @@ public class TextMenu {
 				Select s = new Select();
 				Clipboard.copy(s.selected);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -135,7 +135,7 @@ public class TextMenu {
 				component.setText(s.before + clipboard + s.after);
 				component.setCaretPosition(s.i + clipboard.length());
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -149,7 +149,7 @@ public class TextMenu {
 				component.setText(s.before + s.after); // Remove the selected text
 				component.setCaretPosition(s.i);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -161,7 +161,7 @@ public class TextMenu {
 
 				component.selectAll();
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 }

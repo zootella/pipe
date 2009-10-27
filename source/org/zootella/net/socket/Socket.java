@@ -33,7 +33,7 @@ public class Socket extends Close {
 	/** Disconnect this TCP socket connection. */
 	@Override public void close() {
 		if (already()) return;
-		try { channel.close(); } catch (Exception e) { Mistake.log(e); }
+		try { channel.close(); } catch (Throwable t) { Mistake.log(t); }
 	}
 
 	/** Increase the socket buffer size if necessary. */

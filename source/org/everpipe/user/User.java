@@ -61,7 +61,7 @@ public class User extends Close {
 				
 				show(true);
 				
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
@@ -73,7 +73,7 @@ public class User extends Close {
 				
 				close(program);
 
-			} catch (Exception e) { Mistake.stop(e); }
+			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 }
