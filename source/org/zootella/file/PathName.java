@@ -82,7 +82,7 @@ public class PathName {
 	public String toString() {
 		String s = "";
 		for (Name name : names) s += "/" + name.toString();
-		if (Text.hasText(s)) s = Text.after(s, 1); // Remove the leading slash
+		if (Text.is(s)) s = Text.after(s, 1); // Remove the leading slash
 		return s;
 	}
 }

@@ -95,7 +95,7 @@ public class SendPipe extends Close implements Pipe {
 		if (hasAwayCode()) throw new IllegalStateException();
 
 		TextSplit split = Text.split(s, Main.flag);
-		if (!split.found || Text.hasText(split.before)) return;
+		if (!split.found || Text.is(split.before)) return;
 		
 		try {
 			awayHi = new Outline(Encode.fromBase62(split.after));

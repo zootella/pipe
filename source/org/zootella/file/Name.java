@@ -38,14 +38,14 @@ public class Name {
 	/** Turn this Name into a String like "name.ext". */
 	public String toString() {
 		String s = name;
-		if (Text.hasText(extension)) s += "." + extension; // Only add the period if we have an extension
+		if (Text.is(extension)) s += "." + extension; // Only add the period if we have an extension
 		return s;
 	}
 	
 	/** true if this Name is blank, toString() will give you "". */
 	public boolean isBlank() { return Text.isBlank(toString()); }
 	/** true if this Name has text, toString() won't give you "". */
-	public boolean hasText() { return Text.hasText(toString()); }
+	public boolean hasText() { return Text.is(toString()); }
 	
 	// -------- Make a new Name based on this one --------
 	
@@ -86,5 +86,14 @@ public class Name {
 	/** Make a new Name like "ryio3tz5.db" that won't conflict with files already in a folder. */
 	public static Name unique() {
 		return new Name(Text.start(Data.random(8).base32(), 8), "db");
+	}
+
+	@Override public boolean equals(Object o) {
+		if (o == null || !(o instanceof Name)) return false;
+		return name.equals(((Name)o).name) && extension.equals(((Name)o).extension);
+	}
+	
+	@Override public int hashCode() {
+		return name.hashCode() * extension.hashCode();
 	}
 }

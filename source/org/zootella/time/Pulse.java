@@ -8,6 +8,7 @@ import javax.swing.Timer;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 import org.zootella.state.Receive;
+import org.zootella.state.Update;
 
 public class Pulse extends Close {
 
@@ -20,6 +21,8 @@ public class Pulse extends Close {
 		timer = new Timer((int)delay, new MyActionListener());
 		timer.setRepeats(true);
 		timer.start();
+		
+		update = new Update(receive);
 	}
 	
 	/** A link to the receive() method we call. */
@@ -42,5 +45,13 @@ public class Pulse extends Close {
 				receive.receive();                     // Call our given receive() method
 			} catch (Exception e) { Mistake.stop(e); } // Stop the program for an Exception we didn't expect
 		}
+	}
+	
+	
+
+	//TODO added now
+	private final Update update;
+	public void now() {
+		update.send();
 	}
 }

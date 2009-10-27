@@ -1,33 +1,26 @@
 package org.zootella.user.widget;
 
-import java.awt.Color;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import org.zootella.process.Mistake;
 
 public class Grip {
 	
-	public Grip(JFrame frame, Rectangle rectangle) {
+	public Grip(JFrame frame, JComponent panel) {
 		this.frame = frame;
-		
-		label = new JLabel();
-		label.setBounds(rectangle);
-	    label.setBackground(new Color(0xdedede)); //TODO remove this later
-	    label.setOpaque(true);
 	    
-	    label.addMouseListener(new MyMouseListener());
-	    label.addMouseMotionListener(new MyMouseMotionListener());
+		panel.addMouseListener(new MyMouseListener());
+		panel.addMouseMotionListener(new MyMouseMotionListener());
 	}
 	
 	private final JFrame frame;
-	public final JLabel label;
+
 	private Point press;
 
     private class MyMouseListener extends MouseAdapter {

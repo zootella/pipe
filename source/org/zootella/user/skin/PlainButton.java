@@ -8,7 +8,6 @@ import javax.swing.JButton;
 
 import org.zootella.user.Face;
 
-
 // A button that always stays in the same place to be skinned
 public class PlainButton {
 

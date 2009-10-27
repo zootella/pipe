@@ -20,7 +20,7 @@ public abstract class Close {
 	public Close() {
 		whenMade = new Now();
 		programOpen++; // Count the program has one more object open, this new one that extends Close
-//		add(this);
+		add(this);
 	}
 	
 	/** true once this object that extends Close has been closed, and promises to not change again. */
@@ -41,7 +41,7 @@ public abstract class Close {
 		objectClosed = true;           // Mark this object that extends Close as now permanently closed
 		whenClosed = new Duration(whenMade);
 		programOpen--;                 // Count the program has one fewer object it needs to close
-//		remove(this);
+		remove(this);
 		return false;                  // Return false to run the contents of the close() method this first and only time
 	}
 
@@ -52,7 +52,7 @@ public abstract class Close {
 
 	/** Before the program closes, make sure every object with a close() method had it run. */
 	public static int checkAll() {
-//		print();
+		print();
 		return programOpen;
 	}
 	
@@ -84,18 +84,16 @@ public abstract class Close {
 	public static boolean done(Close c) { return c != null && c.closed(); }
 	
 	// See
-	/*
 	private static final Set<Close> list = new HashSet<Close>();
 	private static synchronized void add(Close c) { list.add(c); }
 	private static synchronized void remove(Close c) { list.remove(c); }
-	public static synchronized void print() {
+	private static synchronized void print() {
 		if (list.size() != 0) {
 			System.out.print(list.size() + " objects open:\n");
 			for (Close c : list)
 				System.out.print(c.toString() + "\n");
 		}
 	}
-	*/
 	
 	// Time
 	public Now whenMade() { return whenMade; }

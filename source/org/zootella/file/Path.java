@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zootella.data.Text;
-import org.zootella.exception.DiskException;
 import org.zootella.exception.DataException;
+import org.zootella.exception.DiskException;
 
 /** A Path is a parsed and valid looking absolute disk path, like "C:\folder\folder\file.ext". */
 public class Path {

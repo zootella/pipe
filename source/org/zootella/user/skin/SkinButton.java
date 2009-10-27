@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import org.zootella.process.Mistake;
 import org.zootella.user.Face;
 
-
 public class SkinButton {
 	
 	public SkinButton(Action action, Skin skin, Rectangle guide, Rectangle place, Point ink) {

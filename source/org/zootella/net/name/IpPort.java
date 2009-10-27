@@ -105,16 +105,20 @@ public class IpPort implements Comparable<IpPort> {
 	 * Compare this IpPort to a given one to determine which should come first in sorted order.
 	 * @return Negative to sort this first, positive if o is first, 0 if they're the same
 	 */
-	public int compareTo(IpPort o) {
+	@Override public int compareTo(IpPort o) {
 		int sort = ip.compareTo(o.ip);  // Compare the IP addresses
 		if (sort != 0) return sort;     // They're different, sort based on that
 		return port.port - o.port.port; // The IP addresses are the same, sort based on the port numbers
 	}
 
 	/** true if the given IpPort has the same IP address and port number as this one. */
-	public boolean equals(Object o) {
+	@Override public boolean equals(Object o) {
 		if (o == null || !(o instanceof IpPort)) return false;
 		return ip.equals(((IpPort)o).ip) && port == ((IpPort)o).port;
+	}
+	
+	@Override public int hashCode() {
+		return ip.hashCode() * port.hashCode();
 	}
 	
 	// List

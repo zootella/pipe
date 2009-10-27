@@ -128,7 +128,7 @@ public class Text {
 	}
 
 	/** true if s has text, false if it's null or "", blank. */
-	public static boolean hasText(String s) {
+	public static boolean is(String s) {
 		return !isBlank(s);
 	}
 
@@ -226,11 +226,11 @@ public class Text {
 		List<String> list = new ArrayList<String>();
 
 		// Loop until s is blank
-		while (hasText(s)) {
+		while (is(s)) {
 			TextSplit split = Text.split(s, tag); // Split s around the first instance of the tag in it
 			String word = split.before.trim();    // Trim spaces from around the word we found before the tag, and save it
 			s = split.after;                      // Next time, we'll split the part that came after
-			if (hasText(word)) list.add(word);    // If the word isn't blank, add it to the List we're making
+			if (is(word)) list.add(word);    // If the word isn't blank, add it to the List we're making
 		}
 		return list;
 	}
@@ -245,7 +245,7 @@ public class Text {
 		StringBuffer done = new StringBuffer();
 		
 		// Loop until s is blank
-		while (hasText(s)) {
+		while (is(s)) {
 			TextSplit split = split(s, tag);       // Split s around the first instance of the tag in it
 			done.append(split.before);             // Move the part before from s to done
 			if (split.found) done.append(replace);

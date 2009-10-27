@@ -40,7 +40,6 @@ public class ToolPanel {
 		menu.addSeparator();
 		menu.add(new JMenuItem(user.exitAction));
 		
-		Grip grip = new Grip(main.frame, Guide.toolGrip);
 		PlainButton closeButton = new PlainButton(closeAction, user.skin, Guide.skinToolClose, Guide.toolClose, Guide.ink);
 		PlainButton makeButton = new PlainButton(makeAction, user.skin, Guide.skinToolMake, Guide.toolMake, Guide.ink);
 		PlainButton menuButton = new PlainButton(menuAction, user.skin, Guide.skinToolMenu, Guide.toolMenu, Guide.ink);
@@ -50,10 +49,10 @@ public class ToolPanel {
 		panel.setSize(Guide.sizeTool);
 		panel.setBackground(new Color(0xebebeb));
 		
-		panel.add(grip.label);
 		panel.add(closeButton.button);
 		panel.add(makeButton.button);
 		panel.add(menuButton.button);
+		new Grip(main.frame, panel);
 		
 		/*
 		SkinPanel skin = new SkinPanel();

@@ -56,7 +56,7 @@ public class TextMenu {
 				
 				// Find out if component is editable or read-only, and if it has some selected text
 				boolean editable = component.isEditable();
-				boolean selection = Text.hasText(component.getSelectedText());
+				boolean selection = Text.is(component.getSelectedText());
 				
 				if (editable && selection) { // Editable with selection, enable Cut and Delete
 					cutAction.setEnabled(true);
@@ -66,7 +66,7 @@ public class TextMenu {
 					copyAction.setEnabled(true);
 				if (editable && Clipboard.hasText()) // Editable and clipboard has text, enable Paste
 					pasteAction.setEnabled(true);
-				if (Text.hasText(component.getText())) // Has text, enable Select All
+				if (Text.is(component.getText())) // Has text, enable Select All
 					selectAction.setEnabled(true);
 				
 				// Show the menu to the user

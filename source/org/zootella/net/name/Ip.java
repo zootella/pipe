@@ -119,7 +119,7 @@ public class Ip implements Comparable<Ip> {
 	 * Compare this Ip to a given one to determine which should come first in sorted order.
 	 * @return Negative to sort this first, positive if o is first, 0 if they're the same
 	 */
-	public int compareTo(Ip o) {
+	@Override public int compareTo(Ip o) {
 		if      (n1 != o.n1) return n1 - o.n1; // Compare each pair of numbers to return the first mismatch
 		else if (n2 != o.n2) return n2 - o.n2;
 		else if (n3 != o.n3) return n3 - o.n3;
@@ -127,8 +127,12 @@ public class Ip implements Comparable<Ip> {
 	}
 
 	/** true if the given Ip is the same as this one. */
-	public boolean equals(Object o) {
+	@Override public boolean equals(Object o) {
 		if (o == null || !(o instanceof Ip)) return false;
 		return n1 == ((Ip)o).n1 && n2 == ((Ip)o).n2 && n3 == ((Ip)o).n3 && n4 == ((Ip)o).n4;
+	}
+	
+	@Override public int hashCode() {
+		return n1 * n2 * n3 * n4;
 	}
 }
