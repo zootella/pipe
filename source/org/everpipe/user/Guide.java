@@ -70,7 +70,8 @@ public class Guide {
 	// Icon
 	
 	/** Where the 16 pixel square icon is pictured in skin.png. */
-	public static final Rectangle icon = new Rectangle(50, 50, 16, 16);
+	//TODO use this, or remove it
+//	public static final Rectangle icon = new Rectangle(50, 50, 16, 16);
 	
 	// Color
 	

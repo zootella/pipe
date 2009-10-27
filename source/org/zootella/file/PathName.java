@@ -52,7 +52,7 @@ public class PathName {
 	private PathName(List<Name> names) { this.names = names; }
 	
 	/** If name isn't blank, add it to our names List. */
-	private void check(Name name) { if (name.hasText()) names.add(name); }
+	private void check(Name name) { if (name.is()) names.add(name); }
 
 	// -------- Look at this PathName --------
 

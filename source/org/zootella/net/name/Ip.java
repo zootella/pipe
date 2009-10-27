@@ -50,7 +50,7 @@ public class Ip implements Comparable<Ip> {
 	// Text
 	
 	/** Convert this Ip into text like "1.2.3.4". */
-	public String toString() { return n1 + "." + n2 + "." + n3 + "." + n4; }
+	@Override public String toString() { return n1 + "." + n2 + "." + n3 + "." + n4; }
 
 	/** Make a new Ip from a String like "1.2.3.4". */
 	public Ip(String s) {
@@ -115,10 +115,6 @@ public class Ip implements Comparable<Ip> {
 
 	// Compare
 
-	/**
-	 * Compare this Ip to a given one to determine which should come first in sorted order.
-	 * @return Negative to sort this first, positive if o is first, 0 if they're the same
-	 */
 	@Override public int compareTo(Ip o) {
 		if      (n1 != o.n1) return n1 - o.n1; // Compare each pair of numbers to return the first mismatch
 		else if (n2 != o.n2) return n2 - o.n2;
@@ -126,10 +122,13 @@ public class Ip implements Comparable<Ip> {
 		else                 return n4 - o.n4;
 	}
 
-	/** true if the given Ip is the same as this one. */
 	@Override public boolean equals(Object o) {
 		if (o == null || !(o instanceof Ip)) return false;
-		return n1 == ((Ip)o).n1 && n2 == ((Ip)o).n2 && n3 == ((Ip)o).n3 && n4 == ((Ip)o).n4;
+		return
+			n1 == ((Ip)o).n1 &&
+			n2 == ((Ip)o).n2 &&
+			n3 == ((Ip)o).n3 &&
+			n4 == ((Ip)o).n4;
 	}
 	
 	@Override public int hashCode() {

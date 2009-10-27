@@ -66,13 +66,4 @@ public abstract class Model extends Close {
 			pulse = new Pulse(new MyReceive());
 	}
 	private Pulse pulse;
-	
-	
-	
-	
-	//TODO is this also somewhere else?
-	public static String say(Object o) {
-		if (o == null) return "";
-		return o.toString();
-	}
 }

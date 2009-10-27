@@ -3,8 +3,7 @@ package org.zootella.net.name;
 import org.zootella.data.Number;
 import org.zootella.exception.DataException;
 
-
-public class Port {
+public class Port implements Comparable<Port> {
 	
 	// Define
 	
@@ -35,6 +34,10 @@ public class Port {
 
 	@Override public String toString() {
 		return port + "";
+	}
+
+	@Override public int compareTo(Port o) {
+		return port - o.port;
 	}
 
 	@Override public boolean equals(Object o) {

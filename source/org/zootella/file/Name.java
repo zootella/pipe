@@ -5,9 +5,9 @@ import org.zootella.data.Text;
 import org.zootella.data.TextSplit;
 
 /** A file name and extension, like "name.ext". */
-public class Name {
+public class Name implements Comparable<Name> {
 	
-	// -------- Make a Name object --------
+	// Make
 	
 	/** Make a new blank Name. */
 	public Name() {
@@ -28,7 +28,7 @@ public class Name {
 		extension = split.after.trim();
 	}
 	
-	// -------- Look at it --------
+	// Look
 	
 	/** The file name, like "name". */
 	public final String name;
@@ -42,12 +42,29 @@ public class Name {
 		return s;
 	}
 	
+	/** true if this Name has text, toString() won't give you "". */
+	public boolean is() { return Text.is(toString()); }
 	/** true if this Name is blank, toString() will give you "". */
 	public boolean isBlank() { return Text.isBlank(toString()); }
-	/** true if this Name has text, toString() won't give you "". */
-	public boolean hasText() { return Text.is(toString()); }
 	
-	// -------- Make a new Name based on this one --------
+	// Compare
+	
+	@Override public int compareTo(Name o) {
+		return toString().compareTo(o.toString());
+	}
+
+	@Override public boolean equals(Object o) {
+		if (o == null || !(o instanceof Name)) return false;
+		return name.equals(((Name)o).name) && extension.equals(((Name)o).extension);
+	}
+	
+	@Override public int hashCode() {
+		return name.hashCode() * extension.hashCode();
+	}
+
+	// Base
+	
+	//TODO add same() which matches case for windows, "Name.ext" and "name.ext" can be in the same folder on linux, but not windows
 	
 	/** Return a new Name that is this one with safe characters, and turn blank into "Index". */
 	public Name safe() {
@@ -81,19 +98,8 @@ public class Name {
 		return new Name(name, extension.toLowerCase());
 	}
 
-	// -------- Make a new Name for a temporary file --------
-
 	/** Make a new Name like "ryio3tz5.db" that won't conflict with files already in a folder. */
 	public static Name unique() {
 		return new Name(Text.start(Data.random(8).base32(), 8), "db");
-	}
-
-	@Override public boolean equals(Object o) {
-		if (o == null || !(o instanceof Name)) return false;
-		return name.equals(((Name)o).name) && extension.equals(((Name)o).extension);
-	}
-	
-	@Override public int hashCode() {
-		return name.hashCode() * extension.hashCode();
 	}
 }

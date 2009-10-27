@@ -58,9 +58,13 @@ public class Data implements Comparable<Data> {
 
 	/** Copy the data this Data object views into a new byte array, and return it. */
 	public byte[] toByteArray() { return Convert.toByteArray(toByteBuffer()); }
-	/** Convert this Data into a String. */
-	public String toString() { return Convert.toString(toByteBuffer()); }
-	
+
+	/**
+	 * If you know this Data has text bytes, look at them all as a String using UTF-8 encoding.
+	 * Use base16() for binary data, this turns it into lines of gobbledygook but doesn't throw an exception.
+	 */
+	@Override public String toString() { return Convert.toString(toByteBuffer()); }
+
 	/**
 	 * Make a read-only ByteBuffer with position and limit clipped around the data this Data object views.
 	 * You can move the position without changing this Data object.
@@ -323,15 +327,17 @@ public class Data implements Comparable<Data> {
 	
 	// Compare
 
-	/** Compare this Data object to another one to determine which should appear first in ascending sorted order. */
-	public int compareTo(Data d) {
-		return buffer.compareTo(d.buffer); // Use Java's ByteBuffer.compareTo() method
+	@Override public int compareTo(Data d) {
+		return buffer.compareTo(d.buffer); // Use the methods on buffer
 	}
 
-	/** Determine if this Data object views exactly the same data as a given one. */
-	public boolean equals(Object o) {
+	@Override public boolean equals(Object o) {
 		if (o == null || !(o instanceof Data)) return false; // Make sure o is a Data like us
-		return buffer.equals(((Data)o).buffer); // Use Java's ByteBuffer.equals() method
+		return buffer.equals(((Data)o).buffer);
+	}
+	
+	@Override public int hashCode() {
+		return buffer.hashCode();
 	}
 
 	// Shortcut
