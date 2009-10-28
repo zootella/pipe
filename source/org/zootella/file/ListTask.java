@@ -35,7 +35,7 @@ public class ListTask extends Close {
 		private List<Name> taskList; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 			
 			taskList = folder.list();
 		}

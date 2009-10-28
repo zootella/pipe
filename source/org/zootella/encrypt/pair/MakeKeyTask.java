@@ -31,7 +31,7 @@ public class MakeKeyTask extends Close {
 		private KeyData taskKey; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 			
 			taskKey = Pair.make();
 		}

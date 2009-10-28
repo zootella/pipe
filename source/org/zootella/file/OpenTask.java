@@ -41,7 +41,7 @@ public class OpenTask extends Close {
 		private File taskFile; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 				
 			// Open the file
 			taskFile = new File(open);

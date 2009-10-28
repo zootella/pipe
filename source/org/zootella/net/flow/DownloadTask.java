@@ -49,7 +49,7 @@ public class DownloadTask extends Close {
 		private Move taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 				
 			// Download 1 or more bytes from socket to bin
 			taskMove = bin.download(socket, range);

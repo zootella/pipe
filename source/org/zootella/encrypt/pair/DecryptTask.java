@@ -38,7 +38,7 @@ public class DecryptTask extends Close {
 		private Data taskDecrypted; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 			
 			taskDecrypted = Pair.decrypt(data, modulus, privateExponent);
 		}

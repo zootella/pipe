@@ -43,7 +43,7 @@ public class HashTask extends Close {
 		private Move taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 			
 			// Hash data from bin and remove it
 			Now start = new Now();

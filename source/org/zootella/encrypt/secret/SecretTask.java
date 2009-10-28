@@ -43,7 +43,7 @@ public class SecretTask extends Close {
 		private Move taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 			
 			taskMove = Secret.process(cipher, mode, source, destination);
 		}

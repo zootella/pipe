@@ -48,7 +48,7 @@ public class ConnectTask extends Close {
 		private Socket taskSocket; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 				
 			// Make and connect a new socket to the given IP address and port number
 			try {

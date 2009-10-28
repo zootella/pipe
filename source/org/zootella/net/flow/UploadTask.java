@@ -49,7 +49,7 @@ public class UploadTask extends Close {
 		private Move taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 				
 			// Upload 1 or more bytes from bin to socket
 			taskMove = bin.upload(socket, range);

@@ -43,7 +43,7 @@ public class SendTask extends Close {
 	private class MyTask implements TaskBody {
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 				
 			// Use listen to send bin's data to ipPort in a UDP packet
 			packet.bin.send(listen, packet.ipPort);

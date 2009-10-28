@@ -34,7 +34,7 @@ public class ParseSecretKeyTask extends Close {
 		private KeySecret taskKey; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 
 			taskKey = Secret.parse(data);
 		}

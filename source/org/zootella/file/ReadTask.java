@@ -51,7 +51,7 @@ public class ReadTask extends Close {
 		private StripeMove taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 				
 			// Read 1 or more bytes from stripe in file to bin
 			taskMove = bin.read(file, pattern, range);

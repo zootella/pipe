@@ -46,7 +46,7 @@ public class DomainTask extends Close {
 		private Ip taskIp; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 
 			// Look up the domain name in DNS to get its IP address
 			try {

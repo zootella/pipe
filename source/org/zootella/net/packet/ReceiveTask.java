@@ -45,7 +45,7 @@ public class ReceiveTask extends Close {
 		private PacketMove taskMove; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 
 			// Wait on listen until a new UDP packet arrives
 			taskMove = bin.receive(listen);

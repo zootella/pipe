@@ -49,7 +49,7 @@ public class AcceptTask extends Close {
 		private Socket taskSocket; // References thread() can safely set
 
 		// A separate thread will call this method
-		public void thread() throws Exception {
+		public void thread() {
 
 			// Wait here until a peer connects to us
 			try {
