@@ -58,7 +58,7 @@ public class InfoFrame extends Close {
 		
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(Guide.icon)));
 		frame.setTitle("Information");
 		frame.setBounds(Screen.positionSize(Guide.sizeInfoFrame));
 		frame.setContentPane(panel.panel);

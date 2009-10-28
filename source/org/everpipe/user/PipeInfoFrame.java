@@ -23,7 +23,7 @@ public class PipeInfoFrame extends Close {
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(Guide.icon)));
 		frame.setTitle("Pipe Information");
 		frame.setSize(200, 200);
 		frame.setBounds(Screen.positionPercent(40, 40));

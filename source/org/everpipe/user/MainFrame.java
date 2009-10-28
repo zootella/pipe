@@ -38,7 +38,7 @@ public class MainFrame extends Close {
 		fill();
 		
 		frame.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("pipe/icon.gif")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(Guide.icon)));
 		frame.setTitle(Main.name);
 		frame.setBounds(Screen.positionSize(frame.getSize().width, frame.getSize().height));
 		frame.setContentPane(panel);

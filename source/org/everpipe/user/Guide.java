@@ -9,8 +9,11 @@ public class Guide {
 
 	// File
 
-	/** Filename skin.png in the present working directory. */
+	/** Filename "skin.png" in the present working directory. */
 	public static final String skin = "skin.png";
+	
+	/** Package path to "icon.gif" in the jar or source code. */
+	public static final String icon = "org/everpipe/resource/icon.gif";
 	
 	public static final Dimension skinSize = new Dimension(424, 667);
 	

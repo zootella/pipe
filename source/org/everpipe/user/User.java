@@ -25,7 +25,7 @@ public class User extends Close {
 		main = new MainFrame(this);
 		info = new InfoFrame(this);
 
-		icon = new CornerIcon(Main.name, Face.image("pipe/icon.gif"), restoreAction, exitAction);
+		icon = new CornerIcon(Main.name, Face.image(Guide.icon), restoreAction, exitAction);
 
 		show(true);
 	}
