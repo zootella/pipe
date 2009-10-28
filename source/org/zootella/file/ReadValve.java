@@ -55,7 +55,7 @@ public class ReadValve extends Close implements Valve {
 			task = new ReadTask(update, file, meter.remain(), out);
 	}
 	
-	public void stop() throws Exception {
+	public void stop() {
 		if (closed()) return;
 		if (task != null && task.closed()) { // Our later finished
 			meter.add(task.result().stripe.size); // If an exception closed later, throw it

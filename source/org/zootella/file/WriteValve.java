@@ -55,7 +55,7 @@ public class WriteValve extends Close implements Valve {
 			later = new WriteTask(update, file, meter.remain(), in);
 	}
 	
-	public void stop() throws Exception {
+	public void stop() {
 		if (closed()) return;
 		if (later != null && later.closed()) { // Our later finished
 			meter.add(later.result().stripe.size); // If an exception closed later, throw it

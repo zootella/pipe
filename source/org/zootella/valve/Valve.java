@@ -1,6 +1,5 @@
 package org.zootella.valve;
 
-
 import org.zootella.data.Bin;
 import org.zootella.size.Meter;
 
@@ -19,7 +18,7 @@ public interface Valve {
 	/** Tell this Valve to start if possible. */
 	public void start();
 	/** Have this Valve stop if it's done, and throw the exception that stopped it. */
-	public void stop() throws Exception;
+	public void stop();
 
 	/** true if this Valve is done and empty of data. */
 	public boolean isEmpty();

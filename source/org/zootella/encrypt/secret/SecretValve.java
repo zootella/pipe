@@ -43,7 +43,7 @@ public class SecretValve extends Close implements Valve {
 			task = new SecretTask(update, cipher, mode, in, out);
 	}
 
-	public void stop() throws Exception {
+	public void stop() {
 		if (closed()) return;
 		if (done(task)) {
 			meter.add(task.result().size); // If an exception closed task, result() will throw it

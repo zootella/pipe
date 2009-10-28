@@ -1,7 +1,6 @@
 package org.zootella.net.flow;
 
 import org.zootella.data.Bin;
-import org.zootella.exception.ProgramException;
 import org.zootella.net.socket.Socket;
 import org.zootella.size.Meter;
 import org.zootella.size.Range;
@@ -54,7 +53,7 @@ public class UploadValve extends Close implements Valve {
 			task = new UploadTask(update, socket, meter.remain(), in);
 	}
 	
-	public void stop() throws ProgramException {
+	public void stop() {
 		if (closed()) return;
 		if (done(task)) {
 			meter.add(task.result().size); // If an exception closed later, throw it

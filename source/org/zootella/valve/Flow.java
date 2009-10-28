@@ -3,7 +3,6 @@ package org.zootella.valve;
 import java.util.LinkedList;
 import java.util.List;
 
-
 import org.zootella.data.Bin;
 import org.zootella.state.Close;
 import org.zootella.state.Update;
@@ -47,7 +46,7 @@ public class Flow extends Close {
 	// Go
 
 	/** Move data down this list. */
-	public void move() throws Exception {
+	public void move() {
 		if (closed()) return;
 			
 		// Stop each valve that doesn't have a later working on its bins
@@ -66,7 +65,7 @@ public class Flow extends Close {
 	}
 
 	/** true if this ValveList is empty of data. */
-	public boolean isEmpty() throws Exception {
+	public boolean isEmpty() {
 		if (in != null && in.hasData())   return false; // Not empty
 		for (Valve valve: list)
 			if (!valve.isEmpty())         return false;
