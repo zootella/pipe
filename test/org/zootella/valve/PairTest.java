@@ -14,7 +14,7 @@ public class PairTest {
 	@Test public void test0() throws Exception {
 		List<Character> list = new ArrayList<Character>();
 		
-		List<Pair> pairs = Pair.pairs(list);
+		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(0, pairs.size());
 	}
 	
@@ -22,7 +22,7 @@ public class PairTest {
 		List<Character> list = new ArrayList<Character>();
 		list.add(new Character('a'));
 		
-		List<Pair> pairs = Pair.pairs(list);
+		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(0, pairs.size());
 	}
 	
@@ -31,7 +31,7 @@ public class PairTest {
 		list.add(new Character('a'));
 		list.add(new Character('b'));
 		
-		List<Pair> pairs = Pair.pairs(list);
+		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(1, pairs.size());
 		
 		assertEquals('a', pairs.get(0).a);
@@ -44,7 +44,7 @@ public class PairTest {
 		list.add(new Character('b'));
 		list.add(new Character('c'));
 		
-		List<Pair> pairs = Pair.pairs(list);
+		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(2, pairs.size());
 		
 		assertEquals('b', pairs.get(0).a);
@@ -61,7 +61,7 @@ public class PairTest {
 		list.add(new Character('c'));
 		list.add(new Character('d'));
 		
-		List<Pair> pairs = Pair.pairs(list);
+		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(3, pairs.size());
 		
 		assertEquals('c', pairs.get(0).a);
@@ -82,7 +82,7 @@ public class PairTest {
 		list.add(new Character('d'));
 		list.add(new Character('e'));
 		
-		List<Pair> pairs = Pair.pairs(list);
+		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(4, pairs.size());
 		
 		assertEquals('d', pairs.get(0).a);

@@ -55,8 +55,8 @@ public class Flow extends Close {
 		
 		// Move data down the list, end to start
 		Bin.move(last().out(), out);       // Take from the last in the list
-		for (Pair pair : Pair.pairs(list)) // Move data down the list, bottom to top
-			Bin.move(((Valve)pair.a).out(), ((Valve)pair.b).in());
+		for (Pair<Valve> pair : Pair.pairs(list)) // Move data down the list, bottom to top
+			Bin.move(pair.a.out(), pair.b.in());
 		Bin.move(in, first().in());        // Give to the first in the list
 		
 		// Start each valve that has data and space
