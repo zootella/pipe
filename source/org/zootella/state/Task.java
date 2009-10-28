@@ -15,7 +15,7 @@ public class Task extends Close {
 		this.body = body;
 		thread = new Thread(new ThreadRun(), "Task"); // Name thread "Task"
 		thread.setDaemon(true); // Let the program close even if thread is still running
-		thread.start(); // Have thread call ThreadRun.run() below now
+		thread.start(); // Have the new thread call run() below now
 	}
 
 	private final TaskBody body;
@@ -24,8 +24,8 @@ public class Task extends Close {
 	/** Interrupt our Task thread. */
 	@Override public void close() {
 		if (already()) return;
-		if (thread != null) // If thread is running, have it throw an Exception
-			thread.interrupt();
+		if (thread != null) // If thread is running
+			thread.interrupt(); // Stop it by making it throw an exception
 	}
 	
 	// Run
@@ -35,7 +35,7 @@ public class Task extends Close {
 		public void run() {
 			try { body.thread(); } // Call the code we were given
 			catch (ProgramException e) { programException = e; } // A ProgramException we expect and save
-			catch (Throwable t) { throwable = t; } // An Exception isn't expected, and stops the program
+			catch (Throwable t) { throwable = t; } // An exception isn't expected, and stops the program
 			SwingUtilities.invokeLater(new EventRun()); // We're done, send an event
 		} // When thread exits run(), it closes
 	}	
@@ -52,7 +52,7 @@ public class Task extends Close {
 				thread = null;                              // thread is done and exited, null our reference to it
 				close(me());                                // Mark this Task closed
 				body.done(programException);                // Call the given done() method giving it the ProgramException we got
-			} catch (Throwable t) { Mistake.stop(t); }      // Stop the program for an Exception we didn't expect
+			} catch (Throwable t) { Mistake.stop(t); }      // Stop the program for an exception we didn't expect
 		}
 	}
 	private final Task me() { return this; } // Give inner code a link to this outer object

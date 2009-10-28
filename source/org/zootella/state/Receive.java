@@ -4,5 +4,5 @@ package org.zootella.state;
 public interface Receive {
 
 	/** Implement a receive() method that Java will call when the event happens. */
-	public void receive() throws Exception;
+	public void receive();
 }

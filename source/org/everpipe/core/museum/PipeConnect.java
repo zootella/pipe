@@ -13,7 +13,6 @@ import org.zootella.state.Close;
 import org.zootella.state.Receive;
 import org.zootella.state.Update;
 import org.zootella.time.Ago;
-import org.zootella.time.Now;
 import org.zootella.time.Pulse;
 
 public class PipeConnect extends Close {
@@ -70,7 +69,7 @@ public class PipeConnect extends Close {
 
 	private final MyReceive receive;
 	private class MyReceive implements Receive {
-		public void receive() throws Exception {
+		public void receive() {
 			if (closed()) return;
 
 			// Connect to peer's LAN address

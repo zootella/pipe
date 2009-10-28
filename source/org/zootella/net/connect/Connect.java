@@ -51,7 +51,7 @@ public class Connect extends Close {
 
 	private final MyReceive receive;
 	private class MyReceive implements Receive {
-		public void receive() throws Exception {
+		public void receive() {
 			if (closed()) return;
 			try {
 				egg.check();

@@ -40,7 +40,7 @@ public class Accept extends Close {
 	}
 
 	private class MyReceive implements Receive {
-		public void receive() throws Exception {
+		public void receive() {
 			if (closed()) return;
 			
 			// Wait for new sockets to connect
