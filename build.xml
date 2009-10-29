@@ -4,6 +4,26 @@
 <project default="build">
 	<target name="build" description="Compile and package the source code into a jar">
 
+		<!-- List all the library jars for the classpath -->
+		<path id="class.path.list">
+
+			<!--
+			net.roydesign
+			Macintosh Runtime for Java Adapter
+			https://mrjadapter.dev.java.net/
+
+			Downloaded 2009 Oct 29
+			https://mrjadapter.dev.java.net/files/documents/8670/138136/MRJAdapter.zip
+			Version unknown, page says "Modified by steveroy on Tuesday, July 7, 2009 at 8:44:41 PM"
+			-->
+			<pathelement location="MRJAdapter.jar"/>
+
+		</path>
+		<pathconvert property="class.path.line" pathsep=" ">
+			<path refid="class.path.list"/>
+			<flattenmapper/>
+		</pathconvert>
+
 		<!-- Delete temporary folders to make everything again from scratch -->
 		<delete dir="ant"/>
 		<delete file="work/pipe.jar"/>
@@ -29,8 +49,11 @@
 			<!-- Compile the code in these folders, each has a tree of .java files in it -->
 			<src path="source"/>
 
-			<!-- Tell the Java compiler where .jar files are that the code above uses -->
+			<!-- Tell the Java compiler where jar files are that the code above uses -->
 			<classpath>
+				<fileset dir="work">
+					<include name="*.jar"/>
+				</fileset>
 			</classpath>
 		</javac>
 
@@ -53,7 +76,7 @@
 				<attribute name="Main-Class" value="org.everpipe.main.Main"/>
 
 				<!-- The names of the .jar files the program will use when it runs, separated by spaces -->
-				<attribute name="Class-Path" value=""/>
+				<attribute name="Class-Path" value="${class.path.line}"/>
 			</manifest>
 		</jar>
 
