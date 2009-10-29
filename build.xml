@@ -9,14 +9,37 @@
 
 			<!--
 			net.roydesign
-			Macintosh Runtime for Java Adapter
 			https://mrjadapter.dev.java.net/
+			Macintosh Runtime for Java Adapter, makes close and reopen work from the Mac dock
 
 			Downloaded 2009 Oct 29
 			https://mrjadapter.dev.java.net/files/documents/8670/138136/MRJAdapter.zip
 			Version unknown, page says "Modified by steveroy on Tuesday, July 7, 2009 at 8:44:41 PM"
 			-->
 			<pathelement location="MRJAdapter.jar"/>
+
+			<!--
+			org.cybergarage
+			http://cgupnpjava.sourceforge.net/
+			CyberLink for UPnP devices, forwards ports on NAT router
+
+			Downloaded 2009 Oct 29
+			http://sourceforge.net/projects/cgupnpjava/files/clinkjava/1.7/clink170.jar/download
+			Version 1.7
+			-->
+			<pathelement location="clink170.jar"/>
+
+			<!--
+			org.apache.xmlcommons
+			http://xerces.apache.org/xerces2-j/
+			Apache Xerces2 XML parser, clink needs it
+
+			Downloaded 2009 Oct 29
+			http://www.apache.org/dist/xerces/j/Xerces-J-bin.2.9.1.tar.gz
+			Version 2.9.1
+			-->
+			<pathelement location="xml-apis.jar"/>
+			<pathelement location="xercesImpl.jar"/>
 
 		</path>
 		<pathconvert property="class.path.line" pathsep=" ">
