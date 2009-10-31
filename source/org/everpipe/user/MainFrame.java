@@ -2,15 +2,20 @@ package org.everpipe.user;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.roydesign.mac.MRJAdapter;
+
 import org.everpipe.core.museum.Pipe;
 import org.everpipe.main.Main;
 import org.everpipe.main.Program;
+import org.zootella.desktop.Desktop;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 import org.zootella.user.Screen;
@@ -37,7 +42,12 @@ public class MainFrame extends Close {
 
 		fill();
 		
-		frame.addWindowListener(new MyWindowListener()); // Have Java tell us when the user closes the window
+		frame.addWindowListener(new MyWindowListener()); // Find out when the user closes the window from the taskbar
+		if (Desktop.isMac()) {
+			MRJAdapter.addQuitApplicationListener(new MyQuitActionListener()); // And from the Mac application menu
+			MRJAdapter.addReopenApplicationListener(new MyReopenActionListener()); // And when she clicks the dock icon
+		}
+
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(Guide.icon)));
 		frame.setTitle(Main.name);
 		frame.setBounds(Screen.positionSize(frame.getSize().width, frame.getSize().height));
@@ -69,21 +79,36 @@ public class MainFrame extends Close {
 	
 	public final ToolPanel tool;
 
-	// When the user clicks the main window's corner X, Java calls this windowClosing() method
+	@Override public void close() {
+		if (already()) return;
+		frame.setVisible(false);
+		frame.dispose(); // Dispose the frame so the process can close
+	}
+
+	/** On Windows, the user right-clicked the taskbar button and clicked "X Close" or keyed Alt+F4. */
 	private class MyWindowListener extends WindowAdapter {
 		public void windowClosing(WindowEvent w) {
 			try {
-				
 				program.user.show(false);
-				
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
-	@Override public void close() {
-		if (already()) return;
-		
-		frame.setVisible(false);
-		frame.dispose(); // Dispose the frame so the process can close
+	/** On Mac, the user clicked the Quit menu item from the top left of the screen or from the program's icon on the dock. */
+	private class MyQuitActionListener implements ActionListener {
+		@Override public void actionPerformed(ActionEvent a) {
+			try {
+				program.user.exitAction.actionPerformed(a);
+			} catch (Throwable t) { Mistake.stop(t); }
+		}
+	}
+
+	/** On Mac, the user clicked the program's icon on the dock. */
+	private class MyReopenActionListener implements ActionListener {
+		@Override public void actionPerformed(ActionEvent a) {
+			try {
+				program.user.restoreAction.actionPerformed(a);
+			} catch (Throwable t) { Mistake.stop(t); }
+		}
 	}
 }

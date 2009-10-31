@@ -11,7 +11,7 @@ import org.zootella.data.Text;
 /** A PathName is a relative disk path of folders and a file, like "folder\folder\file.ext". */
 public class PathName {
 
-	// -------- Make a new PathName --------
+	// Make
 
 	/** Make a new PathName object with an empty names List. */
 	public PathName() {
@@ -32,7 +32,7 @@ public class PathName {
 		for (String word : words) check(new Name(word)); // Only add non-blank Name objects
 	}
 	
-	// -------- Make a new PathName based on this one --------
+	// Base
 
 	/** Return a new PathName which is this one with name like "file.ext" added to it. */
 	public PathName add(Name name) { return add(new PathName(name)); }
@@ -45,16 +45,11 @@ public class PathName {
 		for (Name name : path.names) all.check(name); // Add the given Name objects that aren't blank
 		return all;
 	}
-
-	// -------- Internal tools --------
-	
-	/** Wrap the given List of Name objects into a new PathName. */
-	private PathName(List<Name> names) { this.names = names; }
 	
 	/** If name isn't blank, add it to our names List. */
 	private void check(Name name) { if (name.is()) names.add(name); }
 
-	// -------- Look at this PathName --------
+	// Look
 
 	/**
 	 * The List of Name objects that make up this PathName relative path.

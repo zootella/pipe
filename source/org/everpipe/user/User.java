@@ -6,6 +6,7 @@ import javax.swing.AbstractAction;
 
 import org.everpipe.main.Main;
 import org.everpipe.main.Program;
+import org.zootella.desktop.Desktop;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 import org.zootella.user.CornerIcon;
@@ -25,7 +26,8 @@ public class User extends Close {
 		main = new MainFrame(this);
 		info = new InfoFrame(this);
 
-		icon = new CornerIcon(Main.name, Face.image(Guide.icon), restoreAction, exitAction);
+		if (!Desktop.isMac()) // On Mac, we've already got the icon on the dock
+			icon = new CornerIcon(Main.name, Face.image(Guide.icon), restoreAction, exitAction);
 
 		show(true);
 	}
@@ -34,7 +36,7 @@ public class User extends Close {
 	public final Skin skin;
 	public final MainFrame main;
 	public final InfoFrame info;
-	public final CornerIcon icon;
+	public CornerIcon icon;
 	
 	@Override public void close() {
 		if (already()) return;
@@ -49,30 +51,27 @@ public class User extends Close {
 		show = b;
 
 		main.frame.setVisible(show);
-		icon.show(!show);
+		if (is(icon))
+			icon.show(!show);
 	}
 	private boolean show;
 
 	public final RestoreAction restoreAction;
-	private class RestoreAction extends AbstractAction {
+	public class RestoreAction extends AbstractAction {
 		public RestoreAction() { super("Restore"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
-				
 				show(true);
-				
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 
 	public final ExitAction exitAction;
-	private class ExitAction extends AbstractAction {
+	public class ExitAction extends AbstractAction {
 		public ExitAction() { super("Exit"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
-				
 				close(program);
-
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}

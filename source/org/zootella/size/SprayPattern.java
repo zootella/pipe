@@ -1,12 +1,9 @@
 package org.zootella.size;
 
-
 import java.util.BitSet;
-
 
 import org.zootella.data.Bay;
 import org.zootella.data.Data;
-import org.zootella.exception.ChopException;
 import org.zootella.exception.DataException;
 
 public class SprayPattern {

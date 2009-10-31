@@ -5,7 +5,6 @@ import java.io.StringWriter;
 
 import javax.swing.JOptionPane;
 
-import org.zootella.exception.ProgramException;
 import org.zootella.state.Close;
 
 public class Mistake {
