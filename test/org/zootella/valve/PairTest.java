@@ -34,8 +34,8 @@ public class PairTest {
 		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(1, pairs.size());
 		
-		assertEquals('a', pairs.get(0).a);
-		assertEquals('b', pairs.get(0).b);
+		assertEquals(new Character('a'), pairs.get(0).a);
+		assertEquals(new Character('b'), pairs.get(0).b);
 	}
 	
 	@Test public void test3() throws Exception {
@@ -47,11 +47,11 @@ public class PairTest {
 		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(2, pairs.size());
 		
-		assertEquals('b', pairs.get(0).a);
-		assertEquals('c', pairs.get(0).b);
+		assertEquals(new Character('b'), pairs.get(0).a);
+		assertEquals(new Character('c'), pairs.get(0).b);
 		
-		assertEquals('a', pairs.get(1).a);
-		assertEquals('b', pairs.get(1).b);
+		assertEquals(new Character('a'), pairs.get(1).a);
+		assertEquals(new Character('b'), pairs.get(1).b);
 	}
 	
 	@Test public void test4() throws Exception {
@@ -64,14 +64,14 @@ public class PairTest {
 		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(3, pairs.size());
 		
-		assertEquals('c', pairs.get(0).a);
-		assertEquals('d', pairs.get(0).b);
+		assertEquals(new Character('c'), pairs.get(0).a);
+		assertEquals(new Character('d'), pairs.get(0).b);
 		
-		assertEquals('b', pairs.get(1).a);
-		assertEquals('c', pairs.get(1).b);
+		assertEquals(new Character('b'), pairs.get(1).a);
+		assertEquals(new Character('c'), pairs.get(1).b);
 		
-		assertEquals('a', pairs.get(2).a);
-		assertEquals('b', pairs.get(2).b);
+		assertEquals(new Character('a'), pairs.get(2).a);
+		assertEquals(new Character('b'), pairs.get(2).b);
 	}
 	
 	@Test public void test5() throws Exception {
@@ -85,16 +85,16 @@ public class PairTest {
 		List<Pair<Character>> pairs = Pair.pairs(list);
 		assertEquals(4, pairs.size());
 		
-		assertEquals('d', pairs.get(0).a);
-		assertEquals('e', pairs.get(0).b);
+		assertEquals(new Character('d'), pairs.get(0).a);
+		assertEquals(new Character('e'), pairs.get(0).b);
 		
-		assertEquals('c', pairs.get(1).a);
-		assertEquals('d', pairs.get(1).b);
+		assertEquals(new Character('c'), pairs.get(1).a);
+		assertEquals(new Character('d'), pairs.get(1).b);
 		
-		assertEquals('b', pairs.get(2).a);
-		assertEquals('c', pairs.get(2).b);
+		assertEquals(new Character('b'), pairs.get(2).a);
+		assertEquals(new Character('c'), pairs.get(2).b);
 		
-		assertEquals('a', pairs.get(3).a);
-		assertEquals('b', pairs.get(3).b);
+		assertEquals(new Character('a'), pairs.get(3).a);
+		assertEquals(new Character('b'), pairs.get(3).b);
 	}
 }
