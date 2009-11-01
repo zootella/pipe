@@ -53,7 +53,7 @@ public class PathName {
 
 	/**
 	 * The List of Name objects that make up this PathName relative path.
-	 * For the PathName "folder/folder/file.ext", names has 3 Name objects, "folder", "folder", and "file.ext".
+	 * For the PathName "folder1/folder2/file.ext", names has 3 Name objects, "folder1", "folder2", and "file.ext".
 	 */
 	public List<Name> names;
 
