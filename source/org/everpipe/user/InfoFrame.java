@@ -116,11 +116,8 @@ public class InfoFrame extends Close {
 		}
 
 		// The Model beneath closed, take this View off the screen
-		public void vanish() { close(me()); }
+		public void vanish() { close(InfoFrame.this); }
 	}
-	
-	/** Give inner classes a link to this outer object. */
-	private InfoFrame me() { return this; }
 	
 	
 	

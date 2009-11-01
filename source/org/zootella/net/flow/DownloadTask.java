@@ -60,8 +60,7 @@ public class DownloadTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			move = taskMove;
-			close(me());          // We're done
+			close(DownloadTask.this);          // We're done
 		}
 	}
-	private DownloadTask me() { return this; } // Give inner code a link to the outer object
 }

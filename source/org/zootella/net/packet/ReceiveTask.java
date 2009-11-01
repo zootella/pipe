@@ -56,8 +56,7 @@ public class ReceiveTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			packet = new Packet(bin, taskMove);
-			close(me());          // We're done
+			close(ReceiveTask.this); // We're done
 		}
 	}
-	private ReceiveTask me() { return this; } // Give inner code a link to the outer object
 }

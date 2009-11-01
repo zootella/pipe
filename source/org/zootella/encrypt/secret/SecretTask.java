@@ -53,8 +53,7 @@ public class SecretTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			data = taskMove;
-			close(me());          // We're done
+			close(SecretTask.this); // We're done
 		}
 	}
-	private SecretTask me() { return this; } // Give inner code a link to the outer object
 }

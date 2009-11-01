@@ -69,14 +69,13 @@ public class Connect extends Close {
 					try {
 						Outline o = new Outline(socket.download().data());
 						if (o.toData().hash().start(6).equals(hash))
-							close(me());
+							close(Connect.this);
 						else
 							throw new DataException("bad response");
 					} catch (ChopException e) { Mistake.ignore(e); }
 				}
 
-			} catch (ProgramException e) { exception = e; close(me()); }
+			} catch (ProgramException e) { exception = e; close(Connect.this); }
 		}
 	}
-	private Connect me() { return this; }
 }

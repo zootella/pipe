@@ -50,10 +50,9 @@ public class Task extends Close {
 			if (throwable != null) Mistake.stop(throwable); // An exception isn't expected, stop the program
 			try {
 				thread = null;                              // thread is done and exited, null our reference to it
-				close(me());                                // Mark this Task closed
+				close(Task.this);                           // Mark this Task closed
 				body.done(programException);                // Call the given done() method giving it the ProgramException we got
 			} catch (Throwable t) { Mistake.stop(t); }      // Stop the program for an exception we didn't expect
 		}
 	}
-	private final Task me() { return this; } // Give inner code a link to this outer object
 }

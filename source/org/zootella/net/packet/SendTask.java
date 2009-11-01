@@ -55,8 +55,7 @@ public class SendTask extends Close {
 			exception = e;        // Get the exception our code above threw
 			bin = packet.bin;
 			bin.clear();
-			close(me());          // We're done
+			close(SendTask.this); // We're done
 		}
 	}
-	private SendTask me() { return this; } // Give inner code a link to the outer object
 }

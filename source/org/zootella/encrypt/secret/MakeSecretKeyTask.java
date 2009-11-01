@@ -41,8 +41,7 @@ public class MakeSecretKeyTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			key = taskKey;
-			close(me());          // We're done
+			close(MakeSecretKeyTask.this); // We're done
 		}
 	}
-	private MakeSecretKeyTask me() { return this; } // Give inner code a link to the outer object
 }

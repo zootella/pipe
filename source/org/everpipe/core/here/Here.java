@@ -107,19 +107,18 @@ public class Here extends Close {
 	public final MyModel model;
 	public class MyModel extends Model {
 		
-		public boolean canRefresh() { return me().canRefresh(); }
+		public boolean canRefresh() { return Here.this.canRefresh(); }
 		
-		public String lan()      { return Describe.object((me().lan())); }
-		public String internet() { return Describe.object((me().internet())); }
+		public String lan()      { return Describe.object((Here.this.lan())); }
+		public String internet() { return Describe.object((Here.this.internet())); }
 		
 		public String age() {
-			if (me().age() == null) return "";
-			return me().age().day() + " (" + Describe.timeCoarse(me().age().age()) + " ago)";
+			if (Here.this.age() == null) return "";
+			return Here.this.age().day() + " (" + Describe.timeCoarse(Here.this.age().age()) + " ago)";
 		}
 		
-		public String exception() { return Describe.object((me().exception())); }
+		public String exception() { return Describe.object((Here.this.exception())); }
 	}
-	private Here me() { return this; } // Give the inner class a link to this outer object
 	
 	
 	

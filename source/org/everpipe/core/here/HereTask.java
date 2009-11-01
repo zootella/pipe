@@ -89,7 +89,7 @@ public class HereTask extends Close {
 				if (center != null && internet == null && sent.once())
 					packets.send((new Outline("aq")).toData(), center);
 
-			} catch (ProgramException e) { exception = e; close(me()); up.send(); }
+			} catch (ProgramException e) { exception = e; close(HereTask.this); up.send(); }
 		}
 	}
 	
@@ -105,15 +105,14 @@ public class HereTask extends Close {
 					if (o.has("hash") && !o.value("hash").equals(o.value().hash())) // Hash check
 						throw new DataException("received corrupted ap");
 					internet = new IpPort(o.value()); // Read
-					close(me()); // It worked, we're done
+					close(HereTask.this); // It worked, we're done
 					up.send();
 					return true;
 				}
 			}
 			catch (DataException e) { Mistake.log(e); }
-			catch (ProgramException e) { exception = e; close(me()); up.send(); }
+			catch (ProgramException e) { exception = e; close(HereTask.this); up.send(); }
 			return false;
 		}
 	}
-	private HereTask me() { return this; }
 }

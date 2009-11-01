@@ -80,7 +80,7 @@ public class PipeConnect extends Close {
 			if (done(lan)) {
 				try {
 					socket = lan.result(); // As soon as we have socket, close and return
-					close(me());
+					close(PipeConnect.this);
 					return;
 				} catch (ProgramException e) { Mistake.ignore(e); }
 				lan = null;
@@ -92,7 +92,7 @@ public class PipeConnect extends Close {
 			if (done(net)) {
 				try {
 					socket = net.result();
-					close(me());
+					close(PipeConnect.this);
 					return;
 				} catch (ProgramException e) { Mistake.ignore(e); }
 				net = null;
@@ -110,7 +110,7 @@ public class PipeConnect extends Close {
 				if ((new Outline(s.download().data())).toData().hash().start(6).same(hash)) {
 					socket = s;
 					socket.upload().add(hello);
-					close(me());
+					close(PipeConnect.this);
 					return true;
 				}
 				
@@ -118,7 +118,6 @@ public class PipeConnect extends Close {
 			return false;
 		}
 	}
-	private PipeConnect me() { return this; }
 	
 	//tell the user about us
 	

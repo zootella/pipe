@@ -48,8 +48,7 @@ public class DecryptTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			decrypted = taskDecrypted;
-			close(me());          // We're done
+			close(DecryptTask.this); // We're done
 		}
 	}
-	private DecryptTask me() { return this; } // Give inner code a link to the outer object
 }

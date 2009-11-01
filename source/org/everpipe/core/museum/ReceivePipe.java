@@ -133,10 +133,9 @@ public class ReceivePipe extends Close implements Pipe {
 					System.out.println("receive pipe has socket");
 				}
 
-			} catch (ProgramException e) { exception = e; close(me()); }
+			} catch (ProgramException e) { exception = e; close(ReceivePipe.this); }
 		}
 	}
-	private ReceivePipe me() { return this; }
 	
 	public ProgramException exception() { return exception; }
 	private ProgramException exception;

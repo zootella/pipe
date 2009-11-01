@@ -60,8 +60,7 @@ public class WriteTask extends Close {
 			exception = e;         // Get the exception our code above threw
 			move = taskMove;
 			file.add(move.stripe); // Record the Stripe of data we wrote in file's StripePattern
-			close(me());           // We're done
+			close(WriteTask.this); // We're done
 		}
 	}
-	private WriteTask me() { return this; } // Give inner code a link to the outer object
 }

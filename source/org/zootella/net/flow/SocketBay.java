@@ -63,10 +63,9 @@ public class SocketBay extends Close {
 				uploadValve.start();
 				downloadValve.start();
 
-			} catch (ProgramException e) { exception = e; close(me()); }
+			} catch (ProgramException e) { exception = e; close(SocketBay.this); }
 		}
 	}
-	private SocketBay me() { return this; }
 	
 	/** Add data to upload to this Bay. */
 	public Bay upload() { if (exception != null) throw exception; update.send(); return uploadBay; } // Send update to notice what the caller adds to upload

@@ -62,8 +62,7 @@ public class ReadTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			move = taskMove;
-			close(me());          // We're done
+			close(ReadTask.this);          // We're done
 		}
 	}
-	private ReadTask me() { return this; } // Give inner code a link to the outer object
 }

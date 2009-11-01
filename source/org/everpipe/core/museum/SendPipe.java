@@ -131,10 +131,9 @@ public class SendPipe extends Close implements Pipe {
 					System.out.println("send pipe has socket");
 				}
 
-			} catch (ProgramException e) { exception = e; close(me()); }
+			} catch (ProgramException e) { exception = e; close(SendPipe.this); }
 		}
 	}
-	private SendPipe me() { return this; }
 	
 	public ProgramException exception() { return exception; }
 	private ProgramException exception;
