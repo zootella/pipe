@@ -2,9 +2,9 @@ package org.zootella.encrypt.pair;
 
 import org.zootella.data.Data;
 
-public class KeyData {
+public class PairKeyData {
 	
-	public KeyData(Data modulus, Data publicExponent, Data privateExponent) {
+	public PairKeyData(Data modulus, Data publicExponent, Data privateExponent) {
 		this.modulus = modulus;
 		this.publicExponent = publicExponent;
 		this.privateExponent = privateExponent;

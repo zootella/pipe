@@ -22,16 +22,23 @@ import org.zootella.exception.DataException;
 import org.zootella.exception.PlatformException;
 
 public class Pair {
+	
+	// Define
 
 	/** RSA, the kind of public and private key pair encryption we use. */
 	public static final String algorithm = "RSA";
 	/** The transformation and padding we use. */
 	private static final String transformation = "RSA/ECB/PKCS1PADDING";
-	/** 1024 bit key size, ships with Java, will encrypt messages up to 177 bytes long. */
+	/** 1024 bit key size, ships with Java. */
 	public static final int size = 1024;
+	
+	/** 117 byte message size, the largest message a 1024 bit key can encrypt. */
+	public static final int messageSize = 117;
+	
+	// Key
 
 	/** Make a new public and private key pair. */
-	public static KeyData make() {
+	public static PairKeyData make() {
 		try {
 			KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 			generator.initialize(size);
@@ -49,11 +56,13 @@ public class Pair {
 			Data publicExponentData = new Data(publicExponent.toByteArray());
 			Data privateExponentData = new Data(privateExponent.toByteArray());
 			
-			return new KeyData(modulusData, publicExponentData, privateExponentData);
+			return new PairKeyData(modulusData, publicExponentData, privateExponentData);
 		}
 		catch (NoSuchAlgorithmException e) { throw new PlatformException(e); }
 		catch (InvalidKeySpecException e)  { throw new PlatformException(e); }
 	}
+	
+	// Encrypt
 
 	/** Use the given modulus and a peer's public exponent to encrypt data just for the peer. */
 	public static Data encrypt(Data data, Data modulus, Data publicExponent) {
