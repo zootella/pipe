@@ -2,6 +2,7 @@ package org.zootella.encrypt.sign;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.zootella.data.Data;
 
 public class SignTest {
 	
@@ -17,22 +18,13 @@ public class SignTest {
 		
 		SignKeyData key = Sign.make();
 		
+		Data message = new Data("hello");
+		Data signature = Sign.sign(message, key.privateKey);
+		boolean valid = Sign.verify(message, signature, key.publicKey);
 		
+		Assert.assertTrue(valid);
 		
-
-		round();
-		round();
-		round();
-		round();
-		round();
 		
 	}
 	
-	private static void round() {
-		SignKeyData key = Sign.make();
-		System.out.println(key.publicKey.size()  + " bytes: " + key.publicKey.base16());//443 or 444
-		System.out.println(key.privateKey.size() + " bytes: " + key.privateKey.base16());//335
-		System.out.println("");
-		
-	}
 }

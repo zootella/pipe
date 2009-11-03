@@ -4,11 +4,17 @@ import org.zootella.data.Data;
 
 public class SignKeyData {
 	
-	public SignKeyData(Data publicKey, Data privateKey) {
-		this.publicKey = publicKey;
-		this.privateKey = privateKey;
+	public SignKeyData(Data gBase, Data pPrime, Data qSub, Data xPrivate, Data yPublic) {
+		this.gBase    = gBase;
+		this.pPrime   = pPrime;
+		this.qSub     = qSub;
+		this.xPrivate = xPrivate;
+		this.yPublic  = yPublic;
 	}
-	
-	public final Data publicKey;
-	public final Data privateKey;
+
+	public final Data gBase;
+	public final Data pPrime;
+	public final Data qSub;
+	public final Data xPrivate;
+	public final Data yPublic;
 }

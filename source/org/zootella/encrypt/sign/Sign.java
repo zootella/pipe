@@ -11,10 +11,14 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.DSAPrivateKeySpec;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import org.zootella.data.Data;
+import org.zootella.encrypt.pair.PairKeyData;
 import org.zootella.exception.DataException;
 import org.zootella.exception.PlatformException;
 
@@ -32,6 +36,21 @@ public class Sign {
 
 	public static SignKeyData make() {
 		try {
+			/*
+			KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
+			generator.initialize(size);
+			KeyPair key = generator.generateKeyPair();
+			
+			KeyFactory factory = KeyFactory.getInstance(algorithm);
+			RSAPublicKeySpec publicSpec = factory.getKeySpec(key.getPublic(), RSAPublicKeySpec.class);
+			RSAPrivateKeySpec privateSpec = factory.getKeySpec(key.getPrivate(), RSAPrivateKeySpec.class);
+
+			return new PairKeyData(
+				new Data(publicSpec.getModulus()),
+				new Data(publicSpec.getPublicExponent()),
+				new Data(privateSpec.getPrivateExponent()));
+			 */
+			
 			KeyPairGenerator g = KeyPairGenerator.getInstance(algorithm, provider);
 			SecureRandom r = SecureRandom.getInstance(algorithmRandom, provider);
 			g.initialize(size, r);
@@ -49,9 +68,9 @@ public class Sign {
 	
 	public static Data sign(Data message, Data privateKeyData) {
 		try {
-			X509EncodedKeySpec x = new X509EncodedKeySpec(privateKeyData.toByteArray());
 			KeyFactory f = KeyFactory.getInstance(algorithm, provider);
-			PrivateKey k = f.generatePrivate(x);
+			DSAPrivateKeySpec x = new DSAPrivateKeySpec(privateKeyData.toByteArray());
+			PrivateKey k = f.generatePrivate(x);//move line above in here
 
 			Signature s = Signature.getInstance(algorithmDetail);
 			s.initSign(k);

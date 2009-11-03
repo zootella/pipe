@@ -1,6 +1,5 @@
 package org.zootella.encrypt.pair;
 
-import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -47,16 +46,11 @@ public class Pair {
 			KeyFactory factory = KeyFactory.getInstance(algorithm);
 			RSAPublicKeySpec publicSpec = factory.getKeySpec(key.getPublic(), RSAPublicKeySpec.class);
 			RSAPrivateKeySpec privateSpec = factory.getKeySpec(key.getPrivate(), RSAPrivateKeySpec.class);
-			
-			BigInteger modulus = publicSpec.getModulus();
-			BigInteger publicExponent = publicSpec.getPublicExponent();
-			BigInteger privateExponent = privateSpec.getPrivateExponent();
-			
-			Data modulusData = new Data(modulus.toByteArray());
-			Data publicExponentData = new Data(publicExponent.toByteArray());
-			Data privateExponentData = new Data(privateExponent.toByteArray());
-			
-			return new PairKeyData(modulusData, publicExponentData, privateExponentData);
+
+			return new PairKeyData(
+				new Data(publicSpec.getModulus()),
+				new Data(publicSpec.getPublicExponent()),
+				new Data(privateSpec.getPrivateExponent()));
 		}
 		catch (NoSuchAlgorithmException e) { throw new PlatformException(e); }
 		catch (InvalidKeySpecException e)  { throw new PlatformException(e); }
@@ -67,11 +61,8 @@ public class Pair {
 	/** Use the given modulus and a peer's public exponent to encrypt data just for the peer. */
 	public static Data encrypt(Data data, Data modulus, Data publicExponent) {
 		try {
-			BigInteger modulusBig = new BigInteger(modulus.toByteArray());
-			BigInteger publicExponentBig = new BigInteger(publicExponent.toByteArray());
-
 			KeyFactory factory = KeyFactory.getInstance(algorithm);
-			PublicKey publicKey = factory.generatePublic(new RSAPublicKeySpec(modulusBig, publicExponentBig));
+			PublicKey publicKey = factory.generatePublic(new RSAPublicKeySpec(modulus.toBigInteger(), publicExponent.toBigInteger()));
 
 			Cipher cipher = Cipher.getInstance(transformation);
 			cipher.init(Cipher.ENCRYPT_MODE, publicKey);
@@ -89,11 +80,8 @@ public class Pair {
 	/** Use the modulus and our private exponent to decrypt data that was encrypted just for us. */
 	public static Data decrypt(Data data, Data modulus, Data privateExponent) {
 		try {
-			BigInteger modulusBig = new BigInteger(modulus.toByteArray());
-			BigInteger privateExponentBig = new BigInteger(privateExponent.toByteArray());
-
 			KeyFactory factory = KeyFactory.getInstance(algorithm);
-			PrivateKey privateKey = factory.generatePrivate(new RSAPrivateKeySpec(modulusBig, privateExponentBig));
+			PrivateKey privateKey = factory.generatePrivate(new RSAPrivateKeySpec(modulus.toBigInteger(), privateExponent.toBigInteger()));
 
 			Cipher cipher = Cipher.getInstance(transformation);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);

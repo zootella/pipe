@@ -1,5 +1,6 @@
 package org.zootella.data;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
@@ -52,6 +53,20 @@ public class Data implements Comparable<Data> {
 		if (toString().equals("t")) return true;
 		if (toString().equals("f")) return false;
 		throw new DataException();
+	}
+	
+	// Big
+
+	/** Covert the given BigInteger into a new Data object. */
+	public Data(BigInteger b) {
+		this(b.toByteArray());
+	}
+
+	/** Covert this Data back into the BigInteger it was made from, or throw DataException not valid. */
+	public BigInteger toBigInteger() {
+		try {
+			return new BigInteger(toByteArray());
+		} catch (NumberFormatException e) { throw new DataException(e); }
 	}
 
 	// Convert
