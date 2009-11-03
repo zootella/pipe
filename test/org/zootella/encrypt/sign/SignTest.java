@@ -32,15 +32,11 @@ public class SignTest {
 		
 		//TODO confirm if the message is corrupted, this returns false, it shouldn't throw an exception
 		
-		/*
 		SignKey key = Sign.make();
-		
 		Data message = new Data("hello");
 		Data signature = Sign.sign(message, key);
 		boolean valid = Sign.verify(message, signature, key);
-		
 		Assert.assertTrue(valid);
-		 */
 		
 		main2();
 		
@@ -76,28 +72,26 @@ public class SignTest {
 	
 	public static void main2() throws Exception {
 		
-		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
-		keyGen.initialize(1024);
-		KeyPair keypair = keyGen.genKeyPair();
-		DSAPrivateKey privateKey = (DSAPrivateKey) keypair.getPrivate();
-		DSAPublicKey publicKey = (DSAPublicKey) keypair.getPublic();
+		KeyPairGenerator generator = KeyPairGenerator.getInstance(Sign.algorithm);
+		generator.initialize(1024);
+		KeyPair pair = generator.generateKeyPair();
 		
-		DSAParams dsaParams = privateKey.getParams();
-		BigInteger p = dsaParams.getP();
-		BigInteger q = dsaParams.getQ();
-		BigInteger g = dsaParams.getG();
+		DSAPrivateKey privateKey = (DSAPrivateKey)pair.getPrivate();
+		DSAPublicKey publicKey = (DSAPublicKey)pair.getPublic();
+		
+		BigInteger p = privateKey.getParams().getP();
+		BigInteger q = privateKey.getParams().getQ();
+		BigInteger g = privateKey.getParams().getG();
+		
 		BigInteger x = privateKey.getX();
 		BigInteger y = publicKey.getY();
 		
-		KeyFactory keyFactory = KeyFactory.getInstance("DSA");
-		KeySpec publicKeySpec = new DSAPublicKeySpec(y, p, q, g);
-		PublicKey publicKey1 = keyFactory.generatePublic(publicKeySpec);
-		KeySpec privateKeySpec = new DSAPrivateKeySpec(x, p, q, g);
-		PrivateKey privateKey1 = keyFactory.generatePrivate(privateKeySpec);
+		PublicKey publicKey1 = KeyFactory.getInstance(Sign.algorithm).generatePublic(new DSAPublicKeySpec(y, p, q, g));
+		PrivateKey privateKey1 = KeyFactory.getInstance(Sign.algorithm).generatePrivate(new DSAPrivateKeySpec(x, p, q, g));
 		
 		byte[] buffer = new byte[1024];
 		
-		Signature sig = Signature.getInstance(privateKey1.getAlgorithm());
+		Signature sig = Signature.getInstance(Sign.algorithm);
 		sig.initSign(privateKey1);
 		sig.update(buffer, 0, buffer.length);
 		
@@ -106,7 +100,9 @@ public class SignTest {
 		sig = Signature.getInstance(publicKey1.getAlgorithm());
 		sig.initVerify(publicKey1);
 		sig.update(buffer, 0, buffer.length);
-		Assert.assertTrue(sig.verify(signature));
+		boolean validity = sig.verify(signature);
+		
+		Assert.assertTrue(validity);
 		
 	}
 	

@@ -1,5 +1,6 @@
 package org.zootella.encrypt.sign;
 
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -9,6 +10,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.interfaces.DSAPrivateKey;
+import java.security.interfaces.DSAPublicKey;
 import java.security.spec.DSAPrivateKeySpec;
 import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
@@ -21,9 +24,9 @@ public class Sign {
 	
 	// Define
 	
-	private static final String algorithm = "DSA";
-	private static final String algorithmDetail = "SHA1withDSA"; //TODO you would like to not need two of these
-	private static final int size = 1024;
+	public static final String algorithm = "DSA";
+//	private static final String algorithmDetail = "SHA1withDSA"; //TODO you would like to not need two of these
+	public static final int size = 1024;
 
 	// Key
 
@@ -33,13 +36,30 @@ public class Sign {
 			generator.initialize(size);
 			KeyPair key = generator.generateKeyPair();
 			
+			
+			
+			
+			DSAPrivateKey privateKey = (DSAPrivateKey)key.getPrivate();
+			DSAPublicKey publicKey = (DSAPublicKey)key.getPublic();
+			
+			Data p = new Data(privateKey.getParams().getP());
+			Data q = new Data(privateKey.getParams().getQ());
+			Data g = new Data(privateKey.getParams().getG());
+			
+			Data x = new Data(privateKey.getX());
+			Data y = new Data(publicKey.getY());
+
+			return new SignKey(g, p, q, x, y);
+			
+			/*
 			KeyFactory factory = KeyFactory.getInstance(algorithm);
 			return new SignKey(
 				factory.getKeySpec(key.getPublic(), DSAPublicKeySpec.class),
 				factory.getKeySpec(key.getPrivate(), DSAPrivateKeySpec.class));
+				*/
 		}
 		catch (NoSuchAlgorithmException e) { throw new PlatformException(e); }
-		catch (InvalidKeySpecException e)  { throw new PlatformException(e); }
+//		catch (InvalidKeySpecException e)  { throw new PlatformException(e); }
 	}
 
 	// Sign

@@ -27,7 +27,7 @@ public class Pair {
 	/** RSA, the kind of public and private key pair encryption we use. */
 	public static final String algorithm = "RSA";
 	/** The transformation and padding we use. */
-	private static final String transformation = "RSA/ECB/PKCS1PADDING";
+	public static final String transformation = "RSA/ECB/PKCS1PADDING";
 	/** 1024 bit key size, ships with Java. */
 	public static final int size = 1024;
 	
