@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import org.zootella.data.Bin;
 import org.zootella.data.Data;
-import org.zootella.encrypt.pair.PairKeyData;
+import org.zootella.encrypt.pair.PairKey;
 import org.zootella.encrypt.pair.Pair;
 import org.zootella.encrypt.secret.KeySecret;
 import org.zootella.encrypt.secret.Secret;
@@ -18,7 +18,7 @@ public class EncryptTest {
 	// pair
 
 	@Test public void pair() {
-		PairKeyData key = Pair.make();
+		PairKey key = Pair.make();
 		Data a = new Data("this is my short and very secret message");
 		Data b = Pair.encrypt(a, key.modulus, key.publicExponent);
 		Data c = Pair.decrypt(b, key.modulus, key.privateExponent);

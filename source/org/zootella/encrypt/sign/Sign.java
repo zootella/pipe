@@ -19,7 +19,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import org.zootella.data.Data;
-import org.zootella.encrypt.pair.PairKeyData;
+import org.zootella.encrypt.pair.PairKey;
 import org.zootella.exception.DataException;
 import org.zootella.exception.PlatformException;
 
@@ -33,7 +33,7 @@ public class Sign {
 
 	// Key
 
-	public static SignKeyData make() {
+	public static SignKey make() {
 		try {
 			KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 			generator.initialize(size);
@@ -43,7 +43,7 @@ public class Sign {
 			DSAPublicKeySpec publicSpec = factory.getKeySpec(key.getPublic(), DSAPublicKeySpec.class);
 			DSAPrivateKeySpec privateSpec = factory.getKeySpec(key.getPrivate(), DSAPrivateKeySpec.class);
 
-			return new SignKeyData(
+			return new SignKey(
 				new Data(publicSpec.getG()),
 				new Data(publicSpec.getP()),
 				new Data(publicSpec.getQ()),

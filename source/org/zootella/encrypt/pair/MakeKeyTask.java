@@ -22,13 +22,13 @@ public class MakeKeyTask extends Close {
 		up.send();
 	}
 
-	public PairKeyData result() { check(exception, key); return key; }
+	public PairKey result() { check(exception, key); return key; }
 	private ProgramException exception;
-	private PairKeyData key;
+	private PairKey key;
 	
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private PairKeyData taskKey; // References thread() can safely set
+		private PairKey taskKey; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() {

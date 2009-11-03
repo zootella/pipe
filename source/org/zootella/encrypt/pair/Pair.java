@@ -37,7 +37,7 @@ public class Pair {
 	// Key
 
 	/** Make a new public and private key pair. */
-	public static PairKeyData make() {
+	public static PairKey make() {
 		try {
 			KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 			generator.initialize(size);
@@ -47,7 +47,7 @@ public class Pair {
 			RSAPublicKeySpec publicSpec = factory.getKeySpec(key.getPublic(), RSAPublicKeySpec.class);
 			RSAPrivateKeySpec privateSpec = factory.getKeySpec(key.getPrivate(), RSAPrivateKeySpec.class);
 
-			return new PairKeyData(
+			return new PairKey(
 				new Data(publicSpec.getModulus()),
 				new Data(publicSpec.getPublicExponent()),
 				new Data(privateSpec.getPrivateExponent()));
@@ -59,10 +59,10 @@ public class Pair {
 	// Encrypt
 
 	/** Use the given modulus and a peer's public exponent to encrypt data just for the peer. */
-	public static Data encrypt(Data data, Data modulus, Data publicExponent) {
+	public static Data encrypt(Data data, PairKey key) {
 		try {
 			KeyFactory factory = KeyFactory.getInstance(algorithm);
-			PublicKey publicKey = factory.generatePublic(new RSAPublicKeySpec(modulus.toBigInteger(), publicExponent.toBigInteger()));
+			PublicKey publicKey = factory.generatePublic(new RSAPublicKeySpec(key.modulus.toBigInteger(), key.publicExponent.toBigInteger()));
 
 			Cipher cipher = Cipher.getInstance(transformation);
 			cipher.init(Cipher.ENCRYPT_MODE, publicKey);

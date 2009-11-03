@@ -8,7 +8,7 @@ import org.zootella.exception.DataException;
 public class PairTest {
 	
 	@Test public void test() throws Exception {
-		PairKeyData key = Pair.make();
+		PairKey key = Pair.make();
 		
 		roundTrip(key, Data.empty()); // No data
 		
@@ -23,7 +23,7 @@ public class PairTest {
 		} catch (DataException e) {}
 	}
 	
-	private static void roundTrip(PairKeyData key, Data a) {
+	private static void roundTrip(PairKey key, Data a) {
 		Data b = Pair.encrypt(a, key.modulus, key.publicExponent);
 		Data c = Pair.decrypt(b, key.modulus, key.privateExponent);
 		Assert.assertEquals("before and after", a, c);

@@ -19,7 +19,7 @@ public class SignTest {
 		//TODO confirm if the message is corrupted, this returns false, it shouldn't throw an exception
 		
 		
-		SignKeyData key = Sign.make();
+		SignKey key = Sign.make();
 		
 		Data message = new Data("hello");
 		Data signature = Sign.sign(message, key.privateKey);
