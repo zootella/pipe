@@ -16,6 +16,9 @@ public class SignTest {
 		// corrupt the message
 		// confirm validate returns false
 		
+		//TODO confirm if the message is corrupted, this returns false, it shouldn't throw an exception
+		
+		
 		SignKeyData key = Sign.make();
 		
 		Data message = new Data("hello");

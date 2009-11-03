@@ -12,6 +12,7 @@ import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.DSAPrivateKeySpec;
+import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
@@ -26,49 +27,42 @@ public class Sign {
 	
 	// Define
 	
-	private static final String provider = "SUN";
 	private static final String algorithm = "DSA";
 	private static final String algorithmDetail = "SHA1withDSA";
-	private static final String algorithmRandom = "SHA1PRNG";
 	private static final int size = 1024;
 
 	// Key
 
 	public static SignKeyData make() {
 		try {
-			/*
 			KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 			generator.initialize(size);
 			KeyPair key = generator.generateKeyPair();
 			
 			KeyFactory factory = KeyFactory.getInstance(algorithm);
-			RSAPublicKeySpec publicSpec = factory.getKeySpec(key.getPublic(), RSAPublicKeySpec.class);
-			RSAPrivateKeySpec privateSpec = factory.getKeySpec(key.getPrivate(), RSAPrivateKeySpec.class);
+			DSAPublicKeySpec publicSpec = factory.getKeySpec(key.getPublic(), DSAPublicKeySpec.class);
+			DSAPrivateKeySpec privateSpec = factory.getKeySpec(key.getPrivate(), DSAPrivateKeySpec.class);
 
-			return new PairKeyData(
-				new Data(publicSpec.getModulus()),
-				new Data(publicSpec.getPublicExponent()),
-				new Data(privateSpec.getPrivateExponent()));
-			 */
-			
-			KeyPairGenerator g = KeyPairGenerator.getInstance(algorithm, provider);
-			SecureRandom r = SecureRandom.getInstance(algorithmRandom, provider);
-			g.initialize(size, r);
-			
-			KeyPair k = g.generateKeyPair();
 			return new SignKeyData(
-				new Data(k.getPublic().getEncoded()),
-				new Data(k.getPrivate().getEncoded()));
+				new Data(publicSpec.getG()),
+				new Data(publicSpec.getP()),
+				new Data(publicSpec.getQ()),
+				new Data(publicSpec.getY()),
+				new Data(privateSpec.getX()));
 		}
 		catch (NoSuchAlgorithmException e) { throw new PlatformException(e); }
-		catch (NoSuchProviderException e)  { throw new PlatformException(e); }
+		catch (InvalidKeySpecException e)  { throw new PlatformException(e); }
 	}
 
 	// Sign
 	
-	public static Data sign(Data message, Data privateKeyData) {
+	public static Data sign(Data message, Data g, Data p, Data q, Data x) {
 		try {
-			KeyFactory f = KeyFactory.getInstance(algorithm, provider);
+			KeyFactory factory = KeyFactory.getInstance(algorithm);
+			PrivateKey privateKey = factory.generatePrivate(new DSAPrivateKeySpec(null, null, null, null));
+			
+			
+			KeyFactory f = KeyFactory.getInstance(algorithm);
 			DSAPrivateKeySpec x = new DSAPrivateKeySpec(privateKeyData.toByteArray());
 			PrivateKey k = f.generatePrivate(x);//move line above in here
 
@@ -88,7 +82,7 @@ public class Sign {
 		try {
 			X509EncodedKeySpec x = new X509EncodedKeySpec(publicKeyData.toByteArray());
 			KeyFactory f;
-			f = KeyFactory.getInstance(algorithm, provider);
+			f = KeyFactory.getInstance(algorithm);
 			PublicKey k = f.generatePublic(x);
 
 			Signature s = Signature.getInstance(algorithmDetail);
@@ -96,7 +90,6 @@ public class Sign {
 			s.update(message.toByteArray());
 			return s.verify(signature.toByteArray());
 			
-			//TODO confirm if the message is corrupted, this returns false, it shouldn't throw an exception
 		}
 		catch (NoSuchProviderException e)  { throw new PlatformException(e); }
 		catch (NoSuchAlgorithmException e) { throw new PlatformException(e); }
