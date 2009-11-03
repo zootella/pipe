@@ -9,18 +9,16 @@ import org.zootella.state.Update;
 
 public class DecryptTask extends Close {
 
-	public DecryptTask(Update up, Data data, Data modulus, Data privateExponent) {
+	public DecryptTask(Update up, Data data, PairKey key) {
 		this.up = up; // We'll tell update when we're done
 		this.data = data;
-		this.modulus = modulus;
-		this.privateExponent = privateExponent;
+		this.key = key;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
 	private final Data data;
-	private final Data modulus;
-	private final Data privateExponent;
+	private final PairKey key;
 	private final Task task;
 
 	@Override public void close() {
@@ -40,7 +38,7 @@ public class DecryptTask extends Close {
 		// A separate thread will call this method
 		public void thread() {
 			
-			taskDecrypted = Pair.decrypt(data, modulus, privateExponent);
+			taskDecrypted = Pair.decrypt(data, key);
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method

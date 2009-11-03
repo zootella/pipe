@@ -20,8 +20,8 @@ public class EncryptTest {
 	@Test public void pair() {
 		PairKey key = Pair.make();
 		Data a = new Data("this is my short and very secret message");
-		Data b = Pair.encrypt(a, key.modulus, key.publicExponent);
-		Data c = Pair.decrypt(b, key.modulus, key.privateExponent);
+		Data b = Pair.encrypt(a, key);
+		Data c = Pair.decrypt(b, key);
 		System.out.println(c.strike());
 		assertEquals(a, c);
 	}

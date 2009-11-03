@@ -1,5 +1,8 @@
 package org.zootella.encrypt.sign;
 
+import java.security.spec.DSAPrivateKeySpec;
+import java.security.spec.DSAPublicKeySpec;
+
 import org.zootella.data.Data;
 import org.zootella.data.Outline;
 
@@ -39,6 +42,26 @@ public class SignKey {
 	public boolean hasPrivate() { return x != null; }
 	
 	// Java
+	
+	/** Get the data parts of a new signature key Java has made for you. */
+	public SignKey(DSAPublicKeySpec publicSpec, DSAPrivateKeySpec privateSpec) {
+		this(
+			new Data(publicSpec.getG()),
+			new Data(publicSpec.getP()),
+			new Data(publicSpec.getQ()),
+			new Data(publicSpec.getY()),
+			new Data(privateSpec.getX()));
+	}
+
+	/** Convert our data into a Java object. */
+	public DSAPrivateKeySpec toPrivateSpec() {
+		return new DSAPrivateKeySpec(x.toBigInteger(), p.toBigInteger(), q.toBigInteger(), g.toBigInteger()); 
+	}
+
+	/** Convert our data into a Java object. */
+	public DSAPublicKeySpec toPublicSpec() {
+		return new DSAPublicKeySpec(y.toBigInteger(), p.toBigInteger(), q.toBigInteger(), g.toBigInteger());
+	}
 	
 	// Outline
 

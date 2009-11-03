@@ -44,13 +44,9 @@ public class Pair {
 			KeyPair key = generator.generateKeyPair();
 			
 			KeyFactory factory = KeyFactory.getInstance(algorithm);
-			RSAPublicKeySpec publicSpec = factory.getKeySpec(key.getPublic(), RSAPublicKeySpec.class);
-			RSAPrivateKeySpec privateSpec = factory.getKeySpec(key.getPrivate(), RSAPrivateKeySpec.class);
-
 			return new PairKey(
-				new Data(publicSpec.getModulus()),
-				new Data(publicSpec.getPublicExponent()),
-				new Data(privateSpec.getPrivateExponent()));
+				factory.getKeySpec(key.getPublic(), RSAPublicKeySpec.class),
+				factory.getKeySpec(key.getPrivate(), RSAPrivateKeySpec.class));
 		}
 		catch (NoSuchAlgorithmException e) { throw new PlatformException(e); }
 		catch (InvalidKeySpecException e)  { throw new PlatformException(e); }
@@ -61,9 +57,7 @@ public class Pair {
 	/** Use the given modulus and a peer's public exponent to encrypt data just for the peer. */
 	public static Data encrypt(Data data, PairKey key) {
 		try {
-			KeyFactory factory = KeyFactory.getInstance(algorithm);
-			PublicKey publicKey = factory.generatePublic(new RSAPublicKeySpec(key.modulus.toBigInteger(), key.publicExponent.toBigInteger()));
-
+			PublicKey publicKey = KeyFactory.getInstance(algorithm).generatePublic(key.toPublicSpec());
 			Cipher cipher = Cipher.getInstance(transformation);
 			cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 			return new Data(cipher.doFinal(data.toByteArray()));
@@ -78,11 +72,9 @@ public class Pair {
 	}
 
 	/** Use the modulus and our private exponent to decrypt data that was encrypted just for us. */
-	public static Data decrypt(Data data, Data modulus, Data privateExponent) {
+	public static Data decrypt(Data data, PairKey key) {
 		try {
-			KeyFactory factory = KeyFactory.getInstance(algorithm);
-			PrivateKey privateKey = factory.generatePrivate(new RSAPrivateKeySpec(modulus.toBigInteger(), privateExponent.toBigInteger()));
-
+			PrivateKey privateKey = KeyFactory.getInstance(algorithm).generatePrivate(key.toPrivateSpec());
 			Cipher cipher = Cipher.getInstance(transformation);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
 			return new Data(cipher.doFinal(data.toByteArray()));

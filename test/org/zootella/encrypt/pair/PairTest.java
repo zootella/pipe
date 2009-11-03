@@ -24,8 +24,8 @@ public class PairTest {
 	}
 	
 	private static void roundTrip(PairKey key, Data a) {
-		Data b = Pair.encrypt(a, key.modulus, key.publicExponent);
-		Data c = Pair.decrypt(b, key.modulus, key.privateExponent);
+		Data b = Pair.encrypt(a, key);
+		Data c = Pair.decrypt(b, key);
 		Assert.assertEquals("before and after", a, c);
 	}
 }

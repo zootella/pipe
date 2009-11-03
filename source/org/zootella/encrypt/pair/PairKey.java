@@ -1,5 +1,8 @@
 package org.zootella.encrypt.pair;
 
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
+
 import org.zootella.data.Data;
 import org.zootella.data.Outline;
 
@@ -31,8 +34,26 @@ public class PairKey {
 
 	/** true if this SignKey has all the public and private parts, false public only. */
 	public boolean hasPrivate() { return privateExponent != null; }
-	
+
 	// Java
+	
+	/** Get the data parts of a new encryption key Java has made for you. */
+	public PairKey(RSAPublicKeySpec publicSpec, RSAPrivateKeySpec privateSpec) {
+		this(
+			new Data(publicSpec.getModulus()),
+			new Data(publicSpec.getPublicExponent()),
+			new Data(privateSpec.getPrivateExponent()));
+	}
+
+	/** Convert our data into a Java object. */
+	public RSAPrivateKeySpec toPrivateSpec() {
+		return new RSAPrivateKeySpec(modulus.toBigInteger(), privateExponent.toBigInteger()); 
+	}
+
+	/** Convert our data into a Java object. */
+	public RSAPublicKeySpec toPublicSpec() {
+		return new RSAPublicKeySpec(modulus.toBigInteger(), publicExponent.toBigInteger());
+	}
 	
 	// Outline
 
