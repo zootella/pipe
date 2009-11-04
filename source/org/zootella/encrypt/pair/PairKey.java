@@ -32,12 +32,12 @@ public class PairKey {
 	public final Data publicExponent;
 	public final Data privateExponent;
 
-	/** true if this SignKey has all the public and private parts, false public only. */
+	/** true if this PairKey has all the public and private parts, false public only. */
 	public boolean hasPrivate() { return privateExponent != null; }
 
 	// Java
 	
-	/** Get the data parts of a new encryption key Java has made for you. */
+	/** Get the data parts of a new encryption key Java has made. */
 	public PairKey(RSAPublicKeySpec publicSpec, RSAPrivateKeySpec privateSpec) {
 		this(
 			new Data(publicSpec.getModulus()),
@@ -57,7 +57,7 @@ public class PairKey {
 	
 	// Outline
 
-	/** Turn this SignKey object into an Outline with the given name. */
+	/** Turn this PairKey object into an Outline with the given name. */
 	public Outline toOutline(String name) {
 		Outline o = new Outline(name);
 		o.add("m", modulus);
@@ -66,7 +66,7 @@ public class PairKey {
 		return o;
 	}
 
-	/** Turn o back into a the SignKey object it was made from. */
+	/** Turn o back into a the PairKey object it was made from. */
 	public static PairKey fromOutline(Outline o) {
 		if (o.has("r"))
 			return new PairKey(o.value("m"), o.value("u"), o.value("r"));

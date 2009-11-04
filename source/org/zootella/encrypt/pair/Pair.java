@@ -58,9 +58,9 @@ public class Pair {
 	public static Data encrypt(Data data, PairKey key) {
 		try {
 			PublicKey publicKey = KeyFactory.getInstance(algorithm).generatePublic(key.toPublicSpec());
-			Cipher cipher = Cipher.getInstance(transformation);
-			cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-			return new Data(cipher.doFinal(data.toByteArray()));
+			Cipher c = Cipher.getInstance(transformation);
+			c.init(Cipher.ENCRYPT_MODE, publicKey);
+			return new Data(c.doFinal(data.toByteArray()));
 		}
 		catch (NoSuchAlgorithmException e)  { throw new PlatformException(e); }
 		catch (NoSuchPaddingException e)    { throw new PlatformException(e); }
@@ -75,9 +75,9 @@ public class Pair {
 	public static Data decrypt(Data data, PairKey key) {
 		try {
 			PrivateKey privateKey = KeyFactory.getInstance(algorithm).generatePrivate(key.toPrivateSpec());
-			Cipher cipher = Cipher.getInstance(transformation);
-			cipher.init(Cipher.DECRYPT_MODE, privateKey);
-			return new Data(cipher.doFinal(data.toByteArray()));
+			Cipher c = Cipher.getInstance(transformation);
+			c.init(Cipher.DECRYPT_MODE, privateKey);
+			return new Data(c.doFinal(data.toByteArray()));
 		}
 		catch (NoSuchAlgorithmException e)  { throw new PlatformException(e); }
 		catch (NoSuchPaddingException e)    { throw new PlatformException(e); }

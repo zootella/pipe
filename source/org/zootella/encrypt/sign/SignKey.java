@@ -43,14 +43,14 @@ public class SignKey {
 	
 	// Java
 	
-	/** Get the data parts of a new signature key Java has made for you. */
+	/** Get the data parts of a new signature key Java has made. */
 	public SignKey(DSAPublicKeySpec publicSpec, DSAPrivateKeySpec privateSpec) {
 		this(
 			new Data(publicSpec.getG()),
 			new Data(publicSpec.getP()),
 			new Data(publicSpec.getQ()),
-			new Data(publicSpec.getY()),
-			new Data(privateSpec.getX()));
+			new Data(privateSpec.getX()),
+			new Data(publicSpec.getY()));
 	}
 
 	/** Convert our data into a Java object. */
