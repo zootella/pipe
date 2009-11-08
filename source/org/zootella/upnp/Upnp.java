@@ -2,7 +2,6 @@ package org.zootella.upnp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,6 +15,8 @@ import org.cybergarage.upnp.Service;
 import org.cybergarage.upnp.device.DeviceChangeListener;
 import org.zootella.data.Data;
 import org.zootella.net.name.Ip;
+import org.zootella.net.name.IpPort;
+import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 
 /**
@@ -59,6 +60,8 @@ import org.zootella.state.Close;
  * stop().
  */
 public class Upnp extends Close {
+	
+	// Define
 
 	/** some schemas */
 	private static final String urnRouterDevice        = "urn:schemas-upnp-org:device:InternetGatewayDevice:1";
@@ -70,55 +73,38 @@ public class Upnp extends Close {
 	private static final String tcpPrefix = "LimeTCP";
 	private static final String udpPrefix = "LimeUDP";
 	
-	private String guidSuffix;
+	// Objects
 
-	/**
-	 * the router we have and the sub-device necessary for port mapping LOCKING:
-	 * DEVICE_LOCK
-	 */
+	private final ControlPoint control;
 	private Device device;
-
-	/**
-	 * The port-mapping service we'll use. LOCKING: DEVICE_LOCK
-	 */
 	private Service service;
 
 	/** The tcp and udp mappings created this session */
-	private Mapping tcpMapping;
-	private Mapping udpMapping;
+	private OldMapping tcpMapping;
+	private OldMapping udpMapping;
+	
+	// Create and close
 
-	private final AtomicBoolean started = new AtomicBoolean(false);
-
-	private final ControlPoint controlPoint;
-
-	private final ArrayList<UPnPListener> listeners = new ArrayList<UPnPListener>();
-
-	private final UPnPManagerConfiguration configuration;
-
-	public Upnp(UPnPManagerConfiguration configuration) {
-		this.configuration = configuration;
-		this.controlPoint = new ControlPoint();
-		
+	public Upnp() {
 		System.out.println("Starting UPnP Manager.");
-		controlPoint.addDeviceChangeListener(new MyDeviceChangeListener());
+		
+		control = new ControlPoint();
+		control.addDeviceChangeListener(new MyDeviceChangeListener());
 
 		try {
-			controlPoint.start();
-		} catch (Exception bad) {
-			configuration.setEnabled(false);
-			System.out.println("error: " + bad);
+			control.start();
+		} catch (Exception e) {
+			System.out.println("error: " + e);
 		}
 	}
 
 	@Override public void close() {
 		if (already()) return;
 
-		controlPoint.stop();
+		try { control.stop(); } catch (Throwable t) { Mistake.log(t); }
 	}
-
-	public void addListener(UPnPListener uPnPListener) {
-		listeners.add(uPnPListener);
-	}
+	
+	// Look
 
 	/** true if we're behind an UPnP NAT device. */
 	public boolean isNATPresent() {
@@ -129,6 +115,8 @@ public class Upnp extends Close {
 	public boolean mappingsExist() {
 		return tcpMapping != null || udpMapping != null;
 	}
+	
+	// API
 
 	/** Blocks and returns the external address the NAT thinks we have, or null can't find it. */
 	public InetAddress getNATAddress() throws UnknownHostException {
@@ -165,7 +153,7 @@ public class Upnp extends Close {
 		int localPort = port;
 
 		// try adding new mappings with the same port
-		Mapping udp = new Mapping("", port, localAddress, localPort, "UDP", udpPrefix + getGUIDSuffix());
+		OldMapping udp = new OldMapping("", port, localAddress, localPort, "UDP", udpPrefix + getGUIDSuffix());
 
 		// add udp first in case it gets overwritten.
 		// if we can't add, update or find an appropriate port
@@ -180,7 +168,7 @@ public class Upnp extends Close {
 			if (gen == null)
 				gen = new Random();
 			port = gen.nextInt(50000) + 2000;
-			udp = new Mapping("", port, localAddress, localPort, "UDP", udpPrefix + getGUIDSuffix());
+			udp = new OldMapping("", port, localAddress, localPort, "UDP", udpPrefix + getGUIDSuffix());
 		}
 
 		if (tries < 0) {
@@ -188,18 +176,13 @@ public class Upnp extends Close {
 			return 0;
 		}
 
-		// at this stage, the variable port will point to the port the UDP
-		// mapping
+		// at this stage, the variable port will point to the port the UDP mapping
 		// got mapped to. Since we have to have the same port for UDP and tcp,
-		// we can't afford to change the port here. So if mapping to this port
-		// on tcp
+		// we can't afford to change the port here. So if mapping to this port on tcp
 		// fails, we give up and clean up the udp mapping.
-		// Note: Phillipe reported that on some routers adding an UDP mapping
-		// will also
-		// create a TCP mapping. So we no longer delete the UDP mapping if the
-		// TCP one
-		// fails.
-		Mapping tcp = new Mapping("", port, localAddress, localPort, "TCP", tcpPrefix + getGUIDSuffix());
+		// Note: Phillipe reported that on some routers adding an UDP mapping will also
+		// create a TCP mapping. So we no longer delete the UDP mapping if the TCP one fails.
+		OldMapping tcp = new OldMapping("", port, localAddress, localPort, "TCP", tcpPrefix + getGUIDSuffix());
 		if (!addMapping(tcp)) {
 			System.out.println(" couldn't map tcp to whatever udp was mapped. leaving udp around...");
 			tcp = null;
@@ -210,6 +193,58 @@ public class Upnp extends Close {
 		udpMapping = udp;
 
 		return port;
+	}
+
+	private boolean addMapping(OldMapping m) {
+
+		System.out.println("adding " + m);
+
+		Action add = getActionFromService(service, "AddPortMapping");
+
+		if (add == null)
+			return false;
+
+		add.setArgumentValue("NewRemoteHost", m.externalAddress);
+		add.setArgumentValue("NewExternalPort", m.externalPort);
+		add.setArgumentValue("NewInternalClient", m.internalAddress);
+		add.setArgumentValue("NewInternalPort", m.internalPort);
+		add.setArgumentValue("NewProtocol", m.protocol);
+		add.setArgumentValue("NewPortMappingDescription", m.description);
+		add.setArgumentValue("NewEnabled", "1");
+		add.setArgumentValue("NewLeaseDuration", 0);
+
+		boolean success = add.postControlAction();
+		System.out.println("Post succeeded: " + success);
+		return success;
+	}
+
+	private String getGUIDSuffix() {
+		return "0123456789";
+	}
+
+	/**
+	 * @param m
+	 *            the mapping to remove from the NAT
+	 * @return whether it worked or not
+	 */
+	private boolean removeMapping(OldMapping m) {
+
+		System.out.println("removing " + m);
+
+		Action remove = getActionFromService(service, "DeletePortMapping");
+
+		if (remove == null) {
+			System.out.println("Couldn't find DeletePortMapping action!");
+			return false;
+		}
+
+		remove.setArgumentValue("NewRemoteHost", m.externalAddress);
+		remove.setArgumentValue("NewExternalPort", m.externalPort);
+		remove.setArgumentValue("NewProtocol", m.protocol);
+
+		boolean success = remove.postControlAction();
+		System.out.println("Remove succeeded: " + success);
+		return success;
 	}
 
 	/**
@@ -241,59 +276,6 @@ public class Upnp extends Close {
 	}
 
 	/**
-	 * @param m
-	 *            Port mapping to send to the NAT
-	 * @return the error code
-	 */
-	private boolean addMapping(Mapping m) {
-
-		System.out.println("adding " + m);
-
-		Action add = getActionFromService(service, "AddPortMapping");
-
-		if (add == null)
-			return false;
-
-		add.setArgumentValue("NewRemoteHost", m._externalAddress);
-		add.setArgumentValue("NewExternalPort", m._externalPort);
-		add.setArgumentValue("NewInternalClient", m._internalAddress);
-		add.setArgumentValue("NewInternalPort", m._internalPort);
-		add.setArgumentValue("NewProtocol", m._protocol);
-		add.setArgumentValue("NewPortMappingDescription", m._description);
-		add.setArgumentValue("NewEnabled", "1");
-		add.setArgumentValue("NewLeaseDuration", 0);
-
-		boolean success = add.postControlAction();
-		System.out.println("Post succeeded: " + success);
-		return success;
-	}
-
-	/**
-	 * @param m
-	 *            the mapping to remove from the NAT
-	 * @return whether it worked or not
-	 */
-	private boolean removeMapping(Mapping m) {
-
-		System.out.println("removing " + m);
-
-		Action remove = getActionFromService(service, "DeletePortMapping");
-
-		if (remove == null) {
-			System.out.println("Couldn't find DeletePortMapping action!");
-			return false;
-		}
-
-		remove.setArgumentValue("NewRemoteHost", m._externalAddress);
-		remove.setArgumentValue("NewExternalPort", m._externalPort);
-		remove.setArgumentValue("NewProtocol", m._protocol);
-
-		boolean success = remove.postControlAction();
-		System.out.println("Remove succeeded: " + success);
-		return success;
-	}
-
-	/**
 	 * schedules a shutdown hook which will clear the mappings created this
 	 * session.
 	 */
@@ -306,13 +288,6 @@ public class Upnp extends Close {
 			removeMapping(udpMapping);
 		
 		System.out.println("done cleaning");
-	}
-
-
-	private String getGUIDSuffix() {
-		if (guidSuffix == null)
-			guidSuffix = configuration.getClientID();
-		return guidSuffix;
 	}
 
 	private class MyDeviceChangeListener implements DeviceChangeListener {
@@ -345,9 +320,13 @@ public class Upnp extends Close {
 				System.out.println("didn't get router device");
 			}
 
-			if (isNATPresent())
+			if (isNATPresent()) {
+				//Here's where we update.send();
+				/*
 				for (UPnPListener listener : listeners)
 					listener.natFound();
+					*/
+			}
 		}
 
 		public void deviceRemoved(Device dev) {}
@@ -383,37 +362,23 @@ public class Upnp extends Close {
 		}
 	}
 
-	private final class Mapping {
+	private final class OldMapping {
 		
-		public final String _externalAddress;
-		public final int _externalPort;
-		public final String _internalAddress;
-		public final int _internalPort;
-		public final String _protocol;
-		public final String _description;
-
-		// network constructor
-		public Mapping(String externalAddress, String externalPort, String internalAddress, String internalPort, String protocol, String description) throws NumberFormatException {
-			_externalAddress = externalAddress;
-			_externalPort = Integer.parseInt(externalPort);
-			_internalAddress = internalAddress;
-			_internalPort = Integer.parseInt(internalPort);
-			_protocol = protocol;
-			_description = description;
-		}
+		public final String externalAddress;
+		public final int    externalPort;
+		public final String internalAddress;
+		public final int    internalPort;
+		public final String protocol;
+		public final String description;
 
 		// internal constructor
-		public Mapping(String externalAddress, int externalPort, String internalAddress, int internalPort, String protocol, String description) {
-			_externalAddress = externalAddress;
-			_externalPort = externalPort;
-			_internalAddress = internalAddress;
-			_internalPort = internalPort;
-			_protocol = protocol;
-			_description = description;
-		}
-
-		@Override public String toString() {
-			return _externalAddress + ":" + _externalPort + "->" + _internalAddress + ":" + _internalPort + "@" + _protocol + " desc: " + _description;
+		public OldMapping(String externalAddress, int externalPort, String internalAddress, int internalPort, String protocol, String description) {
+			this.externalAddress = externalAddress;
+			this.externalPort    = externalPort;
+			this.internalAddress = internalAddress;
+			this.internalPort    = internalPort;
+			this.protocol        = protocol;
+			this.description     = description;
 		}
 	}
 }
