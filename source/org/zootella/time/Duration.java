@@ -27,4 +27,8 @@ public class Duration {
 		if (t == 0) return 1; // A 0 might end up on the bottom of a speed fraction
 		else return t;
 	}
+	
+	@Override public String toString() {
+		return "Duration " + time() + " milliseconds";
+	}
 }

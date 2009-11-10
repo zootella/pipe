@@ -11,6 +11,7 @@ import javax.swing.JPopupMenu;
 import org.everpipe.main.Main;
 import org.everpipe.main.Program;
 import org.everpipe.main.Snippet;
+import org.zootella.net.upnp.Upnp;
 import org.zootella.process.Mistake;
 import org.zootella.user.skin.PlainButton;
 import org.zootella.user.widget.Grip;
@@ -115,11 +116,20 @@ public class ToolPanel {
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				Snippet.snippet(program);
+				snippet();
+//				Snippet.snippet(program);
 
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
+	
+	private void snippet() {
+		if (upnp == null)
+			upnp = new Upnp();
+		else
+			upnp.snippet();
+	}
+	private Upnp upnp;
 
 	private final PreferencesAction preferencesAction;
 	private class PreferencesAction extends AbstractAction {

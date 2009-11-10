@@ -212,29 +212,6 @@ public class UpnpManager extends Close {
 	
 	
 
-	
-
-	/*
-	private Action getActionFromService(Service serviceWithAction, String actionName) {
-		
-		Action a = serviceWithAction.getAction(actionName);
-		if (a != null)
-			return a;
-
-		for (Object o : service.getActionList()) {
-			if (o instanceof Action) {
-				a = (Action)o;
-				// see http://forum.limewire.org/showpost.php?p=21952&postcount=1 for an example
-				// router that adds whitespace
-				if (a.getName() != null && actionName.equals(a.getName().trim()))
-					return a;
-			}
-		}
-
-		return null;
-	}
-	*/
-
 	private class MyDeviceChangeListener implements DeviceChangeListener {
 		
 		/** this method will be called when we discover a UPnP device. */
