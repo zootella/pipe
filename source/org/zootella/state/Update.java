@@ -44,4 +44,17 @@ public class Update {
 			} catch (Throwable t) { Mistake.stop(t); } // Stop the program for an exception we didn't expect
 		}
 	}
+
+	// Thread
+
+	/** Only the normal event thread can call send(), if you're in a Task thread or something else, use sendFromThread(). */
+	public void sendFromThread() {
+		SwingUtilities.invokeLater(new Runnable() { // Have the normal Swing thread call this run() method
+			public void run() {
+				try {
+					send();
+				} catch (Throwable t) { Mistake.stop(t); } // Stop the program for an exception we didn't expect
+			}
+		});
+	}
 }

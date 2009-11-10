@@ -115,21 +115,12 @@ public class ToolPanel {
 		public SnippetAction() { super("Snippet"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
-				
-				snippet();
-//				Snippet.snippet(program);
+
+				Snippet.snippet(program);
 
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
-	
-	private void snippet() {
-		if (upnp == null)
-			upnp = new Upnp();
-		else
-			upnp.snippet();
-	}
-	private Upnp upnp;
 
 	private final PreferencesAction preferencesAction;
 	private class PreferencesAction extends AbstractAction {
