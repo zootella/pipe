@@ -43,9 +43,9 @@ public class ControlTask extends Close {
 		// A separate thread will call this method
 		public void thread() {
 
-			control = new ControlPoint();
-			control.addDeviceChangeListener(listen);
-			control.start();
+			taskControl = new ControlPoint();
+			taskControl.addDeviceChangeListener(listen);
+			taskControl.start();
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method

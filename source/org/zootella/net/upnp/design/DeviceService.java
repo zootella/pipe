@@ -20,19 +20,14 @@ public class DeviceService {
 	private final Update update;
 	public final DeviceChangeListener listener;
 	
-	private volatile Device device;
-	private volatile Service service;
-	private volatile Outline name;
-	
-	public Device device() { return device; }
-	public Service service() { return service; }
-	public Outline name() { return name; }
+	private volatile UpnpDevice device;
+	public UpnpDevice device() { return device; }
 
 	private class MyDeviceChangeListener implements DeviceChangeListener {
 
 		public void deviceAdded(Device gatewayDevice) {//a pool thread calls in here
 			try {
-				if (device == null && service == null) {
+				if (device == null) {
 					
 					if (gatewayDevice.getDeviceType().equals(gatewaySchema) && gatewayDevice.isRootDevice()) {
 						
@@ -51,28 +46,23 @@ public class DeviceService {
 										Service s = connectionDevice.getService(serviceSchema);
 										if (s != null) {
 											
-											device = gatewayDevice;
-											service = s;
-
-											name = new Outline();
-											name.add("", device.getDescriptionFilePath());
-											name.add("", device.getDeviceType());
-											name.add("", device.getFriendlyName());
-											name.add("", device.getManufacture());
-											name.add("", device.getManufactureURL());
-											name.add("", device.getModelDescription());
-											name.add("", device.getModelName());
-											name.add("", device.getModelNumber());
-											name.add("", device.getModelURL());
-											name.add("", device.getSerialNumber());
-											name.add("", device.getUDN());
-											name.add("", device.getUPC());
-											name.add("", device.getPresentationURL());
-											name.add("", device.getInterfaceAddress());
-											name.add("", device.getLocation());
-											name.add("", device.getURLBase());
-											System.out.println(name.toString());
+											Outline o = new Outline();
+											o.add("devicetype",       gatewayDevice.getDeviceType());
+											o.add("name",             gatewayDevice.getFriendlyName()); // Show to the user
+											o.add("manufacturer",     gatewayDevice.getManufacture());
+											o.add("manufacturerurl",  gatewayDevice.getManufactureURL());
+											o.add("modeldescription", gatewayDevice.getModelDescription());
+											o.add("modelname",        gatewayDevice.getModelName());
+											o.add("modelnumber",      gatewayDevice.getModelNumber());
+											o.add("modelurl",         gatewayDevice.getModelURL());
+											o.add("serialnumber",     gatewayDevice.getSerialNumber());
+											o.add("udn",              gatewayDevice.getUDN());
+											o.add("upc",              gatewayDevice.getUPC());
+											o.add("presentationurl",  gatewayDevice.getPresentationURL());
+											o.add("interfaceaddress", gatewayDevice.getInterfaceAddress());
+											o.add("location",         gatewayDevice.getLocation());
 											
+											device = new UpnpDevice(gatewayDevice, s, o);
 											update.sendFromThread();
 											return;
 										}

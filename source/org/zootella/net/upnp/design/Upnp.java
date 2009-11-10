@@ -44,7 +44,7 @@ public class Upnp extends Close {
 				controlPoint = controlTask.result();
 			
 			if (device.device() != null && once.once())
-				System.out.println(device.name().toString());
+				System.out.println(device.device().o.toString());
 			
 
 		}
