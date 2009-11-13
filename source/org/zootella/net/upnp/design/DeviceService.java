@@ -48,7 +48,7 @@ public class DeviceService {
 											
 											Outline o = new Outline();
 											o.add("devicetype",       gatewayDevice.getDeviceType());
-											o.add("name",             gatewayDevice.getFriendlyName()); // Show to the user
+											o.add("friendlyname",     gatewayDevice.getFriendlyName()); // Show to the user
 											o.add("manufacturer",     gatewayDevice.getManufacture());
 											o.add("manufacturerurl",  gatewayDevice.getManufactureURL());
 											o.add("modeldescription", gatewayDevice.getModelDescription());
