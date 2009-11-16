@@ -8,11 +8,11 @@ import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
 import org.zootella.state.Update;
 
-public class ControlTask extends Close {
+public class StartTask extends Close {
 	
 	// Make
 
-	public ControlTask(Update up, DeviceChangeListener listen) {
+	public StartTask(Update up, DeviceChangeListener listen) {
 		this.up = up; // We'll tell above when we're done
 		this.listen = listen;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
@@ -53,7 +53,7 @@ public class ControlTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			control = taskControl;
-			close(ControlTask.this); // We're done
+			close(StartTask.this); // We're done
 		}
 	}
 }

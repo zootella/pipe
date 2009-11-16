@@ -3,18 +3,18 @@ package org.zootella.net.upnp.task;
 import org.cybergarage.upnp.Action;
 import org.zootella.exception.NetException;
 import org.zootella.exception.ProgramException;
-import org.zootella.net.upnp.Forward;
+import org.zootella.net.upnp.Map;
 import org.zootella.net.upnp.Router;
 import org.zootella.state.Close;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
 import org.zootella.state.Update;
 
-public class ForwardTask extends Close {
+public class AddTask extends Close {
 	
 	// Make
 
-	public ForwardTask(Update up, Router router, Forward forward) {
+	public AddTask(Update up, Router router, Map forward) {
 		this.up = up; // We'll tell above when we're done
 		this.router = router;
 		this.forward = forward;
@@ -23,7 +23,7 @@ public class ForwardTask extends Close {
 	
 	private final Update up;
 	private final Router router;
-	private final Forward forward;
+	private final Map forward;
 	private final Task task;
 
 	@Override public void close() {
@@ -67,7 +67,7 @@ public class ForwardTask extends Close {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
 			result = taskResult;
-			close(ForwardTask.this); // We're done
+			close(AddTask.this); // We're done
 		}
 	}
 }

@@ -14,7 +14,7 @@ import org.cybergarage.upnp.Service;
 import org.cybergarage.upnp.device.DeviceChangeListener;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.Port;
-import org.zootella.net.upnp.Forward;
+import org.zootella.net.upnp.Map;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 
@@ -69,8 +69,8 @@ public class Manager extends Close {
 	private Device device;
 	private Service service;
 
-	private Forward forwardTcp;
-	private Forward forwardUdp;
+	private Map forwardTcp;
+	private Map forwardUdp;
 
 	public Manager() {
 		//TODO GetControlPointTask
@@ -118,7 +118,7 @@ public class Manager extends Close {
 		Port localPort = port;
 
 		// try adding new mappings with the same port
-		Forward udp = new Forward("", port, localIp, localPort, "UDP", "LimeUDP");
+		Map udp = new Map("", port, localIp, localPort, "UDP", "LimeUDP");
 
 		// add udp first in case it gets overwritten.
 		// if we can't add, update or find an appropriate port
@@ -133,7 +133,7 @@ public class Manager extends Close {
 			if (gen == null)
 				gen = new Random();
 			port = new Port(gen.nextInt(50000) + 2000);
-			udp = new Forward("", port, localIp, localPort, "UDP", "LimeUDP");
+			udp = new Map("", port, localIp, localPort, "UDP", "LimeUDP");
 		}
 
 		if (tries < 0)
@@ -145,7 +145,7 @@ public class Manager extends Close {
 		// fails, we give up and clean up the udp mapping.
 		// Note: Phillipe reported that on some routers adding an UDP mapping will also
 		// create a TCP mapping. So we no longer delete the UDP mapping if the TCP one fails.
-		Forward tcp = new Forward("", port, localIp, localPort, "TCP", "LimeTCP");
+		Map tcp = new Map("", port, localIp, localPort, "TCP", "LimeTCP");
 		if (!addMapping(tcp))
 			tcp = null;
 
@@ -156,7 +156,7 @@ public class Manager extends Close {
 		return port;
 	}
 
-	private boolean addMapping(Forward f) {
+	private boolean addMapping(Map f) {
 
 		Action a = getActionFromService(service, "AddPortMapping");
 		if (a == null)
@@ -174,7 +174,7 @@ public class Manager extends Close {
 		return a.postControlAction();
 	}
 
-	private boolean removeMapping(Forward f) {
+	private boolean removeMapping(Map f) {
 
 		Action a = getActionFromService(service, "DeletePortMapping");
 		if (a == null)

@@ -3,8 +3,8 @@ package org.zootella.net.upnp;
 import org.cybergarage.upnp.ControlPoint;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.Port;
-import org.zootella.net.upnp.task.ControlTask;
-import org.zootella.net.upnp.task.ForwardTask;
+import org.zootella.net.upnp.task.StartTask;
+import org.zootella.net.upnp.task.AddTask;
 import org.zootella.net.upnp.task.IpTask;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
@@ -18,8 +18,8 @@ public class Upnp extends Close {
 		this.up = up;
 		update = new Update(new MyReceive());
 		
-		deviceService = new Change(update);
-		controlTask = new ControlTask(update, deviceService.listener);
+		deviceService = new Listen(update);
+		controlTask = new StartTask(update, deviceService.listener);
 		
 		Now.say("start");
 	}
@@ -27,16 +27,16 @@ public class Upnp extends Close {
 	private final Update up;
 	private final Update update;
 	
-	private final ControlTask controlTask;
+	private final StartTask controlTask;
 	private ControlPoint controlPoint;
-	private final Change deviceService;
+	private final Listen deviceService;
 	private Router router;
 	
 	private IpTask ipTask;
 	
 	private Ip ip;
 	
-	private ForwardTask forwardTask;
+	private AddTask forwardTask;
 	private Boolean forwardResult;
 
 	@Override public void close() {
@@ -72,8 +72,8 @@ public class Upnp extends Close {
 			}
 			
 			if (no(forwardTask) && router != null) {
-				Forward f = new Forward("", new Port(12345), "192.168.1.100", new Port(12345), "TCP", "PipeTest1");
-				forwardTask = new ForwardTask(update, router, f);
+				Map f = new Map("", new Port(12345), "192.168.1.100", new Port(12345), "TCP", "PipeTest1");
+				forwardTask = new AddTask(update, router, f);
 				Now.say("made forward task");
 			}
 			

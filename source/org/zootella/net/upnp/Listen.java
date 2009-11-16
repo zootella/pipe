@@ -10,9 +10,9 @@ import org.zootella.data.Outline;
 import org.zootella.process.Mistake;
 import org.zootella.state.Update;
 
-public class Change {
+public class Listen {
 	
-	public Change(Update update) {
+	public Listen(Update update) {
 		this.update = update;
 		listener = new MyDeviceChangeListener();
 	}
