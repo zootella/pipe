@@ -1,4 +1,4 @@
-package org.zootella.net.upnp.design;
+package org.zootella.net.upnp;
 
 import org.cybergarage.upnp.Action;
 import org.cybergarage.upnp.Device;

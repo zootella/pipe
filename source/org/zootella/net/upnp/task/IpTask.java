@@ -1,27 +1,28 @@
-package org.zootella.net.upnp.design;
+package org.zootella.net.upnp.task;
 
 import org.cybergarage.upnp.Action;
+import org.cybergarage.upnp.Argument;
 import org.zootella.exception.NetException;
 import org.zootella.exception.ProgramException;
+import org.zootella.net.name.Ip;
+import org.zootella.net.upnp.Router;
 import org.zootella.state.Close;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
 import org.zootella.state.Update;
 
-public class RemoveTask extends Close {
+public class IpTask extends Close {
 	
 	// Make
 
-	public RemoveTask(Update up, Router router, Forward forward) {
+	public IpTask(Update up, Router device) {
 		this.up = up; // We'll tell above when we're done
-		this.router = router;
-		this.forward = forward;
+		this.device = device;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
-	private final Router router;
-	private final Forward forward;
+	private final Router device;
 	private final Task task;
 
 	@Override public void close() {
@@ -32,35 +33,33 @@ public class RemoveTask extends Close {
 
 	// Result
 	
-	public Boolean result() { check(exception, result); return result; }
+	public Ip result() { check(exception, ip); return ip; }
 	private ProgramException exception;
-	private Boolean result;
+	private Ip ip;
 	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private Boolean taskResult; // References thread() can safely set
+		private Ip taskIp; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() {
 
-			Action a = router.action("DeletePortMapping");
+			Action a = device.action("GetExternalIPAddress");
 			if (a == null) throw new NetException("null action");
+			if (!a.postControlAction()) throw new NetException("post false");
 
-			a.setArgumentValue("NewRemoteHost",   forward.externalIp);
-			a.setArgumentValue("NewExternalPort", forward.externalPort.port);
-			a.setArgumentValue("NewProtocol",     forward.protocol);
-
-			taskResult = new Boolean(a.postControlAction());
+			Argument r = a.getOutputArgumentList().getArgument("NewExternalIPAddress");
+			taskIp = new Ip(r.getValue());
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method
 		public void done(ProgramException e) {
 			if (closed()) return; // Don't let anything change if we're already closed
 			exception = e;        // Get the exception our code above threw
-			result = taskResult;
-			close(RemoveTask.this); // We're done
+			ip = taskIp;
+			close(IpTask.this); // We're done
 		}
 	}
 }

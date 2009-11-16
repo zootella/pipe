@@ -9,7 +9,7 @@ import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
 import org.zootella.net.packet.Packets;
-import org.zootella.net.upnp.design.Upnp;
+import org.zootella.net.upnp.Upnp;
 import org.zootella.state.Close;
 import org.zootella.state.Model;
 import org.zootella.state.Receive;

@@ -1,8 +1,10 @@
-package org.zootella.net.upnp.design;
+package org.zootella.net.upnp.task;
 
 import org.cybergarage.upnp.Action;
 import org.zootella.exception.NetException;
 import org.zootella.exception.ProgramException;
+import org.zootella.net.upnp.Forward;
+import org.zootella.net.upnp.Router;
 import org.zootella.state.Close;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;

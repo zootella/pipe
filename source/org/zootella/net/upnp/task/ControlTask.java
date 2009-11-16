@@ -1,4 +1,4 @@
-package org.zootella.net.upnp.design;
+package org.zootella.net.upnp.task;
 
 import org.cybergarage.upnp.ControlPoint;
 import org.cybergarage.upnp.device.DeviceChangeListener;

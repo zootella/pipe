@@ -1,8 +1,11 @@
-package org.zootella.net.upnp.design;
+package org.zootella.net.upnp;
 
 import org.cybergarage.upnp.ControlPoint;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.Port;
+import org.zootella.net.upnp.task.ControlTask;
+import org.zootella.net.upnp.task.ForwardTask;
+import org.zootella.net.upnp.task.IpTask;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 import org.zootella.state.Receive;

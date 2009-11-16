@@ -1,4 +1,4 @@
-package org.zootella.net.upnp;
+package org.zootella.net.upnp.old;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -14,7 +14,7 @@ import org.cybergarage.upnp.Service;
 import org.cybergarage.upnp.device.DeviceChangeListener;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.Port;
-import org.zootella.net.upnp.design.Forward;
+import org.zootella.net.upnp.Forward;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 
