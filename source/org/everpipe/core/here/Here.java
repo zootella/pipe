@@ -49,6 +49,7 @@ public class Here extends Close {
 
 	@Override public void close() {
 		if (already()) return;
+		close(upnp);
 		close(task);
 		close(model);
 	}
@@ -119,7 +120,7 @@ public class Here extends Close {
 		
 		public String age() {
 			if (Here.this.age() == null) return "";
-			return Here.this.age().day() + " (" + Describe.timeCoarse(Here.this.age().age()) + " ago)";
+			return Here.this.age().toString() + " (" + Describe.timeCoarse(Here.this.age().age()) + " ago)";
 		}
 		
 		public String exception() { return Describe.object((Here.this.exception())); }

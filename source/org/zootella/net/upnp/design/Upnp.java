@@ -1,11 +1,12 @@
 package org.zootella.net.upnp.design;
 
 import org.cybergarage.upnp.ControlPoint;
+import org.zootella.net.name.Ip;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
-import org.zootella.state.Once;
 import org.zootella.state.Receive;
 import org.zootella.state.Update;
+import org.zootella.time.Now;
 
 public class Upnp extends Close {
 	
@@ -13,10 +14,10 @@ public class Upnp extends Close {
 		this.up = up;
 		update = new Update(new MyReceive());
 		
-		device = new DeviceService(update);
-		controlTask = new ControlTask(update, device.listener);
+		deviceService = new DeviceService(update);
+		controlTask = new ControlTask(update, deviceService.listener);
 		
-		once = new Once();
+		Now.say("start");
 	}
 	
 	private final Update up;
@@ -24,7 +25,12 @@ public class Upnp extends Close {
 	
 	private final ControlTask controlTask;
 	private ControlPoint controlPoint;
-	private final DeviceService device;
+	private final DeviceService deviceService;
+	private UpnpDevice upnpDevice;
+	
+	private IpTask ipTask;
+	
+	private Ip ip;
 
 	@Override public void close() {
 		if (already()) return;
@@ -40,17 +46,29 @@ public class Upnp extends Close {
 		public void receive() {
 			if (closed()) return;
 			
-			if (controlPoint == null && done(controlTask))
+			if (controlPoint == null && done(controlTask)) {
 				controlPoint = controlTask.result();
+				Now.say("control point");
+			}
 			
-			if (device.device() != null && once.once())
-				System.out.println(device.device().o.toString());
+			if (upnpDevice == null && deviceService.device() != null) {
+				upnpDevice = deviceService.device();
+				Now.say(upnpDevice.o.value("friendlyname").toString());
+			}
+			
+			if (no(ipTask) && upnpDevice != null)
+				ipTask = new IpTask(update, deviceService.device());
+			
+			if (ip == null && done(ipTask)) {
+				ip = ipTask.result();
+				Now.say(ip.toString());
+			}
+			
 			
 
 		}
 	}
 	
-	private final Once once;
 	
 	
 	

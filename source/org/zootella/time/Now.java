@@ -20,11 +20,6 @@ public class Now {
 	
 	
 	
-	// Describe
-	
-	public String day() { return Describe.day(time); }
-	
-	
 	// Compare
 
 	/** Return this Now or the given one, whichever is the oldest. */
@@ -37,6 +32,23 @@ public class Now {
 	public Now young(Now now) {
 		if (time > now.time) return this;
 		else return now;
+	}
+	
+	
+	
+	// Describe
+	
+	
+	
+	/** Convert this Now into text like "Mon 11:58a 18.686s". */
+	@Override public String toString() { return Describe.day(time); }
+	
+	
+	public static String say() { return (new Now()).toString(); }
+	
+	//TODO move this into Close so it's always there, maybe
+	public static void say(String s) {
+		System.out.println(say() + " " + s);
 	}
 
 	
