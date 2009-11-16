@@ -11,7 +11,7 @@ import javax.swing.JPopupMenu;
 import org.everpipe.main.Main;
 import org.everpipe.main.Program;
 import org.everpipe.main.Snippet;
-import org.zootella.net.upnp.Upnp;
+import org.zootella.net.upnp.OldUpnp;
 import org.zootella.process.Mistake;
 import org.zootella.user.skin.PlainButton;
 import org.zootella.user.widget.Grip;

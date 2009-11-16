@@ -10,9 +10,9 @@ import org.zootella.data.Outline;
 import org.zootella.process.Mistake;
 import org.zootella.state.Update;
 
-public class DeviceService {
+public class Change {
 	
-	public DeviceService(Update update) {
+	public Change(Update update) {
 		this.update = update;
 		listener = new MyDeviceChangeListener();
 	}
@@ -20,14 +20,14 @@ public class DeviceService {
 	private final Update update;
 	public final DeviceChangeListener listener;
 	
-	private volatile UpnpDevice device;
-	public UpnpDevice device() { return device; }
+	private volatile Router router;
+	public Router router() { return router; }
 
 	private class MyDeviceChangeListener implements DeviceChangeListener {
 
 		public void deviceAdded(Device gatewayDevice) {//a pool thread calls in here
 			try {
-				if (device == null) {
+				if (router == null) {
 					
 					if (gatewayDevice.getDeviceType().equals(gatewaySchema) && gatewayDevice.isRootDevice()) {
 						
@@ -62,7 +62,7 @@ public class DeviceService {
 											o.add("interfaceaddress", gatewayDevice.getInterfaceAddress());
 											o.add("location",         gatewayDevice.getLocation());
 											
-											device = new UpnpDevice(gatewayDevice, s, o);
+											router = new Router(gatewayDevice, s, o);
 											update.sendFromThread();
 											return;
 										}

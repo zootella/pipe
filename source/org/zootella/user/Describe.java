@@ -105,8 +105,8 @@ public class Describe {
 		else
 			s += "p ";
 
-		// "12.345s"
-		s += numerals(c.get(Calendar.SECOND), 1) + "." + numerals(c.get(Calendar.MILLISECOND), 3) + "s";
+		// "12.345"
+		s += numerals(c.get(Calendar.SECOND), 1) + "." + numerals(c.get(Calendar.MILLISECOND), 3);
 
 		return s;
 	}

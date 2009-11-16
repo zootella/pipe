@@ -2,6 +2,7 @@ package org.zootella.net.upnp.design;
 
 import org.cybergarage.upnp.ControlPoint;
 import org.zootella.net.name.Ip;
+import org.zootella.net.name.Port;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 import org.zootella.state.Receive;
@@ -14,7 +15,7 @@ public class Upnp extends Close {
 		this.up = up;
 		update = new Update(new MyReceive());
 		
-		deviceService = new DeviceService(update);
+		deviceService = new Change(update);
 		controlTask = new ControlTask(update, deviceService.listener);
 		
 		Now.say("start");
@@ -25,12 +26,15 @@ public class Upnp extends Close {
 	
 	private final ControlTask controlTask;
 	private ControlPoint controlPoint;
-	private final DeviceService deviceService;
-	private UpnpDevice upnpDevice;
+	private final Change deviceService;
+	private Router router;
 	
 	private IpTask ipTask;
 	
 	private Ip ip;
+	
+	private ForwardTask forwardTask;
+	private Boolean forwardResult;
 
 	@Override public void close() {
 		if (already()) return;
@@ -51,17 +55,28 @@ public class Upnp extends Close {
 				Now.say("control point");
 			}
 			
-			if (upnpDevice == null && deviceService.device() != null) {
-				upnpDevice = deviceService.device();
-				Now.say(upnpDevice.o.value("friendlyname").toString());
+			if (router == null && deviceService.router() != null) {
+				router = deviceService.router();
+				Now.say(router.o.value("friendlyname").toString());
 			}
 			
-			if (no(ipTask) && upnpDevice != null)
-				ipTask = new IpTask(update, deviceService.device());
+			if (no(ipTask) && router != null)
+				ipTask = new IpTask(update, deviceService.router());
 			
 			if (ip == null && done(ipTask)) {
 				ip = ipTask.result();
 				Now.say(ip.toString());
+			}
+			
+			if (no(forwardTask) && router != null) {
+				Forward f = new Forward("", new Port(12345), "192.168.1.100", new Port(12345), "TCP", "PipeTest1");
+				forwardTask = new ForwardTask(update, router, f);
+				Now.say("made forward task");
+			}
+			
+			if (forwardResult == null && done(forwardTask)) {
+				forwardResult = forwardTask.result();
+				Now.say("forward result " + forwardResult.toString());
 			}
 			
 			

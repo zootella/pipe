@@ -15,14 +15,14 @@ import org.zootella.state.Close;
 import org.zootella.time.Now;
 import org.zootella.time.Slow;
 
-public class Upnp extends Close {
+public class OldUpnp extends Close {
 
 	private static final String gatewaySchema     = "urn:schemas-upnp-org:device:InternetGatewayDevice:1";
 	private static final String wanSchema         = "urn:schemas-upnp-org:device:WANDevice:1";
 	private static final String connectionSchema  = "urn:schemas-upnp-org:device:WANConnectionDevice:1";
 	private static final String serviceSchema     = "urn:schemas-upnp-org:service:WANIPConnection:1";
 	
-	public Upnp() {//make it a task
+	public OldUpnp() {//make it a task
 		Now now = new Now();
 		control = new ControlPoint();
 		control.addDeviceChangeListener(new MyDeviceChangeListener());

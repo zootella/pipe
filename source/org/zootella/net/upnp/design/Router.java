@@ -5,9 +5,9 @@ import org.cybergarage.upnp.Device;
 import org.cybergarage.upnp.Service;
 import org.zootella.data.Outline;
 
-public class UpnpDevice {
+public class Router {
 	
-	public UpnpDevice(Device device, Service service, Outline o) {
+	public Router(Device device, Service service, Outline o) {
 		this.device = device;
 		this.service = service;
 		this.o = o;

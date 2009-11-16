@@ -40,7 +40,7 @@ public class Now {
 	
 	
 	
-	/** Convert this Now into text like "Mon 11:58a 18.686s". */
+	/** Convert this Now into text like "Mon 11:58a 18.686". */
 	@Override public String toString() { return Describe.day(time); }
 	
 	

@@ -14,14 +14,14 @@ public class IpTask extends Close {
 	
 	// Make
 
-	public IpTask(Update up, UpnpDevice device) {
+	public IpTask(Update up, Router device) {
 		this.up = up; // We'll tell above when we're done
 		this.device = device;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
-	private final UpnpDevice device;
+	private final Router device;
 	private final Task task;
 
 	@Override public void close() {

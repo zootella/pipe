@@ -1,4 +1,4 @@
-package org.zootella.net.upnp;
+package org.zootella.net.upnp.design;
 
 import org.zootella.net.name.Port;
 

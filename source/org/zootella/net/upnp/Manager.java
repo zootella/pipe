@@ -14,6 +14,7 @@ import org.cybergarage.upnp.Service;
 import org.cybergarage.upnp.device.DeviceChangeListener;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.Port;
+import org.zootella.net.upnp.design.Forward;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 
@@ -57,7 +58,7 @@ import org.zootella.state.Close;
  * devices. After we discover a router or give up on trying to, we should call
  * stop().
  */
-public class UpnpManager extends Close {
+public class Manager extends Close {
 
 	private static final String gatewayDevice     = "urn:schemas-upnp-org:device:InternetGatewayDevice:1";
 	private static final String wanDevice         = "urn:schemas-upnp-org:device:WANDevice:1";
@@ -71,7 +72,7 @@ public class UpnpManager extends Close {
 	private Forward forwardTcp;
 	private Forward forwardUdp;
 
-	public UpnpManager() {
+	public Manager() {
 		//TODO GetControlPointTask
 		control = new ControlPoint();
 		control.addDeviceChangeListener(new MyDeviceChangeListener());
@@ -231,7 +232,7 @@ public class UpnpManager extends Close {
 				if (service == null)
 					device = null;
 				else
-					close(UpnpManager.this);
+					close(Manager.this);
 			}
 
 			if (device != null && service != null);
