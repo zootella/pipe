@@ -50,14 +50,14 @@ public class AddTask extends Close {
 			Action a = router.action("AddPortMapping");
 			if (a == null) throw new NetException("null action");
 
-			a.setArgumentValue("NewRemoteHost",             forward.externalIp);        // A String
-			a.setArgumentValue("NewExternalPort",           forward.externalPort.port); // An int
-			a.setArgumentValue("NewInternalClient",         forward.internalIp);
-			a.setArgumentValue("NewInternalPort",           forward.internalPort.port);
-			a.setArgumentValue("NewProtocol",               forward.protocol);
-			a.setArgumentValue("NewPortMappingDescription", forward.description);
-			a.setArgumentValue("NewEnabled",                "1"); // A String TODO move these into Forward
-			a.setArgumentValue("NewLeaseDuration",          0);   // An int
+			a.setArgumentValue("NewRemoteHost",             forward.outsideIp);            // String
+			a.setArgumentValue("NewExternalPort",           forward.outsidePort.port);     // int
+			a.setArgumentValue("NewInternalClient",         forward.inside.ip.toString()); // String
+			a.setArgumentValue("NewInternalPort",           forward.inside.port.port);     // int
+			a.setArgumentValue("NewProtocol",               forward.protocol);             // String
+			a.setArgumentValue("NewPortMappingDescription", forward.description);          // String
+			a.setArgumentValue("NewEnabled",                forward.enabled);              // String
+			a.setArgumentValue("NewLeaseDuration",          forward.duration);             // int
 
 			taskResult = new Boolean(a.postControlAction());
 		}

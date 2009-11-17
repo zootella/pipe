@@ -50,9 +50,9 @@ public class RemoveTask extends Close {
 			Action a = router.action("DeletePortMapping");
 			if (a == null) throw new NetException("null action");
 
-			a.setArgumentValue("NewRemoteHost",   forward.externalIp);
-			a.setArgumentValue("NewExternalPort", forward.externalPort.port);
-			a.setArgumentValue("NewProtocol",     forward.protocol);
+			a.setArgumentValue("NewRemoteHost",   forward.outsideIp);        // String
+			a.setArgumentValue("NewExternalPort", forward.outsidePort.port); // int
+			a.setArgumentValue("NewProtocol",     forward.protocol);         // String
 
 			taskResult = new Boolean(a.postControlAction());
 			

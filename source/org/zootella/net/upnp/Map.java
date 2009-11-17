@@ -1,30 +1,46 @@
 package org.zootella.net.upnp;
 
+import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
+import org.zootella.state.Update;
+import org.zootella.time.Duration;
+import org.zootella.time.Now;
 
 public class Map {
 
-	public Map(String externalIp, Port externalPort, String internalIp, Port internalPort, String protocol, String description) {
-		this.externalIp   = externalIp;
-		this.externalPort = externalPort;
-		this.internalIp   = internalIp;
-		this.internalPort = internalPort;
-		this.protocol     = protocol;
-		this.description  = description;
+	public Map(Update update, Port outside, IpPort inside, String protocol, String description) {
+		this.start = new Now();
+		this.update = update;
+		
+		this.outsideIp   = "";
+		this.outsidePort = outside;
+		this.inside      = inside;
+		this.protocol    = protocol;
+		this.description = description;
+		this.enabled     = "1";
+		this.duration    = 0;
 	}
+
+	public final Now start;
+	private final Update update;
 	
-	public final String externalIp; //hardcode this to blank
-	public final Port   externalPort;
-	public final String internalIp;
-	public final Port   internalPort;
+	public final String outsideIp;
+	public final Port outsidePort;
+	public final IpPort inside;
 	public final String protocol;
 	public final String description;
-	// add in the other two that you tell to the library
+	public final String enabled;
+	public final int duration;
+
+	private Duration make;
+	public Duration make() { return make; }
+
+	private Boolean result;
+	public boolean result() { return result; }
 	
-	//add an update to this
-	//add the success and fail boolean, and a duration of its lifetime
-	
-	
-	//TODO what if here you kept the time we tried, the time we finished, and whether it succeeded or failed
-	// so i guess the constructor takes an update that gets send()ed when the result comes back
+	public void result(boolean result) {
+		this.make = new Duration(start);
+		this.result = result;
+		update.send();
+	}
 }

@@ -2,6 +2,7 @@ package org.zootella.net.upnp;
 
 import org.cybergarage.upnp.ControlPoint;
 import org.zootella.net.name.Ip;
+import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
 import org.zootella.net.upnp.task.StartTask;
 import org.zootella.net.upnp.task.AddTask;
@@ -72,7 +73,7 @@ public class Upnp extends Close {
 			}
 			
 			if (no(forwardTask) && router != null) {
-				Map f = new Map("", new Port(12345), "192.168.1.100", new Port(12345), "TCP", "PipeTest1");
+				Map f = new Map(update, new Port(12345), new IpPort("192.168.1.100:12345"), "TCP", "PipeTest1");
 				forwardTask = new AddTask(update, router, f);
 				Now.say("made forward task");
 			}
