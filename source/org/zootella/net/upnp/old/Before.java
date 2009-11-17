@@ -1,9 +1,13 @@
-package org.zootella.net.upnp;
+package org.zootella.net.upnp.old;
 
 import org.cybergarage.upnp.ControlPoint;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
+import org.zootella.net.upnp.Access;
+import org.zootella.net.upnp.Listen;
+import org.zootella.net.upnp.name.Map;
+import org.zootella.net.upnp.name.MapResult;
 import org.zootella.net.upnp.task.StartTask;
 import org.zootella.net.upnp.task.AddTask;
 import org.zootella.net.upnp.task.IpTask;
@@ -13,14 +17,14 @@ import org.zootella.state.Receive;
 import org.zootella.state.Update;
 import org.zootella.time.Now;
 
-public class Upnp extends Close {
+public class Before extends Close {
 	
-	public Upnp(Update up) {
+	public Before(Update up) {
 		this.up = up;
 		update = new Update(new MyReceive());
 		
-		deviceService = new Listen(update);
-		controlTask = new StartTask(update, deviceService.listener);
+		listen = new Listen(update);
+		start = new StartTask(update, listen.listener);
 		
 		Now.say("start");
 	}
@@ -28,22 +32,22 @@ public class Upnp extends Close {
 	private final Update up;
 	private final Update update;
 	
-	private final StartTask controlTask;
+	private final StartTask start;
 	private ControlPoint controlPoint;
-	private final Listen deviceService;
-	private Router router;
+	private final Listen listen;
+	private Access access;
 	
 	private IpTask ipTask;
 	
 	private Ip ip;
 	
-	private AddTask forwardTask;
-	private Boolean forwardResult;
+	private AddTask addTask;
+	private MapResult mapResult;
 
 	@Override public void close() {
 		if (already()) return;
 
-		close(controlTask);
+		close(start);
 
 		try {
 			controlPoint.stop();
@@ -54,33 +58,33 @@ public class Upnp extends Close {
 		public void receive() {
 			if (closed()) return;
 			
-			if (controlPoint == null && done(controlTask)) {
-				controlPoint = controlTask.result();
+			if (controlPoint == null && done(start)) {
+				controlPoint = start.result();
 				Now.say("control point");
 			}
 			
-			if (router == null && deviceService.router() != null) {
-				router = deviceService.router();
-				Now.say(router.o.value("friendlyname").toString());
+			if (access == null && listen.access() != null) {
+				access = listen.access();
+				Now.say(access.o.value("friendlyname").toString());
 			}
 			
-			if (no(ipTask) && router != null)
-				ipTask = new IpTask(update, deviceService.router());
+			if (no(ipTask) && access != null)
+				ipTask = new IpTask(update, listen.access());
 			
 			if (ip == null && done(ipTask)) {
-				ip = ipTask.result();
+				ip = ipTask.result().ip;
 				Now.say(ip.toString());
 			}
 			
-			if (no(forwardTask) && router != null) {
-				Map f = new Map(update, new Port(12345), new IpPort("192.168.1.100:12345"), "TCP", "PipeTest1");
-				forwardTask = new AddTask(update, router, f);
+			if (no(addTask) && access != null) {
+				Map f = new Map(new Port(12345), new IpPort("192.168.1.100:12345"), "TCP", "PipeTest1");
+				addTask = new AddTask(update, access, f);
 				Now.say("made forward task");
 			}
 			
-			if (forwardResult == null && done(forwardTask)) {
-				forwardResult = forwardTask.result();
-				Now.say("forward result " + forwardResult.toString());
+			if (mapResult == null && done(addTask)) {
+				mapResult = addTask.result();
+				Now.say("forward result " + mapResult.toString());
 			}
 			
 			

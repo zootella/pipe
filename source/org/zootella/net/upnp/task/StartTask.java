@@ -3,6 +3,7 @@ package org.zootella.net.upnp.task;
 import org.cybergarage.upnp.ControlPoint;
 import org.cybergarage.upnp.device.DeviceChangeListener;
 import org.zootella.exception.ProgramException;
+import org.zootella.net.upnp.Do;
 import org.zootella.state.Close;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
@@ -43,9 +44,7 @@ public class StartTask extends Close {
 		// A separate thread will call this method
 		public void thread() {
 
-			taskControl = new ControlPoint();
-			taskControl.addDeviceChangeListener(listen);
-			taskControl.start();
+			taskControl = Do.start(listen);
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method

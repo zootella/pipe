@@ -1,10 +1,10 @@
 package org.zootella.net.upnp.task;
 
-import org.cybergarage.upnp.Action;
-import org.zootella.exception.NetException;
 import org.zootella.exception.ProgramException;
-import org.zootella.net.upnp.Map;
-import org.zootella.net.upnp.Router;
+import org.zootella.net.upnp.Access;
+import org.zootella.net.upnp.Do;
+import org.zootella.net.upnp.name.Map;
+import org.zootella.net.upnp.name.MapResult;
 import org.zootella.state.Close;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
@@ -14,7 +14,7 @@ public class AddTask extends Close {
 	
 	// Make
 
-	public AddTask(Update up, Router router, Map forward) {
+	public AddTask(Update up, Access router, Map forward) {
 		this.up = up; // We'll tell above when we're done
 		this.router = router;
 		this.forward = forward;
@@ -22,7 +22,7 @@ public class AddTask extends Close {
 	}
 	
 	private final Update up;
-	private final Router router;
+	private final Access router;
 	private final Map forward;
 	private final Task task;
 
@@ -34,32 +34,20 @@ public class AddTask extends Close {
 
 	// Result
 	
-	public Boolean result() { check(exception, result); return result; }
+	public MapResult result() { check(exception, result); return result; }
 	private ProgramException exception;
-	private Boolean result;
+	private MapResult result;
 	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private Boolean taskResult; // References thread() can safely set
+		private MapResult taskResult; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() {
-
-			Action a = router.action("AddPortMapping");
-			if (a == null) throw new NetException("null action");
-
-			a.setArgumentValue("NewRemoteHost",             forward.outsideIp);            // String
-			a.setArgumentValue("NewExternalPort",           forward.outsidePort.port);     // int
-			a.setArgumentValue("NewInternalClient",         forward.inside.ip.toString()); // String
-			a.setArgumentValue("NewInternalPort",           forward.inside.port.port);     // int
-			a.setArgumentValue("NewProtocol",               forward.protocol);             // String
-			a.setArgumentValue("NewPortMappingDescription", forward.description);          // String
-			a.setArgumentValue("NewEnabled",                forward.enabled);              // String
-			a.setArgumentValue("NewLeaseDuration",          forward.duration);             // int
-
-			taskResult = new Boolean(a.postControlAction());
+			
+			taskResult = Do.add(router, forward);
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method

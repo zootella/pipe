@@ -1,11 +1,9 @@
 package org.zootella.net.upnp.task;
 
-import org.cybergarage.upnp.Action;
-import org.cybergarage.upnp.Argument;
-import org.zootella.exception.NetException;
 import org.zootella.exception.ProgramException;
-import org.zootella.net.name.Ip;
-import org.zootella.net.upnp.Router;
+import org.zootella.net.upnp.Access;
+import org.zootella.net.upnp.Do;
+import org.zootella.net.upnp.name.IpResult;
 import org.zootella.state.Close;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
@@ -15,14 +13,14 @@ public class IpTask extends Close {
 	
 	// Make
 
-	public IpTask(Update up, Router device) {
+	public IpTask(Update up, Access device) {
 		this.up = up; // We'll tell above when we're done
 		this.device = device;
 		task = new Task(new MyTask()); // Make a separate thread call thread() below now
 	}
 	
 	private final Update up;
-	private final Router device;
+	private final Access device;
 	private final Task task;
 
 	@Override public void close() {
@@ -33,25 +31,20 @@ public class IpTask extends Close {
 
 	// Result
 	
-	public Ip result() { check(exception, ip); return ip; }
+	public IpResult result() { check(exception, ip); return ip; }
 	private ProgramException exception;
-	private Ip ip;
+	private IpResult ip;
 	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private Ip taskIp; // References thread() can safely set
+		private IpResult taskIp; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() {
-
-			Action a = device.action("GetExternalIPAddress");
-			if (a == null) throw new NetException("null action");
-			if (!a.postControlAction()) throw new NetException("post false");
-
-			Argument r = a.getOutputArgumentList().getArgument("NewExternalIPAddress");
-			taskIp = new Ip(r.getValue());
+			
+			taskIp = Do.ip(device);
 		}
 
 		// Once thread() above returns, the normal event thread calls this done() method

@@ -9,7 +9,7 @@ import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
 import org.zootella.net.packet.Packets;
-import org.zootella.net.upnp.Upnp;
+import org.zootella.net.upnp.old.Before;
 import org.zootella.state.Close;
 import org.zootella.state.Model;
 import org.zootella.state.Receive;
@@ -33,7 +33,7 @@ public class Here extends Close {
 		model.pulse();
 		model.changed();
 		
-		upnp = new Upnp(update);
+		upnp = new Before(update);
 	}
 	
 	private final Port port;
@@ -45,7 +45,7 @@ public class Here extends Close {
 	private IpPort internet; // The most recent good Internet IP address we found for ourselves
 	private Now age; // When we found internet
 	
-	private final Upnp upnp;
+	private final Before upnp;
 
 	@Override public void close() {
 		if (already()) return;

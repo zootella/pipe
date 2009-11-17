@@ -20,14 +20,14 @@ public class Listen {
 	private final Update update;
 	public final DeviceChangeListener listener;
 	
-	private volatile Router router;
-	public Router router() { return router; }
+	private volatile Access access;
+	public Access access() { return access; }
 
 	private class MyDeviceChangeListener implements DeviceChangeListener {
 
 		public void deviceAdded(Device gatewayDevice) {//a pool thread calls in here
 			try {
-				if (router == null) {
+				if (access == null) {
 					
 					if (gatewayDevice.getDeviceType().equals(gatewaySchema) && gatewayDevice.isRootDevice()) {
 						
@@ -62,7 +62,7 @@ public class Listen {
 											o.add("interfaceaddress", gatewayDevice.getInterfaceAddress());
 											o.add("location",         gatewayDevice.getLocation());
 											
-											router = new Router(gatewayDevice, s, o);
+											access = new Access(gatewayDevice, s, o);
 											update.sendFromThread();
 											return;
 										}
