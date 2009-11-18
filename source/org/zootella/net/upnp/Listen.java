@@ -14,11 +14,11 @@ public class Listen {
 	
 	public Listen(Update update) {
 		this.update = update;
-		listener = new MyDeviceChangeListener();
+		listen = new MyDeviceChangeListener();
 	}
 	
 	private final Update update;
-	public final DeviceChangeListener listener;
+	public final DeviceChangeListener listen;
 	
 	private volatile Access access;
 	public Access access() { return access; }

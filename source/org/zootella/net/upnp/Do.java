@@ -38,14 +38,14 @@ public class Do {
 		Action a = router.action("AddPortMapping");
 		if (a == null) throw new NetException("null action");
 
-		a.setArgumentValue("NewRemoteHost",             map.outsideIp);            // String
+		a.setArgumentValue("NewRemoteHost",             "");                       // String
 		a.setArgumentValue("NewExternalPort",           map.outsidePort.port);     // int
 		a.setArgumentValue("NewInternalClient",         map.inside.ip.toString()); // String
 		a.setArgumentValue("NewInternalPort",           map.inside.port.port);     // int
 		a.setArgumentValue("NewProtocol",               map.protocol);             // String
 		a.setArgumentValue("NewPortMappingDescription", map.description);          // String
-		a.setArgumentValue("NewEnabled",                map.enabled);              // String
-		a.setArgumentValue("NewLeaseDuration",          map.duration);             // int
+		a.setArgumentValue("NewEnabled",                "1");                      // String
+		a.setArgumentValue("NewLeaseDuration",          0);                        // int
 		
 		boolean b = a.postControlAction();
 		return new MapResult(map, start, b);
@@ -57,7 +57,7 @@ public class Do {
 		Action a = router.action("DeletePortMapping");
 		if (a == null) throw new NetException("null action");
 
-		a.setArgumentValue("NewRemoteHost",   map.outsideIp);        // String
+		a.setArgumentValue("NewRemoteHost",   "");                   // String
 		a.setArgumentValue("NewExternalPort", map.outsidePort.port); // int
 		a.setArgumentValue("NewProtocol",     map.protocol);         // String
 

@@ -100,4 +100,7 @@ public abstract class Close {
 	public Duration whenClosed() { open(); return whenClosed; }
 	private final Now whenMade;
 	private Duration whenClosed;
+	
+	// Log
+	public static void log(String s) { System.out.println((new Now()).toString() + " " + s); }
 }

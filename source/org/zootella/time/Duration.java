@@ -20,15 +20,21 @@ public class Duration {
 	public final Now start;
 	/** The time when this Duration stopped, the same as start or afterwards. */
 	public final Now stop;
-
+	
 	/** The length of this Duration in milliseconds, 1 or more. */
+	public long timeSafe() {
+		long time = time();
+		if (time < 1) time = 1; // A 0 might end up on the bottom of a speed fraction
+		return time;
+	}
+
+	/** The length of this Duration in milliseconds, 0 or more. */
 	public long time() {
-		long t = stop.time - start.time;
-		if (t == 0) return 1; // A 0 might end up on the bottom of a speed fraction
-		else return t;
+		return stop.time - start.time;
 	}
 	
+	/** When this duration ended and how long it took, like "Wed 1:39p 58.023s in 278ms". */
 	@Override public String toString() {
-		return "Duration " + time() + " milliseconds";
+		return stop.toString() + " in " + time() + "ms";
 	}
 }

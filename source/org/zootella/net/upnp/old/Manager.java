@@ -163,7 +163,7 @@ public class Manager extends Close {
 		if (a == null)
 			return false;
 
-		a.setArgumentValue("NewRemoteHost",             f.outsideIp);        // A String
+		a.setArgumentValue("NewRemoteHost",             "");        // A String
 		a.setArgumentValue("NewExternalPort",           f.outsidePort.port); // An int
 		a.setArgumentValue("NewInternalClient",         f.inside.ip.toString());
 		a.setArgumentValue("NewInternalPort",           f.inside.port.port);
@@ -181,7 +181,7 @@ public class Manager extends Close {
 		if (a == null)
 			return false;
 
-		a.setArgumentValue("NewRemoteHost",   f.outsideIp);
+		a.setArgumentValue("NewRemoteHost",   "");
 		a.setArgumentValue("NewExternalPort", f.outsidePort.port);
 		a.setArgumentValue("NewProtocol",     f.protocol);
 

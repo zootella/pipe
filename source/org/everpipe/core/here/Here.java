@@ -9,7 +9,8 @@ import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
 import org.zootella.net.packet.Packets;
-import org.zootella.net.upnp.old.Before;
+import org.zootella.net.upnp.Big;
+import org.zootella.net.upnp.name.Map;
 import org.zootella.state.Close;
 import org.zootella.state.Model;
 import org.zootella.state.Receive;
@@ -33,7 +34,11 @@ public class Here extends Close {
 		model.pulse();
 		model.changed();
 		
-		upnp = new Before(update);
+		IpPort l = new IpPort(lan(), port);
+		Map t = new Map(port, l, "TCP", "Pipe");
+		Map u = new Map(port, l, "UDP", "Pipe");
+		
+		upnp = new Big(update, t, u);
 	}
 	
 	private final Port port;
@@ -45,7 +50,7 @@ public class Here extends Close {
 	private IpPort internet; // The most recent good Internet IP address we found for ourselves
 	private Now age; // When we found internet
 	
-	private final Before upnp;
+	private final Big upnp;
 
 	@Override public void close() {
 		if (already()) return;
@@ -95,9 +100,15 @@ public class Here extends Close {
 	// Look
 
 	/** Our internal IP address and listening port number on the LAN right now. */
-	public IpPort lan() {
+	public IpPort lanIpPort() {//TODO split this off so port is separate
 		try {
 			return new IpPort(new Ip(InetAddress.getLocalHost()), port);
+		} catch (UnknownHostException e) { throw new PlatformException(e); }
+	}
+	
+	public Ip lan() {
+		try {
+			return new Ip(InetAddress.getLocalHost());
 		} catch (UnknownHostException e) { throw new PlatformException(e); }
 	}
 
@@ -115,7 +126,7 @@ public class Here extends Close {
 		
 		public boolean canRefresh() { return Here.this.canRefresh(); }
 		
-		public String lan()      { return Describe.object((Here.this.lan())); }
+		public String lan()      { return Describe.object((Here.this.lanIpPort())); }
 		public String internet() { return Describe.object((Here.this.internet())); }
 		
 		public String age() {
