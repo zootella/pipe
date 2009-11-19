@@ -35,7 +35,7 @@ public class Guide {
 	
 	public static final Dimension sizeFolderDialog = new Dimension(600, 180);
 	public static final Dimension sizeExchangeDialog = new Dimension(900, 200);
-	public static final Dimension sizeInfoFrame = new Dimension(600, 200);
+	public static final Dimension sizeInfoFrame = new Dimension(800, 400);
 	public static final Dimension sizeMuseumDialog = new Dimension(600, 300);
 	
 	// Skin

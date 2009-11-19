@@ -34,10 +34,57 @@ public class InfoFrame extends Close {
 		panel = new Panel();
 		panel.border();
 		
-		panel.place(0, 0, 1, 1, 0, 0, 0, 0, Cell.wrap(new JLabel("LAN IP address")));
-		panel.place(0, 1, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Internet IP address")));
-		panel.place(0, 2, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Age of information")));
-		panel.place(0, 3, 1, 1, 1, 0, 0, 0, Cell.wrap(new JLabel("Error")));
+		
+		panel.place(0, 0, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("")));
+		panel.place(1, 0, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("1.2.3.4:5 -> 6.7.8.9:5")));
+		panel.place(2, 0, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("")));
+		panel.place(3, 0, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("")));
+		panel.place(4, 0, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("")));
+
+		panel.place(0, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("LAN")));
+		panel.place(1, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(lan.area));
+		panel.place(2, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("Thu")));
+		panel.place(3, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("err")));
+		panel.place(4, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshAction)));
+
+		panel.place(0, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("Bind")));
+		panel.place(1, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("1001")));
+		panel.place(2, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("Thu")));
+		panel.place(3, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("err")));
+		panel.place(4, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshAction)));
+
+		panel.place(0, 3, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("NAT")));
+		panel.place(1, 3, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("Linksys Model")));
+		panel.place(2, 3, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("Thu")));
+		panel.place(3, 3, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("err")));
+		panel.place(4, 3, 1, 4, 0, 0, 0, 1, Cell.wrap(new JButton(refreshAction)));
+
+		panel.place(0, 4, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("")));
+		panel.place(1, 4, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("1.2.3.4")));
+		panel.place(2, 4, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("Thu")));
+		panel.place(3, 4, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("err")));
+		panel.place(4, 4, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("")));
+
+		panel.place(0, 5, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("")));
+		panel.place(1, 5, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("5 -> 1.2.3.4:5 TCP Pipe")));
+		panel.place(2, 5, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("Thu")));
+		panel.place(3, 5, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("err")));
+		panel.place(4, 5, 1, 1, 0, 0, 0, 1, Cell.wrap(new JLabel("")));
+
+		panel.place(0, 6, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("")));
+		panel.place(1, 6, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("5 -> 1.2.3.4:5 UDP Pipe")));
+		panel.place(2, 6, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("Thu")));
+		panel.place(3, 6, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("err")));
+		panel.place(4, 6, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("")));
+
+		panel.place(0, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(new JLabel("Center")));
+		panel.place(1, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(internet.area));
+		panel.place(2, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(age.area));
+		panel.place(3, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(exception.area));
+		panel.place(4, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshAction)).grow());
+
+		
+		/*
 		
 		panel.place(1, 0, 1, 1, 0, 1, 0, 0, Cell.wrap(lan.area).fillWide());
 		panel.place(1, 1, 1, 1, 1, 1, 0, 0, Cell.wrap(internet.area).fillWide());
@@ -45,6 +92,7 @@ public class InfoFrame extends Close {
 		panel.place(1, 3, 1, 1, 1, 1, 0, 0, Cell.wrap(exception.area).fillWide());
 		
 		panel.place(1, 4, 1, 1, 1, 1, 0, 0, Cell.wrap(new JButton(refreshAction)).grow());
+		*/
 		
 		
 
