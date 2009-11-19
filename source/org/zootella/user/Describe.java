@@ -77,7 +77,7 @@ public class Describe {
 	
 	// Day
 
-	/** Given a number of milliseconds since January 1970, compose the local day and time like "Thu 1:39p 12.077s". */
+	/** Given a number of milliseconds since January 1970, compose the local day and time like "Fri 12:52p 07.023s". */
 	public static String day(long milliseconds) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date(milliseconds));
@@ -105,8 +105,8 @@ public class Describe {
 		else
 			s += "p ";
 
-		// "12.345s"
-		s += numerals(c.get(Calendar.SECOND), 1) + "." + numerals(c.get(Calendar.MILLISECOND), 3) + "s";
+		// "07.023s"
+		s += numerals(c.get(Calendar.SECOND), 2) + "." + numerals(c.get(Calendar.MILLISECOND), 3) + "s";
 
 		return s;
 	}

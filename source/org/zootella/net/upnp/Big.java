@@ -1,6 +1,7 @@
 package org.zootella.net.upnp;
 
 import org.cybergarage.upnp.ControlPoint;
+import org.zootella.data.Outline;
 import org.zootella.net.upnp.name.IpResult;
 import org.zootella.net.upnp.name.Map;
 import org.zootella.net.upnp.name.MapResult;
@@ -36,15 +37,22 @@ public class Big extends Close {
 	private StartTask startTask;
 	private ControlPoint controlPoint;
 	private Access access;
+	public Outline name() {
+		if (access == null) return null;
+		return access.o;
+	}
 	
 	private IpTask ipTask;
 	private IpResult ipResult;
+	public IpResult ip() { return ipResult; }
 	
 	private AddTask tcpTask;
 	private MapResult tcpResult;
+	public MapResult tcp() { return tcpResult; }
 	
 	private AddTask udpTask;
 	private MapResult udpResult;
+	public MapResult udp() { return udpResult; }
 
 	@Override public void close() {
 		if (already()) return;
@@ -73,7 +81,7 @@ public class Big extends Close {
 			if (ipResult == null && done(ipTask)) {
 				ipResult = ipTask.result();
 				up.send();
-				log("ip " + ipResult.ip.toString() + ipResult.duration.toString());
+				log("ip " + ipResult.ip.toString() + " " + ipResult.duration.toString());
 			}
 			
 			if (no(tcpTask) && access != null)
@@ -81,7 +89,7 @@ public class Big extends Close {
 			if (tcpResult == null && done(tcpTask)) {
 				tcpResult = tcpTask.result();
 				up.send();
-				log("tcp map made" + tcpResult.duration.toString());
+				log("tcp " + tcpResult.result + " " + tcpResult.duration.toString());
 			}
 			
 			if (no(udpTask) && access != null)
@@ -89,7 +97,7 @@ public class Big extends Close {
 			if (udpResult == null && done(udpTask)) {
 				udpResult = udpTask.result();
 				up.send();
-				log("udp map made" + udpResult.duration.toString());
+				log("udp " + udpResult.result + " " + udpResult.duration.toString());
 			}
 		}
 	}
