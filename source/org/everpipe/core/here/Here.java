@@ -1,9 +1,6 @@
 package org.everpipe.core.here;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import org.zootella.exception.PlatformException;
+import org.everpipe.core.here.old.Here.MyReceive;
 import org.zootella.exception.ProgramException;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
@@ -14,117 +11,95 @@ import org.zootella.net.upnp.name.Map;
 import org.zootella.state.Close;
 import org.zootella.state.Model;
 import org.zootella.state.Receive;
+import org.zootella.state.Result;
 import org.zootella.state.Update;
-import org.zootella.time.Now;
-import org.zootella.time.Time;
+import org.zootella.time.Duration;
 import org.zootella.user.Describe;
 
 public class Here extends Close {
-	
-	// Make
-	
-	public Here(Port port, Packets packets) {
-		this.port = port;
-		this.packets = packets;
+
+	public Here() {
 
 		update = new Update(new MyReceive());
-		refresh();
 		
 		model = new MyModel();
-		model.pulse();
-		model.changed();
 		
-		IpPort l = new IpPort(lan(), port);
-		Map t = new Map(port, l, "TCP", "Pipe");
-		Map u = new Map(port, l, "UDP", "Pipe");
-		
-		upnp = new Router(update, t, u);
 	}
 	
-	private final Port port;
-	private final Packets packets;
 	private final Update update;
 	
-	private HereTask task; // The HereTask we used most recently to find internet at age
-	private ProgramException exception; // The most recent exception from task
-	private IpPort internet; // The most recent good Internet IP address we found for ourselves
-	private Now age; // When we found internet
 	
-	private final Router upnp;
 
 	@Override public void close() {
 		if (already()) return;
-		close(upnp);
-		close(task);
-		close(model);
 	}
+	
 
 	private class MyReceive implements Receive {
 		public void receive() {
 			if (closed()) return;
-			try {
-				
-				if (done(task) && task.result.once()) {
-					internet = task.internet();
-					age = task.age();
-					model.changed();
-				}
 
-			} catch (ProgramException e) { exception = e; }
 		}
 	}
 	
-	// Do
 	
-	/** true if we've waited long enough to try to find our Internet IP address again. */
-	public boolean canRefresh() {
-		if (task == null) return true;
-		if (!done(task)) return false;
-		
-		
-		return task.age().expired(4 * Time.second);
-		
-		
-		
-	}
 	
-	/** Send a UDP packet to the central server to find out what our Internet IP address is. */
-	public void refresh() {
-		if (!canRefresh()) return;
-		
-		close(task);
-		task = new HereTask(update, port, packets);
-		
-	}
+	
+	// summary
+	public IpPort net() { return null; }
+	public IpPort lan() { return null; }
 
-	// Look
-
-	/** Our internal IP address and listening port number on the LAN right now. */
-	public IpPort lanIpPort() {
-		return new IpPort(lan(), port);
-	}
+	// value, time, error
+	public Result<Ip>     lanIp() { return null; }
+	public Result<Port>   bindPort() { return null; }
+	public Result<String> natModel() { return null; }
+	public Result<Ip>     natIp() { return null; }
+	public Result<String> mapTcp() { return null; }
+	public Result<String> mapUdp() { return null; }
+	public Result<Ip>     centerIp() { return null; }
 	
-	public static Ip lan() {
-		try {
-			return new Ip(InetAddress.getLocalHost());
-		} catch (UnknownHostException e) { throw new PlatformException(e); }
-	}
-
-	/** The most recent ProgramException that prevented us from finding out our Internet IP address. */
-	public ProgramException exception() { return exception; }
-	/** The most recent valid Internet IP address we've determined we have, null if we don't know yet. */
-	public IpPort internet() { return internet; }
-	/** When we found internet(). */
-	public Now age() { return age; }
-	
-	// Model
+	// refresh
+	public void refreshLan() {}
+	public void refreshBind() {}
+	public void refreshNat() {}
+	public void refreshCenter() {}
 
 	public final MyModel model;
 	public class MyModel extends Model {
 		
-		public boolean canRefresh() { return Here.this.canRefresh(); }
+		public String ips() {
+			if (Here.this.net() == null || Here.this.lan() == null) return "";
+			return Here.this.net().toString() + " -> " + Here.this.lan().toString();
+		}
 		
-		public String lan()      { return Describe.object((Here.this.lanIpPort())); }
+		public String lanIp()    { return Here.this.lanIp()    == null ? "" : Here.this.lanIp().result.toString(); }
+		public String bindPort() { return Here.this.bindPort() == null ? "" : Here.this.bindPort().result.toString(); }
+		public String natModel() { return Here.this.natModel() == null ? "" : Here.this.natModel().result.toString(); }
+		public String natIp()    { return Here.this.natIp()    == null ? "" : Here.this.natIp().result.toString(); }
+		public String mapTcp()   { return Here.this.mapTcp()   == null ? "" : Here.this.mapTcp().result.toString(); }
+		public String mapUdp()   { return Here.this.mapUdp()   == null ? "" : Here.this.mapUdp().result.toString(); }
+		public String centerIp() { return Here.this.centerIp() == null ? "" : Here.this.centerIp().result.toString(); }
+
+		public String lanIpTime()    { return Here.this.lanIp()    == null ? "" : Here.this.lanIp().duration.toString(); }
+		public String bindPortTime() { return Here.this.bindPort() == null ? "" : Here.this.bindPort().duration.toString(); }
+		public String natModelTime() { return Here.this.natModel() == null ? "" : Here.this.natModel().duration.toString(); }
+		public String natIpTime()    { return Here.this.natIp()    == null ? "" : Here.this.natIp().duration.toString(); }
+		public String mapTcpTime()   { return Here.this.mapTcp()   == null ? "" : Here.this.mapTcp().duration.toString(); }
+		public String mapUdpTime()   { return Here.this.mapUdp()   == null ? "" : Here.this.mapUdp().duration.toString(); }
+		public String centerIpTime() { return Here.this.centerIp() == null ? "" : Here.this.centerIp().duration.toString(); }
+
+		public String lanIpError()    { return Here.this.lanIp()    == null ? "" : Here.this.lanIp().duration.toString(); }
+		public String bindPortError() { return Here.this.bindPort() == null ? "" : Here.this.bindPort().duration.toString(); }
+		public String natModelError() { return Here.this.natModel() == null ? "" : Here.this.natModel().duration.toString(); }
+		public String natIpTime()    { return Here.this.natIp()    == null ? "" : Here.this.natIp().duration.toString(); }
+		public String mapTcpTime()   { return Here.this.mapTcp()   == null ? "" : Here.this.mapTcp().duration.toString(); }
+		public String mapUdpTime()   { return Here.this.mapUdp()   == null ? "" : Here.this.mapUdp().duration.toString(); }
+		public String centerIpTime() { return Here.this.centerIp() == null ? "" : Here.this.centerIp().duration.toString(); }
+
+		
+		
+		
+		
 		public String internet() { return Describe.object((Here.this.internet())); }
 		
 		public String age() {
@@ -134,22 +109,5 @@ public class Here extends Close {
 		
 		public String exception() { return Describe.object((Here.this.exception())); }
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

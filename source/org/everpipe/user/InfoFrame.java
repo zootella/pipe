@@ -136,7 +136,6 @@ public class InfoFrame extends Close {
 
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
-			Refresh.can(refreshAction, program.core.here.model.canRefresh());
 			Refresh.text(lan.area, program.core.here.model.lan());
 			Refresh.text(internet.area, program.core.here.model.internet());
 			Refresh.text(age.area, program.core.here.model.age());
