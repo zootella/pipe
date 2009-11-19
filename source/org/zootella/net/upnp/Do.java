@@ -32,10 +32,10 @@ public class Do {
 		return new IpResult(start, ip);
 	}
 
-	public static MapResult add(Access router, Map map) {
+	public static MapResult add(Access access, Map map) {
 		Now start = new Now();
 		
-		Action a = router.action("AddPortMapping");
+		Action a = access.action("AddPortMapping");
 		if (a == null) throw new NetException("null action");
 
 		a.setArgumentValue("NewRemoteHost",             "");                       // String
@@ -51,10 +51,10 @@ public class Do {
 		return new MapResult(map, start, b);
 	}
 	
-	public static MapResult remove(Access router, Map map) {
+	public static MapResult remove(Access access, Map map) {
 		Now start = new Now();
 		
-		Action a = router.action("DeletePortMapping");
+		Action a = access.action("DeletePortMapping");
 		if (a == null) throw new NetException("null action");
 
 		a.setArgumentValue("NewRemoteHost",   "");                   // String

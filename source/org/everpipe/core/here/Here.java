@@ -9,7 +9,7 @@ import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
 import org.zootella.net.packet.Packets;
-import org.zootella.net.upnp.Big;
+import org.zootella.net.upnp.Router;
 import org.zootella.net.upnp.name.Map;
 import org.zootella.state.Close;
 import org.zootella.state.Model;
@@ -38,7 +38,7 @@ public class Here extends Close {
 		Map t = new Map(port, l, "TCP", "Pipe");
 		Map u = new Map(port, l, "UDP", "Pipe");
 		
-		upnp = new Big(update, t, u);
+		upnp = new Router(update, t, u);
 	}
 	
 	private final Port port;
@@ -50,7 +50,7 @@ public class Here extends Close {
 	private IpPort internet; // The most recent good Internet IP address we found for ourselves
 	private Now age; // When we found internet
 	
-	private final Big upnp;
+	private final Router upnp;
 
 	@Override public void close() {
 		if (already()) return;
@@ -100,13 +100,11 @@ public class Here extends Close {
 	// Look
 
 	/** Our internal IP address and listening port number on the LAN right now. */
-	public IpPort lanIpPort() {//TODO split this off so port is separate
-		try {
-			return new IpPort(new Ip(InetAddress.getLocalHost()), port);
-		} catch (UnknownHostException e) { throw new PlatformException(e); }
+	public IpPort lanIpPort() {
+		return new IpPort(lan(), port);
 	}
 	
-	public Ip lan() {
+	public static Ip lan() {
 		try {
 			return new Ip(InetAddress.getLocalHost());
 		} catch (UnknownHostException e) { throw new PlatformException(e); }
