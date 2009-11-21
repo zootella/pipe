@@ -55,6 +55,7 @@ public class CenterTask extends Close {
 
 	@Override public void close() {
 		if (already()) return;
+		System.out.println("center task close");
 		
 		packets.remove(packetReceive);
 		close(egg);
@@ -64,7 +65,7 @@ public class CenterTask extends Close {
 	// Result
 	
 	public Result<Ip> result() {
-		return new Result<Ip>(internet().ip, whenClosed(), exception);
+		return new Result<Ip>(internet().ip, new Duration(egg.start), exception);//TODO use whenClosed() here
 	}
 	//TODO just use above
 	public IpPort internet() { check(exception, internet); return internet; }
