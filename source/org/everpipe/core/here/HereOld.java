@@ -30,7 +30,7 @@ public class HereOld extends Close {
 		model = new MyModel();
 		model.changed();
 		
-		IpPort l = new IpPort(HereLan.ip().result, port);
+		IpPort l = new IpPort(HereLan.ip().result(), port);
 		Map t = new Map(port, l, "TCP", "Pipe");
 		Map u = new Map(port, l, "UDP", "Pipe");
 		upnp = new Router(update, t, u);

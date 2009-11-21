@@ -33,8 +33,8 @@ public class SendPipe extends Close implements Pipe {
 		
 		hereHi = new Outline("h");
 		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
-		hereHi.add("i", program.core.hereOld.internet().data());
-		hereHi.add("l", program.core.hereOld.lan().data());
+		hereHi.add("i", program.core.here.net().data());
+		hereHi.add("l", program.core.here.lan().data());
 		
 		update = new Update(new MyReceive());
 	}

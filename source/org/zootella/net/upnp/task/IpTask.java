@@ -4,7 +4,6 @@ import org.zootella.exception.ProgramException;
 import org.zootella.net.name.Ip;
 import org.zootella.net.upnp.Access;
 import org.zootella.net.upnp.Do;
-import org.zootella.net.upnp.name.IpResult;
 import org.zootella.state.Close;
 import org.zootella.state.Result;
 import org.zootella.state.Task;
@@ -33,15 +32,15 @@ public class IpTask extends Close {
 
 	// Result
 	
-	public IpResult result() { check(exception, ip); return ip; }
+	public Result<Ip> result() { check(exception, ip); ip.check(); return ip; }
 	private ProgramException exception;
-	private IpResult ip;
+	private Result<Ip> ip;
 	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private IpResult taskIp; // References thread() can safely set
+		private Result<Ip> taskIp; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() {

@@ -66,4 +66,30 @@ public abstract class Model extends Close {
 			pulse = new Pulse(new MyReceive());
 	}
 	private Pulse pulse;
+	
+	
+	
+	
+	
+	
+	
+	
+	public static String describe(Result<?> result) {
+		if (result == null) return "";
+		return result.result().toString();
+	}
+	
+	public static String describeTime(Result<?> result) {
+		if (result == null) return "";
+		return result.duration.toString();
+	}
+	
+	public static String describeError(Result<?> result) {
+		if (result == null) return "";
+		if (result.exception == null) return "";
+		return result.exception.toString();
+	}
+	
+	
+	
 }

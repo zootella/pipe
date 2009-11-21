@@ -30,7 +30,6 @@ public class Core extends Close {
 		pipes = new Pipes(program);
 		accept = new Accept(port);
 		packets = new Packets(port);
-		hereOld = new HereOld(port, packets);
 		here = new Here(packets, port);
 	}
 
@@ -40,7 +39,6 @@ public class Core extends Close {
 	public final Packets packets;
 
 	private final Port port;
-	public final HereOld hereOld;
 	public final Here here;
 	
 	
@@ -50,7 +48,7 @@ public class Core extends Close {
 		close(pipes);
 		close(accept);
 		close(packets);
-		close(hereOld);
+		close(here);
 	}
 	
 	

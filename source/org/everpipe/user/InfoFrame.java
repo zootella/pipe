@@ -82,7 +82,7 @@ public class InfoFrame extends Close {
 
 		// Make our inner View object and connect the Model below to it
 		view = new MyView();
-		program.core.hereOld.model.add(view); // When the Model below changes, it will call our view.refresh() method
+		program.core.here.model.add(view); // When the Model below changes, it will call our view.refresh() method
 		view.refresh();
 
 		frame = new JFrame();
@@ -131,7 +131,7 @@ public class InfoFrame extends Close {
 		public RefreshCenterAction() { super("Refresh"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
 			try {
-				program.core.hereOld.refresh();
+				program.core.here.refreshCenter();
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
@@ -145,10 +145,10 @@ public class InfoFrame extends Close {
 
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
-			Refresh.text(lan.area, program.core.hereOld.model.lan());
-			Refresh.text(internet.area, program.core.hereOld.model.internet());
-			Refresh.text(age.area, program.core.hereOld.model.age());
-			Refresh.text(exception.area, program.core.hereOld.model.exception());
+			Refresh.text(lan.area, program.core.here.model.lanIp());
+			Refresh.text(internet.area, program.core.here.model.centerIp());
+			Refresh.text(age.area, program.core.here.model.centerIpTime());
+			Refresh.text(exception.area, program.core.here.model.centerIpError());
 		}
 
 		// The Model beneath closed, take this View off the screen

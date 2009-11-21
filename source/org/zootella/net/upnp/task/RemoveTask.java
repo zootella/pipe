@@ -4,8 +4,8 @@ import org.zootella.exception.ProgramException;
 import org.zootella.net.upnp.Access;
 import org.zootella.net.upnp.Do;
 import org.zootella.net.upnp.name.Map;
-import org.zootella.net.upnp.name.MapResult;
 import org.zootella.state.Close;
+import org.zootella.state.Result;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
 import org.zootella.state.Update;
@@ -34,15 +34,15 @@ public class RemoveTask extends Close {
 
 	// Result
 	
-	public MapResult result() { check(exception, result); return result; }
+	public Result<Map> result() { check(exception, result); result.check(); return result; }
 	private ProgramException exception;
-	private MapResult result;
+	private Result<Map> result;
 	
 	// Task
 
 	/** Our Task with a thread that runs our code that blocks. */
 	private class MyTask implements TaskBody {
-		private MapResult taskResult; // References thread() can safely set
+		private Result<Map> taskResult; // References thread() can safely set
 
 		// A separate thread will call this method
 		public void thread() {

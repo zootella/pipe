@@ -1,5 +1,6 @@
 package org.everpipe.core.here;
 
+import org.zootella.data.Outline;
 import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
@@ -43,8 +44,15 @@ public class Here extends Close {
 		public void receive() {
 			if (closed()) return;
 			
-			if (done(router)) {
-				
+			if (is(router)) {
+				if (natModel == null && router.hasName())
+					natModel = router.name();
+				if (natIp == null && router.hasIp())
+					natIp = router.ip();
+				if (mapTcp == null && router.hasTcp())
+					mapTcp = router.tcp();
+				if (mapUdp == null && router.hasUdp())
+					mapUdp = router.udp();
 			}
 
 			if (done(centerTask)) {
@@ -65,18 +73,18 @@ public class Here extends Close {
 	// value, time, error
 	public Result<Ip>     lanIp()    { return lanIp; }
 	public Result<Port>   bindPort() { return bindPort; }
-	public Result<String> natModel() { return natModel; }
+	public Result<Outline> natModel() { return natModel; }
 	public Result<Ip>     natIp()    { return natIp; }
-	public Result<String> mapTcp()   { return mapTcp; }
-	public Result<String> mapUdp()   { return mapUdp; }
+	public Result<Map> mapTcp()   { return mapTcp; }
+	public Result<Map> mapUdp()   { return mapUdp; }
 	public Result<Ip>     centerIp() { return centerIp; }
 	
 	private Result<Ip> lanIp;
 	private Result<Port> bindPort;
-	private Result<String> natModel;
+	private Result<Outline> natModel;
 	private Result<Ip> natIp;
-	private Result<String> mapTcp;
-	private Result<String> mapUdp;
+	private Result<Map> mapTcp;
+	private Result<Map> mapUdp;
 	private Result<Ip> centerIp;
 	
 	// refresh
@@ -86,7 +94,13 @@ public class Here extends Close {
 	public void refreshBind() {}
 	public void refreshNat() {
 		close(router);
-		IpPort l = new IpPort(HereLan.ip().result, port);
+		
+		natModel = null;
+		natIp = null;
+		mapTcp = null;
+		mapUdp = null;
+		
+		IpPort l = new IpPort(HereLan.ip().result(), port);
 		Map t = new Map(port, l, "TCP", "Pipe");
 		Map u = new Map(port, l, "UDP", "Pipe");
 		router = new Router(update, t, u);
@@ -108,28 +122,28 @@ public class Here extends Close {
 			return Here.this.net().toString() + " -> " + Here.this.lan().toString();
 		}
 		
-		public String lanIp()    { return Here.this.lanIp()    == null ? "" : Here.this.lanIp().result.toString(); }
-		public String bindPort() { return Here.this.bindPort() == null ? "" : Here.this.bindPort().result.toString(); }
-		public String natModel() { return Here.this.natModel() == null ? "" : Here.this.natModel().result.toString(); }
-		public String natIp()    { return Here.this.natIp()    == null ? "" : Here.this.natIp().result.toString(); }
-		public String mapTcp()   { return Here.this.mapTcp()   == null ? "" : Here.this.mapTcp().result.toString(); }
-		public String mapUdp()   { return Here.this.mapUdp()   == null ? "" : Here.this.mapUdp().result.toString(); }
-		public String centerIp() { return Here.this.centerIp() == null ? "" : Here.this.centerIp().result.toString(); }
+		public String lanIp()    { return describe(Here.this.lanIp()); }
+		public String bindPort() { return describe(Here.this.bindPort()); }
+		public String natModel() { return describe(Here.this.natModel()); }
+		public String natIp()    { return describe(Here.this.natIp()); }
+		public String mapTcp()   { return describe(Here.this.mapTcp()); }
+		public String mapUdp()   { return describe(Here.this.mapUdp()); }
+		public String centerIp() { return describe(Here.this.centerIp()); }
 
-		public String lanIpTime()    { return Here.this.lanIp()    == null ? "" : Here.this.lanIp().duration.toString(); }
-		public String bindPortTime() { return Here.this.bindPort() == null ? "" : Here.this.bindPort().duration.toString(); }
-		public String natModelTime() { return Here.this.natModel() == null ? "" : Here.this.natModel().duration.toString(); }
-		public String natIpTime()    { return Here.this.natIp()    == null ? "" : Here.this.natIp().duration.toString(); }
-		public String mapTcpTime()   { return Here.this.mapTcp()   == null ? "" : Here.this.mapTcp().duration.toString(); }
-		public String mapUdpTime()   { return Here.this.mapUdp()   == null ? "" : Here.this.mapUdp().duration.toString(); }
-		public String centerIpTime() { return Here.this.centerIp() == null ? "" : Here.this.centerIp().duration.toString(); }
+		public String lanIpTime()    { return describeTime(Here.this.lanIp()); }
+		public String bindPortTime() { return describeTime(Here.this.bindPort()); }
+		public String natModelTime() { return describeTime(Here.this.natModel()); }
+		public String natIpTime()    { return describeTime(Here.this.natIp()); }
+		public String mapTcpTime()   { return describeTime(Here.this.mapTcp()); }
+		public String mapUdpTime()   { return describeTime(Here.this.mapUdp()); }
+		public String centerIpTime() { return describeTime(Here.this.centerIp()); }
 
-		public String lanIpError()    { return Here.this.lanIp()    == null ? "" : Here.this.lanIp().exception.toString(); }
-		public String bindPortError() { return Here.this.bindPort() == null ? "" : Here.this.bindPort().exception.toString(); }
-		public String natModelError() { return Here.this.natModel() == null ? "" : Here.this.natModel().exception.toString(); }
-		public String natIpError()    { return Here.this.natIp()    == null ? "" : Here.this.natIp().exception.toString(); }
-		public String mapTcpError()   { return Here.this.mapTcp()   == null ? "" : Here.this.mapTcp().exception.toString(); }
-		public String mapUdpError()   { return Here.this.mapUdp()   == null ? "" : Here.this.mapUdp().exception.toString(); }
-		public String centerIpError() { return Here.this.centerIp() == null ? "" : Here.this.centerIp().exception.toString(); }
+		public String lanIpError()    { return describeError(Here.this.lanIp()); }
+		public String bindPortError() { return describeError(Here.this.bindPort()); }
+		public String natModelError() { return describeError(Here.this.natModel()); }
+		public String natIpError()    { return describeError(Here.this.natIp()); }
+		public String mapTcpError()   { return describeError(Here.this.mapTcp()); }
+		public String mapUdpError()   { return describeError(Here.this.mapUdp()); }
+		public String centerIpError() { return describeError(Here.this.centerIp()); }
 	}
 }

@@ -2,15 +2,15 @@ package org.zootella.net.upnp;
 
 import org.cybergarage.upnp.ControlPoint;
 import org.zootella.data.Outline;
-import org.zootella.net.upnp.name.IpResult;
+import org.zootella.net.name.Ip;
 import org.zootella.net.upnp.name.Map;
-import org.zootella.net.upnp.name.MapResult;
 import org.zootella.net.upnp.task.AddTask;
 import org.zootella.net.upnp.task.IpTask;
 import org.zootella.net.upnp.task.StartTask;
 import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 import org.zootella.state.Receive;
+import org.zootella.state.Result;
 import org.zootella.state.Update;
 
 public class Router extends Close {
@@ -37,24 +37,24 @@ public class Router extends Close {
 	private StartTask startTask;
 	private ControlPoint control;
 	private Access access;
-	public Outline name() {
-		if (access == null) return null;
-		return access.o;
-	}
+	
+	private Result<Outline> nameResult;
+	public Result<Outline> name() { return nameResult; }
+	public boolean hasName() { return nameResult != null; }
 	
 	private IpTask ipTask;
-	private IpResult ipResult;
-	public IpResult ip() { return ipResult; }
+	private Result<Ip> ipResult;
+	public Result<Ip> ip() { return ipResult; }
 	public boolean hasIp() { return ipResult != null; }
 	
 	private AddTask tcpTask;
-	private MapResult tcpResult;
-	public MapResult tcp() { return tcpResult; }
+	private Result<Map> tcpResult;
+	public Result<Map> tcp() { return tcpResult; }
 	public boolean hasTcp() { return tcpResult != null; }
 	
 	private AddTask udpTask;
-	private MapResult udpResult;
-	public MapResult udp() { return udpResult; }
+	private Result<Map> udpResult;
+	public Result<Map> udp() { return udpResult; }
 	public boolean hasUdp() { return udpResult != null; }
 
 	@Override public void close() {
@@ -75,6 +75,7 @@ public class Router extends Close {
 				control = startTask.result();
 			if (access == null && listen.access() != null) {
 				access = listen.access();
+				nameResult = new Result<Outline>(access.o, whenMade());
 				up.send();
 				log("access " + access.o.value("friendlyname"));
 			}
@@ -84,7 +85,7 @@ public class Router extends Close {
 			if (ipResult == null && done(ipTask)) {
 				ipResult = ipTask.result();
 				up.send();
-				log("ip " + ipResult.ip.toString() + " " + ipResult.duration.toString());
+				log("ip " + ipResult.result().toString() + " " + ipResult.duration.toString());
 			}
 			
 			if (no(tcpTask) && access != null)
@@ -92,7 +93,7 @@ public class Router extends Close {
 			if (tcpResult == null && done(tcpTask)) {
 				tcpResult = tcpTask.result();
 				up.send();
-				log("tcp " + tcpResult.result + " " + tcpResult.duration.toString());
+				log("tcp " + " " + tcpResult.duration.toString());
 			}
 			
 			if (no(udpTask) && access != null)
@@ -100,15 +101,8 @@ public class Router extends Close {
 			if (udpResult == null && done(udpTask)) {
 				udpResult = udpTask.result();
 				up.send();
-				log("udp " + udpResult.result + " " + udpResult.duration.toString());
+				log("udp " + " " + udpResult.duration.toString());
 			}
-			
-			/*
-			if (done(ipTask) && done(tcpTask) && done(udpTask)) {
-				close(Router.this);
-				return;
-			}
-			(/
 		}
 	}
 }

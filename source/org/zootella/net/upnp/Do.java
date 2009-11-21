@@ -6,9 +6,7 @@ import org.cybergarage.upnp.ControlPoint;
 import org.cybergarage.upnp.device.DeviceChangeListener;
 import org.zootella.exception.NetException;
 import org.zootella.net.name.Ip;
-import org.zootella.net.upnp.name.IpResult;
 import org.zootella.net.upnp.name.Map;
-import org.zootella.net.upnp.name.MapResult;
 import org.zootella.state.Result;
 import org.zootella.time.Now;
 
@@ -21,7 +19,7 @@ public class Do {
 		return c;
 	}
 
-	public static IpResult ip(Access device) {
+	public static Result<Ip> ip(Access device) {
 		Now start = new Now();
 			
 		Action a = device.action("GetExternalIPAddress");
@@ -30,11 +28,10 @@ public class Do {
 		
 		Argument r = a.getOutputArgumentList().getArgument("NewExternalIPAddress");
 		Ip ip = new Ip(r.getValue());
-		return new IpResult(start, ip);
-		//TODO use Result<Ip> without the exception
+		return new Result<Ip>(ip, start);
 	}
 
-	public static MapResult add(Access access, Map map) {
+	public static Result<Map> add(Access access, Map map) {
 		Now start = new Now();
 		
 		Action a = access.action("AddPortMapping");
@@ -50,11 +47,11 @@ public class Do {
 		a.setArgumentValue("NewLeaseDuration",          0);                        // int
 		
 		boolean b = a.postControlAction();
-		//TODO
-		return new MapResult(map, start, b);
+		if (!b) throw new NetException("post false");
+		return new Result<Map>(map, start);
 	}
 	
-	public static MapResult remove(Access access, Map map) {
+	public static Result<Map> remove(Access access, Map map) {
 		Now start = new Now();
 		
 		Action a = access.action("DeletePortMapping");
@@ -65,6 +62,7 @@ public class Do {
 		a.setArgumentValue("NewProtocol",     map.protocol);         // String
 
 		boolean b = a.postControlAction();
-		return new MapResult(map, start, b);
+		if (!b) throw new NetException("post false");
+		return new Result<Map>(map, start);
 	}
 }

@@ -33,8 +33,8 @@ public class ReceivePipe extends Close implements Pipe {
 		hereHello.add("unique", Data.unique());
 		
 		hereHi = new Outline("h");
-		hereHi.add("i", program.core.hereOld.internet().data());
-		hereHi.add("l", program.core.hereOld.lan().data());
+		hereHi.add("i", program.core.here.net().data());
+		hereHi.add("l", program.core.here.lan().data());
 		hereHi.add("h", hereHello.toData().hash().start(6)); // Just the first 6 bytes of the 20-byte SHA1 hash
 		
 		update = new Update(new MyReceive());
