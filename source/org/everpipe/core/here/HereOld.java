@@ -1,4 +1,4 @@
-package org.everpipe.core.here.old;
+package org.everpipe.core.here;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,11 +18,9 @@ import org.zootella.state.Update;
 import org.zootella.time.Now;
 import org.zootella.user.Describe;
 
-public class Here extends Close {
-	
-	// Make
-	
-	public Here(Port port, Packets packets) {
+public class HereOld extends Close {
+
+	public HereOld(Port port, Packets packets) {
 		this.port = port;
 		this.packets = packets;
 
@@ -30,13 +28,11 @@ public class Here extends Close {
 		refresh();
 		
 		model = new MyModel();
-		model.pulse();
 		model.changed();
 		
-		IpPort l = new IpPort(lan(), port);
+		IpPort l = new IpPort(HereLan.ip().result, port);
 		Map t = new Map(port, l, "TCP", "Pipe");
 		Map u = new Map(port, l, "UDP", "Pipe");
-		
 		upnp = new Router(update, t, u);
 	}
 	
@@ -44,7 +40,7 @@ public class Here extends Close {
 	private final Packets packets;
 	private final Update update;
 	
-	private HereTask task; // The HereTask we used most recently to find internet at age
+	private CenterTask centerTask; // The HereTask we used most recently to find internet at age
 	private ProgramException exception; // The most recent exception from task
 	private IpPort internet; // The most recent good Internet IP address we found for ourselves
 	private Now age; // When we found internet
@@ -54,7 +50,7 @@ public class Here extends Close {
 	@Override public void close() {
 		if (already()) return;
 		close(upnp);
-		close(task);
+		close(centerTask);
 		close(model);
 	}
 
@@ -63,11 +59,6 @@ public class Here extends Close {
 			if (closed()) return;
 			try {
 				
-				if (done(task) && task.result.once()) {
-					internet = task.internet();
-					age = task.age();
-					model.changed();
-				}
 
 			} catch (ProgramException e) { exception = e; }
 		}
@@ -78,8 +69,8 @@ public class Here extends Close {
 	/** Send a UDP packet to the central server to find out what our Internet IP address is. */
 	public void refresh() {
 		
-		close(task);
-		task = new HereTask(update, port, packets);
+		close(centerTask);
+		centerTask = new CenterTask(update, packets);
 		
 	}
 
@@ -108,15 +99,15 @@ public class Here extends Close {
 	public final MyModel model;
 	public class MyModel extends Model {
 
-		public String lan()      { return Describe.object((Here.this.lanIpPort())); }
-		public String internet() { return Describe.object((Here.this.internet())); }
+		public String lan()      { return Describe.object((HereOld.this.lanIpPort())); }
+		public String internet() { return Describe.object((HereOld.this.internet())); }
 		
 		public String age() {
-			if (Here.this.age() == null) return "";
-			return Here.this.age().toString() + " (" + Describe.timeCoarse(Here.this.age().age()) + " ago)";
+			if (HereOld.this.age() == null) return "";
+			return HereOld.this.age().toString();
 		}
 		
-		public String exception() { return Describe.object((Here.this.exception())); }
+		public String exception() { return Describe.object((HereOld.this.exception())); }
 	}
 	
 	

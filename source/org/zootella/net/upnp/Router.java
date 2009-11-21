@@ -45,14 +45,17 @@ public class Router extends Close {
 	private IpTask ipTask;
 	private IpResult ipResult;
 	public IpResult ip() { return ipResult; }
+	public boolean hasIp() { return ipResult != null; }
 	
 	private AddTask tcpTask;
 	private MapResult tcpResult;
 	public MapResult tcp() { return tcpResult; }
+	public boolean hasTcp() { return tcpResult != null; }
 	
 	private AddTask udpTask;
 	private MapResult udpResult;
 	public MapResult udp() { return udpResult; }
+	public boolean hasUdp() { return udpResult != null; }
 
 	@Override public void close() {
 		if (already()) return;
@@ -99,6 +102,13 @@ public class Router extends Close {
 				up.send();
 				log("udp " + udpResult.result + " " + udpResult.duration.toString());
 			}
+			
+			/*
+			if (done(ipTask) && done(tcpTask) && done(udpTask)) {
+				close(Router.this);
+				return;
+			}
+			(/
 		}
 	}
 }

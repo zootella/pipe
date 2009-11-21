@@ -24,7 +24,8 @@ public class InfoFrame extends Close {
 	public InfoFrame(User user) {
 		program = user.program;
 		
-		refreshAction = new RefreshAction();
+		refreshCenterAction = new RefreshCenterAction();
+		refreshLanAction = new RefreshLanAction();
 		
 		lan = new TextValue();
 		internet = new TextValue();
@@ -71,17 +72,17 @@ public class InfoFrame extends Close {
 		panel.place(3, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(exception.area));
 
 		//          4, 0
-		panel.place(4, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshAction)));
-		panel.place(4, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshAction)));
-		panel.place(4, 3, 1, 4, 0, 0, 0, 1, Cell.wrap(new JButton(refreshAction)));
+		panel.place(4, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshCenterAction)));
+		panel.place(4, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshCenterAction)));
+		panel.place(4, 3, 1, 4, 0, 0, 0, 1, Cell.wrap(new JButton(refreshCenterAction)));
 		//          4, 4
 		//          4, 5
 		//          4, 6
-		panel.place(4, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshAction)).grow());
+		panel.place(4, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshCenterAction)).grow());
 
 		// Make our inner View object and connect the Model below to it
 		view = new MyView();
-		program.core.here.model.add(view); // When the Model below changes, it will call our view.refresh() method
+		program.core.hereOld.model.add(view); // When the Model below changes, it will call our view.refresh() method
 		view.refresh();
 
 		frame = new JFrame();
@@ -114,18 +115,26 @@ public class InfoFrame extends Close {
 	
 	
 
-	private final RefreshAction refreshAction;
-	private class RefreshAction extends AbstractAction {
-		public RefreshAction() { super("Refresh"); } // Specify the button text
+	private final RefreshLanAction refreshLanAction;
+	private class RefreshLanAction extends AbstractAction {
+		public RefreshLanAction() { super("Refresh"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
 			try {
 				
-				program.core.here.refresh();
-
+				
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
 	
+	private final RefreshCenterAction refreshCenterAction;
+	private class RefreshCenterAction extends AbstractAction {
+		public RefreshCenterAction() { super("Refresh"); } // Specify the button text
+		public void actionPerformed(ActionEvent a) {
+			try {
+				program.core.hereOld.refresh();
+			} catch (Throwable t) { Mistake.stop(t); }
+		}
+	}
 	
 	
 	// View
@@ -136,10 +145,10 @@ public class InfoFrame extends Close {
 
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
-			Refresh.text(lan.area, program.core.here.model.lan());
-			Refresh.text(internet.area, program.core.here.model.internet());
-			Refresh.text(age.area, program.core.here.model.age());
-			Refresh.text(exception.area, program.core.here.model.exception());
+			Refresh.text(lan.area, program.core.hereOld.model.lan());
+			Refresh.text(internet.area, program.core.hereOld.model.internet());
+			Refresh.text(age.area, program.core.hereOld.model.age());
+			Refresh.text(exception.area, program.core.hereOld.model.exception());
 		}
 
 		// The Model beneath closed, take this View off the screen

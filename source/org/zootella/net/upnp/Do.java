@@ -9,6 +9,7 @@ import org.zootella.net.name.Ip;
 import org.zootella.net.upnp.name.IpResult;
 import org.zootella.net.upnp.name.Map;
 import org.zootella.net.upnp.name.MapResult;
+import org.zootella.state.Result;
 import org.zootella.time.Now;
 
 public class Do {
@@ -19,10 +20,10 @@ public class Do {
 		c.start();
 		return c;
 	}
-	
+
 	public static IpResult ip(Access device) {
 		Now start = new Now();
-		
+			
 		Action a = device.action("GetExternalIPAddress");
 		if (a == null) throw new NetException("null action");
 		if (!a.postControlAction()) throw new NetException("post false");
@@ -30,6 +31,7 @@ public class Do {
 		Argument r = a.getOutputArgumentList().getArgument("NewExternalIPAddress");
 		Ip ip = new Ip(r.getValue());
 		return new IpResult(start, ip);
+		//TODO use Result<Ip> without the exception
 	}
 
 	public static MapResult add(Access access, Map map) {
@@ -48,6 +50,7 @@ public class Do {
 		a.setArgumentValue("NewLeaseDuration",          0);                        // int
 		
 		boolean b = a.postControlAction();
+		//TODO
 		return new MapResult(map, start, b);
 	}
 	

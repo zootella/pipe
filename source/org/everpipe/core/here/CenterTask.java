@@ -1,4 +1,4 @@
-package org.everpipe.core.here.old;
+package org.everpipe.core.here;
 
 import org.everpipe.center.Center;
 import org.zootella.data.Number;
@@ -6,6 +6,7 @@ import org.zootella.data.Outline;
 import org.zootella.data.Text;
 import org.zootella.exception.DataException;
 import org.zootella.exception.ProgramException;
+import org.zootella.net.name.Ip;
 import org.zootella.net.name.IpPort;
 import org.zootella.net.name.Port;
 import org.zootella.net.packet.Packet;
@@ -16,16 +17,18 @@ import org.zootella.process.Mistake;
 import org.zootella.state.Close;
 import org.zootella.state.Once;
 import org.zootella.state.Receive;
+import org.zootella.state.Result;
 import org.zootella.state.Update;
 import org.zootella.time.Egg;
 import org.zootella.time.Now;
+import org.zootella.time.Duration;
 
 /** A Here figures out what our IP address is once and right now. */
-public class HereTask extends Close {
+public class CenterTask extends Close {
 	
 	// Make
 	
-	public HereTask(Update up, Port port, Packets packets) {
+	public CenterTask(Update up, Packets packets) {
 
 		// Save and connect the given object that sends UDP packets
 		this.packets = packets;
@@ -37,7 +40,6 @@ public class HereTask extends Close {
 		receive = new MyReceive();
 		egg = new Egg(receive);
 		sent = new Once();
-		result = new Once();
 		update = new Update(receive);
 		update.send();
 	}
@@ -47,11 +49,9 @@ public class HereTask extends Close {
 	private final Packets packets;
 	private final Egg egg;
 	private final Once sent;
-	public final Once result;
 	
 	private DomainTask domain;
 	private IpPort center;
-	
 
 	@Override public void close() {
 		if (already()) return;
@@ -63,6 +63,10 @@ public class HereTask extends Close {
 
 	// Result
 	
+	public Result<Ip> result() {
+		return new Result<Ip>(internet().ip, whenClosed(), exception);
+	}
+	//TODO just use above
 	public IpPort internet() { check(exception, internet); return internet; }
 	public Now age() { return egg.start; }
 	private ProgramException exception;
@@ -89,7 +93,7 @@ public class HereTask extends Close {
 				if (center != null && internet == null && sent.once())
 					packets.send((new Outline("aq")).toData(), center);
 
-			} catch (ProgramException e) { exception = e; close(HereTask.this); up.send(); }
+			} catch (ProgramException e) { exception = e; close(CenterTask.this); up.send(); }
 		}
 	}
 	
@@ -105,13 +109,13 @@ public class HereTask extends Close {
 					if (o.has("hash") && !o.value("hash").equals(o.value().hash())) // Hash check
 						throw new DataException("received corrupted ap");
 					internet = new IpPort(o.value()); // Read
-					close(HereTask.this); // It worked, we're done
+					close(CenterTask.this); // It worked, we're done
 					up.send();
 					return true;
 				}
 			}
 			catch (DataException e) { Mistake.log(e); }
-			catch (ProgramException e) { exception = e; close(HereTask.this); up.send(); }
+			catch (ProgramException e) { exception = e; close(CenterTask.this); up.send(); }
 			return false;
 		}
 	}

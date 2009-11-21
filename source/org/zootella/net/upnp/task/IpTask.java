@@ -1,10 +1,12 @@
 package org.zootella.net.upnp.task;
 
 import org.zootella.exception.ProgramException;
+import org.zootella.net.name.Ip;
 import org.zootella.net.upnp.Access;
 import org.zootella.net.upnp.Do;
 import org.zootella.net.upnp.name.IpResult;
 import org.zootella.state.Close;
+import org.zootella.state.Result;
 import org.zootella.state.Task;
 import org.zootella.state.TaskBody;
 import org.zootella.state.Update;

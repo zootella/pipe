@@ -1,6 +1,7 @@
 package org.everpipe.core;
 
-import org.everpipe.core.here.old.Here;
+import org.everpipe.core.here.Here;
+import org.everpipe.core.here.HereOld;
 import org.everpipe.main.Program;
 import org.zootella.data.Data;
 import org.zootella.exception.DataException;
@@ -29,7 +30,8 @@ public class Core extends Close {
 		pipes = new Pipes(program);
 		accept = new Accept(port);
 		packets = new Packets(port);
-		here = new Here(port, packets);
+		hereOld = new HereOld(port, packets);
+		here = new Here(packets, port);
 	}
 
 	private final Program program;
@@ -38,6 +40,7 @@ public class Core extends Close {
 	public final Packets packets;
 
 	private final Port port;
+	public final HereOld hereOld;
 	public final Here here;
 	
 	
@@ -47,7 +50,7 @@ public class Core extends Close {
 		close(pipes);
 		close(accept);
 		close(packets);
-		close(here);
+		close(hereOld);
 	}
 	
 	
