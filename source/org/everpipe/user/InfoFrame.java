@@ -16,21 +16,17 @@ import org.zootella.user.Refresh;
 import org.zootella.user.Screen;
 import org.zootella.user.panel.Cell;
 import org.zootella.user.panel.Panel;
-import org.zootella.user.widget.TextValue;
+import org.zootella.user.widget.TextLine;
 
 /** The Info window that shows advanced statistics and diagnostic information. */
 public class InfoFrame extends Close {
+	
+	private final Program program;
 
 	public InfoFrame(User user) {
 		program = user.program;
 		
-		refreshCenterAction = new RefreshCenterAction();
-		refreshLanAction = new RefreshLanAction();
 		
-		lan = new TextValue();
-		internet = new TextValue();
-		age = new TextValue();
-		exception = new TextValue();
 
 		panel = new Panel();
 		panel.border();
@@ -72,18 +68,17 @@ public class InfoFrame extends Close {
 		panel.place(3, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(exception.area));
 
 		//          4, 0
-		panel.place(4, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshCenterAction)));
-		panel.place(4, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshCenterAction)));
-		panel.place(4, 3, 1, 4, 0, 0, 0, 1, Cell.wrap(new JButton(refreshCenterAction)));
+		panel.place(4, 1, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(lanAction)));
+		panel.place(4, 2, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(bindAction)));
+		panel.place(4, 3, 1, 4, 0, 0, 0, 1, Cell.wrap(new JButton(natAction)));
 		//          4, 4
 		//          4, 5
 		//          4, 6
-		panel.place(4, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(refreshCenterAction)).grow());
+		panel.place(4, 7, 1, 1, 0, 0, 1, 1, Cell.wrap(new JButton(centerAction)).grow());
 
 		// Make our inner View object and connect the Model below to it
-		view = new MyView();
 		program.core.here.model.add(view); // When the Model below changes, it will call our view.refresh() method
-		view.refresh();
+		view.refresh();//TODO why not put view.refresh() inside add(view)
 
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -93,14 +88,23 @@ public class InfoFrame extends Close {
 		frame.setContentPane(panel.panel);
 	}
 	
-	private final Program program;
 	public final JFrame frame;
 	public final Panel panel;
 	
-	private final TextValue lan;
-	private final TextValue internet;
-	private final TextValue age;
-	private final TextValue exception;
+	private final TextLine summary = new TextLine();
+	
+	private final TextLine summary = new TextLine();
+	private final TextLine summary = new TextLine();
+	private final TextLine summary = new TextLine();
+	private final TextLine summary = new TextLine();
+	private final TextLine summary = new TextLine();
+	private final TextLine summary = new TextLine();
+	private final TextLine summary = new TextLine();
+	
+	private final TextLine lan       = new TextLine();
+	private final TextLine internet  = new TextLine();
+	private final TextLine age       = new TextLine();
+	private final TextLine exception = new TextLine();
 	
 	
 
@@ -110,25 +114,40 @@ public class InfoFrame extends Close {
 		frame.setVisible(false);
 		frame.dispose(); // Dispose the frame so the process can close
 	}
-	
-	
-	
-	
 
-	private final RefreshLanAction refreshLanAction;
-	private class RefreshLanAction extends AbstractAction {
-		public RefreshLanAction() { super("Refresh"); } // Specify the button text
+	private final LanAction lanAction = new LanAction();
+	private class LanAction extends AbstractAction {
+		public LanAction() { super("Refresh"); } // Specify the button text
 		public void actionPerformed(ActionEvent a) {
 			try {
-				
-				
+				program.core.here.refreshLan();
 			} catch (Throwable t) { Mistake.stop(t); }
 		}
 	}
-	
-	private final RefreshCenterAction refreshCenterAction;
-	private class RefreshCenterAction extends AbstractAction {
-		public RefreshCenterAction() { super("Refresh"); } // Specify the button text
+
+	private final BindAction bindAction = new BindAction();
+	private class BindAction extends AbstractAction {
+		public BindAction() { super("Refresh"); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+				program.core.here.refreshBind();
+			} catch (Throwable t) { Mistake.stop(t); }
+		}
+	}
+
+	private final NatAction natAction = new NatAction();
+	private class NatAction extends AbstractAction {
+		public NatAction() { super("Refresh"); }
+		public void actionPerformed(ActionEvent a) {
+			try {
+				program.core.here.refreshNat();
+			} catch (Throwable t) { Mistake.stop(t); }
+		}
+	}
+
+	private final CenterAction centerAction = new CenterAction();
+	private class CenterAction extends AbstractAction {
+		public CenterAction() { super("Refresh"); }
 		public void actionPerformed(ActionEvent a) {
 			try {
 				program.core.here.refreshCenter();
@@ -140,7 +159,7 @@ public class InfoFrame extends Close {
 	// View
 
 	// When our Model underneath changes, it calls these methods
-	private final View view;
+	private final View view = new MyView();
 	private class MyView implements View {
 
 		// The Model beneath changed, we need to update what we show the user

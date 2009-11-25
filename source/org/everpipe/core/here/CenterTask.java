@@ -55,7 +55,6 @@ public class CenterTask extends Close {
 
 	@Override public void close() {
 		if (already()) return;
-		System.out.println("center task close");
 		
 		packets.remove(packetReceive);
 		close(egg);

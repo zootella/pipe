@@ -21,8 +21,8 @@ public class Here extends Close {
 		update = new Update(new MyReceive());
 		model = new MyModel();
 		
-		/*
 		refreshLan();
+		/*
 		refreshBind();
 		refreshNat();
 		*/
@@ -60,7 +60,6 @@ public class Here extends Close {
 			*/
 
 			if (done(centerTask)) {
-				System.out.println("done returned true");
 				centerIp = centerTask.result();
 				centerTask = null;
 				model.changed();
@@ -76,13 +75,13 @@ public class Here extends Close {
 	public IpPort lan() { return null; }
 
 	// value, time, error
-	public Result<Ip>     lanIp()    { return lanIp; }
-	public Result<Port>   bindPort() { return bindPort; }
+	public Result<Ip>      lanIp()    { return lanIp; }
+	public Result<Port>    bindPort() { return bindPort; }
 	public Result<Outline> natModel() { return natModel; }
-	public Result<Ip>     natIp()    { return natIp; }
-	public Result<Map> mapTcp()   { return mapTcp; }
-	public Result<Map> mapUdp()   { return mapUdp; }
-	public Result<Ip>     centerIp() { return centerIp; }
+	public Result<Ip>      natIp()    { return natIp; }
+	public Result<Map>     mapTcp()   { return mapTcp; }
+	public Result<Map>     mapUdp()   { return mapUdp; }
+	public Result<Ip>      centerIp() { return centerIp; }
 	
 	private Result<Ip> lanIp;
 	private Result<Port> bindPort;
