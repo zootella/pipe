@@ -93,9 +93,25 @@ public class InfoFrame extends Close {
 	
 	private final TextLine summary = new TextLine();
 	
-	private final TextLine summary = new TextLine();
-	private final TextLine summary = new TextLine();
-	private final TextLine summary = new TextLine();
+	private final TextLine lanValue = new TextLine();
+	private final TextLine bindValue = new TextLine();
+	private final TextLine natModelValue = new TextLine();
+	private final TextLine natIpValue = new TextLine();
+	private final TextLine natTcpValue = new TextLine();
+	private final TextLine natUdpValue = new TextLine();
+	private final TextLine centerValue = new TextLine();
+	
+	private final TextLine lanTime = new TextLine();
+	private final TextLine bindTime = new TextLine();
+	private final TextLine natModelTime = new TextLine();
+	private final TextLine natIpTime = new TextLine();
+	private final TextLine natTcpTime = new TextLine();
+	private final TextLine natUdpTime = new TextLine();
+	private final TextLine centerTime = new TextLine();
+	
+	private final TextLine lanError = new TextLine();
+	private final TextLine bindError = new TextLine();
+	private final TextLine natModelError = new TextLine();
 	private final TextLine summary = new TextLine();
 	private final TextLine summary = new TextLine();
 	private final TextLine summary = new TextLine();
