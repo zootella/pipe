@@ -22,10 +22,8 @@ public class Here extends Close {
 		model = new MyModel();
 		
 		refreshLan();
-		/*
 		refreshBind();
 		refreshNat();
-		*/
 		refreshCenter();
 	}
 	
@@ -47,7 +45,6 @@ public class Here extends Close {
 		public void receive() {
 			if (closed()) return;
 			
-			/*
 			if (is(router)) {
 				if (natModel == null && router.hasName())
 					natModel = router.name();
@@ -58,7 +55,6 @@ public class Here extends Close {
 				if (mapUdp == null && router.hasUdp())
 					mapUdp = router.udp();
 			}
-			*/
 
 			if (done(centerTask)) {
 				centerIp = centerTask.result();

@@ -100,6 +100,7 @@ public abstract class Close {
 	public Duration whenClosed() { open(); return whenClosed; }
 	private final Now whenMade;
 	private Duration whenClosed;
+	//TODO problem accessing whenClosed, remove it and just have public final Now birth
 	
 	// Log
 	public static void log(String s) { System.out.println((new Now()).toString() + " " + s); }

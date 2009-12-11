@@ -3,6 +3,7 @@ package org.zootella.state;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.zootella.exception.ProgramException;
 import org.zootella.time.Delay;
 import org.zootella.time.Pulse;
 
@@ -76,7 +77,11 @@ public abstract class Model extends Close {
 	
 	public static String describe(Result<?> result) {
 		if (result == null) return "";
-		return result.result().toString();
+		try {
+			return result.result().toString();
+		} catch (ProgramException e) {
+			return e.toString();
+		}
 	}
 	
 	public static String describeTime(Result<?> result) {
