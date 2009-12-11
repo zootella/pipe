@@ -25,8 +25,6 @@ public class InfoFrame extends Close {
 
 	public InfoFrame(User user) {
 		program = user.program;
-		
-		
 
 		panel = new Panel();
 		panel.border();

@@ -16,10 +16,12 @@ public class HereLan {
 		Ip ip = null;
 		Now now = new Now();
 		ProgramException exception = null;
+		
 		try {
 			ip = new Ip(InetAddress.getLocalHost());
 		} catch (UnknownHostException e) { exception = new NetException(e); }
 		Duration duration = new Duration(now);
+		
 		return new Result<Ip>(ip, duration, exception);
 	}
 }

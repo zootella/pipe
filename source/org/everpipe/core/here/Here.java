@@ -37,6 +37,7 @@ public class Here extends Close {
 
 	@Override public void close() {
 		if (already()) return;
+		close(model);
 		close(centerTask);
 		close(router);
 	}
@@ -94,6 +95,7 @@ public class Here extends Close {
 	// refresh
 	public void refreshLan() {
 		lanIp = HereLan.ip();
+		model.changed();
 	}
 	public void refreshBind() {}
 	public void refreshNat() {
