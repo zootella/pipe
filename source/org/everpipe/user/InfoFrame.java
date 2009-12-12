@@ -173,15 +173,13 @@ public class InfoFrame extends Close {
 		// The Model beneath changed, we need to update what we show the user
 		public void refresh() {
 			
-			try {
-				Refresh.text(lanValue.area, program.core.here.model.lanIp());
-				Refresh.text(bindValue.area, program.core.here.model.bindPort());
-				Refresh.text(natModelValue.area, program.core.here.model.natModel());
-				Refresh.text(natIpValue.area, program.core.here.model.natIp());
-				Refresh.text(natTcpValue.area, program.core.here.model.mapTcp());
-				Refresh.text(natUdpValue.area, program.core.here.model.mapUdp());
-				Refresh.text(centerValue.area, program.core.here.model.centerIp());
-			} catch (TimeException e) { System.out.println("time exception here"); } //TODO no good
+			Refresh.text(lanValue.area, program.core.here.model.lanIp());
+			Refresh.text(bindValue.area, program.core.here.model.bindPort());
+			Refresh.text(natModelValue.area, program.core.here.model.natModel());
+			Refresh.text(natIpValue.area, program.core.here.model.natIp());
+			Refresh.text(natTcpValue.area, program.core.here.model.mapTcp());
+			Refresh.text(natUdpValue.area, program.core.here.model.mapUdp());
+			Refresh.text(centerValue.area, program.core.here.model.centerIp());
 			
 			Refresh.text(lanTime.area, program.core.here.model.lanIpTime());
 			Refresh.text(bindTime.area, program.core.here.model.bindPortTime());

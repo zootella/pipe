@@ -72,7 +72,12 @@ public class Router extends Close {
 		close(udpTask);
 		close(tcpTask);
 		close(ipTask);
-		try { control.stop(); } catch (Throwable t) { Mistake.log(t); }
+		
+		try {
+			if (control != null)
+				control.stop();
+		} catch (Throwable t) { Mistake.log(t); }
+		
 		close(startTask);
 		
 		up.send();

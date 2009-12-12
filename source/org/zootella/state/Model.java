@@ -61,12 +61,12 @@ public abstract class Model extends Close {
 
 	// Pulse
 
-	/** If this Model has something that changes in time, like an age, have it pulse views above. */
+	/** If this Model has something guaranteed to change in time, like an age, have it pulse views above. */
 	public void pulse() {
 		if (pulse == null)
 			pulse = new Pulse(new MyReceive());
 	}
-	private Pulse pulse;
+	private Pulse pulse;//TODO confirm nobody's using this and get rid of it
 	
 	
 	
@@ -77,11 +77,11 @@ public abstract class Model extends Close {
 	
 	public static String describe(Result<?> result) {
 		if (result == null) return "";
-		try {
+//		try {
 			return result.result().toString();
-		} catch (ProgramException e) {
-			return e.toString();
-		}
+//		} catch (ProgramException e) {
+//			return e.toString();
+//		}
 	}
 	
 	public static String describeTime(Result<?> result) {
