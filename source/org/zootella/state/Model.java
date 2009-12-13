@@ -77,11 +77,11 @@ public abstract class Model extends Close {
 	
 	public static String describe(Result<?> result) {
 		if (result == null) return "";
-//		try {
+		try {
 			return result.result().toString();
-//		} catch (ProgramException e) {
-//			return e.toString();
-//		}
+		} catch (ProgramException e) {
+			return e.toString();
+		}
 	}
 	
 	public static String describeTime(Result<?> result) {

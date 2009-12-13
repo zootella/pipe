@@ -24,7 +24,7 @@ public class Router extends Close {
 		
 		Receive receive = new MyReceive();
 		update = new Update(receive);
-		egg = new Egg(receive, 4 * Time.second);//TODO change to 20 seconds
+		egg = new Egg(receive, 20 * Time.second);
 
 		tcpMap = tcp;
 		udpMap = udp;
