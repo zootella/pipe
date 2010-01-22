@@ -24,8 +24,22 @@ public class Update {
 	/**
 	 * Have this Update call the receive() method you gave it in a separate event.
 	 * Call send() several times in a row, and receive() will only happen once.
+	 * It's safe to call this from whatever thread you want.
 	 */
 	public void send() {
+		if (SwingUtilities.isEventDispatchThread()) {
+			sendDo();
+		} else {
+			SwingUtilities.invokeLater(new Runnable() { // Have the normal Swing thread call this run() method
+				public void run() {
+					try {
+						sendDo();
+					} catch (Throwable t) { Mistake.stop(t); } // Stop the program for an exception we didn't expect
+				}
+			});
+		}
+	}
+	private void sendDo() { // Only the event thread calls this
 		if (set) return; // We're already set to go off
 		SwingUtilities.invokeLater(new MyRunnable()); // Have Java call run() below separately and soon
 		set = true;
@@ -43,18 +57,5 @@ public class Update {
 				receive.receive();                     // Call our given receive() method
 			} catch (Throwable t) { Mistake.stop(t); } // Stop the program for an exception we didn't expect
 		}
-	}
-
-	// Thread
-
-	/** Only the normal event thread can call send(), if you're in a Task thread or something else, use sendFromThread(). */
-	public void sendFromThread() {
-		SwingUtilities.invokeLater(new Runnable() { // Have the normal Swing thread call this run() method
-			public void run() {
-				try {
-					send();
-				} catch (Throwable t) { Mistake.stop(t); } // Stop the program for an exception we didn't expect
-			}
-		});
 	}
 }

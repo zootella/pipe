@@ -63,7 +63,7 @@ public class Listen {
 											o.add("location",         gatewayDevice.getLocation());
 											
 											access = new Access(gatewayDevice, s, o);
-											update.sendFromThread();
+											update.send();
 											return;
 										}
 									}
