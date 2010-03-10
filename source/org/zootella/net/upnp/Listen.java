@@ -20,8 +20,8 @@ public class Listen {
 	private final Update update;
 	public final DeviceChangeListener listen;
 	
-	private volatile Access access;
 	public Access access() { return access; }
+	private volatile Access access;
 
 	private class MyDeviceChangeListener implements DeviceChangeListener {
 
